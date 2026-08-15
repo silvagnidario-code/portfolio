@@ -216,6 +216,76 @@ export const aboutCopy = {
   },
 }
 
+/**
+ * Placeholder legal copy. It is written to be structurally realistic — the
+ * right sections, the right lengths — and is explicitly not legal advice: the
+ * client's counsel replaces the wording, not the layout.
+ */
+export const legalCopy = {
+  privacy: {
+    slug: 'privacy',
+    title: { it: 'Privacy', en: 'Privacy', zh: '隐私政策' } satisfies Localized<string>,
+    heading: {
+      it: 'Come trattiamo i dati di chi ci scrive.',
+      en: 'How we handle the data of people who write to us.',
+      zh: '我们如何处理来信者的数据。',
+    },
+    lead: {
+      it: 'Testo segnaposto, da sostituire con quello del consulente legale del cliente prima della pubblicazione.',
+      en: 'Placeholder text, to be replaced by the client’s legal counsel before launch.',
+      zh: '占位文本，上线前须由客户的法律顾问替换。',
+    },
+    body: {
+      it: [
+        'Raccogliamo solo i dati che ci vengono inviati volontariamente dal modulo di contatto: nome, azienda, indirizzo email, tipo di progetto, budget indicativo, tempistiche e il testo del messaggio. Non usiamo questi dati per profilazione e non li cediamo a terzi.',
+        'I messaggi vengono recapitati via email e conservati nella casella dello studio per il tempo necessario a rispondere e a gestire un’eventuale trattativa. Non vengono salvati in nessun database del sito.',
+        'Per esercitare i diritti previsti dal GDPR — accesso, rettifica, cancellazione, limitazione, portabilità e opposizione — è sufficiente scrivere all’indirizzo di contatto indicato in fondo alla pagina.',
+      ],
+      en: [
+        'We only collect what is voluntarily sent through the contact form: name, company, email address, project type, indicative budget, timing and the message itself. We do not use this data for profiling and we do not pass it to third parties.',
+        'Messages are delivered by email and kept in the studio inbox for as long as answering and handling a possible engagement requires. Nothing is stored in any database of this site.',
+        'To exercise the rights the GDPR provides — access, rectification, erasure, restriction, portability and objection — writing to the contact address at the bottom of the page is enough.',
+      ],
+      zh: [
+        '我们只收集通过联系表单自愿提交的信息：姓名、公司、电子邮箱、项目类型、预算范围、时间安排以及留言内容。我们不将这些数据用于用户画像，也不会转交第三方。',
+        '留言以邮件形式送达并保存在工作室邮箱中，保留时间以答复及后续洽谈所需为限。本站的任何数据库都不存储这些内容。',
+        '如需行使 GDPR 赋予的权利——访问、更正、删除、限制处理、可携带与反对——写信至页面底部的联系地址即可。',
+      ],
+    },
+  },
+  cookie: {
+    slug: 'cookie',
+    title: { it: 'Cookie', en: 'Cookie', zh: 'Cookie' } satisfies Localized<string>,
+    heading: {
+      it: 'Quali cookie usiamo, e perché sono pochi.',
+      en: 'Which cookies we use, and why there are few.',
+      zh: '我们使用哪些 Cookie，以及为何数量很少。',
+    },
+    lead: {
+      it: 'Testo segnaposto, da sostituire con quello del consulente legale del cliente prima della pubblicazione.',
+      en: 'Placeholder text, to be replaced by the client’s legal counsel before launch.',
+      zh: '占位文本，上线前须由客户的法律顾问替换。',
+    },
+    body: {
+      it: [
+        'Il sito usa due cookie tecnici, che non richiedono consenso: quello che ricorda la lingua scelta e quello che ricorda se preferisci il tema chiaro o scuro. Entrambi restano sul dispositivo e non vengono letti da nessun servizio esterno.',
+        'Non è attivo alcuno strumento di analisi. Se in futuro ne verrà introdotto uno, sarà disattivato per impostazione predefinita e si attiverà soltanto dopo un consenso esplicito espresso dal banner.',
+        'I font sono ospitati sul nostro server: aprire una pagina non comporta alcuna richiesta verso servizi di terze parti.',
+      ],
+      en: [
+        'The site uses two technical cookies, which need no consent: one remembers the chosen language, the other whether you prefer the light or the dark theme. Both stay on the device and are read by no external service.',
+        'No analytics tool is active. If one is introduced later it will be off by default and will only start after explicit consent given through the banner.',
+        'Fonts are hosted on our own server: opening a page makes no request to any third party.',
+      ],
+      zh: [
+        '本站使用两个无需同意的技术性 Cookie：一个记住所选语言，另一个记住你偏好浅色还是深色主题。两者都保存在设备本地，不会被任何外部服务读取。',
+        '当前未启用任何分析工具。若日后引入，将默认关闭，并且只有在通过横幅明确同意之后才会启动。',
+        '字体托管在我们自己的服务器上：打开页面不会向任何第三方发出请求。',
+      ],
+    },
+  },
+} as const
+
 export const globalsCopy = {
   settings: {
     legalName: 'Studio Sartori Srl',

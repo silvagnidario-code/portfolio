@@ -2,7 +2,7 @@ import config from '@payload-config'
 import { getPayload, type Payload } from 'payload'
 
 import { locales, type Locale } from '../i18n/routing'
-import { aboutCopy, globalsCopy, homeCopy, servicesCopy } from './content/pages'
+import { aboutCopy, globalsCopy, homeCopy, legalCopy, servicesCopy } from './content/pages'
 import { clients, team, testimonials } from './content/people'
 import { projects } from './content/projects'
 import { industries, services, type Localized } from './content/taxonomy'
@@ -649,6 +649,37 @@ async function seed(): Promise<void> {
       zh: { title: aboutCopy.title.zh, slug: 'about', layout: aboutLayout('zh') },
     },
   )
+
+  for (const page of [legalCopy.privacy, legalCopy.cookie]) {
+    const layout = (locale: Locale) => [
+      {
+        blockType: 'hero' as const,
+        variant: 'typographic' as const,
+        eyebrow: page.title[locale],
+        heading: page.heading[locale],
+        lead: page.lead[locale],
+        ...blockSettings('paper', 'wide'),
+      },
+      {
+        blockType: 'statement' as const,
+        variant: 'twoColumns' as const,
+        heading: page.heading[locale],
+        body: richText(...page.body[locale]),
+        ...blockSettings('paper', 'normal'),
+      },
+    ]
+
+    await createLocalized(
+      payload,
+      'pages',
+      { _status: 'published' },
+      {
+        it: { title: page.title.it, slug: page.slug, layout: layout('it') },
+        en: { title: page.title.en, slug: page.slug, layout: layout('en') },
+        zh: { title: page.title.zh, slug: page.slug, layout: layout('zh') },
+      },
+    )
+  }
 
   // ---- globals ------------------------------------------------------------
   payload.logger.info('Globals...')
