@@ -193,8 +193,7 @@
       "variants": {
         "navbar": "Navbar",
         "pill": "Pillola",
-        "chrome": "Chrome",
-        "cursor": "Cursore"
+        "chrome": "Chrome"
       },
       "proof": {
         "title": "Prova di contrasto sul vetro",

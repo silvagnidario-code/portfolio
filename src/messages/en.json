@@ -193,8 +193,7 @@
       "variants": {
         "navbar": "Navbar",
         "pill": "Pill",
-        "chrome": "Chrome",
-        "cursor": "Cursor"
+        "chrome": "Chrome"
       },
       "proof": {
         "title": "Contrast proof on glass",

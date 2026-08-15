@@ -5,14 +5,13 @@ import type { ComponentPropsWithoutRef, ReactNode, Ref } from 'react'
 import type { GlassVariant } from '@/tokens/glass'
 
 import { useGlassBudget } from './glass-budget'
-import { GlassRefractionFilter } from './glass-refraction-filter'
 
 /**
  * The single implementation of the glass material.
  *
  * Every translucent element on the site goes through here: navbar, language and
- * theme switchers, filter pills on the work index, the cursor, lightbox chrome,
- * the floating CTA. No other component may reimplement it — the four layers,
+ * theme switchers, filter pills on the work index, lightbox chrome, the
+ * floating CTA. No other component may reimplement it — the three layers,
  * the opacity floor that keeps text at AA, the fallback and the cost budget all
  * live in one place precisely so they cannot be forgotten one element at a time.
  *
@@ -42,16 +41,12 @@ export function GlassSurface({
   useGlassBudget()
 
   return (
-    <>
-      {/* The refraction filter exists only where it is referenced. */}
-      {variant === 'cursor' ? <GlassRefractionFilter /> : null}
-      <Tag
-        ref={ref}
-        className={['glass', `glass--${variant}`, className].filter(Boolean).join(' ')}
-        {...rest}
-      >
-        {children}
-      </Tag>
-    </>
+    <Tag
+      ref={ref}
+      className={['glass', `glass--${variant}`, className].filter(Boolean).join(' ')}
+      {...rest}
+    >
+      {children}
+    </Tag>
   )
 }

@@ -193,8 +193,7 @@
       "variants": {
         "navbar": "导航栏",
         "pill": "胶囊",
-        "chrome": "浮层控件",
-        "cursor": "光标"
+        "chrome": "浮层控件"
       },
       "proof": {
         "title": "玻璃上的对比度证明",

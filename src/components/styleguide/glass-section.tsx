@@ -50,23 +50,11 @@ export async function GlassSection() {
   const surfaces = (
     <div className="flex flex-wrap items-center gap-24">
       {glassVariants.map((variant) => (
-        <GlassSurface
-          key={variant}
-          variant={variant}
-          className={
-            variant === 'cursor'
-              ? 'flex h-64 w-64 items-center justify-center'
-              : 'px-24 py-16 text-body'
-          }
-        >
-          {variant === 'cursor' ? (
-            <span className="font-mono text-caption uppercase">{variant.slice(0, 2)}</span>
-          ) : (
-            <span>
-              <span className="font-mono text-caption uppercase">{t(`variants.${variant}`)}</span>
-              <span className="block">{t('sample')}</span>
-            </span>
-          )}
+        <GlassSurface key={variant} variant={variant} className="px-24 py-16 text-body">
+          <span>
+            <span className="font-mono text-caption uppercase">{t(`variants.${variant}`)}</span>
+            <span className="block">{t('sample')}</span>
+          </span>
         </GlassSurface>
       ))}
     </div>

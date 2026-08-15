@@ -129,10 +129,20 @@ export const grid = {
  * Glass. Applies to the floating interface layer only — never to content.
  * The fill opacities live in `glass.ts`, because they are not free values:
  * they are derived from the contrast the text above them has to keep.
+ *
+ * §7 describes a fourth layer, an SVG displacement filter, applied to the
+ * cursor alone. The custom cursor was removed, and with it that layer's only
+ * justified consumer: on a navbar or a pill the filter costs a full-surface
+ * repaint for an effect nobody sees.
  */
 export const glass = {
-  blur: 24,
-  saturate: 1.8,
+  /**
+   * A heavier blur and a stronger saturation than §7's starting point: asked
+   * for explicitly, and the room was there. What could not move is the fill
+   * opacity — see `glass.ts`, where the floor is computed rather than chosen.
+   */
+  blur: 36,
+  saturate: 2.1,
   borderWidth: 1,
   /** Tint of the fill, per theme. */
   fill: { light: grey.paper50, dark: grey.sumi950 },
@@ -141,16 +151,22 @@ export const glass = {
    * to read as refraction on the corner rather than as a drawn outline.
    */
   edge: {
-    light: { highlight: 0.55, shade: 0.18, border: 0.12 },
-    dark: { highlight: 0.28, shade: 0.45, border: 0.14 },
+    light: { highlight: 0.85, shade: 0.26, border: 0.18 },
+    dark: { highlight: 0.45, shade: 0.6, border: 0.22 },
+  },
+  /**
+   * The pane casts a shadow: without it a translucent surface reads as a hole
+   * in the page rather than as something floating above it.
+   */
+  lift: {
+    light: { blur: 48, spread: -12, y: 16, alpha: 0.12 },
+    dark: { blur: 48, spread: -12, y: 16, alpha: 0.4 },
   },
   /**
    * `backdrop-filter` is one of the most expensive properties in CSS and here
    * it already shares the frame with smooth scroll and a WebGL canvas.
    */
   maxSimultaneous: 4,
-  /** Displacement of the refraction filter, cursor only. */
-  refraction: { scale: 12, frequency: 0.008 },
 } as const
 
 /**

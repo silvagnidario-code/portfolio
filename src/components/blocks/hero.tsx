@@ -24,7 +24,6 @@ export function Hero({ block }: { block: HeroBlock }) {
       {cta?.label && cta.href ? (
         <Link
           href={cta.href}
-          data-magnetic
           className="mt-48 inline-block border border-line-strong px-24 py-16 text-body transition ease-reveal duration-fast hover:bg-surface-2"
         >
           {cta.label}

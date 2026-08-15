@@ -25,11 +25,11 @@ import { semanticColors, type ThemeName } from './semantic'
 export const WORST_CASE_BACKDROPS = ['#FFFFFF', '#000000'] as const
 
 /**
- * The four places glass is allowed to appear. Declared here rather than in the
+ * The three places glass is allowed to appear. Declared here rather than in the
  * component so server components can read the list: values exported from a
  * 'use client' module arrive as client references, not as data.
  */
-export const glassVariants = ['navbar', 'pill', 'chrome', 'cursor'] as const
+export const glassVariants = ['navbar', 'pill', 'chrome'] as const
 
 export type GlassVariant = (typeof glassVariants)[number]
 
@@ -60,7 +60,10 @@ export function requiredFillOpacity(theme: ThemeName): number {
 }
 
 /**
- * Chosen opacities. Light sits inside the 60–70% the specification asks for.
+ * Chosen opacities, pushed as close to the floor as the measurement allows —
+ * a thinner fill is what makes glass read as glass.
+ *
+ * Light sits at the bottom of the 60–70% the specification asks for.
  *
  * Dark does not: the specification asks for 45–55%, but its own AA rule makes
  * that impossible — over a white backdrop the dark fill needs 0.63 before
@@ -69,8 +72,8 @@ export function requiredFillOpacity(theme: ThemeName): number {
  * computed floor.
  */
 export const fillOpacity: Record<ThemeName, number> = {
-  light: 0.66,
-  dark: 0.68,
+  light: 0.6,
+  dark: 0.65,
 }
 
 /**
@@ -78,6 +81,11 @@ export const fillOpacity: Record<ThemeName, number> = {
  * always the ink one, whatever the theme: light falls on the top corner of a
  * pane from above in both.
  */
+export const glassLift: Record<ThemeName, string> = {
+  light: `0 ${glass.lift.light.y}px ${glass.lift.light.blur}px ${glass.lift.light.spread}px ${withAlpha(grey.sumi900, glass.lift.light.alpha)}`,
+  dark: `0 ${glass.lift.dark.y}px ${glass.lift.dark.blur}px ${glass.lift.dark.spread}px ${withAlpha(grey.sumi950, glass.lift.dark.alpha)}`,
+}
+
 export const glassEdges: Record<ThemeName, { highlight: string; shade: string; border: string }> = {
   light: {
     highlight: withAlpha(grey.paper50, glass.edge.light.highlight),
