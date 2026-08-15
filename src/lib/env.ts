@@ -45,6 +45,14 @@ const envSchema = z.object({
   S3_FORCE_PATH_STYLE: booleanFromString,
   // Public base URL the media files are served from (CDN in production).
   S3_PUBLIC_URL: z.url(),
+
+  /**
+   * Transactional email. Optional on purpose: a developer without a key can
+   * still run the site, and the brief form says so instead of pretending the
+   * message was sent.
+   */
+  RESEND_API_KEY: z.string().min(1).optional(),
+  RESEND_FROM: z.email().default('brief@resend.dev'),
 })
 
 const parsed = envSchema.safeParse(process.env)
