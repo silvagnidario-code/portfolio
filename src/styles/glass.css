@@ -54,6 +54,16 @@
   }
 }
 
+/*
+ * The system cursor is hidden only while the glass one is actually running:
+ * the attribute is set by the component after it mounts and removed when it
+ * unmounts, so a page with no replacement never loses its pointer.
+ */
+:root[data-custom-cursor='true'],
+:root[data-custom-cursor='true'] * {
+  cursor: none;
+}
+
 /* Variants differ only in corner radius — the material itself is one. */
 .glass--navbar {
   border-radius: var(--corner-glass-lg);
@@ -69,6 +79,13 @@
 
 .glass--cursor {
   border-radius: var(--corner-round);
+  /*
+   * The one glass element that has to be visible on *any* backdrop: it is
+   * standing in for the system cursor. Over a flat page the blur returns the
+   * same colour it was given, so the edge is all there is to see —
+   * `--border-strong` is the token already verified at 3:1 on both themes.
+   */
+  border-color: var(--border-strong);
   /*
    * 4 — refraction. The displacement filter is worth its cost only here: on a
    * disc a few dozen pixels wide it reads, on a navbar it does not.

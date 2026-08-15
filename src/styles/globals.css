@@ -4,10 +4,16 @@
 @import './tokens.generated.css';
 /* Tailwind mapping, generated from the same source */
 @import './theme.generated.css';
+/*
+ * Component styles go into Tailwind's `components` layer explicitly. Without
+ * the layer they would simply come later in the file than the utilities and
+ * win on source order — which is how `.glass { position: relative }` quietly
+ * beat a `fixed` utility on the cursor.
+ */
 /* The glass material — used only by the GlassSurface component */
-@import './glass.css';
+@import './glass.css' layer(components);
 /* Block-level background, spacing and prose */
-@import './blocks.css';
+@import './blocks.css' layer(components);
 
 @source '../../src';
 

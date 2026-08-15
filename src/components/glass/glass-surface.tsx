@@ -1,6 +1,6 @@
 'use client'
 
-import type { ComponentPropsWithoutRef, ReactNode } from 'react'
+import type { ComponentPropsWithoutRef, ReactNode, Ref } from 'react'
 
 import type { GlassVariant } from '@/tokens/glass'
 
@@ -27,6 +27,8 @@ type GlassSurfaceProps = Omit<ComponentPropsWithoutRef<'div'>, 'children'> & {
   /** Element to render. Pick the one the surface means, not a div by default. */
   as?: GlassElement
   children?: ReactNode
+  /** The cursor needs a handle to move the surface every frame. */
+  ref?: Ref<HTMLDivElement>
 }
 
 export function GlassSurface({
@@ -34,6 +36,7 @@ export function GlassSurface({
   as: Tag = 'div',
   className,
   children,
+  ref,
   ...rest
 }: GlassSurfaceProps) {
   useGlassBudget()
@@ -43,6 +46,7 @@ export function GlassSurface({
       {/* The refraction filter exists only where it is referenced. */}
       {variant === 'cursor' ? <GlassRefractionFilter /> : null}
       <Tag
+        ref={ref}
         className={['glass', `glass--${variant}`, className].filter(Boolean).join(' ')}
         {...rest}
       >
