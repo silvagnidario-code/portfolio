@@ -190,7 +190,13 @@ function buildThemeCss(): string {
     .map(([alias, role]) => `  --color-${alias}: var(--${role});`)
     .join('\n')
 
-  const spacings = spacing.map((step) => `  --spacing-${step}: var(--space-${step});`).join('\n')
+  const spacings = [
+    // Zero is not a step of the scale, but the utilities that clamp an element
+    // to an edge (`inset-0`, `top-0`) resolve through the spacing namespace,
+    // and the default multiplier was deliberately removed above.
+    '  --spacing-0: 0px;',
+    ...spacing.map((step) => `  --spacing-${step}: var(--space-${step});`),
+  ].join('\n')
 
   const texts = Object.entries(typeScale)
     .map(([name, grade]) => {

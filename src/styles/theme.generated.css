@@ -47,6 +47,7 @@
   --font-weight-medium: 500;
 
   /* Spacing */
+  --spacing-0: 0px;
   --spacing-4: var(--space-4);
   --spacing-8: var(--space-8);
   --spacing-12: var(--space-12);
