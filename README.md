@@ -75,6 +75,61 @@ should not need a redeploy to change. Phase 9 adds cached reads with tag-based
 revalidation on publish, which makes the pages static again, refreshed by an
 edit rather than by a build.
 
+## SEO and structured data
+
+Every page declares reciprocal `hreflang` for all three languages plus an
+`x-default`; case studies build theirs from the translated slugs rather than
+assuming the path is the same. `sitemap.xml` carries one entry per language per
+document with the alternates of its siblings, and is generated per request — a
+sitemap frozen at build goes stale the first time an editor publishes. JSON-LD
+covers `Organization` site-wide and `CreativeWork` on each case study.
+
+**Metadata is blocking for every client** (`htmlLimitedBots: /.*/` in
+`next.config.ts`). The pages are dynamic, so Next would otherwise stream
+`generateMetadata` into the body, where an indexer that does not run a browser
+never sees the description, the canonical or the hreflang. Measured: LCP did not
+move.
+
+Share cards are generated from the document itself at `/[locale]/work/[slug]/og`
+— a route handler rather than the `opengraph-image` convention, which does not
+resolve inside this project's `(frontend)` route group (`robots.ts` and
+`sitemap.ts` had to move to the app root for the same reason). The chinese card
+leads with the client's latin name: a full CJK face is ten megabytes resident
+per instance to draw a picture nobody reads at full size, and a row of tofu is
+worse than a substitution.
+
+## Audits
+
+Both audits are reproducible against a production build, and both were run
+against every page in all three languages.
+
+**Accessibility — axe-core, 0 violations across 42 combinations** (7 pages × 3
+languages × 2 themes). Getting there fixed real defects: missing `main`
+landmarks, headings that skipped a level, scroll tracks that no keyboard could
+reach, `<p>` between the pairs of a definition list, and a theme switcher whose
+disabled fieldset greyed its own labels below AA. Audit with reduced motion
+emulated — otherwise axe measures blocks that are still mid-reveal at opacity 0
+and reports their text as unreadable.
+
+**Lighthouse, mobile unless noted:**
+
+| Page             | Perf | A11y | BP  | SEO |
+| ---------------- | ---- | ---- | --- | --- |
+| `/it` (desktop)  | 100  | 100  | 100 | 100 |
+| `/it`            | 93   | 100  | 100 | 100 |
+| `/it/work/kaisu` | 97   | 100  | 100 | 100 |
+| `/it/contact`    | 96   | 100  | 100 | 100 |
+| `/zh`            | 85   | 100  | 100 | 100 |
+| `/zh/contact`    | 76   | 100  | 100 | 100 |
+
+The chinese gap is entirely the CJK face: the _same_ contact page scores 96 in
+italian and 76 in chinese. Making its stylesheet non-blocking recovered first
+paint (3.5s → 1.7s); what remains is LCP waiting for the font to swap in, which
+is what `font-display: swap` means on a throttled connection. Switching that
+face to `font-display: optional` would close most of the gap at the cost of
+showing a system font on first visit — a typographic decision, not a technical
+one, so it is left open.
+
 ## Motion
 
 Everything that moves is mounted once by `MotionRuntime` and reads the same two
