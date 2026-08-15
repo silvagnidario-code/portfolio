@@ -33,6 +33,9 @@ const envSchema = z.object({
 
   NEXT_PUBLIC_SERVER_URL: z.url(),
 
+  // Guards the draft-preview entry point, on top of the editor's session.
+  PREVIEW_SECRET: z.string().min(16, 'PREVIEW_SECRET must be at least 16 characters long'),
+
   S3_BUCKET: z.string().min(1),
   S3_REGION: z.string().min(1).default('auto'),
   S3_ENDPOINT: z.url(),

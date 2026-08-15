@@ -21,6 +21,7 @@ ENV NODE_ENV=production \
     NEXT_TELEMETRY_DISABLED=1 \
     DATABASE_URI=postgres://build:build@localhost:5432/build \
     PAYLOAD_SECRET=build-time-placeholder-secret-not-used-at-runtime \
+    PREVIEW_SECRET=build-time-placeholder-preview-secret \
     NEXT_PUBLIC_SERVER_URL=http://localhost:3000 \
     S3_BUCKET=build \
     S3_REGION=auto \
