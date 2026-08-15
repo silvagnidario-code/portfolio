@@ -53,6 +53,28 @@ docker compose --profile full up --build   # app + postgres + minio
 The `Dockerfile` produces a standalone Next server and is deployable to any VPS;
 the project also runs on Vercel unchanged.
 
+## Layout
+
+The sticky navbar is one `GlassSurface` floating over the content, with the menu
+read from the `navigation` global and the language and theme switchers sitting
+_on_ that surface rather than carrying their own — nesting glass inside glass
+doubles the most expensive property in the stylesheet and reads as a smudge.
+The footer is content, so it is opaque, flat and square-cornered.
+
+Every page starts with a skip link, and the page transition wrapper carries the
+`#main` target so the link moves focus, not just the scroll position.
+Transitions are a slow dissolve with a short translation, flattened site-wide by
+the `prefers-reduced-motion` rule. Only the incoming half is animated; the
+outgoing half needs the router hook that arrives with the animation system in
+phase 8.
+
+**The frontend renders per request.** The layout reads its menu, footer and
+settings from the CMS, so prerendering at build time would require a database
+inside the build — the container image has none, and a menu that is editable
+should not need a redeploy to change. Phase 9 adds cached reads with tag-based
+revalidation on publish, which makes the pages static again, refreshed by an
+edit rather than by a build.
+
 ## Content model
 
 Nine collections and four globals, all editorial text localized field by field
