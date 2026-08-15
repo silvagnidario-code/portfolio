@@ -1,0 +1,29 @@
+# dependencies
+/node_modules
+
+# next.js
+/.next/
+/out/
+/build
+next-env.d.ts
+*.tsbuildinfo
+
+# local env files
+.env
+.env*.local
+
+# uploads written to disk (should always go to S3/R2 instead)
+/media
+
+# editor / os
+.DS_Store
+/.idea/
+*.pem
+
+# logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# vercel
+.vercel
