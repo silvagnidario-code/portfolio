@@ -10,9 +10,16 @@
     "about": "Studio",
     "contact": "Contact"
   },
+  "Theme": {
+    "legend": "Theme",
+    "system": "System",
+    "light": "Light",
+    "dark": "Dark"
+  },
   "HomePage": {
     "title": "Foundations",
-    "intro": "Project scaffolding: multilingual routing, CMS and infrastructure. No styling applied at this stage."
+    "intro": "Project scaffolding: multilingual routing, CMS and infrastructure. No styling applied at this stage.",
+    "styleguide": "Styleguide"
   },
   "WorkPage": {
     "title": "Work",
@@ -22,5 +29,79 @@
     "title": "Page not found",
     "description": "The requested address does not match any page.",
     "backHome": "Back to home"
+  },
+  "Specimen": {
+    "sentence": "We design identities that stay legible over time.",
+    "paragraph": "Every project starts from a single question: what has to remain once everything else has gone out of fashion. We work by subtraction, because empty space is not what is left around the content — it is part of the content.",
+    "languageName": "English"
+  },
+  "Styleguide": {
+    "title": "Styleguide",
+    "intro": "Control surface for the design system. Every value shown here is read from the same tokens the CSS is generated from: if a check passes on this page, it passes on the site.",
+    "colors": {
+      "title": "Colour",
+      "description": "Level 1, primitives: the only file to touch when the identity changes. Level 2, semantic roles: what components actually see.",
+      "primitives": "Primitives",
+      "semantic": "Semantic roles",
+      "currentTheme": "Values of the theme currently active."
+    },
+    "contrast": {
+      "title": "Contrast check",
+      "description": "WCAG 2.1 ratios computed on both themes, not assumed. Text: AA requires 4.5. Borders and non-text elements: 3.",
+      "pair": "Pair",
+      "ratio": "Ratio",
+      "required": "Required",
+      "result": "Result",
+      "pass": "Pass",
+      "fail": "Fail",
+      "notRequired": "Decorative",
+      "allPass": "Every required pair passes AA on both themes.",
+      "someFail": "Some pairs do not reach the AA threshold."
+    },
+    "typography": {
+      "title": "Typography",
+      "description": "Seven grades, fluid scale in clamp(). Three weights only: 300, 400, 500. Hierarchy is built with scale and space, never with weight.",
+      "grade": "Grade",
+      "size": "Size",
+      "lineHeight": "Line height",
+      "tracking": "Tracking",
+      "weight": "Weight",
+      "cjkNote": "Chinese carries a 6% optical compensation and 2.0 leading: the difference is visible across the three lines of each grade."
+    },
+    "spacing": {
+      "title": "Space",
+      "description": "4px base with geometric jumps, extended upwards because empty space is content. Off-scale values do not exist as utilities."
+    },
+    "motion": {
+      "title": "Motion",
+      "description": "Four durations, a single easing for every reveal, stagger between 80 and 120ms. Movement is slow, decelerated and quiet: translation plus opacity, never scale or rotation.",
+      "duration": "Durations",
+      "easing": "Easing",
+      "stagger": "Stagger",
+      "distance": "Reveal translation",
+      "preview": "Preview",
+      "replay": "Replay",
+      "reducedMotionNote": "With prefers-reduced-motion on, transitions are flattened site-wide by a single rule."
+    },
+    "shape": {
+      "title": "Shape and grid",
+      "description": "Zero radius on content blocks and media. Wide continuous corners only on glass elements: content is paper, the interface is a screen.",
+      "radius": "Radii",
+      "grid": "Grid",
+      "columns": "Columns",
+      "gutter": "Gutter",
+      "margin": "Page margin",
+      "gridNote": "12 columns on desktop, 6 on tablet, 4 on mobile. Resize the window to see it change."
+    },
+    "aliases": {
+      "title": "Roles and utilities",
+      "description": "Level 3. Components never write a colour: they use these utilities, which point at the semantic roles.",
+      "role": "Semantic role",
+      "utility": "Tailwind utility"
+    },
+    "table": {
+      "token": "Token",
+      "value": "Value"
+    }
   }
 }

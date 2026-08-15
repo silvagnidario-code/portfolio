@@ -10,9 +10,16 @@
     "about": "工作室",
     "contact": "联系"
   },
+  "Theme": {
+    "legend": "主题",
+    "system": "跟随系统",
+    "light": "浅色",
+    "dark": "深色"
+  },
   "HomePage": {
     "title": "基础架构",
-    "intro": "项目骨架：多语言路由、内容管理系统与基础设施。此阶段尚未应用任何样式。"
+    "intro": "项目骨架：多语言路由、内容管理系统与基础设施。此阶段尚未应用任何样式。",
+    "styleguide": "样式指南"
   },
   "WorkPage": {
     "title": "作品",
@@ -22,5 +29,79 @@
     "title": "页面未找到",
     "description": "请求的地址不对应任何页面。",
     "backHome": "返回首页"
+  },
+  "Specimen": {
+    "sentence": "我们设计经得起时间考验的品牌识别。",
+    "paragraph": "每个项目都始于同一个问题：当潮流退去之后，什么应该留下来。我们以减法工作，因为留白并非内容之外的剩余空间，它本身就是内容的一部分。",
+    "languageName": "简体中文"
+  },
+  "Styleguide": {
+    "title": "样式指南",
+    "intro": "设计系统的检验工具。此页显示的每个数值都取自生成 CSS 的同一套 token：在这里通过的检验，在站点上同样成立。",
+    "colors": {
+      "title": "色彩",
+      "description": "第一层，原始值：品牌识别变更时唯一需要修改的文件。第二层，语义角色：组件真正看到的内容。",
+      "primitives": "原始值",
+      "semantic": "语义角色",
+      "currentTheme": "当前主题下的取值。"
+    },
+    "contrast": {
+      "title": "对比度检验",
+      "description": "在两种主题下实际计算的 WCAG 2.1 对比度，而非假定值。文本：AA 要求 4.5。边框及非文本元素：3。",
+      "pair": "组合",
+      "ratio": "对比度",
+      "required": "要求",
+      "result": "结果",
+      "pass": "通过",
+      "fail": "未通过",
+      "notRequired": "装饰性",
+      "allPass": "所有必检组合在两种主题下均通过 AA。",
+      "someFail": "部分组合未达到 AA 阈值。"
+    },
+    "typography": {
+      "title": "字体排印",
+      "description": "七个级别，使用 clamp() 的流体比例。仅三种字重：300、400、500。层级由尺度与空间构建，而非字重。",
+      "grade": "级别",
+      "size": "字号",
+      "lineHeight": "行高",
+      "tracking": "字距",
+      "weight": "字重",
+      "cjkNote": "中文带有 6% 的视觉补偿与 2.0 行高：对比每个级别的三行即可看出差异。"
+    },
+    "spacing": {
+      "title": "空间",
+      "description": "以 4px 为基数并按几何级数递增，向上延伸，因为留白即内容。不在比例中的数值不存在对应的 utility。"
+    },
+    "motion": {
+      "title": "动效",
+      "description": "四种时长，所有 reveal 共用一条缓动曲线，间隔 80 至 120 毫秒。动作缓慢、减速且安静：位移加透明度，绝不使用缩放或旋转。",
+      "duration": "时长",
+      "easing": "缓动",
+      "stagger": "间隔",
+      "distance": "Reveal 位移",
+      "preview": "预览",
+      "replay": "重播",
+      "reducedMotionNote": "启用 prefers-reduced-motion 后，全站过渡由同一条规则统一关闭。"
+    },
+    "shape": {
+      "title": "形状与栅格",
+      "description": "内容区块与媒体容器圆角为 0。宽大的连续圆角仅用于玻璃元素：内容是纸，界面是屏。",
+      "radius": "圆角",
+      "grid": "栅格",
+      "columns": "列数",
+      "gutter": "栏距",
+      "margin": "页面边距",
+      "gridNote": "桌面 12 列，平板 6 列，移动端 4 列。缩放窗口即可看到变化。"
+    },
+    "aliases": {
+      "title": "角色与 utility",
+      "description": "第三层。组件从不直接书写颜色：它们使用这些指向语义角色的 utility。",
+      "role": "语义角色",
+      "utility": "Tailwind utility"
+    },
+    "table": {
+      "token": "Token",
+      "value": "取值"
+    }
   }
 }

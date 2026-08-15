@@ -10,9 +10,16 @@
     "about": "Studio",
     "contact": "Contatti"
   },
+  "Theme": {
+    "legend": "Tema",
+    "system": "Sistema",
+    "light": "Chiaro",
+    "dark": "Scuro"
+  },
   "HomePage": {
     "title": "Fondamenta",
-    "intro": "Impalcatura del progetto: routing multilingua, CMS e infrastruttura. Nessuno stile applicato in questa fase."
+    "intro": "Impalcatura del progetto: routing multilingua, CMS e infrastruttura. Nessuno stile applicato in questa fase.",
+    "styleguide": "Styleguide"
   },
   "WorkPage": {
     "title": "Progetti",
@@ -22,5 +29,79 @@
     "title": "Pagina non trovata",
     "description": "L'indirizzo richiesto non corrisponde a nessuna pagina.",
     "backHome": "Torna alla home"
+  },
+  "Specimen": {
+    "sentence": "Progettiamo identità che restano leggibili nel tempo.",
+    "paragraph": "Ogni progetto parte da una domanda sola: che cosa deve restare quando tutto il resto è passato di moda. Lavoriamo per sottrazione, perché lo spazio vuoto non è ciò che avanza intorno al contenuto, è parte del contenuto.",
+    "languageName": "Italiano"
+  },
+  "Styleguide": {
+    "title": "Styleguide",
+    "intro": "Strumento di controllo del design system. Ogni valore mostrato qui è letto dagli stessi token da cui viene generato il CSS: se una verifica passa in questa pagina, passa anche nel sito.",
+    "colors": {
+      "title": "Colore",
+      "description": "Livello 1, primitivi: l'unico file da modificare quando cambia l'identità. Livello 2, ruoli semantici: quello che i componenti vedono davvero.",
+      "primitives": "Primitivi",
+      "semantic": "Ruoli semantici",
+      "currentTheme": "Valori del tema attualmente attivo."
+    },
+    "contrast": {
+      "title": "Verifica di contrasto",
+      "description": "Rapporti WCAG 2.1 calcolati su entrambi i temi, non assunti. Testo: AA richiede 4.5. Bordi ed elementi non testuali: 3.",
+      "pair": "Coppia",
+      "ratio": "Rapporto",
+      "required": "Richiesto",
+      "result": "Esito",
+      "pass": "Passa",
+      "fail": "Non passa",
+      "notRequired": "Decorativo",
+      "allPass": "Tutte le coppie richieste passano AA su entrambi i temi.",
+      "someFail": "Alcune coppie non raggiungono la soglia AA."
+    },
+    "typography": {
+      "title": "Tipografia",
+      "description": "Sette gradi, scala fluida in clamp(). Tre soli pesi: 300, 400, 500. La gerarchia si costruisce con la scala e con lo spazio, non con il peso.",
+      "grade": "Grado",
+      "size": "Dimensione",
+      "lineHeight": "Interlinea",
+      "tracking": "Tracking",
+      "weight": "Peso",
+      "cjkNote": "Il cinese ha compensazione ottica del 6% e interlinea 2.0: la differenza è visibile confrontando le tre righe di ogni grado."
+    },
+    "spacing": {
+      "title": "Spazio",
+      "description": "Base 4px con salti geometrici, estesa verso l'alto perché il vuoto è contenuto. I valori fuori scala non esistono come utility."
+    },
+    "motion": {
+      "title": "Movimento",
+      "description": "Quattro durate, un solo easing per tutti i reveal, stagger fra 80 e 120ms. Il movimento è lento, decelerato e silenzioso: traslazione più opacità, mai scala o rotazione.",
+      "duration": "Durate",
+      "easing": "Easing",
+      "stagger": "Stagger",
+      "distance": "Traslazione dei reveal",
+      "preview": "Anteprima",
+      "replay": "Riproduci",
+      "reducedMotionNote": "Con prefers-reduced-motion attivo le transizioni sono azzerate in tutto il sito da un'unica regola."
+    },
+    "shape": {
+      "title": "Forma e griglia",
+      "description": "Raggio 0 sui blocchi di contenuto e sui media. Angoli continui ampi solo sugli elementi in vetro: il contenuto è carta, l'interfaccia è schermo.",
+      "radius": "Raggi",
+      "grid": "Griglia",
+      "columns": "Colonne",
+      "gutter": "Gutter",
+      "margin": "Margine di pagina",
+      "gridNote": "12 colonne su desktop, 6 su tablet, 4 su mobile. Ridimensiona la finestra per vedere il cambio."
+    },
+    "aliases": {
+      "title": "Ruoli e utility",
+      "description": "Livello 3. I componenti non scrivono mai un colore: usano queste utility, che puntano ai ruoli semantici.",
+      "role": "Ruolo semantico",
+      "utility": "Utility Tailwind"
+    },
+    "table": {
+      "token": "Token",
+      "value": "Valore"
+    }
   }
 }
