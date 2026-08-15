@@ -53,6 +53,56 @@ docker compose --profile full up --build   # app + postgres + minio
 The `Dockerfile` produces a standalone Next server and is deployable to any VPS;
 the project also runs on Vercel unchanged.
 
+## Content model
+
+Nine collections and four globals, all editorial text localized field by field
+(`it`, `en`, `zh`) with the default locale as fallback.
+
+| Collection                                  | What it holds                                                              |
+| ------------------------------------------- | -------------------------------------------------------------------------- |
+| `projects`                                  | Case studies — the central model: identity, media, narrative, credits, SEO |
+| `pages`                                     | Free pages composed from the block library (`home`, `services`, `about`)   |
+| `services` · `industries`                   | Taxonomy behind the work-index filters                                     |
+| `team-members` · `testimonials` · `clients` | Supporting content                                                         |
+| `media`                                     | Uploads on S3/R2, localized `alt`, focal point, four generated sizes       |
+| `users`                                     | Auth, `admin` / `editor`                                                   |
+
+Globals: `settings`, `navigation`, `footer`, `seo-defaults`.
+
+**Blocks.** `src/blocks` holds the eleven-block library of the specification.
+Every block carries the same `settings` group (background, spacing, animate) and
+a `variant` select — the variant is a _field_, never a separate block type, so
+changing how a section looks can never cost its content or its translations.
+The renderer arrives in phase 6.
+
+**Drafts and preview.** `projects` and `pages` keep versions with autosave. The
+public API only ever returns published documents, enforced by an access query
+rather than a filter. The admin panel previews through `/next/preview`, which
+checks the shared secret _and_ the editor's session before enabling Next draft
+mode; it refuses absolute URLs so a signed link cannot become an open redirect.
+
+**Arrays and blocks are not localized**, only the fields inside them: the
+structure is shared across languages and each field carries one value per
+locale. Writing a translation therefore has to send existing row ids — see
+`withRowIds` in the seed — otherwise Payload treats the rows as new and silently
+drops the language written first.
+
+## Seed
+
+```bash
+npm run seed
+```
+
+Three case studies, five services, four people, eight clients, three composed
+pages and every global, in all three languages. Destructive: it clears the
+content collections first, and never touches users.
+
+The copy has realistic lengths on purpose — italian runs long, english ~8%
+shorter, chinese ~65% shorter in this dataset. That gap is what breaks a layout
+built on vertical rhythm, and lorem ipsum would hide it. Imagery is generated
+from the palette with sharp rather than downloaded, so the uploads are real
+files with real dimensions.
+
 ## Design system
 
 Three levels, one direction. Nothing skips a level.
