@@ -1,20 +1,24 @@
 'use client'
 
 import { useTranslations } from 'next-intl'
-import { useEffect, useState } from 'react'
+import { useEffect, useId, useRef, useState } from 'react'
 
+import { CheckIcon, GlobeIcon } from '@/components/icons'
 import { Link, usePathname } from '@/i18n/navigation'
 import { locales } from '@/i18n/routing'
 
 /**
  * Switches language keeping the reader where they are.
  *
- * For most routes the path is the same in every language, so `usePathname` —
+ * A globe opens the list; the languages themselves are named, not iconised. A
+ * flag is a country and several countries share a language — the only honest
+ * icon for "language" is the one that means all of them.
+ *
+ * For most routes the path is identical in every language, so `usePathname` —
  * which strips the locale prefix — is the whole answer. Case-study slugs are
  * localized, and those pages already declare their translations as `hreflang`
- * links for crawlers: rather than duplicating that map through a second
- * channel, the switcher reads it back from the document. One declaration, two
- * consumers.
+ * links for crawlers: the switcher reads that same declaration back from the
+ * document rather than carrying a second copy of the map.
  */
 function useAlternatePaths(pathname: string): Record<string, string> {
   const [alternates, setAlternates] = useState<Record<string, string>>({})
@@ -28,7 +32,6 @@ function useAlternatePaths(pathname: string): Record<string, string> {
       if (!code || !href || code === 'x-default') continue
 
       try {
-        // Strip origin and locale prefix: the router adds them back.
         const path = new URL(href, window.location.origin).pathname.replace(`/${code}`, '')
         found[code] = path || '/'
       } catch {
@@ -48,27 +51,73 @@ export function LocaleSwitcher({ locale }: { locale: string }) {
   const t = useTranslations('Layout')
   const tLocales = useTranslations('Locales')
 
-  return (
-    <nav aria-label={t('localeLabel')} className="flex items-center gap-4">
-      {locales.map((code) => {
-        const isCurrent = code === locale
+  const [open, setOpen] = useState(false)
+  const menuId = useId()
+  const containerRef = useRef<HTMLDivElement>(null)
 
-        return (
-          <Link
-            key={code}
-            href={alternates[code] ?? pathname}
-            locale={code}
-            hrefLang={code}
-            aria-current={isCurrent ? 'true' : undefined}
-            aria-label={tLocales(code)}
-            className={`rounded-glass-sm px-12 py-8 font-mono text-caption uppercase transition ease-reveal duration-fast ${
-              isCurrent ? 'text-ink' : 'text-ink-muted hover:text-ink'
-            }`}
-          >
-            {code}
-          </Link>
-        )
-      })}
-    </nav>
+  // A navigation closes the menu; without this it survives the route change.
+  useEffect(() => setOpen(false), [pathname])
+
+  useEffect(() => {
+    if (!open) return
+
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') setOpen(false)
+    }
+
+    const onPointerDown = (event: PointerEvent) => {
+      if (!containerRef.current?.contains(event.target as Node)) setOpen(false)
+    }
+
+    window.addEventListener('keydown', onKeyDown)
+    window.addEventListener('pointerdown', onPointerDown)
+
+    return () => {
+      window.removeEventListener('keydown', onKeyDown)
+      window.removeEventListener('pointerdown', onPointerDown)
+    }
+  }, [open])
+
+  return (
+    <div ref={containerRef} className="relative">
+      <button
+        type="button"
+        aria-expanded={open}
+        aria-controls={menuId}
+        aria-label={`${t('localeLabel')}: ${tLocales(locale)}`}
+        onClick={() => setOpen((value) => !value)}
+        className="flex items-center gap-8 rounded-glass-sm px-12 py-8 text-ink-2 transition ease-reveal duration-fast hover:text-ink"
+      >
+        <GlobeIcon />
+        <span className="font-mono text-caption uppercase">{locale}</span>
+      </button>
+
+      <ul
+        id={menuId}
+        hidden={!open}
+        className="absolute right-0 z-50 mt-8 min-w-[12rem] rounded-glass-sm border border-line bg-surface p-8 shadow-lg"
+      >
+        {locales.map((code) => {
+          const isCurrent = code === locale
+
+          return (
+            <li key={code}>
+              <Link
+                href={alternates[code] ?? pathname}
+                locale={code}
+                hrefLang={code}
+                aria-current={isCurrent ? 'true' : undefined}
+                className={`flex items-center justify-between gap-16 rounded-glass-sm px-12 py-8 text-body transition ease-reveal duration-fast hover:bg-surface-2 ${
+                  isCurrent ? 'text-ink' : 'text-ink-2'
+                }`}
+              >
+                {tLocales(code)}
+                {isCurrent ? <CheckIcon width={16} height={16} /> : null}
+              </Link>
+            </li>
+          )
+        })}
+      </ul>
+    </div>
   )
 }
