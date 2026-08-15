@@ -25,7 +25,8 @@
     "tokens": "tsx scripts/generate-tokens.ts",
     "predev": "npm run tokens && npm run fonts",
     "prebuild": "npm run tokens && npm run fonts",
-    "fonts": "tsx scripts/fetch-fonts.ts"
+    "fonts": "tsx scripts/fetch-fonts.ts",
+    "seed": "cross-env NODE_OPTIONS=--no-deprecation payload run src/seed/index.ts"
   },
   "dependencies": {
     "@payloadcms/db-postgres": "3.88.0",
