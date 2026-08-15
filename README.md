@@ -75,6 +75,40 @@ should not need a redeploy to change. Phase 9 adds cached reads with tag-based
 revalidation on publish, which makes the pages static again, refreshed by an
 edit rather than by a build.
 
+## Motion
+
+Everything that moves is mounted once by `MotionRuntime` and reads the same two
+preferences from one place: `prefers-reduced-motion` and `pointer: coarse`.
+
+**The switch is the load, not a flag.** GSAP, Lenis and OGL are imported
+dynamically inside the effects that need them, so a reader who asked for reduced
+motion downloads none of the three — verified, not assumed. They stay out of the
+shared bundle entirely.
+
+- **Smooth scroll** — Lenis on GSAP's ticker, with `ScrollTrigger.update` on
+  every Lenis frame. Not `scrollerProxy`: that exists to teach ScrollTrigger
+  about a _different_ scroller, and Lenis here drives the window, which
+  ScrollTrigger already measures. What matters is one clock, which is what is
+  wired.
+- **Scroll reveal** — one pattern, driven by the `data-animate` attribute
+  `BlockSection` already emits. Nothing is hidden in the markup: the hidden
+  state is set from JavaScript, so a page without scripting is a page that
+  reads.
+- **Magnetic cursor** — a glass disc following by interpolation, snapping to
+  `data-magnetic` elements inside 80px and leaning them back by at most 8px. It
+  hides the system cursor only once it is running, and disables itself entirely
+  on touch and under reduced motion.
+- **WebGL** — a distortion canvas laid over the real `next/image`, mounted on
+  first intersection and only where a pointer, a WebGL context and a motion
+  preference all allow it. The picture underneath is the fallback.
+- **Counters, marquee, drag** — the behaviours the blocks were already marked
+  for. The first two stop under reduced motion; dragging does not, because it is
+  an input rather than an animation.
+
+The easing token is parsed into a GSAP `CustomEase` rather than approximated
+with a named ease, so the CSS transitions and the scripted animations move
+identically.
+
 ## Pages
 
 | Route                                                            | Source                                             |
