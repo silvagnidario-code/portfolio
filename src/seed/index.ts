@@ -96,6 +96,29 @@ async function createLocalized<
   return doc.id as number
 }
 
+/**
+ * Globals have the same trap as collections: their arrays are not localized,
+ * so a translation written without the existing row ids replaces the rows and
+ * takes the previous language's labels with it.
+ */
+async function updateGlobalLocalized<
+  T extends 'settings' | 'navigation' | 'footer' | 'seo-defaults',
+>(payload: Payload, slug: T, dataFor: (locale: Locale) => Record<string, unknown>): Promise<void> {
+  const created = await payload.updateGlobal({
+    slug,
+    locale: 'it',
+    data: dataFor('it') as never,
+  })
+
+  for (const locale of otherLocales) {
+    await payload.updateGlobal({
+      slug,
+      locale,
+      data: withRowIds(created, dataFor(locale)) as never,
+    })
+  }
+}
+
 async function uploadImage(
   payload: Payload,
   {
@@ -637,62 +660,44 @@ async function seed(): Promise<void> {
     alt: { it: 'Studio', en: 'Studio', zh: '工作室' },
   })
 
-  for (const locale of locales) {
-    await payload.updateGlobal({
-      slug: 'settings',
-      locale,
-      data: {
-        legalName: globalsCopy.settings.legalName,
-        vatId: globalsCopy.settings.vatId,
-        contact: {
-          email: globalsCopy.settings.email,
-          briefRecipient: globalsCopy.settings.briefRecipient,
-          phone: globalsCopy.settings.phone,
-        },
-        offices: globalsCopy.settings.offices.map((office) => ({
-          city: office.city[locale],
-          address: office.address[locale],
-          timezone: office.timezone,
-        })),
-        social: globalsCopy.settings.social,
-      },
-    })
+  await updateGlobalLocalized(payload, 'settings', (locale) => ({
+    legalName: globalsCopy.settings.legalName,
+    vatId: globalsCopy.settings.vatId,
+    contact: {
+      email: globalsCopy.settings.email,
+      briefRecipient: globalsCopy.settings.briefRecipient,
+      phone: globalsCopy.settings.phone,
+    },
+    offices: globalsCopy.settings.offices.map((office) => ({
+      city: office.city[locale],
+      address: office.address[locale],
+      timezone: office.timezone,
+    })),
+    social: globalsCopy.settings.social,
+  }))
 
-    await payload.updateGlobal({
-      slug: 'navigation',
-      locale,
-      data: {
-        items: globalsCopy.navigation.map((item) => ({
-          label: item.label[locale],
-          type: 'internal' as const,
-          path: item.path,
-        })),
-      },
-    })
+  await updateGlobalLocalized(payload, 'navigation', (locale) => ({
+    items: globalsCopy.navigation.map((item) => ({
+      label: item.label[locale],
+      type: 'internal' as const,
+      path: item.path,
+    })),
+  }))
 
-    await payload.updateGlobal({
-      slug: 'footer',
-      locale,
-      data: {
-        columns: globalsCopy.footer.columns.map((column) => ({
-          title: column.title[locale],
-          links: column.links.map((link) => ({ label: link.label[locale], url: link.url })),
-        })),
-        legalText: globalsCopy.footer.legalText[locale],
-      },
-    })
+  await updateGlobalLocalized(payload, 'footer', (locale) => ({
+    columns: globalsCopy.footer.columns.map((column) => ({
+      title: column.title[locale],
+      links: column.links.map((link) => ({ label: link.label[locale], url: link.url })),
+    })),
+    legalText: globalsCopy.footer.legalText[locale],
+  }))
 
-    await payload.updateGlobal({
-      slug: 'seo-defaults',
-      locale,
-      data: {
-        siteName: globalsCopy.seo.siteName[locale],
-        titleTemplate: globalsCopy.seo.titleTemplate,
-        description: globalsCopy.seo.description[locale],
-        ogImage,
-      },
-    })
-  }
+  await updateGlobalLocalized(payload, 'seo-defaults', (locale) => ({
+    siteName: globalsCopy.seo.siteName[locale],
+    titleTemplate: globalsCopy.seo.titleTemplate,
+    description: globalsCopy.seo.description[locale],
+    ogImage,
+  }))
 
   payload.logger.info('Seed complete.')
 }
