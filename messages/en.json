@@ -1,0 +1,26 @@
+{
+  "Site": {
+    "name": "Studio",
+    "tagline": "Creative agency portfolio"
+  },
+  "Navigation": {
+    "home": "Home",
+    "work": "Work",
+    "services": "Services",
+    "about": "Studio",
+    "contact": "Contact"
+  },
+  "HomePage": {
+    "title": "Foundations",
+    "intro": "Project scaffolding: multilingual routing, CMS and infrastructure. No styling applied at this stage."
+  },
+  "WorkPage": {
+    "title": "Work",
+    "intro": "The project index is built in the phase dedicated to pages."
+  },
+  "NotFound": {
+    "title": "Page not found",
+    "description": "The requested address does not match any page.",
+    "backHome": "Back to home"
+  }
+}

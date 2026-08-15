@@ -1,0 +1,26 @@
+{
+  "Site": {
+    "name": "工作室",
+    "tagline": "创意机构作品集"
+  },
+  "Navigation": {
+    "home": "首页",
+    "work": "作品",
+    "services": "服务",
+    "about": "工作室",
+    "contact": "联系"
+  },
+  "HomePage": {
+    "title": "基础架构",
+    "intro": "项目骨架：多语言路由、内容管理系统与基础设施。此阶段尚未应用任何样式。"
+  },
+  "WorkPage": {
+    "title": "作品",
+    "intro": "作品索引将在页面阶段构建。"
+  },
+  "NotFound": {
+    "title": "页面未找到",
+    "description": "请求的地址不对应任何页面。",
+    "backHome": "返回首页"
+  }
+}
