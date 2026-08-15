@@ -57,7 +57,41 @@ const families: readonly FamilySpec[] = [
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..')
 const publicFonts = path.join(root, 'public', 'fonts')
+const ogFonts = path.join(publicFonts, 'og')
 const manifestPath = path.join(root, 'src', 'lib', 'font-manifest.generated.ts')
+
+/**
+ * Open Graph images are drawn by Satori, which needs a whole font file — it
+ * cannot use the unicode-range slices above, and it does not read woff2.
+ * Google's legacy stylesheet still serves a single latin woff, which is small
+ * enough to sit in memory for the lifetime of the process.
+ */
+const LEGACY_UA =
+  'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/28.0.1500.71 Safari/537.36'
+
+const OG_FONT = { family: 'Zen Kaku Gothic New', weight: 400, file: 'og-body.woff' }
+
+async function fetchOgFont(): Promise<void> {
+  const target = path.join(ogFonts, OG_FONT.file)
+  if (existsSync(target)) return
+
+  const css = await (
+    await fetch(
+      `https://fonts.googleapis.com/css?family=${encodeURIComponent(OG_FONT.family).replace(/%20/g, '+')}:${OG_FONT.weight}`,
+      { headers: { 'User-Agent': LEGACY_UA } },
+    )
+  ).text()
+
+  const url = /https:\/\/fonts\.gstatic\.com\/[^)]+\.woff/.exec(css)?.[0]
+  if (!url) throw new Error('No woff found for the Open Graph font')
+
+  const response = await fetch(url, { headers: { 'User-Agent': LEGACY_UA } })
+  if (!response.ok) throw new Error(`Open Graph font responded ${response.status}`)
+
+  await mkdir(ogFonts, { recursive: true })
+  await writeFile(target, Buffer.from(await response.arrayBuffer()))
+  console.log(`Open Graph font: ${OG_FONT.file}`)
+}
 
 /** Ranges worth keeping for a latin-only usage: latin, punctuation, currency. */
 const LATIN_INTERVALS: ReadonlyArray<readonly [number, number]> = [
@@ -223,6 +257,7 @@ function preloadHrefs(spec: FamilySpec, faces: Face[]): string[] {
 async function main(): Promise<void> {
   const upToDate =
     existsSync(manifestPath) &&
+    existsSync(path.join(ogFonts, OG_FONT.file)) &&
     families.every((spec) => existsSync(path.join(publicFonts, `${spec.slug}.css`)))
 
   if (upToDate && process.env.FORCE_FONT_FETCH !== 'true') {
@@ -230,6 +265,7 @@ async function main(): Promise<void> {
   }
 
   await mkdir(publicFonts, { recursive: true })
+  await fetchOgFont()
 
   const manifest: Record<string, { css: string; preload: string[] }> = {}
 
