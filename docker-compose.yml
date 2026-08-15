@@ -1,0 +1,77 @@
+name: portfolio
+
+services:
+  db:
+    image: postgres:17-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: portfolio
+      POSTGRES_PASSWORD: portfolio
+      POSTGRES_DB: portfolio
+    ports:
+      # 5433 on the host: 5432 is often taken by a locally installed Postgres.
+      - '5433:5432'
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U portfolio -d portfolio']
+      interval: 5s
+      timeout: 5s
+      retries: 12
+
+  # S3-compatible storage for local development. Production uses Cloudflare R2
+  # with the same client code, so the upload path is never a dev-only shortcut.
+  minio:
+    image: minio/minio:latest
+    restart: unless-stopped
+    command: server /data --console-address ":9001"
+    environment:
+      MINIO_ROOT_USER: portfolio
+      MINIO_ROOT_PASSWORD: portfolio-secret
+    ports:
+      - '9000:9000'
+      - '9001:9001'
+    volumes:
+      - miniodata:/data
+
+  # Creates the bucket and makes it publicly readable, then exits.
+  minio-init:
+    image: minio/mc:latest
+    depends_on:
+      - minio
+    entrypoint:
+      - sh
+      - -c
+      - |
+        until mc alias set local http://minio:9000 portfolio portfolio-secret; do
+          echo 'waiting for minio...' && sleep 1
+        done
+        mc mb --ignore-existing local/portfolio-media
+        mc anonymous set download local/portfolio-media
+
+  # Full containerised run: `docker compose --profile full up --build`.
+  # Day-to-day development runs the app on the host for faster HMR.
+  app:
+    profiles: ['full']
+    build:
+      context: .
+    restart: unless-stopped
+    ports:
+      - '3000:3000'
+    depends_on:
+      db:
+        condition: service_healthy
+      minio:
+        condition: service_started
+    env_file:
+      - .env
+    environment:
+      NODE_ENV: production
+      DATABASE_URI: postgres://portfolio:portfolio@db:5432/portfolio
+      S3_ENDPOINT: http://minio:9000
+      # Reached from the browser, not from inside the container.
+      S3_PUBLIC_URL: http://localhost:9000/portfolio-media
+
+volumes:
+  pgdata:
+  miniodata:
