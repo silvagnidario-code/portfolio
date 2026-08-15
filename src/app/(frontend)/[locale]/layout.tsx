@@ -4,7 +4,13 @@ import { getTranslations, setRequestLocale } from 'next-intl/server'
 import { notFound } from 'next/navigation'
 import type { ReactNode } from 'react'
 
+import { ThemeProvider } from '@/components/theme/theme-provider'
+import { ThemeScript } from '@/components/theme/theme-script'
+import { CjkStylesheet, FontLinks } from '@/components/typography/font-links'
 import { routing } from '@/i18n/routing'
+import { geistMono } from '@/lib/fonts'
+
+import '@/styles/globals.css'
 
 type LayoutProps = {
   children: ReactNode
@@ -38,9 +44,18 @@ export default async function LocaleLayout({ children, params }: LayoutProps) {
   setRequestLocale(locale)
 
   return (
-    <html lang={locale}>
+    // The inline theme script mutates data-theme before React hydrates.
+    <html lang={locale} className={geistMono.variable} suppressHydrationWarning>
+      <head>
+        <ThemeScript />
+        <FontLinks />
+        {/* Han glyphs are requested only where they are read. */}
+        {locale === 'zh' ? <CjkStylesheet /> : null}
+      </head>
       <body>
-        <NextIntlClientProvider>{children}</NextIntlClientProvider>
+        <NextIntlClientProvider>
+          <ThemeProvider>{children}</ThemeProvider>
+        </NextIntlClientProvider>
       </body>
     </html>
   )
