@@ -23,7 +23,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const { locale, slug } = await params
   if (!isLegalSlug(slug)) return {}
 
-  return cmsPageMetadata({ slug, locale })
+  return cmsPageMetadata({ slug, locale, path: `/legal/${slug}` })
 }
 
 export default async function LegalPage({ params }: PageProps) {

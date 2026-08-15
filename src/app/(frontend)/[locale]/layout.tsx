@@ -1,6 +1,6 @@
 import type { Metadata } from 'next'
 import { hasLocale, NextIntlClientProvider } from 'next-intl'
-import { getTranslations, setRequestLocale } from 'next-intl/server'
+import { setRequestLocale } from 'next-intl/server'
 import { notFound } from 'next/navigation'
 import type { ReactNode } from 'react'
 
@@ -8,13 +8,17 @@ import { GlassBudgetProvider } from '@/components/glass/glass-budget'
 import { PageTransition } from '@/components/layout/page-transition'
 import { MotionPreferencesProvider } from '@/components/motion/motion-preferences'
 import { MotionRuntime } from '@/components/motion/motion-runtime'
+import { OrganizationJsonLd } from '@/components/seo/json-ld'
 import { SiteFooter } from '@/components/layout/site-footer'
 import { SiteHeader } from '@/components/layout/site-header'
 import { SkipLink } from '@/components/layout/skip-link'
 import { ThemeProvider } from '@/components/theme/theme-provider'
 import { ThemeScript } from '@/components/theme/theme-script'
-import { CjkStylesheet, FontLinks } from '@/components/typography/font-links'
+import { CjkStylesheet } from '@/components/typography/cjk-stylesheet'
+import { FontLinks } from '@/components/typography/font-links'
 import { routing } from '@/i18n/routing'
+import { env } from '@/lib/env'
+import { getGlobal } from '@/lib/payload'
 import { geistMono } from '@/lib/fonts'
 
 import '@/styles/globals.css'
@@ -46,11 +50,29 @@ export async function generateMetadata({
   params,
 }: Omit<LayoutProps, 'children'>): Promise<Metadata> {
   const { locale } = await params
-  const t = await getTranslations({ locale, namespace: 'Site' })
+
+  if (!hasLocale(routing.locales, locale)) return {}
+
+  const seo = await getGlobal('seo-defaults', locale)
+  const ogImage = typeof seo.ogImage === 'object' ? seo.ogImage : null
 
   return {
-    title: { default: t('name'), template: `%s — ${t('name')}` },
-    description: t('tagline'),
+    // Lets every page declare its metadata with a path instead of a full URL.
+    metadataBase: new URL(env.NEXT_PUBLIC_SERVER_URL),
+    title: {
+      default: seo.siteName,
+      // The template is editorial, so it lives in the CMS with the site name.
+      template: seo.titleTemplate.replace('%s', '%s'),
+    },
+    description: seo.description,
+    openGraph: {
+      type: 'website',
+      siteName: seo.siteName,
+      locale,
+      images: ogImage?.url ? [{ url: ogImage.url }] : undefined,
+    },
+    twitter: { card: 'summary_large_image' },
+    robots: { index: true, follow: true },
   }
 }
 
@@ -78,6 +100,7 @@ export default async function LocaleLayout({ children, params }: LayoutProps) {
           <ThemeProvider>
             <MotionPreferencesProvider>
               <GlassBudgetProvider>
+                <OrganizationJsonLd locale={locale} />
                 <SkipLink />
                 <SiteHeader locale={locale} />
                 <PageTransition>{children}</PageTransition>

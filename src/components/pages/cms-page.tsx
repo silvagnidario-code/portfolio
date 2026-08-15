@@ -3,6 +3,7 @@ import { notFound } from 'next/navigation'
 
 import { RenderBlocks } from '@/components/blocks/render-blocks'
 import type { Locale } from '@/i18n/routing'
+import { alternatesFor } from '@/lib/metadata'
 import { getGlobal } from '@/lib/payload'
 import { getPageBySlug } from '@/lib/queries'
 
@@ -15,15 +16,25 @@ export async function CmsPage({ slug, locale }: { slug: string; locale: Locale }
 
   if (!page) notFound()
 
-  return <RenderBlocks blocks={page.layout} locale={locale} />
+  // The blocks are the page's content, so they need the landmark: without it
+  // a screen reader has no "skip to main" target and axe reports the page as
+  // having no main region at all.
+  return (
+    <main>
+      <RenderBlocks blocks={page.layout} locale={locale} />
+    </main>
+  )
 }
 
 export async function cmsPageMetadata({
   slug,
   locale,
+  path,
 }: {
   slug: string
   locale: Locale
+  /** Route path without the locale prefix, for canonical and hreflang. */
+  path: string
 }): Promise<Metadata> {
   const [page, seo] = await Promise.all([
     getPageBySlug(slug, locale),
@@ -38,6 +49,7 @@ export async function cmsPageMetadata({
   return {
     title: page.meta?.title ?? page.title,
     description: page.meta?.description ?? seo.description,
+    alternates: alternatesFor(path, locale),
     openGraph: {
       title: page.meta?.title ?? page.title,
       description: page.meta?.description ?? seo.description,

@@ -10,8 +10,11 @@ import { RichText } from '@/components/blocks/rich-text'
 import { MediaImage } from '@/components/media/media-image'
 import { Link } from '@/i18n/navigation'
 import { routing, type Locale } from '@/i18n/routing'
+import { CreativeWorkJsonLd } from '@/components/seo/json-ld'
 import { resolveProjectAccent } from '@/lib/accent'
 import { env } from '@/lib/env'
+import { alternatesForPaths } from '@/lib/metadata'
+import { ogSize } from '@/lib/og'
 import { getProjectAlternates, getProjectBySlug } from '@/lib/queries'
 import type { Industry, Project, Service, TeamMember, Testimonial } from '@/payload-types'
 
@@ -27,24 +30,25 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   if (!project) return {}
 
   const alternates = await getProjectAlternates(project.id, routing.locales)
-  const image = populated(project.meta?.ogImage) ?? populated(project.cover)
+
+  // An editor-supplied OG image wins; otherwise the card is generated from the
+  // document itself.
+  const supplied = populated(project.meta?.ogImage)
+  const generated = `${env.NEXT_PUBLIC_SERVER_URL}/${locale}/work/${slug}/og`
 
   return {
     title: project.meta?.title ?? project.title,
     description: project.meta?.description ?? project.claim,
-    alternates: {
-      canonical: `${env.NEXT_PUBLIC_SERVER_URL}/${locale}${alternates[locale] ?? `/work/${slug}`}`,
-      languages: Object.fromEntries(
-        Object.entries(alternates).map(([code, path]) => [
-          code,
-          `${env.NEXT_PUBLIC_SERVER_URL}/${code}${path}`,
-        ]),
-      ),
-    },
+    alternates: alternatesForPaths(alternates, locale, `/work/${slug}`),
     openGraph: {
+      type: 'article',
       title: project.title,
       description: project.claim,
-      images: image?.url ? [{ url: image.url }] : undefined,
+      images: [
+        supplied?.url
+          ? { url: supplied.url }
+          : { url: generated, width: ogSize.width, height: ogSize.height },
+      ],
     },
   }
 }
@@ -85,10 +89,12 @@ export default async function CaseStudyPage({ params }: PageProps) {
   ]
 
   return (
-    <article
+    <main
       className="project-accent pb-96"
       style={{ '--accent-light': accent.light, '--accent-dark': accent.dark } as CSSProperties}
     >
+      <CreativeWorkJsonLd project={project} locale={locale} path={`/work/${slug}`} />
+
       <header className="page-grid pb-64">
         <div className="col-span-4 tablet:col-span-6 desktop:col-span-9">
           <Eyebrow>{project.client}</Eyebrow>
@@ -148,13 +154,17 @@ export default async function CaseStudyPage({ params }: PageProps) {
                 key={result.id ?? result.value}
                 className="col-span-4 tablet:col-span-2 desktop:col-span-4 border-t border-line pt-24"
               >
-                <dd className="text-display">{result.value}</dd>
-                <dt className="mt-16 text-body-lg">{result.label}</dt>
-                {result.delta ? (
-                  <p className="mt-8 font-mono text-caption uppercase text-ink-muted">
-                    {result.delta}
-                  </p>
-                ) : null}
+                <dt className="text-display">{result.value}</dt>
+                {/* The delta lives inside the description: a `p` between the
+                    pairs of a definition list is not allowed there. */}
+                <dd className="mt-16 text-body-lg">
+                  {result.label}
+                  {result.delta ? (
+                    <span className="mt-8 block font-mono text-caption uppercase text-ink-muted">
+                      {result.delta}
+                    </span>
+                  ) : null}
+                </dd>
               </div>
             ))}
           </dl>
@@ -259,6 +269,6 @@ export default async function CaseStudyPage({ params }: PageProps) {
           {t('backToWork')}
         </Link>
       </p>
-    </article>
+    </main>
   )
 }

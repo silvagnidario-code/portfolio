@@ -4,6 +4,7 @@ import { getTranslations, setRequestLocale } from 'next-intl/server'
 import { ProjectCard } from '@/components/blocks/project-card'
 import { WorkFilters, type WorkFilter } from '@/components/work/work-filters'
 import type { Locale } from '@/i18n/routing'
+import { alternatesFor } from '@/lib/metadata'
 import { getPayloadClient } from '@/lib/payload'
 import type { Where } from 'payload'
 
@@ -19,7 +20,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const { locale } = await params
   const t = await getTranslations({ locale, namespace: 'WorkPage' })
 
-  return { title: t('title'), description: t('intro') }
+  return { title: t('title'), description: t('intro'), alternates: alternatesFor('/work', locale) }
 }
 
 export default async function WorkIndexPage({ params, searchParams }: PageProps) {
@@ -81,6 +82,7 @@ export default async function WorkIndexPage({ params, searchParams }: PageProps)
             >
               <ProjectCard
                 project={project}
+                headingLevel="h2"
                 sizes="(min-width: 1180px) 55vw, (min-width: 768px) 60vw, 100vw"
                 aspect={index % 3 === 0 ? 'aspect-[4/3]' : 'aspect-[3/4]'}
               />

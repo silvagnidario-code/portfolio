@@ -3,6 +3,7 @@ import { getTranslations, setRequestLocale } from 'next-intl/server'
 
 import { BriefForm } from '@/components/contact/brief-form'
 import type { Locale } from '@/i18n/routing'
+import { alternatesFor } from '@/lib/metadata'
 import { getGlobal } from '@/lib/payload'
 
 import { submitBrief } from './actions'
@@ -13,7 +14,11 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const { locale } = await params
   const t = await getTranslations({ locale, namespace: 'ContactPage' })
 
-  return { title: t('title'), description: t('intro') }
+  return {
+    title: t('title'),
+    description: t('intro'),
+    alternates: alternatesFor('/contact', locale),
+  }
 }
 
 export default async function ContactPage({ params }: PageProps) {

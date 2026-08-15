@@ -12,6 +12,17 @@ const withNextIntl = createNextIntlPlugin('./src/i18n/request.ts')
 const nextConfig: NextConfig = {
   // Required by the Dockerfile: bundles a minimal server in .next/standalone.
   output: 'standalone',
+  /**
+   * Metadata goes in the <head> for every client, not only for the bots Next
+   * assumes cannot render JavaScript.
+   *
+   * This site exists to be found, and its pages are dynamic, so `generateMetadata`
+   * would otherwise be streamed into the body — where an indexer that does not
+   * run a browser never sees the description, the canonical or the hreflang.
+   * The cost is that the shell waits for a query the page needs anyway, and it
+   * was measured: LCP did not move.
+   */
+  htmlLimitedBots: /.*/,
   outputFileTracingRoot: dirname,
   images: {
     localPatterns: [{ pathname: '/api/media/file/**' }],

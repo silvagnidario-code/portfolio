@@ -8,7 +8,7 @@ type PageProps = { params: Promise<{ locale: Locale }> }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { locale } = await params
-  return cmsPageMetadata({ slug: 'services', locale })
+  return cmsPageMetadata({ slug: 'services', locale, path: '/services' })
 }
 
 export default async function ServicesPage({ params }: PageProps) {
