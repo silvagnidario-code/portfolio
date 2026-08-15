@@ -4,6 +4,7 @@ import { getTranslations, setRequestLocale } from 'next-intl/server'
 import { notFound } from 'next/navigation'
 import type { ReactNode } from 'react'
 
+import { GlassBudgetProvider } from '@/components/glass/glass-budget'
 import { ThemeProvider } from '@/components/theme/theme-provider'
 import { ThemeScript } from '@/components/theme/theme-script'
 import { CjkStylesheet, FontLinks } from '@/components/typography/font-links'
@@ -54,7 +55,9 @@ export default async function LocaleLayout({ children, params }: LayoutProps) {
       </head>
       <body>
         <NextIntlClientProvider>
-          <ThemeProvider>{children}</ThemeProvider>
+          <ThemeProvider>
+            <GlassBudgetProvider>{children}</GlassBudgetProvider>
+          </ThemeProvider>
         </NextIntlClientProvider>
       </body>
     </html>

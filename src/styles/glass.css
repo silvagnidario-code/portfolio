@@ -1,0 +1,98 @@
+/**
+ * The glass material, §7. Four layers, one place.
+ *
+ * Only `GlassSurface` may use these classes: no other component implements
+ * glass on its own. They apply to the floating interface layer — navbar,
+ * pills, cursor, lightbox chrome — and never to content, which stays opaque
+ * and flat. Content is paper, the interface is shoji.
+ *
+ * Values come from `--glass-*` in tokens.generated.css, whose fill opacity is
+ * computed from the contrast the text above it has to keep.
+ */
+
+.glass {
+  position: relative;
+  color: var(--fg-primary);
+  border-radius: var(--corner-glass-md);
+
+  /* 1 — backdrop blur */
+  -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate));
+  backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate));
+
+  /* 2 — adaptive fill, never transparent enough to lose AA */
+  background-color: var(--glass-fill);
+
+  /* 3 — specular edge: a mid border, a bright top, a darker underside */
+  border: var(--glass-border-width) solid var(--glass-border);
+  box-shadow:
+    inset 0 var(--glass-border-width) 0 0 var(--glass-highlight),
+    inset 0 calc(-1 * var(--glass-border-width)) 0 0 var(--glass-shade);
+
+  /*
+   * The blur radius is never animated: it forces a full repaint every frame.
+   * Naming the transitionable properties here means a transition on a glass
+   * surface cannot reach anything else by accident.
+   */
+  transition-property: opacity, transform;
+  transition-duration: var(--duration-base);
+  transition-timing-function: var(--easing-reveal);
+}
+
+/* Explicit fallback: an opaque panel, never an invisible one. */
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .glass {
+    background-color: var(--glass-fill-opaque);
+  }
+}
+
+/* Readers who ask for less transparency get the opaque panel too. */
+@media (prefers-reduced-transparency: reduce) {
+  .glass {
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+    background-color: var(--glass-fill-opaque);
+  }
+}
+
+/* Variants differ only in corner radius — the material itself is one. */
+.glass--navbar {
+  border-radius: var(--corner-glass-lg);
+}
+
+.glass--pill {
+  border-radius: var(--corner-glass-sm);
+}
+
+.glass--chrome {
+  border-radius: var(--corner-glass-md);
+}
+
+.glass--cursor {
+  border-radius: var(--corner-round);
+  /*
+   * 4 — refraction. The displacement filter is worth its cost only here: on a
+   * disc a few dozen pixels wide it reads, on a navbar it does not.
+   */
+  -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate))
+    url('#glass-refraction');
+  backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate)) url('#glass-refraction');
+}
+
+/*
+ * On touch there is no cursor to replace, and the refraction filter would be
+ * paid for nothing. Phase 8 removes the element itself; this makes sure the
+ * expensive filter never runs even if it is rendered.
+ */
+@media (pointer: coarse) {
+  .glass--cursor {
+    -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate));
+    backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate));
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .glass--cursor {
+    -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate));
+    backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate));
+  }
+}

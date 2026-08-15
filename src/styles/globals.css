@@ -4,6 +4,8 @@
 @import './tokens.generated.css';
 /* Tailwind mapping, generated from the same source */
 @import './theme.generated.css';
+/* The glass material — used only by the GlassSurface component */
+@import './glass.css';
 
 @source '../../src';
 
