@@ -97,3 +97,27 @@
   padding-inline-start: var(--space-24);
   color: var(--fg-primary);
 }
+
+/**
+ * A case study tints its page with the colour pulled out of the project — but
+ * only where that colour holds contrast; `resolveProjectAccent` substitutes the
+ * brand accent per theme where it does not, and the cascade below picks the
+ * right one exactly as the palette does.
+ */
+.project-accent {
+  --accent: var(--accent-light);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) .project-accent {
+    --accent: var(--accent-dark);
+  }
+}
+
+:root[data-theme='dark'] .project-accent {
+  --accent: var(--accent-dark);
+}
+
+:root[data-theme='light'] .project-accent {
+  --accent: var(--accent-light);
+}

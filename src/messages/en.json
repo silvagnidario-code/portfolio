@@ -38,7 +38,75 @@
   },
   "WorkPage": {
     "title": "Work",
-    "intro": "The project index is built in the phase dedicated to pages."
+    "intro": "Three cases told end to end: what was there before, what we took away, what changed after. Filter by service or by industry.",
+    "filters": "Filters",
+    "allProjects": "All",
+    "byService": "Service",
+    "byIndustry": "Industry",
+    "clear": "Clear",
+    "empty": "No project matches these filters.",
+    "count": "{count, plural, =0 {No projects} one {One project} other {# projects}}"
+  },
+  "CaseStudy": {
+    "client": "Client",
+    "year": "Year",
+    "services": "Services",
+    "industry": "Industry",
+    "context": "Context",
+    "challenge": "The challenge",
+    "approach": "The approach",
+    "results": "Results",
+    "credits": "Credits",
+    "team": "Team",
+    "partners": "Partners",
+    "awards": "Awards",
+    "liveUrl": "See it live",
+    "related": "More work",
+    "backToWork": "All work"
+  },
+  "ContactPage": {
+    "title": "Contact",
+    "intro": "Tell us about the project in a few lines: what you sell, to whom, and what is not working now. We answer within two working days.",
+    "name": "Name",
+    "company": "Company",
+    "email": "Email",
+    "projectType": "Project type",
+    "budget": "Indicative budget",
+    "timeline": "Timing",
+    "message": "The project",
+    "messageHint": "Twenty characters at least. Two true sentences beat a page of preamble.",
+    "optional": "optional",
+    "submit": "Send the brief",
+    "sending": "Sending…",
+    "honeypot": "Leave this field empty",
+    "types": {
+      "identity": "Brand identity",
+      "digital": "Site or digital product",
+      "campaign": "Campaign or content",
+      "other": "Something else"
+    },
+    "budgets": {
+      "under25": "Under €25,000",
+      "25to50": "€25,000 – 50,000",
+      "50to100": "€50,000 – 100,000",
+      "over100": "Over €100,000",
+      "unknown": "To be defined"
+    },
+    "timelines": {
+      "asap": "As soon as possible",
+      "quarter": "Within three months",
+      "halfYear": "Within six months",
+      "exploring": "Still exploring"
+    },
+    "status": {
+      "sent": "Received. We will answer within two working days.",
+      "invalid": "Some fields are not valid. Check the ones marked.",
+      "rateLimited": "Too many submissions in a row. Try again in a few minutes.",
+      "notConfigured": "Sending is not configured. Write to us directly at the address below.",
+      "failed": "Sending failed. Try again, or write to us directly at the address below."
+    },
+    "invalidField": "Check this field.",
+    "writeUs": "Or write to us"
   },
   "BlocksPage": {
     "title": "Blocks",

@@ -38,7 +38,75 @@
   },
   "WorkPage": {
     "title": "Progetti",
-    "intro": "L'indice dei progetti viene costruito nella fase dedicata alle pagine."
+    "intro": "Tre casi raccontati per intero: cosa c'era prima, cosa abbiamo tolto, cosa è cambiato dopo. Filtra per servizio o per settore.",
+    "filters": "Filtri",
+    "allProjects": "Tutti",
+    "byService": "Servizio",
+    "byIndustry": "Settore",
+    "clear": "Azzera",
+    "empty": "Nessun progetto corrisponde a questi filtri.",
+    "count": "{count, plural, =0 {Nessun progetto} one {Un progetto} other {# progetti}}"
+  },
+  "CaseStudy": {
+    "client": "Cliente",
+    "year": "Anno",
+    "services": "Servizi",
+    "industry": "Settore",
+    "context": "Contesto",
+    "challenge": "La sfida",
+    "approach": "L'approccio",
+    "results": "Risultati",
+    "credits": "Crediti",
+    "team": "Team",
+    "partners": "Partner",
+    "awards": "Riconoscimenti",
+    "liveUrl": "Vedi il progetto",
+    "related": "Altri progetti",
+    "backToWork": "Tutti i progetti"
+  },
+  "ContactPage": {
+    "title": "Contatti",
+    "intro": "Raccontaci il progetto in poche righe: cosa vendete, a chi, e cosa non funziona adesso. Rispondiamo entro due giorni lavorativi.",
+    "name": "Nome",
+    "company": "Azienda",
+    "email": "Email",
+    "projectType": "Tipo di progetto",
+    "budget": "Budget indicativo",
+    "timeline": "Tempistiche",
+    "message": "Il progetto",
+    "messageHint": "Almeno venti caratteri. Meglio due frasi vere che una pagina di premesse.",
+    "optional": "facoltativo",
+    "submit": "Invia il brief",
+    "sending": "Invio…",
+    "honeypot": "Lascia vuoto questo campo",
+    "types": {
+      "identity": "Identità di marca",
+      "digital": "Sito o prodotto digitale",
+      "campaign": "Campagna o contenuti",
+      "other": "Altro"
+    },
+    "budgets": {
+      "under25": "Sotto 25.000 €",
+      "25to50": "25.000 – 50.000 €",
+      "50to100": "50.000 – 100.000 €",
+      "over100": "Oltre 100.000 €",
+      "unknown": "Da definire"
+    },
+    "timelines": {
+      "asap": "Il prima possibile",
+      "quarter": "Entro tre mesi",
+      "halfYear": "Entro sei mesi",
+      "exploring": "Stiamo valutando"
+    },
+    "status": {
+      "sent": "Ricevuto. Ti rispondiamo entro due giorni lavorativi.",
+      "invalid": "Qualche campo non è valido. Controlla quelli segnalati.",
+      "rateLimited": "Troppi invii ravvicinati. Riprova fra qualche minuto.",
+      "notConfigured": "L'invio non è configurato. Scrivici direttamente all'indirizzo qui sotto.",
+      "failed": "L'invio non è riuscito. Riprova, o scrivici direttamente all'indirizzo qui sotto."
+    },
+    "invalidField": "Controlla questo campo.",
+    "writeUs": "Oppure scrivici"
   },
   "BlocksPage": {
     "title": "Blocchi",

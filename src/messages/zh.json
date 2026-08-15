@@ -38,7 +38,75 @@
   },
   "WorkPage": {
     "title": "作品",
-    "intro": "作品索引将在页面阶段构建。"
+    "intro": "三个完整讲述的案例：此前是什么、我们拿掉了什么、之后发生了什么变化。可按服务或行业筛选。",
+    "filters": "筛选",
+    "allProjects": "全部",
+    "byService": "服务",
+    "byIndustry": "行业",
+    "clear": "清除",
+    "empty": "没有符合当前筛选条件的项目。",
+    "count": "{count, plural, other {# 个项目}}"
+  },
+  "CaseStudy": {
+    "client": "客户",
+    "year": "年份",
+    "services": "服务",
+    "industry": "行业",
+    "context": "背景",
+    "challenge": "挑战",
+    "approach": "方法",
+    "results": "成果",
+    "credits": "参与人员",
+    "team": "团队",
+    "partners": "合作方",
+    "awards": "奖项",
+    "liveUrl": "查看线上版本",
+    "related": "更多作品",
+    "backToWork": "全部作品"
+  },
+  "ContactPage": {
+    "title": "联系",
+    "intro": "用几行字告诉我们项目：你们卖什么、卖给谁、现在哪里不顺。我们会在两个工作日内回复。",
+    "name": "姓名",
+    "company": "公司",
+    "email": "电子邮箱",
+    "projectType": "项目类型",
+    "budget": "预算范围",
+    "timeline": "时间安排",
+    "message": "项目说明",
+    "messageHint": "至少二十个字符。两句实话胜过一页铺垫。",
+    "optional": "选填",
+    "submit": "发送需求",
+    "sending": "发送中…",
+    "honeypot": "请勿填写此字段",
+    "types": {
+      "identity": "品牌识别",
+      "digital": "网站或数字产品",
+      "campaign": "营销活动或内容",
+      "other": "其他"
+    },
+    "budgets": {
+      "under25": "2.5 万欧元以下",
+      "25to50": "2.5 万 – 5 万欧元",
+      "50to100": "5 万 – 10 万欧元",
+      "over100": "10 万欧元以上",
+      "unknown": "待定"
+    },
+    "timelines": {
+      "asap": "尽快",
+      "quarter": "三个月内",
+      "halfYear": "六个月内",
+      "exploring": "仍在评估"
+    },
+    "status": {
+      "sent": "已收到。我们会在两个工作日内回复。",
+      "invalid": "部分字段无效，请检查标记处。",
+      "rateLimited": "提交过于频繁，请几分钟后再试。",
+      "notConfigured": "发送功能尚未配置。请直接写信到下方地址。",
+      "failed": "发送失败。请重试，或直接写信到下方地址。"
+    },
+    "invalidField": "请检查此字段。",
+    "writeUs": "或直接联系我们"
   },
   "BlocksPage": {
     "title": "区块",
