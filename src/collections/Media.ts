@@ -17,9 +17,17 @@ export const Media: CollectionConfig = {
     // Files live on S3/R2 (see the storage plugin in payload.config.ts),
     // never on the app filesystem.
     focalPoint: true,
-    // Image sizes are added in phase 2, once the breakpoints of the design
-    // system exist. Adding them earlier would mean re-generating every asset.
-    imageSizes: [],
+    /**
+     * Widths chosen against the grid rather than against round numbers: a card
+     * in the three-column variant, a half-page pair, and the full-bleed case.
+     * `withoutEnlargement` keeps a small logo from being blown up into mush.
+     */
+    imageSizes: [
+      { name: 'thumbnail', width: 400, withoutEnlargement: true },
+      { name: 'card', width: 768, withoutEnlargement: true },
+      { name: 'wide', width: 1280, withoutEnlargement: true },
+      { name: 'full', width: 1920, withoutEnlargement: true },
+    ],
   },
   fields: [
     {

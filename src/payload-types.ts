@@ -67,8 +67,15 @@ export interface Config {
   };
   blocks: {};
   collections: {
-    users: User;
+    projects: Project;
+    pages: Page;
+    services: Service;
+    testimonials: Testimonial;
+    'team-members': TeamMember;
+    clients: Client;
+    industries: Industry;
     media: Media;
+    users: User;
     'payload-kv': PayloadKv;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
@@ -76,8 +83,15 @@ export interface Config {
   };
   collectionsJoins: {};
   collectionsSelect: {
-    users: UsersSelect<false> | UsersSelect<true>;
+    projects: ProjectsSelect<false> | ProjectsSelect<true>;
+    pages: PagesSelect<false> | PagesSelect<true>;
+    services: ServicesSelect<false> | ServicesSelect<true>;
+    testimonials: TestimonialsSelect<false> | TestimonialsSelect<true>;
+    'team-members': TeamMembersSelect<false> | TeamMembersSelect<true>;
+    clients: ClientsSelect<false> | ClientsSelect<true>;
+    industries: IndustriesSelect<false> | IndustriesSelect<true>;
     media: MediaSelect<false> | MediaSelect<true>;
+    users: UsersSelect<false> | UsersSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
@@ -87,8 +101,18 @@ export interface Config {
     defaultIDType: number;
   };
   fallbackLocale: ('false' | 'none' | 'null') | false | null | ('it' | 'en' | 'zh') | ('it' | 'en' | 'zh')[];
-  globals: {};
-  globalsSelect: {};
+  globals: {
+    settings: Setting;
+    navigation: Navigation;
+    footer: Footer;
+    'seo-defaults': SeoDefault;
+  };
+  globalsSelect: {
+    settings: SettingsSelect<false> | SettingsSelect<true>;
+    navigation: NavigationSelect<false> | NavigationSelect<true>;
+    footer: FooterSelect<false> | FooterSelect<true>;
+    'seo-defaults': SeoDefaultsSelect<false> | SeoDefaultsSelect<true>;
+  };
   locale: 'it' | 'en' | 'zh';
   widgets: {
     collections: CollectionsWidget;
@@ -119,6 +143,725 @@ export interface UserAuthOperations {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "projects".
+ */
+export interface Project {
+  id: number;
+  title: string;
+  /**
+   * Generato da "title" se lasciato vuoto. Cambiarlo cambia l'URL.
+   */
+  slug: string;
+  featured?: boolean | null;
+  /**
+   * Ordinamento manuale, crescente.
+   */
+  order: number;
+  meta?: {
+    /**
+     * Se vuoto usa il titolo del documento.
+     */
+    title?: string | null;
+    /**
+     * 150–160 caratteri circa.
+     */
+    description?: string | null;
+    /**
+     * Se vuota viene generata dal titolo del documento.
+     */
+    ogImage?: (number | null) | Media;
+  };
+  client: string;
+  year: number;
+  industry: number | Industry;
+  /**
+   * Alimenta i filtri dell'indice progetti.
+   */
+  services: (number | Service)[];
+  /**
+   * Immagine di griglia. Il focal point si imposta sul media.
+   */
+  cover: number | Media;
+  /**
+   * Loop breve per l'hover in griglia. Opzionale.
+   */
+  coverVideo?: (number | null) | Media;
+  /**
+   * Apertura della pagina di dettaglio.
+   */
+  heroMedia?: (number | null) | Media;
+  /**
+   * Hex estratto dal progetto: tinge la pagina di dettaglio. Il contrasto va verificato in styleguide.
+   */
+  accentColor?: string | null;
+  /**
+   * Galleria libera, con le stesse varianti del blocco Media.
+   */
+  gallery?: MediaBlockType[] | null;
+  /**
+   * Apertura breve. Una frase, non un paragrafo.
+   */
+  claim: string;
+  context?: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
+  challenge?: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
+  approach?: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
+  /**
+   * Testo e media alternati, nell'ordine in cui si leggono.
+   */
+  execution?: (ProseBlock | MediaBlockType)[] | null;
+  results?:
+    | {
+        label: string;
+        value: string;
+        delta?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  testimonial?: (number | null) | Testimonial;
+  team?: (number | TeamMember)[] | null;
+  partners?:
+    | {
+        name: string;
+        role: string;
+        id?: string | null;
+      }[]
+    | null;
+  liveUrl?: string | null;
+  awards?:
+    | {
+        name: string;
+        category?: string | null;
+        year?: number | null;
+        id?: string | null;
+      }[]
+    | null;
+  related?: (number | Project)[] | null;
+  updatedAt: string;
+  createdAt: string;
+  _status?: ('draft' | 'published') | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "media".
+ */
+export interface Media {
+  id: number;
+  /**
+   * Testo alternativo, obbligatorio e tradotto in ogni lingua.
+   */
+  alt: string;
+  prefix?: string | null;
+  updatedAt: string;
+  createdAt: string;
+  url?: string | null;
+  thumbnailURL?: string | null;
+  filename?: string | null;
+  mimeType?: string | null;
+  filesize?: number | null;
+  width?: number | null;
+  height?: number | null;
+  focalX?: number | null;
+  focalY?: number | null;
+  sizes?: {
+    thumbnail?: {
+      url?: string | null;
+      width?: number | null;
+      height?: number | null;
+      mimeType?: string | null;
+      filesize?: number | null;
+      filename?: string | null;
+    };
+    card?: {
+      url?: string | null;
+      width?: number | null;
+      height?: number | null;
+      mimeType?: string | null;
+      filesize?: number | null;
+      filename?: string | null;
+    };
+    wide?: {
+      url?: string | null;
+      width?: number | null;
+      height?: number | null;
+      mimeType?: string | null;
+      filesize?: number | null;
+      filename?: string | null;
+    };
+    full?: {
+      url?: string | null;
+      width?: number | null;
+      height?: number | null;
+      mimeType?: string | null;
+      filesize?: number | null;
+      filename?: string | null;
+    };
+  };
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "industries".
+ */
+export interface Industry {
+  id: number;
+  title: string;
+  /**
+   * Generato da "title" se lasciato vuoto. Cambiarlo cambia l'URL.
+   */
+  slug: string;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "services".
+ */
+export interface Service {
+  id: number;
+  title: string;
+  /**
+   * Generato da "title" se lasciato vuoto. Cambiarlo cambia l'URL.
+   */
+  slug: string;
+  /**
+   * Una riga. Compare nelle griglie e negli elenchi.
+   */
+  summary: string;
+  description?: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
+  /**
+   * SVG monocromatico.
+   */
+  icon?: (number | null) | Media;
+  order: number;
+  meta?: {
+    /**
+     * Se vuoto usa il titolo del documento.
+     */
+    title?: string | null;
+    /**
+     * 150–160 caratteri circa.
+     */
+    description?: string | null;
+    /**
+     * Se vuota viene generata dal titolo del documento.
+     */
+    ogImage?: (number | null) | Media;
+  };
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "MediaBlockType".
+ */
+export interface MediaBlockType {
+  /**
+   * Cambiare variante non perde contenuti né traduzioni.
+   */
+  variant: 'fullBleed' | 'pair' | 'videoLoop' | 'beforeAfter';
+  items?:
+    | {
+        media: number | Media;
+        caption?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  video?: (number | null) | Media;
+  /**
+   * Obbligatorio: il video non parte mai senza poster.
+   */
+  poster?: (number | null) | Media;
+  before?: (number | null) | Media;
+  after?: (number | null) | Media;
+  caption?: string | null;
+  /**
+   * Fondo, respiro verticale e animazione di ingresso.
+   */
+  settings: {
+    background: 'paper' | 'sumi' | 'accent';
+    spacing: 'compact' | 'normal' | 'wide';
+    animate?: boolean | null;
+  };
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'media';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "ProseBlock".
+ */
+export interface ProseBlock {
+  eyebrow?: string | null;
+  heading?: string | null;
+  body: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  };
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'prose';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "testimonials".
+ */
+export interface Testimonial {
+  id: number;
+  quote: string;
+  author: string;
+  role?: string | null;
+  company?: string | null;
+  logo?: (number | null) | Media;
+  project?: (number | null) | Project;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "team-members".
+ */
+export interface TeamMember {
+  id: number;
+  name: string;
+  role: string;
+  bio?: string | null;
+  photo?: (number | null) | Media;
+  links?:
+    | {
+        label: string;
+        url: string;
+        id?: string | null;
+      }[]
+    | null;
+  order: number;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "pages".
+ */
+export interface Page {
+  id: number;
+  title: string;
+  /**
+   * Generato da "title" se lasciato vuoto. Cambiarlo cambia l'URL.
+   */
+  slug: string;
+  meta?: {
+    /**
+     * Se vuoto usa il titolo del documento.
+     */
+    title?: string | null;
+    /**
+     * 150–160 caratteri circa.
+     */
+    description?: string | null;
+    /**
+     * Se vuota viene generata dal titolo del documento.
+     */
+    ogImage?: (number | null) | Media;
+  };
+  layout: (
+    | HeroBlock
+    | StatementBlock
+    | ProjectGridBlock
+    | MediaBlockType
+    | ServicesBlockType
+    | ResultsBlock
+    | TestimonialBlockType
+    | ClientsBlockType
+    | TeamBlockType
+    | CtaBlock
+    | FaqBlock
+  )[];
+  updatedAt: string;
+  createdAt: string;
+  _status?: ('draft' | 'published') | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "HeroBlock".
+ */
+export interface HeroBlock {
+  /**
+   * Cambiare variante non perde contenuti né traduzioni.
+   */
+  variant: 'videoFullscreen' | 'webglImage' | 'typographic';
+  eyebrow?: string | null;
+  heading: string;
+  lead?: string | null;
+  image?: (number | null) | Media;
+  /**
+   * H.264 + WebM, loop entro 10-15s. Il poster e la immagine qui sopra.
+   */
+  video?: (number | null) | Media;
+  cta?: {
+    label?: string | null;
+    href?: string | null;
+  };
+  /**
+   * Fondo, respiro verticale e animazione di ingresso.
+   */
+  settings: {
+    background: 'paper' | 'sumi' | 'accent';
+    spacing: 'compact' | 'normal' | 'wide';
+    animate?: boolean | null;
+  };
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'hero';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "StatementBlock".
+ */
+export interface StatementBlock {
+  /**
+   * Cambiare variante non perde contenuti né traduzioni.
+   */
+  variant: 'asymmetric' | 'twoColumns' | 'horizontalScroll';
+  eyebrow?: string | null;
+  heading: string;
+  body?: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
+  /**
+   * Fondo, respiro verticale e animazione di ingresso.
+   */
+  settings: {
+    background: 'paper' | 'sumi' | 'accent';
+    spacing: 'compact' | 'normal' | 'wide';
+    animate?: boolean | null;
+  };
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'statement';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "ProjectGridBlock".
+ */
+export interface ProjectGridBlock {
+  /**
+   * Cambiare variante non perde contenuti né traduzioni.
+   */
+  variant: 'staggeredTwo' | 'compactThree' | 'draggableRow';
+  heading?: string | null;
+  source: 'featured' | 'manual' | 'byService';
+  projects?: (number | Project)[] | null;
+  service?: (number | null) | Service;
+  limit?: number | null;
+  /**
+   * Fondo, respiro verticale e animazione di ingresso.
+   */
+  settings: {
+    background: 'paper' | 'sumi' | 'accent';
+    spacing: 'compact' | 'normal' | 'wide';
+    animate?: boolean | null;
+  };
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'projectGrid';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "ServicesBlockType".
+ */
+export interface ServicesBlockType {
+  /**
+   * Cambiare variante non perde contenuti né traduzioni.
+   */
+  variant: 'accordion' | 'cards' | 'numberedList';
+  heading?: string | null;
+  intro?: string | null;
+  /**
+   * Se vuoto mostra tutti i servizi, nel loro ordine.
+   */
+  services?: (number | Service)[] | null;
+  /**
+   * Fondo, respiro verticale e animazione di ingresso.
+   */
+  settings: {
+    background: 'paper' | 'sumi' | 'accent';
+    spacing: 'compact' | 'normal' | 'wide';
+    animate?: boolean | null;
+  };
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'services';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "ResultsBlock".
+ */
+export interface ResultsBlock {
+  /**
+   * Cambiare variante non perde contenuti né traduzioni.
+   */
+  variant: 'animatedCounters' | 'staticGrid';
+  heading?: string | null;
+  items?:
+    | {
+        label: string;
+        value: string;
+        delta?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  /**
+   * Fondo, respiro verticale e animazione di ingresso.
+   */
+  settings: {
+    background: 'paper' | 'sumi' | 'accent';
+    spacing: 'compact' | 'normal' | 'wide';
+    animate?: boolean | null;
+  };
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'results';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "TestimonialBlockType".
+ */
+export interface TestimonialBlockType {
+  /**
+   * Cambiare variante non perde contenuti né traduzioni.
+   */
+  variant: 'fullPage' | 'slider' | 'quoteWithLogo';
+  testimonials: (number | Testimonial)[];
+  /**
+   * Fondo, respiro verticale e animazione di ingresso.
+   */
+  settings: {
+    background: 'paper' | 'sumi' | 'accent';
+    spacing: 'compact' | 'normal' | 'wide';
+    animate?: boolean | null;
+  };
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'testimonial';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "ClientsBlockType".
+ */
+export interface ClientsBlockType {
+  /**
+   * Cambiare variante non perde contenuti né traduzioni.
+   */
+  variant: 'staticGrid' | 'marquee';
+  heading?: string | null;
+  /**
+   * Se vuoto mostra tutti i clienti, nel loro ordine.
+   */
+  clients?: (number | Client)[] | null;
+  /**
+   * Fondo, respiro verticale e animazione di ingresso.
+   */
+  settings: {
+    background: 'paper' | 'sumi' | 'accent';
+    spacing: 'compact' | 'normal' | 'wide';
+    animate?: boolean | null;
+  };
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'clients';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "clients".
+ */
+export interface Client {
+  id: number;
+  name: string;
+  /**
+   * SVG monocromatico, che possa vivere su carta e su inchiostro.
+   */
+  logo: number | Media;
+  url?: string | null;
+  order: number;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "TeamBlockType".
+ */
+export interface TeamBlockType {
+  /**
+   * Cambiare variante non perde contenuti né traduzioni.
+   */
+  variant: 'photoGrid' | 'listReveal';
+  heading?: string | null;
+  intro?: string | null;
+  /**
+   * Se vuoto mostra tutto il team, nel suo ordine.
+   */
+  members?: (number | TeamMember)[] | null;
+  /**
+   * Fondo, respiro verticale e animazione di ingresso.
+   */
+  settings: {
+    background: 'paper' | 'sumi' | 'accent';
+    spacing: 'compact' | 'normal' | 'wide';
+    animate?: boolean | null;
+  };
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'team';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "CtaBlock".
+ */
+export interface CtaBlock {
+  /**
+   * Cambiare variante non perde contenuti né traduzioni.
+   */
+  variant: 'typographicBanner' | 'inlineForm' | 'minimalRow';
+  heading: string;
+  body?: string | null;
+  action?: {
+    label?: string | null;
+    href?: string | null;
+  };
+  /**
+   * Fondo, respiro verticale e animazione di ingresso.
+   */
+  settings: {
+    background: 'paper' | 'sumi' | 'accent';
+    spacing: 'compact' | 'normal' | 'wide';
+    animate?: boolean | null;
+  };
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'cta';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "FaqBlock".
+ */
+export interface FaqBlock {
+  /**
+   * Cambiare variante non perde contenuti né traduzioni.
+   */
+  variant: 'accordion';
+  heading?: string | null;
+  items?:
+    | {
+        question: string;
+        answer: {
+          root: {
+            type: string;
+            children: {
+              type: any;
+              version: number;
+              [k: string]: unknown;
+            }[];
+            direction: ('ltr' | 'rtl') | null;
+            format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+            indent: number;
+            version: number;
+          };
+          [k: string]: unknown;
+        };
+        id?: string | null;
+      }[]
+    | null;
+  /**
+   * Fondo, respiro verticale e animazione di ingresso.
+   */
+  settings: {
+    background: 'paper' | 'sumi' | 'accent';
+    spacing: 'compact' | 'normal' | 'wide';
+    animate?: boolean | null;
+  };
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'faq';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "users".
  */
 export interface User {
@@ -146,30 +889,6 @@ export interface User {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "media".
- */
-export interface Media {
-  id: number;
-  /**
-   * Testo alternativo, obbligatorio e tradotto in ogni lingua.
-   */
-  alt: string;
-  prefix?: string | null;
-  updatedAt: string;
-  createdAt: string;
-  url?: string | null;
-  thumbnailURL?: string | null;
-  filename?: string | null;
-  mimeType?: string | null;
-  filesize?: number | null;
-  width?: number | null;
-  height?: number | null;
-  focalX?: number | null;
-  focalY?: number | null;
-  sizes?: {};
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-kv".
  */
 export interface PayloadKv {
@@ -193,12 +912,40 @@ export interface PayloadLockedDocument {
   id: number;
   document?:
     | ({
-        relationTo: 'users';
-        value: number | User;
+        relationTo: 'projects';
+        value: number | Project;
+      } | null)
+    | ({
+        relationTo: 'pages';
+        value: number | Page;
+      } | null)
+    | ({
+        relationTo: 'services';
+        value: number | Service;
+      } | null)
+    | ({
+        relationTo: 'testimonials';
+        value: number | Testimonial;
+      } | null)
+    | ({
+        relationTo: 'team-members';
+        value: number | TeamMember;
+      } | null)
+    | ({
+        relationTo: 'clients';
+        value: number | Client;
+      } | null)
+    | ({
+        relationTo: 'industries';
+        value: number | Industry;
       } | null)
     | ({
         relationTo: 'media';
         value: number | Media;
+      } | null)
+    | ({
+        relationTo: 'users';
+        value: number | User;
       } | null);
   globalSlug?: string | null;
   user: {
@@ -244,6 +991,501 @@ export interface PayloadMigration {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "projects_select".
+ */
+export interface ProjectsSelect<T extends boolean = true> {
+  title?: T;
+  slug?: T;
+  featured?: T;
+  order?: T;
+  meta?:
+    | T
+    | {
+        title?: T;
+        description?: T;
+        ogImage?: T;
+      };
+  client?: T;
+  year?: T;
+  industry?: T;
+  services?: T;
+  cover?: T;
+  coverVideo?: T;
+  heroMedia?: T;
+  accentColor?: T;
+  gallery?:
+    | T
+    | {
+        media?: T | MediaBlockTypeSelect<T>;
+      };
+  claim?: T;
+  context?: T;
+  challenge?: T;
+  approach?: T;
+  execution?:
+    | T
+    | {
+        prose?: T | ProseBlockSelect<T>;
+        media?: T | MediaBlockTypeSelect<T>;
+      };
+  results?:
+    | T
+    | {
+        label?: T;
+        value?: T;
+        delta?: T;
+        id?: T;
+      };
+  testimonial?: T;
+  team?: T;
+  partners?:
+    | T
+    | {
+        name?: T;
+        role?: T;
+        id?: T;
+      };
+  liveUrl?: T;
+  awards?:
+    | T
+    | {
+        name?: T;
+        category?: T;
+        year?: T;
+        id?: T;
+      };
+  related?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  _status?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "MediaBlockType_select".
+ */
+export interface MediaBlockTypeSelect<T extends boolean = true> {
+  variant?: T;
+  items?:
+    | T
+    | {
+        media?: T;
+        caption?: T;
+        id?: T;
+      };
+  video?: T;
+  poster?: T;
+  before?: T;
+  after?: T;
+  caption?: T;
+  settings?:
+    | T
+    | {
+        background?: T;
+        spacing?: T;
+        animate?: T;
+      };
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "ProseBlock_select".
+ */
+export interface ProseBlockSelect<T extends boolean = true> {
+  eyebrow?: T;
+  heading?: T;
+  body?: T;
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "pages_select".
+ */
+export interface PagesSelect<T extends boolean = true> {
+  title?: T;
+  slug?: T;
+  meta?:
+    | T
+    | {
+        title?: T;
+        description?: T;
+        ogImage?: T;
+      };
+  layout?:
+    | T
+    | {
+        hero?: T | HeroBlockSelect<T>;
+        statement?: T | StatementBlockSelect<T>;
+        projectGrid?: T | ProjectGridBlockSelect<T>;
+        media?: T | MediaBlockTypeSelect<T>;
+        services?: T | ServicesBlockTypeSelect<T>;
+        results?: T | ResultsBlockSelect<T>;
+        testimonial?: T | TestimonialBlockTypeSelect<T>;
+        clients?: T | ClientsBlockTypeSelect<T>;
+        team?: T | TeamBlockTypeSelect<T>;
+        cta?: T | CtaBlockSelect<T>;
+        faq?: T | FaqBlockSelect<T>;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+  _status?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "HeroBlock_select".
+ */
+export interface HeroBlockSelect<T extends boolean = true> {
+  variant?: T;
+  eyebrow?: T;
+  heading?: T;
+  lead?: T;
+  image?: T;
+  video?: T;
+  cta?:
+    | T
+    | {
+        label?: T;
+        href?: T;
+      };
+  settings?:
+    | T
+    | {
+        background?: T;
+        spacing?: T;
+        animate?: T;
+      };
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "StatementBlock_select".
+ */
+export interface StatementBlockSelect<T extends boolean = true> {
+  variant?: T;
+  eyebrow?: T;
+  heading?: T;
+  body?: T;
+  settings?:
+    | T
+    | {
+        background?: T;
+        spacing?: T;
+        animate?: T;
+      };
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "ProjectGridBlock_select".
+ */
+export interface ProjectGridBlockSelect<T extends boolean = true> {
+  variant?: T;
+  heading?: T;
+  source?: T;
+  projects?: T;
+  service?: T;
+  limit?: T;
+  settings?:
+    | T
+    | {
+        background?: T;
+        spacing?: T;
+        animate?: T;
+      };
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "ServicesBlockType_select".
+ */
+export interface ServicesBlockTypeSelect<T extends boolean = true> {
+  variant?: T;
+  heading?: T;
+  intro?: T;
+  services?: T;
+  settings?:
+    | T
+    | {
+        background?: T;
+        spacing?: T;
+        animate?: T;
+      };
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "ResultsBlock_select".
+ */
+export interface ResultsBlockSelect<T extends boolean = true> {
+  variant?: T;
+  heading?: T;
+  items?:
+    | T
+    | {
+        label?: T;
+        value?: T;
+        delta?: T;
+        id?: T;
+      };
+  settings?:
+    | T
+    | {
+        background?: T;
+        spacing?: T;
+        animate?: T;
+      };
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "TestimonialBlockType_select".
+ */
+export interface TestimonialBlockTypeSelect<T extends boolean = true> {
+  variant?: T;
+  testimonials?: T;
+  settings?:
+    | T
+    | {
+        background?: T;
+        spacing?: T;
+        animate?: T;
+      };
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "ClientsBlockType_select".
+ */
+export interface ClientsBlockTypeSelect<T extends boolean = true> {
+  variant?: T;
+  heading?: T;
+  clients?: T;
+  settings?:
+    | T
+    | {
+        background?: T;
+        spacing?: T;
+        animate?: T;
+      };
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "TeamBlockType_select".
+ */
+export interface TeamBlockTypeSelect<T extends boolean = true> {
+  variant?: T;
+  heading?: T;
+  intro?: T;
+  members?: T;
+  settings?:
+    | T
+    | {
+        background?: T;
+        spacing?: T;
+        animate?: T;
+      };
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "CtaBlock_select".
+ */
+export interface CtaBlockSelect<T extends boolean = true> {
+  variant?: T;
+  heading?: T;
+  body?: T;
+  action?:
+    | T
+    | {
+        label?: T;
+        href?: T;
+      };
+  settings?:
+    | T
+    | {
+        background?: T;
+        spacing?: T;
+        animate?: T;
+      };
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "FaqBlock_select".
+ */
+export interface FaqBlockSelect<T extends boolean = true> {
+  variant?: T;
+  heading?: T;
+  items?:
+    | T
+    | {
+        question?: T;
+        answer?: T;
+        id?: T;
+      };
+  settings?:
+    | T
+    | {
+        background?: T;
+        spacing?: T;
+        animate?: T;
+      };
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "services_select".
+ */
+export interface ServicesSelect<T extends boolean = true> {
+  title?: T;
+  slug?: T;
+  summary?: T;
+  description?: T;
+  icon?: T;
+  order?: T;
+  meta?:
+    | T
+    | {
+        title?: T;
+        description?: T;
+        ogImage?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "testimonials_select".
+ */
+export interface TestimonialsSelect<T extends boolean = true> {
+  quote?: T;
+  author?: T;
+  role?: T;
+  company?: T;
+  logo?: T;
+  project?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "team-members_select".
+ */
+export interface TeamMembersSelect<T extends boolean = true> {
+  name?: T;
+  role?: T;
+  bio?: T;
+  photo?: T;
+  links?:
+    | T
+    | {
+        label?: T;
+        url?: T;
+        id?: T;
+      };
+  order?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "clients_select".
+ */
+export interface ClientsSelect<T extends boolean = true> {
+  name?: T;
+  logo?: T;
+  url?: T;
+  order?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "industries_select".
+ */
+export interface IndustriesSelect<T extends boolean = true> {
+  title?: T;
+  slug?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "media_select".
+ */
+export interface MediaSelect<T extends boolean = true> {
+  alt?: T;
+  prefix?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  url?: T;
+  thumbnailURL?: T;
+  filename?: T;
+  mimeType?: T;
+  filesize?: T;
+  width?: T;
+  height?: T;
+  focalX?: T;
+  focalY?: T;
+  sizes?:
+    | T
+    | {
+        thumbnail?:
+          | T
+          | {
+              url?: T;
+              width?: T;
+              height?: T;
+              mimeType?: T;
+              filesize?: T;
+              filename?: T;
+            };
+        card?:
+          | T
+          | {
+              url?: T;
+              width?: T;
+              height?: T;
+              mimeType?: T;
+              filesize?: T;
+              filename?: T;
+            };
+        wide?:
+          | T
+          | {
+              url?: T;
+              width?: T;
+              height?: T;
+              mimeType?: T;
+              filesize?: T;
+              filename?: T;
+            };
+        full?:
+          | T
+          | {
+              url?: T;
+              width?: T;
+              height?: T;
+              mimeType?: T;
+              filesize?: T;
+              filename?: T;
+            };
+      };
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "users_select".
  */
 export interface UsersSelect<T extends boolean = true> {
@@ -265,26 +1507,6 @@ export interface UsersSelect<T extends boolean = true> {
         createdAt?: T;
         expiresAt?: T;
       };
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "media_select".
- */
-export interface MediaSelect<T extends boolean = true> {
-  alt?: T;
-  prefix?: T;
-  updatedAt?: T;
-  createdAt?: T;
-  url?: T;
-  thumbnailURL?: T;
-  filename?: T;
-  mimeType?: T;
-  filesize?: T;
-  width?: T;
-  height?: T;
-  focalX?: T;
-  focalY?: T;
-  sizes?: T | {};
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -325,6 +1547,206 @@ export interface PayloadMigrationsSelect<T extends boolean = true> {
   batch?: T;
   updatedAt?: T;
   createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "settings".
+ */
+export interface Setting {
+  id: number;
+  /**
+   * SVG per il tema chiaro.
+   */
+  logoLight?: (number | null) | Media;
+  /**
+   * SVG per il tema scuro.
+   */
+  logoDark?: (number | null) | Media;
+  contact: {
+    email: string;
+    /**
+     * Dove arrivano i brief inviati dal form contatti.
+     */
+    briefRecipient: string;
+    phone?: string | null;
+  };
+  offices?:
+    | {
+        city: string;
+        address: string;
+        timezone?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  social?:
+    | {
+        platform: string;
+        url: string;
+        id?: string | null;
+      }[]
+    | null;
+  /**
+   * Ragione sociale, usata nel JSON-LD e nel footer.
+   */
+  legalName?: string | null;
+  vatId?: string | null;
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "navigation".
+ */
+export interface Navigation {
+  id: number;
+  /**
+   * Trascinare per riordinare: l'ordine qui e l'ordine nel menu.
+   */
+  items: {
+    label: string;
+    type: 'internal' | 'page' | 'external';
+    /**
+     * Senza prefisso di lingua, es. /work.
+     */
+    path?: string | null;
+    page?: (number | null) | Page;
+    url?: string | null;
+    id?: string | null;
+  }[];
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "footer".
+ */
+export interface Footer {
+  id: number;
+  columns?:
+    | {
+        title: string;
+        links?:
+          | {
+              label: string;
+              url: string;
+              id?: string | null;
+            }[]
+          | null;
+        id?: string | null;
+      }[]
+    | null;
+  /**
+   * Riga legale in fondo. Anno e ragione sociale esclusi.
+   */
+  legalText?: string | null;
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "seo-defaults".
+ */
+export interface SeoDefault {
+  id: number;
+  siteName: string;
+  /**
+   * %s viene sostituito dal titolo della pagina.
+   */
+  titleTemplate: string;
+  description: string;
+  ogImage?: (number | null) | Media;
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "settings_select".
+ */
+export interface SettingsSelect<T extends boolean = true> {
+  logoLight?: T;
+  logoDark?: T;
+  contact?:
+    | T
+    | {
+        email?: T;
+        briefRecipient?: T;
+        phone?: T;
+      };
+  offices?:
+    | T
+    | {
+        city?: T;
+        address?: T;
+        timezone?: T;
+        id?: T;
+      };
+  social?:
+    | T
+    | {
+        platform?: T;
+        url?: T;
+        id?: T;
+      };
+  legalName?: T;
+  vatId?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "navigation_select".
+ */
+export interface NavigationSelect<T extends boolean = true> {
+  items?:
+    | T
+    | {
+        label?: T;
+        type?: T;
+        path?: T;
+        page?: T;
+        url?: T;
+        id?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "footer_select".
+ */
+export interface FooterSelect<T extends boolean = true> {
+  columns?:
+    | T
+    | {
+        title?: T;
+        links?:
+          | T
+          | {
+              label?: T;
+              url?: T;
+              id?: T;
+            };
+        id?: T;
+      };
+  legalText?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "seo-defaults_select".
+ */
+export interface SeoDefaultsSelect<T extends boolean = true> {
+  siteName?: T;
+  titleTemplate?: T;
+  description?: T;
+  ogImage?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema

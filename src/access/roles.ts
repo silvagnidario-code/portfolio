@@ -25,3 +25,16 @@ export const adminsFieldAccess: FieldAccess = ({ req: { user } }) => user?.role 
 
 /** Public read access, used for content that the site renders anonymously. */
 export const anyone: Access = () => true
+
+/**
+ * Editors see everything; the public sees only what has been published.
+ * Returns a query rather than a boolean, so drafts stay invisible even to a
+ * direct API call.
+ */
+export const authenticatedOrPublished: Access = ({ req: { user } }) => {
+  if (user) return true
+
+  return {
+    _status: { equals: 'published' },
+  }
+}

@@ -9,8 +9,19 @@ import { it } from '@payloadcms/translations/languages/it'
 import { buildConfig } from 'payload'
 import sharp from 'sharp'
 
+import { Clients } from './collections/Clients'
+import { Industries } from './collections/Industries'
 import { Media } from './collections/Media'
+import { Pages } from './collections/Pages'
+import { Projects } from './collections/Projects'
+import { Services } from './collections/Services'
+import { TeamMembers } from './collections/TeamMembers'
+import { Testimonials } from './collections/Testimonials'
 import { Users } from './collections/Users'
+import { Footer } from './globals/Footer'
+import { Navigation } from './globals/Navigation'
+import { SeoDefaults } from './globals/SeoDefaults'
+import { Settings } from './globals/Settings'
 import { env } from './lib/env'
 
 const dirname = path.dirname(fileURLToPath(import.meta.url))
@@ -39,7 +50,18 @@ export default buildConfig({
     defaultLocale: 'it',
     fallback: true,
   },
-  collections: [Users, Media],
+  collections: [
+    Projects,
+    Pages,
+    Services,
+    Testimonials,
+    TeamMembers,
+    Clients,
+    Industries,
+    Media,
+    Users,
+  ],
+  globals: [Settings, Navigation, Footer, SeoDefaults],
   editor: lexicalEditor(),
   db: postgresAdapter({
     pool: { connectionString: env.DATABASE_URI },
