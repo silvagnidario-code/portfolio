@@ -22,6 +22,7 @@ import {
   cjk,
   duration,
   easing,
+  glass,
   grey,
   grid,
   measure,
@@ -31,7 +32,9 @@ import {
   stagger,
   typeScale,
 } from '../src/tokens/brand'
+import { compositeOver } from '../src/tokens/contrast'
 import { fluidClamp } from '../src/tokens/fluid'
+import { assertFillOpacities, fillOpacity, glassEdges, withAlpha } from '../src/tokens/glass'
 import { colorAliases, colorRoles, semanticColors, type ThemeName } from '../src/tokens/semantic'
 
 const outDir = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../src/styles')
@@ -42,7 +45,23 @@ const BANNER = `/*\n * GENERATED FILE — do not edit.\n * Source: src/tokens/*.
 const kebab = (value: string): string => value.replace(/[A-Z]/g, (c) => `-${c.toLowerCase()}`)
 
 function colorBlock(theme: ThemeName, indent: string): string {
-  return colorRoles.map((role) => `${indent}--${role}: ${semanticColors[theme][role]};`).join('\n')
+  const roles = colorRoles.map((role) => `${indent}--${role}: ${semanticColors[theme][role]};`)
+
+  // The glass layer is theme-dependent too, and its fill opacity is the value
+  // `assertFillOpacities` refuses to let drop below what AA needs.
+  const glassVars = [
+    `${indent}--glass-fill: ${withAlpha(glass.fill[theme], fillOpacity[theme])};`,
+    `${indent}--glass-fill-opaque: ${compositeOver(
+      glass.fill[theme],
+      semanticColors[theme]['bg-primary'],
+      fillOpacity[theme],
+    )};`,
+    `${indent}--glass-highlight: ${glassEdges[theme].highlight};`,
+    `${indent}--glass-shade: ${glassEdges[theme].shade};`,
+    `${indent}--glass-border: ${glassEdges[theme].border};`,
+  ]
+
+  return [...roles, ...glassVars].join('\n')
 }
 
 function buildTokensCss(): string {
@@ -80,6 +99,12 @@ function buildTokensCss(): string {
     .map(([name, value]) => `  --corner-${kebab(name)}: ${value}px;`)
     .join('\n')
 
+  const glassVars = [
+    `  --glass-blur: ${glass.blur}px;`,
+    `  --glass-saturate: ${glass.saturate};`,
+    `  --glass-border-width: ${glass.borderWidth}px;`,
+  ].join('\n')
+
   const gridVars = [
     `  --grid-columns: ${grid.columns.mobile};`,
     `  --grid-gutter: ${grid.gutter}px;`,
@@ -111,6 +136,10 @@ ${motionVars}
 
   /* Radii */
 ${radiusVars}
+  --corner-round: 9999px;
+
+  /* Glass — theme-dependent values live in the colour blocks */
+${glassVars}
 
   /* Grid */
 ${gridVars}
@@ -236,6 +265,9 @@ ${radii}
 }
 
 async function main(): Promise<void> {
+  // Refuses to emit a glass fill transparent enough to break AA.
+  assertFillOpacities()
+
   await mkdir(outDir, { recursive: true })
   await writeFile(path.join(outDir, 'tokens.generated.css'), buildTokensCss(), 'utf8')
   await writeFile(path.join(outDir, 'theme.generated.css'), buildThemeCss(), 'utf8')

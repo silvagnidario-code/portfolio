@@ -27,6 +27,25 @@ export function hexToRgb(hex: string): Rgb {
   }
 }
 
+function toHexChannel(value: number): string {
+  return Math.round(Math.min(255, Math.max(0, value)))
+    .toString(16)
+    .padStart(2, '0')
+}
+
+/**
+ * Flattens a semi-transparent colour onto an opaque one — what the eye actually
+ * sees through a pane of glass. Contrast can only be judged on this result,
+ * never on the fill alone.
+ */
+export function compositeOver(fill: string, backdrop: string, alpha: number): string {
+  const f = hexToRgb(fill)
+  const b = hexToRgb(backdrop)
+  const blend = (a: number, c: number): number => alpha * a + (1 - alpha) * c
+
+  return `#${toHexChannel(blend(f.r, b.r))}${toHexChannel(blend(f.g, b.g))}${toHexChannel(blend(f.b, b.b))}`
+}
+
 /** Relative luminance, WCAG 2.1 definition. */
 export function relativeLuminance(hex: string): number {
   const { r, g, b } = hexToRgb(hex)

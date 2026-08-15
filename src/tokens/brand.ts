@@ -125,6 +125,34 @@ export const grid = {
   margin: { min: 24, max: 128 },
 } as const
 
+/**
+ * Glass. Applies to the floating interface layer only — never to content.
+ * The fill opacities live in `glass.ts`, because they are not free values:
+ * they are derived from the contrast the text above them has to keep.
+ */
+export const glass = {
+  blur: 24,
+  saturate: 1.8,
+  borderWidth: 1,
+  /** Tint of the fill, per theme. */
+  fill: { light: grey.paper50, dark: grey.sumi950 },
+  /**
+   * Alpha of the specular edge, per theme: brighter on top, darker underneath,
+   * to read as refraction on the corner rather than as a drawn outline.
+   */
+  edge: {
+    light: { highlight: 0.55, shade: 0.18, border: 0.12 },
+    dark: { highlight: 0.28, shade: 0.45, border: 0.14 },
+  },
+  /**
+   * `backdrop-filter` is one of the most expensive properties in CSS and here
+   * it already shares the frame with smooth scroll and a WebGL canvas.
+   */
+  maxSimultaneous: 4,
+  /** Displacement of the refraction filter, cursor only. */
+  refraction: { scale: 12, frequency: 0.008 },
+} as const
+
 /** Comfortable reading measure for running text. */
 export const measure = '62ch'
 

@@ -38,6 +38,11 @@
   --border-strong: #8C826C;
   --accent: #A83A15;
   --accent-fg: #FDFCF9;
+  --glass-fill: rgb(253 252 249 / 0.66);
+  --glass-fill-opaque: #fbfaf6;
+  --glass-highlight: rgb(253 252 249 / 0.55);
+  --glass-shade: rgb(26 26 24 / 0.18);
+  --glass-border: rgb(26 26 24 / 0.12);
 
   /* Spacing */
   --space-4: 4px;
@@ -104,6 +109,12 @@
   --corner-glass-sm: 20px;
   --corner-glass-md: 24px;
   --corner-glass-lg: 28px;
+  --corner-round: 9999px;
+
+  /* Glass — theme-dependent values live in the colour blocks */
+  --glass-blur: 24px;
+  --glass-saturate: 1.8;
+  --glass-border-width: 1px;
 
   /* Grid */
   --grid-columns: 4;
@@ -126,6 +137,11 @@
     --border-strong: #8C826C;
     --accent: #FF8452;
     --accent-fg: #1A1A18;
+    --glass-fill: rgb(19 18 17 / 0.68);
+    --glass-fill-opaque: #131211;
+    --glass-highlight: rgb(253 252 249 / 0.28);
+    --glass-shade: rgb(19 18 17 / 0.45);
+    --glass-border: rgb(253 252 249 / 0.14);
   }
 }
 
@@ -143,6 +159,11 @@
   --border-strong: #8C826C;
   --accent: #FF8452;
   --accent-fg: #1A1A18;
+  --glass-fill: rgb(19 18 17 / 0.68);
+  --glass-fill-opaque: #131211;
+  --glass-highlight: rgb(253 252 249 / 0.28);
+  --glass-shade: rgb(19 18 17 / 0.45);
+  --glass-border: rgb(253 252 249 / 0.14);
 }
 
 :root[data-theme='light'] {
@@ -158,6 +179,11 @@
   --border-strong: #8C826C;
   --accent: #A83A15;
   --accent-fg: #FDFCF9;
+  --glass-fill: rgb(253 252 249 / 0.66);
+  --glass-fill-opaque: #fbfaf6;
+  --glass-highlight: rgb(253 252 249 / 0.55);
+  --glass-shade: rgb(26 26 24 / 0.18);
+  --glass-border: rgb(26 26 24 / 0.12);
 }
 
 /* Han glyphs read smaller at the same font-size and need more leading.
