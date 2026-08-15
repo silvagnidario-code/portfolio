@@ -29,6 +29,8 @@ export async function TeamBlock({ block, locale }: { block: TeamBlockType; local
 
   if (members.length === 0) return null
 
+  const MemberHeading = block.heading ? 'h3' : 'h2'
+
   // A block with neither heading nor intro must not reserve the space for them.
   const intro =
     !block.heading && !block.intro ? null : (
@@ -55,7 +57,7 @@ export async function TeamBlock({ block, locale }: { block: TeamBlockType; local
               className="col-span-4 tablet:col-span-6 desktop:col-span-10 desktop:col-start-2 border-t border-line py-32"
             >
               <div className="flex flex-col gap-8 tablet:flex-row tablet:items-baseline tablet:justify-between">
-                <h3 className="text-h2">{member.name}</h3>
+                <MemberHeading className="text-h2">{member.name}</MemberHeading>
                 <p className="font-mono text-caption uppercase text-ink-muted">{member.role}</p>
               </div>
               {member.bio ? (
@@ -86,7 +88,7 @@ export async function TeamBlock({ block, locale }: { block: TeamBlockType; local
                 className="h-full w-full object-cover"
               />
             </div>
-            <h3 className="mt-24 text-h3">{member.name}</h3>
+            <MemberHeading className="mt-24 text-h3">{member.name}</MemberHeading>
             <p className="mt-8 font-mono text-caption uppercase text-ink-muted">{member.role}</p>
           </li>
         ))}

@@ -33,6 +33,9 @@ export async function ServicesBlock({
 }) {
   const services = await resolveServices(block, locale)
 
+  // Without a block heading there is no h2 above these, so they become the h2.
+  const ServiceHeading = block.heading ? 'h3' : 'h2'
+
   // A block with neither heading nor intro must not reserve the space for them.
   const intro =
     !block.heading && !block.intro ? null : (
@@ -58,7 +61,7 @@ export async function ServicesBlock({
               key={service.id}
               className="col-span-4 tablet:col-span-3 desktop:col-span-4 border-t border-line pt-24"
             >
-              <h3 className="text-h3">{service.title}</h3>
+              <ServiceHeading className="text-h3">{service.title}</ServiceHeading>
               <p className="mt-16 text-body text-ink-2">{service.summary}</p>
             </article>
           ))}
@@ -82,7 +85,7 @@ export async function ServicesBlock({
                   {String(index + 1).padStart(2, '0')}
                 </span>
                 <div>
-                  <h3 className="text-h2 text-balance">{service.title}</h3>
+                  <ServiceHeading className="text-h2 text-balance">{service.title}</ServiceHeading>
                   <p className="mt-16 max-w-measure text-body-lg text-ink-2">{service.summary}</p>
                 </div>
               </div>

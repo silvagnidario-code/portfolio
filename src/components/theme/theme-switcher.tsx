@@ -18,11 +18,14 @@ import { useTheme } from './theme-provider'
  */
 export function ThemeSwitcher() {
   const t = useTranslations('Theme')
-  const { mode, setMode, ready } = useTheme()
+  const { mode, setMode } = useTheme()
   const name = useId()
 
   return (
-    <fieldset className="flex items-center gap-4" disabled={!ready}>
+    // Never disabled: a disabled fieldset greys its labels below AA and takes
+    // them out of the tab order, and before hydration the checked value is the
+    // default anyway, so an early click changes nothing.
+    <fieldset className="flex items-center gap-4">
       <legend className="sr-only">{t('legend')}</legend>
 
       {themeModes.map((value) => (

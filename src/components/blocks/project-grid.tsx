@@ -71,6 +71,9 @@ export async function ProjectGrid({ block, locale }: { block: ProjectGridBlock; 
         {heading}
         <div
           data-draggable="horizontal"
+          tabIndex={0}
+          role="group"
+          aria-label={block.heading ?? undefined}
           className="flex snap-x snap-mandatory gap-24 overflow-x-auto page-margin page-snap-margin pb-24"
         >
           {projects.map((project) => (

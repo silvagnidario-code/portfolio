@@ -28,7 +28,7 @@ export function Mono({ children }: { children: ReactNode }) {
 
 export function Table({ head, children }: { head: ReactNode; children: ReactNode }) {
   return (
-    <div className="overflow-x-auto">
+    <div tabIndex={0} role="group" className="overflow-x-auto">
       <table className="w-full border-collapse text-body">
         <thead>
           <tr className="border-b border-line-strong text-left">{head}</tr>

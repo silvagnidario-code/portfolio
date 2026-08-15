@@ -26,7 +26,11 @@ export function TestimonialBlock({ block }: { block: TestimonialBlockType }) {
   if (block.variant === 'slider') {
     return (
       <BlockSection settings={block.settings}>
-        <div className="flex snap-x snap-mandatory gap-24 overflow-x-auto page-margin page-snap-margin pb-24">
+        <div
+          tabIndex={0}
+          role="group"
+          className="flex snap-x snap-mandatory gap-24 overflow-x-auto page-margin page-snap-margin pb-24"
+        >
           {testimonials.map((testimonial) => (
             <blockquote
               key={testimonial.id}

@@ -20,16 +20,22 @@ export function Results({ block }: { block: ResultsBlock }) {
             key={item.id ?? index}
             className="col-span-4 tablet:col-span-2 desktop:col-span-4 border-t border-line pt-24"
           >
-            <dd
+            {/* The term is the number and the description is the label:
+                reversing them reads as a list with no terms. */}
+            <dt
               data-counter={variant === 'animatedCounters' ? item.value : undefined}
               className="text-display"
             >
               {item.value}
+            </dt>
+            <dd className="mt-16 text-body-lg">
+              {item.label}
+              {item.delta ? (
+                <span className="mt-8 block font-mono text-caption uppercase text-ink-muted">
+                  {item.delta}
+                </span>
+              ) : null}
             </dd>
-            <dt className="mt-16 text-body-lg">{item.label}</dt>
-            {item.delta ? (
-              <p className="mt-8 font-mono text-caption uppercase text-ink-muted">{item.delta}</p>
-            ) : null}
           </div>
         ))}
       </dl>

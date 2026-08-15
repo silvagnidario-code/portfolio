@@ -32,7 +32,7 @@ export function Statement({ block }: { block: StatementBlock }) {
       <BlockSection settings={settings}>
         <div className="page-margin">{eyebrow ? <Eyebrow>{eyebrow}</Eyebrow> : null}</div>
         {/* Scrolls inside itself: the page never scrolls sideways. */}
-        <div className="mt-24 overflow-x-auto">
+        <div tabIndex={0} role="group" className="mt-24 overflow-x-auto">
           <h2 className="page-margin w-max text-h1 whitespace-nowrap">{heading}</h2>
         </div>
         <div className="page-grid mt-32">

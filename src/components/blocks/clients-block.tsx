@@ -39,7 +39,15 @@ export async function ClientsBlock({ block, locale }: { block: ClientsBlockType;
         {heading}
         {/* The loop itself is driven in phase 8; a static row is what it
             enhances, and what a reader with reduced motion keeps. */}
-        <div data-marquee className="flex gap-64 overflow-x-auto page-margin">
+        {/* A scrollable region has to be reachable by keyboard, so it takes
+            focus and says what it is. */}
+        <div
+          data-marquee
+          tabIndex={0}
+          role="group"
+          aria-label={block.heading ?? undefined}
+          className="flex gap-64 overflow-x-auto page-margin"
+        >
           {clients.map((client) => (
             <MediaImage
               key={client.id}
