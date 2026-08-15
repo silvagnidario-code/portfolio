@@ -1,4 +1,5 @@
 import { MediaImage } from '@/components/media/media-image'
+import { HoverDistortion } from '@/components/motion/hover-distortion'
 import { Link } from '@/i18n/navigation'
 import type { HeroBlock } from '@/payload-types'
 
@@ -23,6 +24,7 @@ export function Hero({ block }: { block: HeroBlock }) {
       {cta?.label && cta.href ? (
         <Link
           href={cta.href}
+          data-magnetic
           className="mt-48 inline-block border border-line-strong px-24 py-16 text-body transition ease-reveal duration-fast hover:bg-surface-2"
         >
           {cta.label}
@@ -71,8 +73,13 @@ export function Hero({ block }: { block: HeroBlock }) {
   return (
     <BlockSection settings={settings}>
       <div className="page-grid">{text}</div>
-      <figure data-webgl="hover-distortion" className="mt-96 aspect-[16/9] w-full overflow-hidden">
-        <MediaImage media={image} sizes="100vw" priority className="h-full w-full object-cover" />
+      <figure className="mt-96">
+        <HoverDistortion
+          src={typeof image === 'object' ? (image?.url ?? '') : ''}
+          className="aspect-[16/9] w-full overflow-hidden"
+        >
+          <MediaImage media={image} sizes="100vw" priority className="h-full w-full object-cover" />
+        </HoverDistortion>
       </figure>
     </BlockSection>
   )

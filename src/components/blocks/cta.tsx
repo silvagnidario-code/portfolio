@@ -43,6 +43,7 @@ export function Cta({ block }: { block: CtaBlock }) {
           <div className="col-span-4 tablet:col-span-6 desktop:col-span-4 desktop:col-start-9">
             <Link
               href="/contact"
+              data-magnetic
               className="mt-48 inline-block border border-line-strong px-24 py-16 text-body-lg transition ease-reveal duration-fast hover:bg-surface-2"
             >
               {action?.label ?? heading}
