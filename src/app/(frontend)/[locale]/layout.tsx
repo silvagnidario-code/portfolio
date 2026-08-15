@@ -6,6 +6,8 @@ import type { ReactNode } from 'react'
 
 import { GlassBudgetProvider } from '@/components/glass/glass-budget'
 import { PageTransition } from '@/components/layout/page-transition'
+import { MotionPreferencesProvider } from '@/components/motion/motion-preferences'
+import { MotionRuntime } from '@/components/motion/motion-runtime'
 import { SiteFooter } from '@/components/layout/site-footer'
 import { SiteHeader } from '@/components/layout/site-header'
 import { SkipLink } from '@/components/layout/skip-link'
@@ -74,12 +76,15 @@ export default async function LocaleLayout({ children, params }: LayoutProps) {
       <body>
         <NextIntlClientProvider>
           <ThemeProvider>
-            <GlassBudgetProvider>
-              <SkipLink />
-              <SiteHeader locale={locale} />
-              <PageTransition>{children}</PageTransition>
-              <SiteFooter locale={locale} />
-            </GlassBudgetProvider>
+            <MotionPreferencesProvider>
+              <GlassBudgetProvider>
+                <SkipLink />
+                <SiteHeader locale={locale} />
+                <PageTransition>{children}</PageTransition>
+                <SiteFooter locale={locale} />
+                <MotionRuntime />
+              </GlassBudgetProvider>
+            </MotionPreferencesProvider>
           </ThemeProvider>
         </NextIntlClientProvider>
       </body>
