@@ -93,6 +93,40 @@
       "margin": "Page margin",
       "gridNote": "12 columns on desktop, 6 on tablet, 4 on mobile. Resize the window to see it change."
     },
+    "glass": {
+      "title": "Glass",
+      "description": "One component, GlassSurface, holds all four layers: backdrop blur, adaptive fill, specular edge and refraction. No other component implements glass on its own. It applies to the floating interface layer only: content stays opaque and flat.",
+      "sample": "Content is paper, the interface is shoji.",
+      "backdrops": {
+        "light": "Bright backdrop",
+        "dark": "Dark backdrop",
+        "text": "Dense text"
+      },
+      "variants": {
+        "navbar": "Navbar",
+        "pill": "Pill",
+        "chrome": "Chrome",
+        "cursor": "Cursor"
+      },
+      "proof": {
+        "title": "Contrast proof on glass",
+        "description": "Text on glass does not sit on a colour, it sits on the fill composited over whatever scrolls beneath. The worst case is not a photograph: it is pure white under the dark theme and pure black under the light one. Hold the ratio on those two and it holds on any image.",
+        "theme": "Theme",
+        "backdrop": "Backdrop",
+        "fill": "Fill",
+        "composite": "Composite",
+        "ratio": "Ratio",
+        "result": "Result",
+        "pass": "Pass",
+        "fail": "Fail",
+        "allPass": "Text on glass keeps AA on both extremes, in both themes.",
+        "someFail": "Text on glass loses AA on at least one extreme."
+      },
+      "floors": "Minimum opacity computed from the palette: {light} on the light theme, {dark} on the dark one. The floor stated by the specification is {spec}; the token generator refuses to emit a fill more transparent than the higher of the two.",
+      "budget": "At most {limit} glass surfaces at once. The count is enforced at runtime: going over logs an error rather than quietly costing frames.",
+      "fallback": "Without backdrop-filter the panel turns opaque, never invisible. The same applies to readers who ask the system for less transparency.",
+      "noBlurAnimation": "The blur radius is never animated: only opacity and transform are declared transitionable on glass."
+    },
     "aliases": {
       "title": "Roles and utilities",
       "description": "Level 3. Components never write a colour: they use these utilities, which point at the semantic roles.",

@@ -93,6 +93,40 @@
       "margin": "Margine di pagina",
       "gridNote": "12 colonne su desktop, 6 su tablet, 4 su mobile. Ridimensiona la finestra per vedere il cambio."
     },
+    "glass": {
+      "title": "Vetro",
+      "description": "Un solo componente, GlassSurface, incapsula i quattro strati: sfocatura di fondo, riempimento adattivo, bordo speculare e rifrazione. Nessun altro componente implementa il vetro per conto proprio. Si applica solo allo strato di interfaccia fluttuante: il contenuto resta opaco e piatto.",
+      "sample": "Il contenuto è carta, l'interfaccia è shoji.",
+      "backdrops": {
+        "light": "Fondale chiaro",
+        "dark": "Fondale scuro",
+        "text": "Testo denso"
+      },
+      "variants": {
+        "navbar": "Navbar",
+        "pill": "Pillola",
+        "chrome": "Chrome",
+        "cursor": "Cursore"
+      },
+      "proof": {
+        "title": "Prova di contrasto sul vetro",
+        "description": "Il testo su vetro non poggia su un colore, poggia sul riempimento composito sopra ciò che scorre sotto. Il caso peggiore non è una fotografia: è il bianco puro sotto il tema scuro e il nero puro sotto quello chiaro. Se il rapporto regge su questi due, regge su qualsiasi immagine.",
+        "theme": "Tema",
+        "backdrop": "Fondale",
+        "fill": "Riempimento",
+        "composite": "Composito",
+        "ratio": "Rapporto",
+        "result": "Esito",
+        "pass": "Passa",
+        "fail": "Non passa",
+        "allPass": "Il testo su vetro mantiene AA su entrambi gli estremi, in entrambi i temi.",
+        "someFail": "Il testo su vetro perde AA su almeno un estremo."
+      },
+      "floors": "Opacità minima calcolata dalla palette: {light} sul tema chiaro, {dark} su quello scuro. La soglia dichiarata dalla specifica è {spec}: il generatore di token rifiuta di emettere un riempimento più trasparente del maggiore fra i due.",
+      "budget": "Massimo {limit} superfici in vetro contemporaneamente. Il conteggio è a runtime: superarlo produce un errore in console, non un rallentamento silenzioso.",
+      "fallback": "Senza backdrop-filter il pannello diventa opaco, mai invisibile. Lo stesso vale per chi chiede meno trasparenza dal sistema.",
+      "noBlurAnimation": "Il raggio di sfocatura non si anima mai: sul vetro sono dichiarate transizionabili solo opacità e trasformazione."
+    },
     "aliases": {
       "title": "Ruoli e utility",
       "description": "Livello 3. I componenti non scrivono mai un colore: usano queste utility, che puntano ai ruoli semantici.",

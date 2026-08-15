@@ -4,6 +4,7 @@ import { getTranslations, setRequestLocale } from 'next-intl/server'
 import { AliasesSection } from '@/components/styleguide/aliases-section'
 import { ColorSection } from '@/components/styleguide/color-section'
 import { ContrastSection } from '@/components/styleguide/contrast-section'
+import { GlassSection } from '@/components/styleguide/glass-section'
 import { MotionSection } from '@/components/styleguide/motion-section'
 import { ShapeSection } from '@/components/styleguide/shape-section'
 import { SpacingSection } from '@/components/styleguide/spacing-section'
@@ -64,6 +65,7 @@ export default async function StyleguidePage({ params }: PageProps) {
       <SpacingSection />
       <MotionSection />
       <ShapeSection />
+      <GlassSection />
       <AliasesSection />
 
       <footer className="page-margin border-t border-line py-96">
