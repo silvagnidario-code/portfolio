@@ -27,3 +27,7 @@ yarn-error.log*
 
 # vercel
 .vercel
+
+# self-hosted font slices, fetched at build time
+/public/fonts
+/src/lib/font-manifest.generated.ts
