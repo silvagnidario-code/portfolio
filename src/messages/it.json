@@ -40,6 +40,11 @@
     "title": "Progetti",
     "intro": "L'indice dei progetti viene costruito nella fase dedicata alle pagine."
   },
+  "BlocksPage": {
+    "title": "Blocchi",
+    "intro": "Ogni blocco della libreria, renderizzato in tutte le sue varianti con i contenuti reali del CMS. La variante cambia solo la composizione: il contenuto è lo stesso oggetto, ed è la prova che cambiare variante non perde né testi né traduzioni.",
+    "empty": "Nessun contenuto disponibile per questo blocco."
+  },
   "NotFound": {
     "title": "Pagina non trovata",
     "description": "L'indirizzo richiesto non corrisponde a nessuna pagina.",

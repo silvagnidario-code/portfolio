@@ -40,6 +40,11 @@
     "title": "Work",
     "intro": "The project index is built in the phase dedicated to pages."
   },
+  "BlocksPage": {
+    "title": "Blocks",
+    "intro": "Every block in the library, rendered in all its variants with real CMS content. The variant only changes the composition: the content is the same object, which is the proof that switching variant costs neither copy nor translations.",
+    "empty": "No content available for this block."
+  },
   "NotFound": {
     "title": "Page not found",
     "description": "The requested address does not match any page.",
