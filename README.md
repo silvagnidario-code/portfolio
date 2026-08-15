@@ -75,6 +75,41 @@ should not need a redeploy to change. Phase 9 adds cached reads with tag-based
 revalidation on publish, which makes the pages static again, refreshed by an
 edit rather than by a build.
 
+## Pages
+
+| Route                                                            | Source                                             |
+| ---------------------------------------------------------------- | -------------------------------------------------- |
+| `/[locale]` · `/services` · `/about` · `/legal/{privacy,cookie}` | `pages` documents, composed from the block library |
+| `/[locale]/work`                                                 | project index with filters                         |
+| `/[locale]/work/[slug]`                                          | case study, built from the project's own fields    |
+| `/[locale]/contact`                                              | brief form                                         |
+
+**Work filters** are links, not buttons: filtering runs on the server through
+the query string, so the index works without JavaScript, every state has a URL,
+and Back leaves a filter. The specification calls the pills glass — they sit in
+_one_ glass tray rather than one surface each, because eight surfaces would blow
+the budget of four on their own.
+
+**The case study** is deliberately not composed from blocks: the narrative order
+(context, challenge, approach, execution, results) is the argument the page
+makes and should not be re-orderable per document. It may tint itself with the
+project's `accentColor`, but only where that colour holds 4.5:1 against the
+background — `resolveProjectAccent` checks each theme separately and substitutes
+the brand accent where it fails, so an editorial choice can never produce
+unreadable link text.
+
+Case-study slugs are localized, so those pages declare their translations as
+`hreflang` links; the language switcher reads that same declaration back from
+the document rather than duplicating the map through a second channel.
+
+**The brief form** (§11) validates with Zod on the server, keeps a honeypot and
+a per-IP rate limit, persists nothing, and confirms inline instead of
+redirecting. The honeypot is checked _before_ validation and answers with the
+same success a person gets: a bot told which field it tripped simply stops
+filling it. Without `RESEND_API_KEY` the action reports the failure in
+production and logs the brief in development, rather than pretending it was
+sent.
+
 ## Block engine
 
 `RenderBlocks` maps a `layout` array to components and resolves the three common
