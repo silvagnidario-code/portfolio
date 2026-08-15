@@ -60,6 +60,37 @@
    Motion
    --------------------------------------------------------------------------- */
 
+/**
+ * Page transitions. Elements enter with a short translation plus opacity —
+ * never scale, never rotation, no overshoot: a panel sliding, not an object
+ * jumping.
+ */
+@keyframes page-enter {
+  from {
+    opacity: 0;
+    transform: translateY(var(--reveal-distance-max));
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.page-enter {
+  animation: page-enter var(--duration-slow) var(--easing-reveal) both;
+}
+
+/* Cross-document navigations get the same dissolve for free. */
+@view-transition {
+  navigation: auto;
+}
+
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: var(--duration-slow);
+  animation-timing-function: var(--easing-reveal);
+}
+
 /* One switch for the whole site. Individual components never re-implement it. */
 @media (prefers-reduced-motion: reduce) {
   *,
@@ -89,6 +120,15 @@
 }
 @utility duration-slowest {
   transition-duration: var(--duration-slowest);
+}
+
+/**
+ * The focus ring as its own utility, so a control whose real input is visually
+ * hidden can still show the same ring the rest of the site shows.
+ */
+@utility focus-ring {
+  outline: var(--space-4) solid var(--accent);
+  outline-offset: var(--space-4);
 }
 
 /** The page grid: 12/6/4 columns, fixed gutter, fluid margins. */

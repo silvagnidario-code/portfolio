@@ -5,6 +5,10 @@ import { notFound } from 'next/navigation'
 import type { ReactNode } from 'react'
 
 import { GlassBudgetProvider } from '@/components/glass/glass-budget'
+import { PageTransition } from '@/components/layout/page-transition'
+import { SiteFooter } from '@/components/layout/site-footer'
+import { SiteHeader } from '@/components/layout/site-header'
+import { SkipLink } from '@/components/layout/skip-link'
 import { ThemeProvider } from '@/components/theme/theme-provider'
 import { ThemeScript } from '@/components/theme/theme-script'
 import { CjkStylesheet, FontLinks } from '@/components/typography/font-links'
@@ -17,6 +21,20 @@ type LayoutProps = {
   children: ReactNode
   params: Promise<{ locale: string }>
 }
+
+/**
+ * Rendered per request.
+ *
+ * The layout reads the navigation, the footer and the settings from the CMS, so
+ * prerendering at build time would need a database inside the build — the
+ * container image has none, and a portfolio whose menu is editable should not
+ * need a redeploy to change it anyway.
+ *
+ * The cost is real and it is paid back in phase 9, which adds cached reads with
+ * tag-based revalidation on publish; the pages become static again, only
+ * refreshed by an edit instead of by a build.
+ */
+export const dynamic = 'force-dynamic'
 
 export function generateStaticParams() {
   return routing.locales.map((locale) => ({ locale }))
@@ -56,7 +74,12 @@ export default async function LocaleLayout({ children, params }: LayoutProps) {
       <body>
         <NextIntlClientProvider>
           <ThemeProvider>
-            <GlassBudgetProvider>{children}</GlassBudgetProvider>
+            <GlassBudgetProvider>
+              <SkipLink />
+              <SiteHeader locale={locale} />
+              <PageTransition>{children}</PageTransition>
+              <SiteFooter locale={locale} />
+            </GlassBudgetProvider>
           </ThemeProvider>
         </NextIntlClientProvider>
       </body>

@@ -22,10 +22,12 @@ export default async function WorkPage({ params }: PageProps) {
   const tNav = await getTranslations('Navigation')
 
   return (
-    <main>
-      <h1>{t('title')}</h1>
-      <p>{t('intro')}</p>
-      <Link href="/">{tNav('home')}</Link>
+    <main className="page-margin pb-96">
+      <h1 className="text-h1">{t('title')}</h1>
+      <p className="mt-32 max-w-measure text-body-lg text-ink-2">{t('intro')}</p>
+      <Link href="/" className="mt-48 inline-block text-body-lg underline">
+        {tNav('home')}
+      </Link>
     </main>
   )
 }

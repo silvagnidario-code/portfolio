@@ -10,6 +10,21 @@
     "about": "Studio",
     "contact": "Contatti"
   },
+  "Layout": {
+    "skipToContent": "Vai al contenuto",
+    "menuLabel": "Menu principale",
+    "menuOpen": "Menu",
+    "menuClose": "Chiudi",
+    "localeLabel": "Lingua",
+    "offices": "Sedi",
+    "social": "Social",
+    "toTop": "Torna su"
+  },
+  "Locales": {
+    "it": "Italiano",
+    "en": "Inglese",
+    "zh": "Cinese"
+  },
   "Theme": {
     "legend": "Tema",
     "system": "Sistema",

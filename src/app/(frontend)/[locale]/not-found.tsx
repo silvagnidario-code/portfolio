@@ -14,10 +14,12 @@ export default function NotFound() {
   const t = useTranslations('NotFound')
 
   return (
-    <main>
-      <h1>{t('title')}</h1>
-      <p>{t('description')}</p>
-      <Link href="/">{t('backHome')}</Link>
+    <main className="page-margin py-128">
+      <h1 className="text-h1">{t('title')}</h1>
+      <p className="mt-32 max-w-measure text-body-lg text-ink-2">{t('description')}</p>
+      <Link href="/" className="mt-48 inline-block text-body-lg underline">
+        {t('backHome')}
+      </Link>
     </main>
   )
 }

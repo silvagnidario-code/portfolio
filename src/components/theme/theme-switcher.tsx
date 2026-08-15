@@ -9,8 +9,12 @@ import { useTheme } from './theme-provider'
 
 /**
  * Three real radio inputs rather than a cycling button: the three states are
- * visible at once and the whole control is reachable with the keyboard by
- * default. The glass styling arrives in phase 5 — this is the mechanism.
+ * visible at once, the group is one tab stop with arrow keys inside it, and the
+ * current state is announced without any ARIA of our own.
+ *
+ * It renders on the navbar's glass, so it is not a glass surface itself:
+ * blurring a backdrop that is already blurred costs a second expensive layer
+ * and reads as a smudge.
  */
 export function ThemeSwitcher() {
   const t = useTranslations('Theme')
@@ -18,26 +22,25 @@ export function ThemeSwitcher() {
   const name = useId()
 
   return (
-    <fieldset className="border border-line p-16">
-      <legend className="text-caption font-mono uppercase text-ink-muted px-8">
-        {t('legend')}
-      </legend>
-      <div className="flex gap-24">
-        {themeModes.map((value) => (
-          <label key={value} className="flex items-center gap-8 text-body">
-            <input
-              type="radio"
-              name={name}
-              value={value}
-              checked={mode === value}
-              disabled={!ready}
-              onChange={() => setMode(value)}
-              className="accent-accent"
-            />
-            {t(value)}
-          </label>
-        ))}
-      </div>
+    <fieldset className="flex items-center gap-4" disabled={!ready}>
+      <legend className="sr-only">{t('legend')}</legend>
+
+      {themeModes.map((value) => (
+        <label
+          key={value}
+          className="cursor-pointer rounded-glass-sm px-12 py-8 font-mono text-caption uppercase text-ink-muted transition ease-reveal duration-fast hover:text-ink has-[:checked]:bg-ink has-[:checked]:text-ink-inverse has-[:focus-visible]:focus-ring"
+        >
+          <input
+            type="radio"
+            name={name}
+            value={value}
+            checked={mode === value}
+            onChange={() => setMode(value)}
+            className="sr-only"
+          />
+          {t(value)}
+        </label>
+      ))}
     </fieldset>
   )
 }

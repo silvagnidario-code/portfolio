@@ -1,8 +1,6 @@
 import { getTranslations, setRequestLocale } from 'next-intl/server'
 
-import { ThemeSwitcher } from '@/components/theme/theme-switcher'
 import { Link } from '@/i18n/navigation'
-import { routing } from '@/i18n/routing'
 
 type PageProps = {
   params: Promise<{ locale: string }>
@@ -16,7 +14,7 @@ export default async function HomePage({ params }: PageProps) {
   const tNav = await getTranslations('Navigation')
 
   return (
-    <main className="page-margin py-96">
+    <main className="page-margin pb-96">
       <h1 className="text-display">{t('title')}</h1>
       <p className="mt-32 max-w-measure text-body-lg text-ink-2">{t('intro')}</p>
 
@@ -28,23 +26,6 @@ export default async function HomePage({ params }: PageProps) {
           {t('styleguide')}
         </Link>
       </nav>
-
-      <div className="mt-48 flex flex-wrap items-start gap-32">
-        <ThemeSwitcher />
-        <ul className="flex gap-16">
-          {routing.locales.map((code) => (
-            <li key={code}>
-              <Link
-                href="/"
-                locale={code}
-                className="border border-line-strong px-16 py-8 font-mono text-caption uppercase"
-              >
-                {code}
-              </Link>
-            </li>
-          ))}
-        </ul>
-      </div>
     </main>
   )
 }

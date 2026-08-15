@@ -10,6 +10,21 @@
     "about": "工作室",
     "contact": "联系"
   },
+  "Layout": {
+    "skipToContent": "跳到正文",
+    "menuLabel": "主菜单",
+    "menuOpen": "菜单",
+    "menuClose": "关闭",
+    "localeLabel": "语言",
+    "offices": "办公室",
+    "social": "社交媒体",
+    "toTop": "回到顶部"
+  },
+  "Locales": {
+    "it": "意大利语",
+    "en": "英语",
+    "zh": "中文"
+  },
   "Theme": {
     "legend": "主题",
     "system": "跟随系统",
