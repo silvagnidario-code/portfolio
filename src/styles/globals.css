@@ -6,6 +6,8 @@
 @import './theme.generated.css';
 /* The glass material — used only by the GlassSurface component */
 @import './glass.css';
+/* Block-level background, spacing and prose */
+@import './blocks.css';
 
 @source '../../src';
 
@@ -142,4 +144,13 @@
 /** Horizontal page padding without the grid. */
 @utility page-margin {
   padding-inline: var(--page-margin);
+}
+
+/**
+ * A scroll-snap container has to be told about the page margin too: a snap
+ * point aligns to the scrollport edge, which sits *inside* the padding, so
+ * without this the browser scrolls the first item flush to the viewport.
+ */
+@utility page-snap-margin {
+  scroll-padding-inline: var(--page-margin);
 }

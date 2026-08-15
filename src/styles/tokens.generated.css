@@ -116,10 +116,35 @@
   --glass-saturate: 1.8;
   --glass-border-width: 1px;
 
+  /* Section rhythm */
+  --section-compact: clamp(3rem, 2rem + 4.4444vw, 6rem);
+  --section-normal: clamp(4rem, 2.6667rem + 5.9259vw, 8rem);
+  --section-wide: clamp(6rem, 4rem + 8.8889vw, 12rem);
+
   /* Grid */
   --grid-columns: 4;
   --grid-gutter: 24px;
   --page-margin: clamp(1.5rem, -0.6667rem + 9.6296vw, 8rem);
+}
+
+/*
+ * A section on the inverse background adopts the opposite palette wholesale, so
+ * every role inside it — muted text, borders, the accent — keeps the contrast
+ * it was verified with. Flipping only the background and the main foreground
+ * would leave the secondary tones stranded on the wrong side.
+ */
+:root [data-background='sumi'] {
+  --bg-primary: #131211;
+  --bg-secondary: #232220;
+  --bg-inverse: #F7F5F0;
+  --fg-primary: #EDEAE3;
+  --fg-secondary: #CFC9BC;
+  --fg-muted: #A79E8C;
+  --fg-inverse: #131211;
+  --border-subtle: #332F29;
+  --border-strong: #8C826C;
+  --accent: #FF8452;
+  --accent-fg: #1A1A18;
 }
 
 /* System preference, unless the reader explicitly asked for light */
@@ -184,6 +209,50 @@
   --glass-highlight: rgb(253 252 249 / 0.55);
   --glass-shade: rgb(26 26 24 / 0.18);
   --glass-border: rgb(26 26 24 / 0.12);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) [data-background='sumi'] {
+    --bg-primary: #F7F5F0;
+    --bg-secondary: #EFEBE2;
+    --bg-inverse: #1A1A18;
+    --fg-primary: #1A1A18;
+    --fg-secondary: #4E4838;
+    --fg-muted: #6F6757;
+    --fg-inverse: #F7F5F0;
+    --border-subtle: #E3DED2;
+    --border-strong: #8C826C;
+    --accent: #A83A15;
+    --accent-fg: #FDFCF9;
+  }
+}
+
+:root[data-theme='dark'] [data-background='sumi'] {
+  --bg-primary: #F7F5F0;
+  --bg-secondary: #EFEBE2;
+  --bg-inverse: #1A1A18;
+  --fg-primary: #1A1A18;
+  --fg-secondary: #4E4838;
+  --fg-muted: #6F6757;
+  --fg-inverse: #F7F5F0;
+  --border-subtle: #E3DED2;
+  --border-strong: #8C826C;
+  --accent: #A83A15;
+  --accent-fg: #FDFCF9;
+}
+
+:root[data-theme='light'] [data-background='sumi'] {
+  --bg-primary: #131211;
+  --bg-secondary: #232220;
+  --bg-inverse: #F7F5F0;
+  --fg-primary: #EDEAE3;
+  --fg-secondary: #CFC9BC;
+  --fg-muted: #A79E8C;
+  --fg-inverse: #131211;
+  --border-subtle: #332F29;
+  --border-strong: #8C826C;
+  --accent: #FF8452;
+  --accent-fg: #1A1A18;
 }
 
 /* Han glyphs read smaller at the same font-size and need more leading.

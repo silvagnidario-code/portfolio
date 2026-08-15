@@ -1,0 +1,99 @@
+/**
+ * The three properties every block exposes, §5, resolved once here instead of
+ * per block. The values themselves — including the palette a `sumi` section
+ * adopts — are generated in tokens.generated.css.
+ */
+
+[data-background] {
+  background-color: var(--bg-primary);
+  color: var(--fg-primary);
+}
+
+/*
+ * A flat accent field: no gradient, ever. Every foreground role collapses onto
+ * the one colour that was contrast-checked against it, so a block that reaches
+ * for muted text on accent gets legible text instead of a near-invisible one.
+ */
+[data-background='accent'] {
+  --bg-primary: var(--accent);
+  --bg-secondary: var(--accent);
+  --fg-primary: var(--accent-fg);
+  --fg-secondary: var(--accent-fg);
+  --fg-muted: var(--accent-fg);
+  --border-subtle: var(--accent-fg);
+  --border-strong: var(--accent-fg);
+}
+
+[data-spacing='compact'] {
+  padding-block: var(--section-compact);
+}
+
+[data-spacing='normal'] {
+  padding-block: var(--section-normal);
+}
+
+[data-spacing='wide'] {
+  padding-block: var(--section-wide);
+}
+
+/**
+ * Running text coming out of the editor. The blocks never style prose
+ * themselves; they wrap it in this and stop.
+ */
+/*
+ * Sibling spacing is matched by element rather than by depth: the Lexical
+ * converter wraps its output in a container of its own, so a child combinator
+ * from `.prose` would never reach the paragraphs.
+ */
+.prose :is(p, h2, h3, ul, ol, blockquote) + :is(p, h2, h3, ul, ol, blockquote) {
+  margin-block-start: var(--space-32);
+}
+
+.prose p {
+  max-width: var(--container-measure);
+  font-size: calc(var(--fs-body-lg) * var(--type-scale-factor));
+  line-height: var(--leading-body-override);
+  letter-spacing: var(--ls-body-lg);
+  color: var(--fg-secondary);
+}
+
+.prose h2,
+.prose h3 {
+  max-width: var(--container-measure);
+  font-size: calc(var(--fs-h3) * var(--type-scale-factor));
+  line-height: var(--lh-h3);
+  font-weight: var(--fw-h3);
+  color: var(--fg-primary);
+}
+
+.prose ul,
+.prose ol {
+  max-width: var(--container-measure);
+  padding-inline-start: var(--space-24);
+  color: var(--fg-secondary);
+}
+
+.prose ul {
+  list-style: disc;
+}
+
+.prose ol {
+  list-style: decimal;
+}
+
+.prose li + li {
+  margin-block-start: var(--space-8);
+}
+
+.prose a {
+  color: var(--accent);
+  text-decoration: underline;
+  text-underline-offset: var(--space-4);
+}
+
+.prose blockquote {
+  max-width: var(--container-measure);
+  border-inline-start: var(--glass-border-width) solid var(--border-strong);
+  padding-inline-start: var(--space-24);
+  color: var(--fg-primary);
+}

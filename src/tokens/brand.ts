@@ -153,6 +153,19 @@ export const glass = {
   refraction: { scale: 12, frequency: 0.008 },
 } as const
 
+/**
+ * Vertical breathing room between sections, the `spacing` property every block
+ * exposes. Fluid: the specification asks for at least 128px on desktop, which
+ * would swallow a phone screen whole.
+ */
+export const sectionSpacing = {
+  compact: { min: 48, max: 96 },
+  normal: { min: 64, max: 128 },
+  wide: { min: 96, max: 192 },
+} as const
+
+export type SectionSpacing = keyof typeof sectionSpacing
+
 /** Comfortable reading measure for running text. */
 export const measure = '62ch'
 

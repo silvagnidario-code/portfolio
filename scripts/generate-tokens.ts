@@ -28,6 +28,7 @@ import {
   measure,
   radius,
   revealDistance,
+  sectionSpacing,
   spacing,
   stagger,
   typeScale,
@@ -43,6 +44,13 @@ const BANNER = `/*\n * GENERATED FILE — do not edit.\n * Source: src/tokens/*.
 
 /** camelCase grade names become kebab-case CSS names. */
 const kebab = (value: string): string => value.replace(/[A-Z]/g, (c) => `-${c.toLowerCase()}`)
+
+function roleBlock(theme: ThemeName, indent: string): string {
+  return colorRoles.map((role) => `${indent}--${role}: ${semanticColors[theme][role]};`).join('\n')
+}
+
+/** The opposite palette, for a section that inverts against the page. */
+const opposite = (theme: ThemeName): ThemeName => (theme === 'light' ? 'dark' : 'light')
 
 function colorBlock(theme: ThemeName, indent: string): string {
   const roles = colorRoles.map((role) => `${indent}--${role}: ${semanticColors[theme][role]};`)
@@ -105,6 +113,10 @@ function buildTokensCss(): string {
     `  --glass-border-width: ${glass.borderWidth}px;`,
   ].join('\n')
 
+  const sectionVars = Object.entries(sectionSpacing)
+    .map(([name, range]) => `  --section-${name}: ${fluidClamp(range.min, range.max)};`)
+    .join('\n')
+
   const gridVars = [
     `  --grid-columns: ${grid.columns.mobile};`,
     `  --grid-gutter: ${grid.gutter}px;`,
@@ -141,8 +153,21 @@ ${radiusVars}
   /* Glass — theme-dependent values live in the colour blocks */
 ${glassVars}
 
+  /* Section rhythm */
+${sectionVars}
+
   /* Grid */
 ${gridVars}
+}
+
+/*
+ * A section on the inverse background adopts the opposite palette wholesale, so
+ * every role inside it — muted text, borders, the accent — keeps the contrast
+ * it was verified with. Flipping only the background and the main foreground
+ * would leave the secondary tones stranded on the wrong side.
+ */
+:root [data-background='sumi'] {
+${roleBlock(opposite('light'), '  ')}
 }
 
 /* System preference, unless the reader explicitly asked for light */
@@ -162,6 +187,20 @@ ${colorBlock('dark', '  ')}
 :root[data-theme='light'] {
   color-scheme: light;
 ${colorBlock('light', '  ')}
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) [data-background='sumi'] {
+${roleBlock(opposite('dark'), '    ')}
+  }
+}
+
+:root[data-theme='dark'] [data-background='sumi'] {
+${roleBlock(opposite('dark'), '  ')}
+}
+
+:root[data-theme='light'] [data-background='sumi'] {
+${roleBlock(opposite('light'), '  ')}
 }
 
 /* Han glyphs read smaller at the same font-size and need more leading.
