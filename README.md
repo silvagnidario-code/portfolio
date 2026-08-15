@@ -72,6 +72,29 @@ tokens. Both generated files are committed; never edit them by hand.
 every typographic grade in all three languages, and a WCAG contrast table
 computed on both themes from the same values the CSS is generated from.
 
+### Glass
+
+`GlassSurface` is the only implementation of the translucent interface layer,
+and the only component allowed to use the `.glass` classes. It carries the four
+layers of the material — backdrop blur, adaptive fill, specular edge,
+refraction — with variants for navbar, pill, chrome and cursor. Content blocks
+stay opaque and flat: content is paper, the interface is shoji.
+
+Two constraints are enforced rather than documented:
+
+- **Fill opacity.** Text on glass sits on the fill composited over whatever
+  scrolls underneath, so `src/tokens/glass.ts` computes the minimum opacity at
+  which `fg-primary` still holds 4.5:1 over pure white and pure black, and the
+  token generator throws rather than emit anything more transparent. The dark
+  theme needs 0.63 by that measure, above the 45–55% the specification suggests;
+  the accessibility rule wins.
+- **Cost.** `GlassBudgetProvider` counts live surfaces and logs an error past
+  four, the cap the specification sets for `backdrop-filter`.
+
+The refraction filter is applied to the cursor only, and drops out under
+`pointer: coarse` and `prefers-reduced-motion`. The blur radius is never
+animated: only `opacity` and `transform` are declared transitionable on glass.
+
 ### Fonts
 
 Zen Kaku Gothic New and Noto Sans SC are self-hosted by `scripts/fetch-fonts.ts`
