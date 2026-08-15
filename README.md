@@ -149,10 +149,6 @@ shared bundle entirely.
   `BlockSection` already emits. Nothing is hidden in the markup: the hidden
   state is set from JavaScript, so a page without scripting is a page that
   reads.
-- **Magnetic cursor** — a glass disc following by interpolation, snapping to
-  `data-magnetic` elements inside 80px and leaning them back by at most 8px. It
-  hides the system cursor only once it is running, and disables itself entirely
-  on touch and under reduced motion.
 - **WebGL** — a distortion canvas laid over the real `next/image`, mounted on
   first intersection and only where a pointer, a WebGL context and a motion
   preference all allow it. The picture underneath is the fallback.
@@ -295,10 +291,18 @@ computed on both themes from the same values the CSS is generated from.
 ### Glass
 
 `GlassSurface` is the only implementation of the translucent interface layer,
-and the only component allowed to use the `.glass` classes. It carries the four
-layers of the material — backdrop blur, adaptive fill, specular edge,
-refraction — with variants for navbar, pill, chrome and cursor. Content blocks
+and the only component allowed to use the `.glass` classes. It carries the three
+layers of the material — backdrop blur, adaptive fill, specular edge — with
+variants for navbar, pill and chrome. §7 describes a fourth, an SVG
+displacement filter for the cursor; the custom cursor was removed by request
+and that layer lost its only justified consumer. Content blocks
 stay opaque and flat: content is paper, the interface is shoji.
+
+The material is deliberately heavy: 36px of blur, 210% saturation, a specular
+top edge with an inner sheen, and an outer shadow that lifts the pane off the
+page. The fill sits as thin as the measurement allows — 0.60 light, 0.65 dark —
+because a thinner fill is what makes glass read as glass, and the floor below is
+what stops it from going further.
 
 Two constraints are enforced rather than documented:
 
@@ -311,9 +315,8 @@ Two constraints are enforced rather than documented:
 - **Cost.** `GlassBudgetProvider` counts live surfaces and logs an error past
   four, the cap the specification sets for `backdrop-filter`.
 
-The refraction filter is applied to the cursor only, and drops out under
-`pointer: coarse` and `prefers-reduced-motion`. The blur radius is never
-animated: only `opacity` and `transform` are declared transitionable on glass.
+The blur radius is never animated: only `opacity` and `transform` are declared
+transitionable on glass.
 
 ### Fonts
 
