@@ -75,6 +75,30 @@ should not need a redeploy to change. Phase 9 adds cached reads with tag-based
 revalidation on publish, which makes the pages static again, refreshed by an
 edit rather than by a build.
 
+## Block engine
+
+`RenderBlocks` maps a `layout` array to components and resolves the three common
+properties in one place: `BlockSection` sets the background, the vertical rhythm
+and the `data-animate` flag every block exposes. A block type without a renderer
+leaves a hole rather than crashing the page.
+
+A section on the `sumi` background adopts the **opposite palette wholesale** —
+every role inside it, not just the background and the main foreground — so muted
+text, borders and the accent keep the contrast they were verified with. An
+`accent` section collapses every foreground role onto `--accent-fg`, the one
+colour checked against it.
+
+**`/[locale]/blocks` is the catalogue**: all eleven blocks in all twenty-nine
+variants, filled with real CMS content. It cycles the `variant` field on the
+_same_ block object rather than building a fixture per variant, so it is a proof
+that switching variant costs neither copy nor translations, not a mock-up.
+
+Blocks that need scroll interaction (`draggableRow`, the testimonial slider, the
+client marquee, the animated counters) render as scroll-snap tracks and final
+values: they work with a finger, a trackpad and a keyboard before any script
+runs, and that is also what a reader with `prefers-reduced-motion` keeps. Phase
+8 enhances them.
+
 ## Content model
 
 Nine collections and four globals, all editorial text localized field by field
