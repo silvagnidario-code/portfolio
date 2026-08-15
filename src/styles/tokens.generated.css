@@ -38,11 +38,12 @@
   --border-strong: #8C826C;
   --accent: #A83A15;
   --accent-fg: #FDFCF9;
-  --glass-fill: rgb(253 252 249 / 0.66);
-  --glass-fill-opaque: #fbfaf6;
-  --glass-highlight: rgb(253 252 249 / 0.55);
-  --glass-shade: rgb(26 26 24 / 0.18);
-  --glass-border: rgb(26 26 24 / 0.12);
+  --glass-fill: rgb(253 252 249 / 0.6);
+  --glass-fill-opaque: #fbf9f5;
+  --glass-highlight: rgb(253 252 249 / 0.85);
+  --glass-shade: rgb(26 26 24 / 0.26);
+  --glass-border: rgb(26 26 24 / 0.18);
+  --glass-lift: 0 16px 48px -12px rgb(26 26 24 / 0.12);
 
   /* Spacing */
   --space-4: 4px;
@@ -112,8 +113,8 @@
   --corner-round: 9999px;
 
   /* Glass — theme-dependent values live in the colour blocks */
-  --glass-blur: 24px;
-  --glass-saturate: 1.8;
+  --glass-blur: 36px;
+  --glass-saturate: 2.1;
   --glass-border-width: 1px;
 
   /* Section rhythm */
@@ -162,11 +163,12 @@
     --border-strong: #8C826C;
     --accent: #FF8452;
     --accent-fg: #1A1A18;
-    --glass-fill: rgb(19 18 17 / 0.68);
+    --glass-fill: rgb(19 18 17 / 0.65);
     --glass-fill-opaque: #131211;
-    --glass-highlight: rgb(253 252 249 / 0.28);
-    --glass-shade: rgb(19 18 17 / 0.45);
-    --glass-border: rgb(253 252 249 / 0.14);
+    --glass-highlight: rgb(253 252 249 / 0.45);
+    --glass-shade: rgb(19 18 17 / 0.6);
+    --glass-border: rgb(253 252 249 / 0.22);
+    --glass-lift: 0 16px 48px -12px rgb(19 18 17 / 0.4);
   }
 }
 
@@ -184,11 +186,12 @@
   --border-strong: #8C826C;
   --accent: #FF8452;
   --accent-fg: #1A1A18;
-  --glass-fill: rgb(19 18 17 / 0.68);
+  --glass-fill: rgb(19 18 17 / 0.65);
   --glass-fill-opaque: #131211;
-  --glass-highlight: rgb(253 252 249 / 0.28);
-  --glass-shade: rgb(19 18 17 / 0.45);
-  --glass-border: rgb(253 252 249 / 0.14);
+  --glass-highlight: rgb(253 252 249 / 0.45);
+  --glass-shade: rgb(19 18 17 / 0.6);
+  --glass-border: rgb(253 252 249 / 0.22);
+  --glass-lift: 0 16px 48px -12px rgb(19 18 17 / 0.4);
 }
 
 :root[data-theme='light'] {
@@ -204,11 +207,12 @@
   --border-strong: #8C826C;
   --accent: #A83A15;
   --accent-fg: #FDFCF9;
-  --glass-fill: rgb(253 252 249 / 0.66);
-  --glass-fill-opaque: #fbfaf6;
-  --glass-highlight: rgb(253 252 249 / 0.55);
-  --glass-shade: rgb(26 26 24 / 0.18);
-  --glass-border: rgb(26 26 24 / 0.12);
+  --glass-fill: rgb(253 252 249 / 0.6);
+  --glass-fill-opaque: #fbf9f5;
+  --glass-highlight: rgb(253 252 249 / 0.85);
+  --glass-shade: rgb(26 26 24 / 0.26);
+  --glass-border: rgb(26 26 24 / 0.18);
+  --glass-lift: 0 16px 48px -12px rgb(26 26 24 / 0.12);
 }
 
 @media (prefers-color-scheme: dark) {

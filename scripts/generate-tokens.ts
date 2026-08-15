@@ -35,7 +35,13 @@ import {
 } from '../src/tokens/brand'
 import { compositeOver } from '../src/tokens/contrast'
 import { fluidClamp } from '../src/tokens/fluid'
-import { assertFillOpacities, fillOpacity, glassEdges, withAlpha } from '../src/tokens/glass'
+import {
+  assertFillOpacities,
+  fillOpacity,
+  glassEdges,
+  glassLift,
+  withAlpha,
+} from '../src/tokens/glass'
 import { colorAliases, colorRoles, semanticColors, type ThemeName } from '../src/tokens/semantic'
 
 const outDir = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../src/styles')
@@ -67,6 +73,7 @@ function colorBlock(theme: ThemeName, indent: string): string {
     `${indent}--glass-highlight: ${glassEdges[theme].highlight};`,
     `${indent}--glass-shade: ${glassEdges[theme].shade};`,
     `${indent}--glass-border: ${glassEdges[theme].border};`,
+    `${indent}--glass-lift: ${glassLift[theme]};`,
   ]
 
   return [...roles, ...glassVars].join('\n')
