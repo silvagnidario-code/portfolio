@@ -1,6 +1,6 @@
 import { getTranslations } from 'next-intl/server'
 
-import { CjkStylesheet } from '@/components/typography/font-links'
+import { CjkStylesheet } from '@/components/typography/cjk-stylesheet'
 import enMessages from '@/messages/en.json'
 import itMessages from '@/messages/it.json'
 import zhMessages from '@/messages/zh.json'
