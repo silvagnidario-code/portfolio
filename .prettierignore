@@ -4,3 +4,6 @@ package-lock.json
 src/payload-types.ts
 src/app/(payload)/admin/importMap.js
 src/migrations
+src/lib/font-manifest.generated.ts
+public/fonts
+src/styles/*.generated.css

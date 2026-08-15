@@ -1,0 +1,180 @@
+/*
+ * GENERATED FILE — do not edit.
+ * Source: src/tokens/*.ts · Regenerate with: npm run tokens
+ */
+
+:root {
+  color-scheme: light;
+
+  /* Level 1 — primitives */
+  --base-unit: 4px;
+  --grey-paper50: #FDFCF9;
+  --grey-paper100: #F7F5F0;
+  --grey-paper200: #EFEBE2;
+  --grey-paper300: #E3DED2;
+  --grey-clay400: #C7BFAF;
+  --grey-clay500: #8C826C;
+  --grey-clay600: #6F6757;
+  --grey-clay700: #4E4838;
+  --grey-sumi800: #332F29;
+  --grey-sumi850: #232220;
+  --grey-sumi900: #1A1A18;
+  --grey-sumi950: #131211;
+  --grey-ink100: #EDEAE3;
+  --grey-ink200: #CFC9BC;
+  --grey-ink300: #A79E8C;
+  --accent-on-light: #A83A15;
+  --accent-on-dark: #FF8452;
+
+  /* Level 2 — semantic roles (light) */
+  --bg-primary: #F7F5F0;
+  --bg-secondary: #EFEBE2;
+  --bg-inverse: #1A1A18;
+  --fg-primary: #1A1A18;
+  --fg-secondary: #4E4838;
+  --fg-muted: #6F6757;
+  --fg-inverse: #F7F5F0;
+  --border-subtle: #E3DED2;
+  --border-strong: #8C826C;
+  --accent: #A83A15;
+  --accent-fg: #FDFCF9;
+
+  /* Spacing */
+  --space-4: 4px;
+  --space-8: 8px;
+  --space-12: 12px;
+  --space-16: 16px;
+  --space-24: 24px;
+  --space-32: 32px;
+  --space-48: 48px;
+  --space-64: 64px;
+  --space-96: 96px;
+  --space-128: 128px;
+  --space-192: 192px;
+  --space-256: 256px;
+  --space-320: 320px;
+
+  /* Typography */
+  --fs-display: clamp(2.75rem, 1.0833rem + 7.4074vw, 7.75rem);
+  --lh-display: 1.15;
+  --ls-display: 0em;
+  --fw-display: 300;
+  --fs-h1: clamp(2.125rem, 1.3333rem + 3.5185vw, 4.5rem);
+  --lh-h1: 1.15;
+  --ls-h1: 0em;
+  --fw-h1: 300;
+  --fs-h2: clamp(1.6875rem, 1.25rem + 1.9444vw, 3rem);
+  --lh-h2: 1.2;
+  --ls-h2: 0em;
+  --fw-h2: 400;
+  --fs-h3: clamp(1.375rem, 1.1667rem + 0.9259vw, 2rem);
+  --lh-h3: 1.25;
+  --ls-h3: 0em;
+  --fw-h3: 400;
+  --fs-body-lg: clamp(1.125rem, 1.0417rem + 0.3704vw, 1.375rem);
+  --lh-body-lg: 1.8;
+  --ls-body-lg: 0.01em;
+  --fw-body-lg: 400;
+  --fs-body: clamp(1rem, 0.9583rem + 0.1852vw, 1.125rem);
+  --lh-body: 1.8;
+  --ls-body: 0em;
+  --fw-body: 400;
+  --fs-caption: clamp(0.75rem, 0.7292rem + 0.0926vw, 0.8125rem);
+  --lh-caption: 1.4;
+  --ls-caption: 0.12em;
+  --fw-caption: 500;
+  /* Optical compensation, overridden for CJK below */
+  --type-scale-factor: 1;
+  --leading-body-override: var(--lh-body);
+
+  /* Motion */
+  --duration-fast: 200ms;
+  --duration-base: 400ms;
+  --duration-slow: 800ms;
+  --duration-slowest: 1600ms;
+  --easing-reveal: cubic-bezier(0.32, 0.72, 0, 1);
+  --stagger-min: 80ms;
+  --stagger-base: 100ms;
+  --stagger-max: 120ms;
+  --reveal-distance-min: 16px;
+  --reveal-distance-max: 24px;
+
+  /* Radii */
+  --corner-none: 0px;
+  --corner-glass-sm: 20px;
+  --corner-glass-md: 24px;
+  --corner-glass-lg: 28px;
+
+  /* Grid */
+  --grid-columns: 4;
+  --grid-gutter: 24px;
+  --page-margin: clamp(1.5rem, -0.6667rem + 9.6296vw, 8rem);
+}
+
+/* System preference, unless the reader explicitly asked for light */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) {
+    color-scheme: dark;
+    --bg-primary: #131211;
+    --bg-secondary: #232220;
+    --bg-inverse: #F7F5F0;
+    --fg-primary: #EDEAE3;
+    --fg-secondary: #CFC9BC;
+    --fg-muted: #A79E8C;
+    --fg-inverse: #131211;
+    --border-subtle: #332F29;
+    --border-strong: #8C826C;
+    --accent: #FF8452;
+    --accent-fg: #1A1A18;
+  }
+}
+
+/* Explicit choice always wins, in both directions */
+:root[data-theme='dark'] {
+  color-scheme: dark;
+  --bg-primary: #131211;
+  --bg-secondary: #232220;
+  --bg-inverse: #F7F5F0;
+  --fg-primary: #EDEAE3;
+  --fg-secondary: #CFC9BC;
+  --fg-muted: #A79E8C;
+  --fg-inverse: #131211;
+  --border-subtle: #332F29;
+  --border-strong: #8C826C;
+  --accent: #FF8452;
+  --accent-fg: #1A1A18;
+}
+
+:root[data-theme='light'] {
+  color-scheme: light;
+  --bg-primary: #F7F5F0;
+  --bg-secondary: #EFEBE2;
+  --bg-inverse: #1A1A18;
+  --fg-primary: #1A1A18;
+  --fg-secondary: #4E4838;
+  --fg-muted: #6F6757;
+  --fg-inverse: #F7F5F0;
+  --border-subtle: #E3DED2;
+  --border-strong: #8C826C;
+  --accent: #A83A15;
+  --accent-fg: #FDFCF9;
+}
+
+/* Han glyphs read smaller at the same font-size and need more leading.
+   Applies to any subtree marked lang="zh", not just the zh locale. */
+:lang(zh) {
+  --type-scale-factor: 1.06;
+  --leading-body-override: 2;
+}
+
+@media (min-width: 768px) {
+  :root {
+    --grid-columns: 6;
+  }
+}
+
+@media (min-width: 1180px) {
+  :root {
+    --grid-columns: 12;
+  }
+}

@@ -1,0 +1,105 @@
+/*
+ * GENERATED FILE — do not edit.
+ * Source: src/tokens/*.ts · Regenerate with: npm run tokens
+ */
+
+@theme {
+  /* Nothing from the default palette survives: every visual value in a
+     component must come from a token. */
+  --color-*: initial;
+  --text-*: initial;
+  --font-*: initial;
+  --font-weight-*: initial;
+  --radius-*: initial;
+  --ease-*: initial;
+  --breakpoint-*: initial;
+  --spacing: initial;
+  --spacing-*: initial;
+
+  --breakpoint-tablet: 768px;
+  --breakpoint-desktop: 1180px;
+}
+
+@theme inline {
+  /* Colours — resolved at runtime so the theme can switch without a rebuild */
+  --color-surface: var(--bg-primary);
+  --color-surface-2: var(--bg-secondary);
+  --color-surface-inverse: var(--bg-inverse);
+  --color-ink: var(--fg-primary);
+  --color-ink-2: var(--fg-secondary);
+  --color-ink-muted: var(--fg-muted);
+  --color-ink-inverse: var(--fg-inverse);
+  --color-line: var(--border-subtle);
+  --color-line-strong: var(--border-strong);
+  --color-accent: var(--accent);
+  --color-accent-ink: var(--accent-fg);
+
+  /* Typefaces. Zen Kaku and Noto Sans SC are self-hosted (scripts/fetch-fonts.ts),
+     Geist Mono comes from next/font. */
+  --font-body: 'Zen Kaku Gothic New', ui-sans-serif, system-ui, sans-serif;
+  --font-display: 'Zen Kaku Gothic New', ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, monospace;
+  --font-cjk: 'Noto Sans SC', 'Zen Kaku Gothic New', ui-sans-serif, sans-serif;
+
+  /* Only the three weights this direction allows */
+  --font-weight-light: 300;
+  --font-weight-normal: 400;
+  --font-weight-medium: 500;
+
+  /* Spacing */
+  --spacing-4: var(--space-4);
+  --spacing-8: var(--space-8);
+  --spacing-12: var(--space-12);
+  --spacing-16: var(--space-16);
+  --spacing-24: var(--space-24);
+  --spacing-32: var(--space-32);
+  --spacing-48: var(--space-48);
+  --spacing-64: var(--space-64);
+  --spacing-96: var(--space-96);
+  --spacing-128: var(--space-128);
+  --spacing-192: var(--space-192);
+  --spacing-256: var(--space-256);
+  --spacing-320: var(--space-320);
+
+  /* Typographic scale */
+  --text-display: calc(var(--fs-display) * var(--type-scale-factor));
+  --text-display--line-height: var(--lh-display);
+  --text-display--letter-spacing: var(--ls-display);
+  --text-display--font-weight: 300;
+  --text-h1: calc(var(--fs-h1) * var(--type-scale-factor));
+  --text-h1--line-height: var(--lh-h1);
+  --text-h1--letter-spacing: var(--ls-h1);
+  --text-h1--font-weight: 300;
+  --text-h2: calc(var(--fs-h2) * var(--type-scale-factor));
+  --text-h2--line-height: var(--lh-h2);
+  --text-h2--letter-spacing: var(--ls-h2);
+  --text-h2--font-weight: 400;
+  --text-h3: calc(var(--fs-h3) * var(--type-scale-factor));
+  --text-h3--line-height: var(--lh-h3);
+  --text-h3--letter-spacing: var(--ls-h3);
+  --text-h3--font-weight: 400;
+  --text-body-lg: calc(var(--fs-body-lg) * var(--type-scale-factor));
+  --text-body-lg--line-height: var(--lh-body-lg);
+  --text-body-lg--letter-spacing: var(--ls-body-lg);
+  --text-body-lg--font-weight: 400;
+  --text-body: calc(var(--fs-body) * var(--type-scale-factor));
+  --text-body--line-height: var(--leading-body-override);
+  --text-body--letter-spacing: var(--ls-body);
+  --text-body--font-weight: 400;
+  --text-caption: calc(var(--fs-caption) * var(--type-scale-factor));
+  --text-caption--line-height: var(--lh-caption);
+  --text-caption--letter-spacing: var(--ls-caption);
+  --text-caption--font-weight: 500;
+
+  /* Radii */
+  --radius-none: var(--corner-none);
+  --radius-glass-sm: var(--corner-glass-sm);
+  --radius-glass-md: var(--corner-glass-md);
+  --radius-glass-lg: var(--corner-glass-lg);
+
+  /* Reading measure */
+  --container-measure: 62ch;
+
+  /* Motion — one easing for every reveal */
+  --ease-reveal: var(--easing-reveal);
+}

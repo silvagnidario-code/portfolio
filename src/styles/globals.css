@@ -1,0 +1,103 @@
+@import 'tailwindcss';
+
+/* Level 1 + 2: raw values and semantic roles, per theme */
+@import './tokens.generated.css';
+/* Tailwind mapping, generated from the same source */
+@import './theme.generated.css';
+
+@source '../../src';
+
+/* ---------------------------------------------------------------------------
+   Base
+   --------------------------------------------------------------------------- */
+
+@layer base {
+  html {
+    font-family: var(--font-body);
+    /* Nothing here may be a literal: every value is a token. */
+    font-size: 100%;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  body {
+    background-color: var(--bg-primary);
+    color: var(--fg-primary);
+    font-size: calc(var(--fs-body) * var(--type-scale-factor));
+    line-height: var(--leading-body-override);
+    letter-spacing: var(--ls-body);
+    font-weight: var(--fw-body);
+  }
+
+  /* Han glyphs get their own stack; the size and leading compensation rides
+     on the custom properties set in tokens.generated.css. */
+  :lang(zh) {
+    font-family: var(--font-cjk);
+  }
+
+  /* Focus is always visible, on every interactive element. */
+  :focus-visible {
+    outline: var(--space-4) solid var(--accent);
+    outline-offset: var(--space-4);
+  }
+
+  ::selection {
+    background-color: var(--accent);
+    color: var(--accent-fg);
+  }
+
+  /* Content is paper: square corners on everything that is not glass. */
+  img,
+  video,
+  figure {
+    border-radius: var(--corner-none);
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   Motion
+   --------------------------------------------------------------------------- */
+
+/* One switch for the whole site. Individual components never re-implement it. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 1ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 1ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   Utilities
+   --------------------------------------------------------------------------- */
+
+/* Tailwind has no `--duration-*` namespace, so the four durations of the
+   system are exposed as utilities here instead of being typed by hand. */
+@utility duration-fast {
+  transition-duration: var(--duration-fast);
+}
+@utility duration-base {
+  transition-duration: var(--duration-base);
+}
+@utility duration-slow {
+  transition-duration: var(--duration-slow);
+}
+@utility duration-slowest {
+  transition-duration: var(--duration-slowest);
+}
+
+/** The page grid: 12/6/4 columns, fixed gutter, fluid margins. */
+@utility page-grid {
+  display: grid;
+  grid-template-columns: repeat(var(--grid-columns), minmax(0, 1fr));
+  gap: var(--grid-gutter);
+  padding-inline: var(--page-margin);
+}
+
+/** Horizontal page padding without the grid. */
+@utility page-margin {
+  padding-inline: var(--page-margin);
+}

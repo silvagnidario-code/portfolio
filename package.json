@@ -21,7 +21,11 @@
     "migrate": "cross-env NODE_OPTIONS=--no-deprecation payload migrate",
     "migrate:create": "cross-env NODE_OPTIONS=--no-deprecation payload migrate:create",
     "services:up": "docker compose up -d db minio minio-init",
-    "services:down": "docker compose down"
+    "services:down": "docker compose down",
+    "tokens": "tsx scripts/generate-tokens.ts",
+    "predev": "npm run tokens && npm run fonts",
+    "prebuild": "npm run tokens && npm run fonts",
+    "fonts": "tsx scripts/fetch-fonts.ts"
   },
   "dependencies": {
     "@payloadcms/db-postgres": "3.88.0",
@@ -30,6 +34,7 @@
     "@payloadcms/storage-s3": "3.88.0",
     "@payloadcms/translations": "3.88.0",
     "@payloadcms/ui": "3.88.0",
+    "@tailwindcss/postcss": "4.3.3",
     "cross-env": "7.0.3",
     "dotenv": "17.4.2",
     "graphql": "16.14.2",
@@ -39,6 +44,7 @@
     "react": "19.2.6",
     "react-dom": "19.2.6",
     "sharp": "0.34.5",
+    "tailwindcss": "4.3.3",
     "zod": "4.4.3"
   },
   "devDependencies": {
@@ -49,6 +55,7 @@
     "eslint": "9.39.5",
     "eslint-config-next": "15.4.11",
     "prettier": "3.9.6",
+    "tsx": "4.23.12",
     "typescript": "5.9.3"
   }
 }
