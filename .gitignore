@@ -31,3 +31,4 @@ yarn-error.log*
 # self-hosted font slices, fetched at build time
 /public/fonts
 /src/lib/font-manifest.generated.ts
+.env*

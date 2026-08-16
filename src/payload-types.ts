@@ -1650,6 +1650,10 @@ export interface SeoDefault {
   id: number;
   siteName: string;
   /**
+   * SVG o PNG con sfondo trasparente. Se vuoto, resta il testo del sito.
+   */
+  logo?: (number | null) | Media;
+  /**
    * %s viene sostituito dal titolo della pagina.
    */
   titleTemplate: string;
@@ -1741,6 +1745,7 @@ export interface FooterSelect<T extends boolean = true> {
  */
 export interface SeoDefaultsSelect<T extends boolean = true> {
   siteName?: T;
+  logo?: T;
   titleTemplate?: T;
   description?: T;
   ogImage?: T;
