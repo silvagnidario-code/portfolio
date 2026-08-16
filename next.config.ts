@@ -10,8 +10,12 @@ const dirname = path.dirname(fileURLToPath(import.meta.url))
 const withNextIntl = createNextIntlPlugin('./src/i18n/request.ts')
 
 const nextConfig: NextConfig = {
-  // Required by the Dockerfile: bundles a minimal server in .next/standalone.
-  output: 'standalone',
+  /**
+   * A minimal server bundled into `.next/standalone`, which is what the
+   * Dockerfile copies. Vercel builds its own output and warns about this one,
+   * so it is left off there — the same repository deploys to both.
+   */
+  output: process.env.VERCEL ? undefined : 'standalone',
   /**
    * Metadata goes in the <head> for every client, not only for the bots Next
    * assumes cannot render JavaScript.

@@ -298,7 +298,20 @@ export const fontManifest = ${JSON.stringify(manifest, null, 2)} as const
 try {
   await main()
 } catch (error) {
-  // A missing face degrades to the fallback stack; it must not take a deploy
-  // down over a transient network error.
-  console.warn(`Could not self-host fonts: ${(error as Error).message}`)
+  const message = (error as Error).message
+
+  /**
+   * A missing face degrades to the fallback stack, so a transient network
+   * error must not take a deploy down — but only when there is something to
+   * fall back to. With no manifest on disk the next import of it fails during
+   * `next build`, and the error the developer sees is a missing module rather
+   * than the network problem that caused it. On a cold checkout that is the
+   * normal case, so it fails here, loudly, instead.
+   */
+  if (!existsSync(manifestPath)) {
+    console.error(`Could not fetch the fonts and no manifest exists: ${message}`)
+    process.exit(1)
+  }
+
+  console.warn(`Could not refresh the self-hosted fonts, keeping the existing ones: ${message}`)
 }
