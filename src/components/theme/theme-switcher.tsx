@@ -3,43 +3,45 @@
 import { useTranslations } from 'next-intl'
 import { useId, type ComponentType, type SVGProps } from 'react'
 
-import { AutoIcon, MoonIcon, SunIcon } from '@/components/icons'
-import { themeModes, type ThemeMode } from '@/lib/theme'
+import { MoonIcon, SunIcon } from '@/components/icons'
+import type { ThemeMode } from '@/lib/theme'
 
 import { useTheme } from './theme-provider'
 
 /**
- * Three icons, three radio inputs.
+ * Two icons, two radio inputs: light and dark.
  *
- * The icons carry the meaning to the eye; the input carries it to everything
- * else. Each label keeps its word in a visually hidden span, so the control is
- * announced as "Chiaro, radio button" rather than as an unnamed graphic, and
- * the group stays one tab stop with arrow keys inside it.
+ * `system` is still the starting state — nothing is stored until the reader
+ * picks — but it is not offered as a third button. What the control shows is
+ * the theme the reader is *looking at*: with no choice made, that is whatever
+ * the operating system resolved to, and picking either icon simply makes it
+ * explicit.
  *
- * Never disabled: a disabled fieldset greys its labels below AA and takes them
- * out of the tab order, and before hydration the checked value is the default
- * anyway, so an early click changes nothing.
+ * The icons carry the meaning to the eye; the inputs carry it to everything
+ * else, and each label keeps its word in a visually hidden span so the control
+ * is announced by name rather than as an unnamed graphic.
  *
  * It renders on the navbar's glass, so it is not a glass surface itself:
  * blurring a backdrop that is already blurred costs a second expensive layer
  * and reads as a smudge.
  */
-const icons: Record<ThemeMode, ComponentType<SVGProps<SVGSVGElement>>> = {
-  system: AutoIcon,
+const choices = ['light', 'dark'] as const satisfies ReadonlyArray<ThemeMode>
+
+const icons: Record<(typeof choices)[number], ComponentType<SVGProps<SVGSVGElement>>> = {
   light: SunIcon,
   dark: MoonIcon,
 }
 
 export function ThemeSwitcher() {
   const t = useTranslations('Theme')
-  const { mode, setMode } = useTheme()
+  const { resolved, setMode } = useTheme()
   const name = useId()
 
   return (
     <fieldset className="flex items-center gap-4">
       <legend className="sr-only">{t('legend')}</legend>
 
-      {themeModes.map((value) => {
+      {choices.map((value) => {
         const Glyph = icons[value]
 
         return (
@@ -52,7 +54,7 @@ export function ThemeSwitcher() {
               type="radio"
               name={name}
               value={value}
-              checked={mode === value}
+              checked={resolved === value}
               onChange={() => setMode(value)}
               className="sr-only"
             />

@@ -6,6 +6,7 @@ import { useEffect, useId, useState } from 'react'
 import { GlassSurface } from '@/components/glass/glass-surface'
 import { ThemeSwitcher } from '@/components/theme/theme-switcher'
 import { Link, usePathname } from '@/i18n/navigation'
+import type { Locale } from '@/i18n/routing'
 
 import { LocaleSwitcher } from './locale-switcher'
 
@@ -16,7 +17,7 @@ export type NavItem = {
 }
 
 type NavBarProps = {
-  locale: string
+  locale: Locale
   wordmark: string
   items: NavItem[]
 }

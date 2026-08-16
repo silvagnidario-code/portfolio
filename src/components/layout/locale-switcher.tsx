@@ -5,7 +5,7 @@ import { useEffect, useId, useRef, useState } from 'react'
 
 import { CheckIcon, GlobeIcon } from '@/components/icons'
 import { Link, usePathname } from '@/i18n/navigation'
-import { locales } from '@/i18n/routing'
+import { locales, localeNames, type Locale } from '@/i18n/routing'
 
 /**
  * Switches language keeping the reader where they are.
@@ -13,6 +13,11 @@ import { locales } from '@/i18n/routing'
  * A globe opens the list; the languages themselves are named, not iconised. A
  * flag is a country and several countries share a language — the only honest
  * icon for "language" is the one that means all of them.
+ *
+ * Each language is written in itself — Italiano, English, 中文 — and stays that
+ * way whatever locale is active. Translating the list into the language the
+ * reader is already reading is useless to the only person who needs it: the one
+ * who does not read it and is looking for their own.
  *
  * For most routes the path is identical in every language, so `usePathname` —
  * which strips the locale prefix — is the whole answer. Case-study slugs are
@@ -45,11 +50,10 @@ function useAlternatePaths(pathname: string): Record<string, string> {
   return alternates
 }
 
-export function LocaleSwitcher({ locale }: { locale: string }) {
+export function LocaleSwitcher({ locale }: { locale: Locale }) {
   const pathname = usePathname()
   const alternates = useAlternatePaths(pathname)
   const t = useTranslations('Layout')
-  const tLocales = useTranslations('Locales')
 
   const [open, setOpen] = useState(false)
   const menuId = useId()
@@ -84,7 +88,7 @@ export function LocaleSwitcher({ locale }: { locale: string }) {
         type="button"
         aria-expanded={open}
         aria-controls={menuId}
-        aria-label={`${t('localeLabel')}: ${tLocales(locale)}`}
+        aria-label={`${t('localeLabel')}: ${localeNames[locale]}`}
         onClick={() => setOpen((value) => !value)}
         className="flex items-center gap-8 rounded-glass-sm px-12 py-8 text-ink-2 transition ease-reveal duration-fast hover:text-ink"
       >
@@ -111,7 +115,7 @@ export function LocaleSwitcher({ locale }: { locale: string }) {
                   isCurrent ? 'text-ink' : 'text-ink-2'
                 }`}
               >
-                {tLocales(code)}
+                {localeNames[code]}
                 {isCurrent ? <CheckIcon width={16} height={16} /> : null}
               </Link>
             </li>
