@@ -5,6 +5,9 @@ S3-compatible object storage for media, three content locales (`it`, `en`, `zh`)
 
 The full specification lives in [`docs/portfolio-agenzia-specifica-e-prompt.md`](docs/portfolio-agenzia-specifica-e-prompt.md).
 
+Deployment, and what is left to finish before launch, live in
+[`DEPLOY.md`](DEPLOY.md).
+
 ## Requirements
 
 - Node 20+ (the repo is developed on 24, see `.nvmrc`)
