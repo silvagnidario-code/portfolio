@@ -1,7 +1,5 @@
 import type { GlobalConfig } from 'payload'
-
 import { anyone, authenticated } from '../access/roles'
-
 /** Fallback metadata: what a page says about itself when it says nothing. */
 export const SeoDefaults: GlobalConfig = {
   slug: 'seo-defaults',
@@ -10,6 +8,15 @@ export const SeoDefaults: GlobalConfig = {
   access: { read: anyone, update: authenticated },
   fields: [
     { name: 'siteName', type: 'text', required: true, localized: true },
+    {
+      name: 'logo',
+      type: 'upload',
+      relationTo: 'media',
+      label: 'Logo (header)',
+      admin: {
+        description: 'SVG o PNG con sfondo trasparente. Se vuoto, resta il testo del sito.',
+      },
+    },
     {
       name: 'titleTemplate',
       type: 'text',
