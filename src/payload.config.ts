@@ -50,6 +50,17 @@ export default buildConfig({
     defaultLocale: 'it',
     fallback: true,
   },
+  /**
+   * Which origins may use a session cookie against this API.
+   *
+   * Payload is already restrictive by default, but once the site has a real
+   * domain the allowed origin should be stated rather than inferred: `cors`
+   * governs cross-origin API calls, `csrf` governs which origins a cookie is
+   * accepted from. Both are read from the one variable that already knows the
+   * public address of the site.
+   */
+  cors: [env.NEXT_PUBLIC_SERVER_URL],
+  csrf: [env.NEXT_PUBLIC_SERVER_URL],
   collections: [
     Projects,
     Pages,
