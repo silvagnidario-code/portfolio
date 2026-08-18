@@ -16,15 +16,26 @@ import { BlockSection, Eyebrow } from './block-section'
 export function Hero({ block }: { block: HeroBlock }) {
   const { variant, eyebrow, heading, lead, image, video, cta, settings } = block
   const videoRef = useRef<HTMLVideoElement>(null)
-  // iOS Safari (e altri mobile browser) richiedono che `muted` sia impostato
-  // in modo sincrono sull'elemento reale, non solo come prop React, altrimenti
-  // l'autoplay viene bloccato silenziosamente al primo render.
+  // iOS Safari (e altri mobile browser) a volte controllano la presenza
+  // dell'attributo HTML `muted` nel markup iniziale, non solo la proprietà JS
+  // che React imposta dopo l'hydration — per questo lo forziamo esplicitamente
+  // con setAttribute, oltre alla proprietà, e ritentiamo play() quando i
+  // metadati del video sono pronti (nel caso il primo tentativo sia troppo
+  // precoce su una connessione lenta).
   useEffect(() => {
     const el = videoRef.current
     if (!el) return
-    el.muted = true
-    const playPromise = el.play()
-    if (playPromise) playPromise.catch(() => {})
+    const attemptPlay = () => {
+      el.muted = true
+      el.defaultMuted = true
+      el.setAttribute('muted', '')
+      el.setAttribute('playsinline', '')
+      const playPromise = el.play()
+      if (playPromise) playPromise.catch(() => {})
+    }
+    attemptPlay()
+    el.addEventListener('loadedmetadata', attemptPlay)
+    return () => el.removeEventListener('loadedmetadata', attemptPlay)
   }, [])
   const text = (
     <div className="col-span-4 tablet:col-span-6 desktop:col-span-9">
