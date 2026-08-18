@@ -61,7 +61,7 @@ export function Hero({ block }: { block: HeroBlock }) {
   }
   if (variant === 'videoFullscreen') {
     return (
-      <section className="relative -mt-128 flex min-h-screen w-full items-center overflow-hidden">
+      <section className="relative -mt-128 flex min-h-dvh w-full items-center overflow-hidden">
         <div className="absolute inset-0 h-full w-full">
           {typeof video === 'object' && video?.url ? (
             <video
