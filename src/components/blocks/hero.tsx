@@ -37,9 +37,8 @@ export function Hero({ block }: { block: HeroBlock }) {
   }
   if (variant === 'videoFullscreen') {
     return (
-      <BlockSection settings={settings}>
-        <div className="page-grid">{text}</div>
-        <figure className="mt-96 aspect-video w-full overflow-hidden">
+      <section className="relative flex min-h-screen w-full items-center overflow-hidden">
+        <div className="absolute inset-0 h-full w-full">
           {typeof video === 'object' && video?.url ? (
             <video
               className="h-full w-full object-cover"
@@ -60,8 +59,13 @@ export function Hero({ block }: { block: HeroBlock }) {
               className="h-full w-full object-cover"
             />
           )}
-        </figure>
-      </BlockSection>
+          {/* Overlay scuro per garantire contrasto al testo sopra il video */}
+          <div className="absolute inset-0 bg-surface-inverse/40" />
+        </div>
+        <div className="page-grid relative z-10 w-full text-ink-inverse [&_.text-ink-2]:text-ink-inverse/80 [&_.text-ink-muted]:text-ink-inverse/70">
+          {text}
+        </div>
+      </section>
     )
   }
   return (
