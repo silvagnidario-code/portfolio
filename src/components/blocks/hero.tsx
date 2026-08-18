@@ -1,3 +1,5 @@
+'use client'
+import { useEffect, useRef } from 'react'
 import { MediaImage } from '@/components/media/media-image'
 import { HoverDistortion } from '@/components/motion/hover-distortion'
 import { Link } from '@/i18n/navigation'
@@ -13,6 +15,17 @@ import { BlockSection, Eyebrow } from './block-section'
  */
 export function Hero({ block }: { block: HeroBlock }) {
   const { variant, eyebrow, heading, lead, image, video, cta, settings } = block
+  const videoRef = useRef<HTMLVideoElement>(null)
+  // iOS Safari (e altri mobile browser) richiedono che `muted` sia impostato
+  // in modo sincrono sull'elemento reale, non solo come prop React, altrimenti
+  // l'autoplay viene bloccato silenziosamente al primo render.
+  useEffect(() => {
+    const el = videoRef.current
+    if (!el) return
+    el.muted = true
+    const playPromise = el.play()
+    if (playPromise) playPromise.catch(() => {})
+  }, [])
   const text = (
     <div className="col-span-4 tablet:col-span-6 desktop:col-span-9">
       {eyebrow ? <Eyebrow>{eyebrow}</Eyebrow> : null}
@@ -37,10 +50,11 @@ export function Hero({ block }: { block: HeroBlock }) {
   }
   if (variant === 'videoFullscreen') {
     return (
-      <section className="relative flex min-h-screen w-full items-center overflow-hidden">
+      <section className="relative -mt-128 flex min-h-screen w-full items-center overflow-hidden">
         <div className="absolute inset-0 h-full w-full">
           {typeof video === 'object' && video?.url ? (
             <video
+              ref={videoRef}
               className="h-full w-full object-cover"
               autoPlay
               playsInline
