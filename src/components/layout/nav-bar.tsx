@@ -88,7 +88,7 @@ export function NavBar({ locale, wordmark, logo, items }: NavBarProps) {
                 alt={wordmark}
                 width={logo.width ?? 120}
                 height={logo.height ?? 32}
-                className="h-24 w-auto"
+                className="h-32 w-auto tablet:h-40 desktop:h-48"
                 priority
               />
             ) : (
