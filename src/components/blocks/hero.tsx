@@ -2,20 +2,17 @@ import { MediaImage } from '@/components/media/media-image'
 import { HoverDistortion } from '@/components/motion/hover-distortion'
 import { Link } from '@/i18n/navigation'
 import type { HeroBlock } from '@/payload-types'
-
 import { BlockSection, Eyebrow } from './block-section'
-
 /**
  * Hero, three variants.
  *
  * The typographic one is the default of this direction: the heading occupies
  * columns 1-9 and leaves the rest empty. `webglImage` renders the still image
  * here — the distortion is bolted on in phase 8 and degrades to exactly this.
- * `videoFullscreen` always carries a poster and never autoplays without one.
+ * `videoFullscreen` always carries a poster and autoplays muted.
  */
 export function Hero({ block }: { block: HeroBlock }) {
   const { variant, eyebrow, heading, lead, image, video, cta, settings } = block
-
   const text = (
     <div className="col-span-4 tablet:col-span-6 desktop:col-span-9">
       {eyebrow ? <Eyebrow>{eyebrow}</Eyebrow> : null}
@@ -31,7 +28,6 @@ export function Hero({ block }: { block: HeroBlock }) {
       ) : null}
     </div>
   )
-
   if (variant === 'typographic') {
     return (
       <BlockSection settings={settings}>
@@ -39,7 +35,6 @@ export function Hero({ block }: { block: HeroBlock }) {
       </BlockSection>
     )
   }
-
   if (variant === 'videoFullscreen') {
     return (
       <BlockSection settings={settings}>
@@ -48,10 +43,11 @@ export function Hero({ block }: { block: HeroBlock }) {
           {typeof video === 'object' && video?.url ? (
             <video
               className="h-full w-full object-cover"
+              autoPlay
               playsInline
               muted
               loop
-              preload="none"
+              preload="auto"
               poster={typeof image === 'object' ? (image?.url ?? undefined) : undefined}
             >
               <source src={video.url} type={video.mimeType ?? undefined} />
@@ -68,7 +64,6 @@ export function Hero({ block }: { block: HeroBlock }) {
       </BlockSection>
     )
   }
-
   return (
     <BlockSection settings={settings}>
       <div className="page-grid">{text}</div>
