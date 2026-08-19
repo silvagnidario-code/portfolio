@@ -538,6 +538,7 @@ export interface Page {
     | TestimonialBlockType
     | ClientsBlockType
     | TeamBlockType
+    | ContactFormBlock
     | CtaBlock
     | FaqBlock
   )[];
@@ -794,6 +795,26 @@ export interface TeamBlockType {
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "CtaBlock".
  */
+export interface ContactFormBlock {
+  eyebrow?: string | null;
+  heading: string;
+  lead?: string | null;
+  /**
+   * Letti dalle Impostazioni globali, non duplicati qui.
+   */
+  showContactInfo?: boolean | null;
+  /**
+   * Fondo, respiro verticale e animazione di ingresso.
+   */
+  settings: {
+    background: 'paper' | 'sumi' | 'accent';
+    spacing: 'compact' | 'normal' | 'wide';
+    animate?: boolean | null;
+  };
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'contactForm';
+}
 export interface CtaBlock {
   /**
    * Cambiare variante non perde contenuti né traduzioni.
@@ -1124,6 +1145,7 @@ export interface PagesSelect<T extends boolean = true> {
         testimonial?: T | TestimonialBlockTypeSelect<T>;
         clients?: T | ClientsBlockTypeSelect<T>;
         team?: T | TeamBlockTypeSelect<T>;
+        contactForm?: T | ContactFormBlockSelect<T>;
         cta?: T | CtaBlockSelect<T>;
         faq?: T | FaqBlockSelect<T>;
       };
@@ -1300,6 +1322,21 @@ export interface TeamBlockTypeSelect<T extends boolean = true> {
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "CtaBlock_select".
  */
+export interface ContactFormBlockSelect<T extends boolean = true> {
+  eyebrow?: T;
+  heading?: T;
+  lead?: T;
+  showContactInfo?: T;
+  settings?:
+    | T
+    | {
+        background?: T;
+        spacing?: T;
+        animate?: T;
+      };
+  id?: T;
+  blockName?: T;
+}
 export interface CtaBlockSelect<T extends boolean = true> {
   variant?: T;
   heading?: T;
