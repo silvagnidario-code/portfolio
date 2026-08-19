@@ -23,6 +23,18 @@
   background-color: var(--glass-fill);
 
   /*
+   * A soft, off-centre glare: light catching a curved pane rather than a flat
+   * one. It is a gradient, not a filter — the compositor treats it as an
+   * ordinary paint, so it costs nothing extra during scroll, unlike a true
+   * displacement filter would.
+   */
+  background-image: radial-gradient(
+    140% 120% at 18% -15%,
+    var(--glass-highlight) 0%,
+    transparent 48%
+  );
+
+  /*
    * 3 — specular edge: a mid border, a bright top, a darker underside, plus a
    * soft inner sheen that carries the highlight a little way down the pane.
    * The outer shadow lifts the surface off the page: without it a translucent
@@ -73,4 +85,29 @@
 
 .glass--chrome {
   border-radius: var(--corner-glass-md);
+}
+
+/*
+ * EXPERIMENTAL — true optical refraction via an SVG displacement filter,
+ * not the cheap gradient above. Not applied anywhere by default.
+ *
+ * To try it: add "glass--refract" to the navbar's className in nav-bar.tsx
+ * and test on a real phone before keeping it. Two real costs, not just
+ * theoretical ones:
+ *
+ * 1. Safari does not support an SVG filter inside `backdrop-filter` at all.
+ *    There the whole declaration is invalid, so Safari drops it and falls
+ *    back to plain `.glass` (blur + saturate, no refraction) — it degrades
+ *    safely, but a meaningful share of visitors, especially on iPhone, will
+ *    simply never see this.
+ * 2. Where it IS supported, the browser recomposites the displaced backdrop
+ *    on every scroll frame behind a `position: fixed` header — heavier than
+ *    blur alone, and the reason §7 excluded it from the navbar originally.
+ *
+ * If it feels smooth on your own phone, keep it. If it stutters, delete this
+ * rule and the <filter> in the root layout — nothing else depends on either.
+ */
+.glass--refract {
+  -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate));
+  backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate)) url('#glass-refraction');
 }
