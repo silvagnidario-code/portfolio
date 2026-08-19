@@ -1,0 +1,377 @@
+diff --git a/src/app/(frontend)/[locale]/contact/page.tsx b/src/app/(frontend)/[locale]/contact/page.tsx
+index 8a95e3c..cc4286f 100644
+--- a/src/app/(frontend)/[locale]/contact/page.tsx
++++ b/src/app/(frontend)/[locale]/contact/page.tsx
+@@ -1,65 +1,19 @@
+ import type { Metadata } from 'next'
+-import { getTranslations, setRequestLocale } from 'next-intl/server'
++import { setRequestLocale } from 'next-intl/server'
+ 
+-import { BriefForm } from '@/components/contact/brief-form'
++import { CmsPage, cmsPageMetadata } from '@/components/pages/cms-page'
+ import type { Locale } from '@/i18n/routing'
+-import { alternatesFor } from '@/lib/metadata'
+-import { getGlobal } from '@/lib/payload'
+-
+-import { submitBrief } from './actions'
+ 
+ type PageProps = { params: Promise<{ locale: Locale }> }
+ 
+ export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+   const { locale } = await params
+-  const t = await getTranslations({ locale, namespace: 'ContactPage' })
+-
+-  return {
+-    title: t('title'),
+-    description: t('intro'),
+-    alternates: alternatesFor('/contact', locale),
+-  }
++  return cmsPageMetadata({ slug: 'contact', locale, path: '/contact' })
+ }
+ 
+ export default async function ContactPage({ params }: PageProps) {
+   const { locale } = await params
+   setRequestLocale(locale)
+ 
+-  const t = await getTranslations('ContactPage')
+-  const settings = await getGlobal('settings', locale)
+-
+-  return (
+-    <main className="page-grid pb-96">
+-      <header className="col-span-4 tablet:col-span-6 desktop:col-span-5">
+-        <h1 className="text-h1 text-balance">{t('title')}</h1>
+-        <p className="mt-32 max-w-measure text-body-lg text-ink-2">{t('intro')}</p>
+-
+-        {settings.contact?.email ? (
+-          <p className="mt-48">
+-            <span className="block font-mono text-caption uppercase text-ink-muted">
+-              {t('writeUs')}
+-            </span>
+-            <a href={`mailto:${settings.contact.email}`} className="text-body-lg underline">
+-              {settings.contact.email}
+-            </a>
+-          </p>
+-        ) : null}
+-
+-        {(settings.offices ?? []).length > 0 ? (
+-          <ul className="mt-48 flex flex-col gap-24">
+-            {(settings.offices ?? []).map((office) => (
+-              <li key={office.id ?? office.city} className="text-body text-ink-2">
+-                <span className="block text-ink">{office.city}</span>
+-                <span className="block whitespace-pre-line">{office.address}</span>
+-              </li>
+-            ))}
+-          </ul>
+-        ) : null}
+-      </header>
+-
+-      <div className="col-span-4 tablet:col-span-6 desktop:col-span-6 desktop:col-start-7">
+-        <BriefForm locale={locale} action={submitBrief} />
+-      </div>
+-    </main>
+-  )
++  return <CmsPage slug="contact" locale={locale} />
+ }
+diff --git a/src/blocks/contact-form.ts b/src/blocks/contact-form.ts
+new file mode 100644
+index 0000000..335865a
+--- /dev/null
++++ b/src/blocks/contact-form.ts
+@@ -0,0 +1,29 @@
++import type { Block } from 'payload'
++
++import { blockSettings } from './shared'
++
++/**
++ * The brief form itself stays in code — honeypot, rate limit and Zod
++ * validation live in one place, per the note on the `cta` block's inline-form
++ * variant. What becomes editable here is everything around it: the heading,
++ * the lead, and whether to show the email/offices already managed in
++ * Impostazioni globali. There is only one contact page, so no variant field.
++ */
++export const ContactForm: Block = {
++  slug: 'contactForm',
++  interfaceName: 'ContactFormBlock',
++  labels: { singular: 'Form di contatto', plural: 'Form di contatto' },
++  fields: [
++    { name: 'eyebrow', type: 'text', localized: true },
++    { name: 'heading', type: 'textarea', required: true, localized: true },
++    { name: 'lead', type: 'textarea', localized: true },
++    {
++      name: 'showContactInfo',
++      type: 'checkbox',
++      label: 'Mostra email e sedi',
++      defaultValue: true,
++      admin: { description: 'Letti dalle Impostazioni globali, non duplicati qui.' },
++    },
++    blockSettings,
++  ],
++}
+diff --git a/src/blocks/index.ts b/src/blocks/index.ts
+index b203785..7cd72ba 100644
+--- a/src/blocks/index.ts
++++ b/src/blocks/index.ts
+@@ -1,6 +1,7 @@
+ import type { Block } from 'payload'
+ 
+ import { ClientsBlock } from './clients'
++import { ContactForm } from './contact-form'
+ import { Cta } from './cta'
+ import { Faq } from './faq'
+ import { Hero } from './hero'
+@@ -29,12 +30,14 @@ export const layoutBlocks: Block[] = [
+   TestimonialBlock,
+   ClientsBlock,
+   TeamBlock,
++  ContactForm,
+   Cta,
+   Faq,
+ ]
+ 
+ export {
+   ClientsBlock,
++  ContactForm,
+   Cta,
+   Faq,
+   Hero,
+diff --git a/src/components/blocks/contact-form.tsx b/src/components/blocks/contact-form.tsx
+new file mode 100644
+index 0000000..e6f0646
+--- /dev/null
++++ b/src/components/blocks/contact-form.tsx
+@@ -0,0 +1,68 @@
++import { getTranslations } from 'next-intl/server'
++
++import { submitBrief } from '@/app/(frontend)/[locale]/contact/actions'
++import { BriefForm } from '@/components/contact/brief-form'
++import type { Locale } from '@/i18n/routing'
++import { getGlobal } from '@/lib/payload'
++import type { ContactFormBlock as ContactFormBlockType } from '@/payload-types'
++
++import { BlockSection, Eyebrow } from './block-section'
++
++/**
++ * Wraps the brief form in the block system so the heading, the lead and
++ * whether to show contact info are editable like any other page — the form's
++ * validation, rate limit and honeypot are untouched, imported from the same
++ * action the page used before this block existed.
++ */
++export async function ContactFormBlock({
++  block,
++  locale,
++}: {
++  block: ContactFormBlockType
++  locale: Locale
++}) {
++  const { eyebrow, heading, lead, showContactInfo, settings } = block
++
++  const [globalSettings, t] = await Promise.all([
++    showContactInfo ? getGlobal('settings', locale) : Promise.resolve(null),
++    getTranslations({ locale, namespace: 'ContactPage' }),
++  ])
++
++  return (
++    <BlockSection settings={settings}>
++      <div className="page-grid pb-96">
++        <header className="col-span-4 tablet:col-span-6 desktop:col-span-5">
++          {eyebrow ? <Eyebrow>{eyebrow}</Eyebrow> : null}
++          <h1 className="mt-16 text-h1 text-balance">{heading}</h1>
++          {lead ? <p className="mt-32 max-w-measure text-body-lg text-ink-2">{lead}</p> : null}
++
++          {globalSettings?.contact?.email ? (
++            <p className="mt-48">
++              <span className="block font-mono text-caption uppercase text-ink-muted">
++                {t('writeUs')}
++              </span>
++              <a href={`mailto:${globalSettings.contact.email}`} className="text-body-lg underline">
++                {globalSettings.contact.email}
++              </a>
++            </p>
++          ) : null}
++
++          {globalSettings && (globalSettings.offices ?? []).length > 0 ? (
++            <ul className="mt-48 flex flex-col gap-24">
++              {(globalSettings.offices ?? []).map((office) => (
++                <li key={office.id ?? office.city} className="text-body text-ink-2">
++                  <span className="block text-ink">{office.city}</span>
++                  <span className="block whitespace-pre-line">{office.address}</span>
++                </li>
++              ))}
++            </ul>
++          ) : null}
++        </header>
++
++        <div className="col-span-4 tablet:col-span-6 desktop:col-span-6 desktop:col-start-7">
++          <BriefForm locale={locale} action={submitBrief} />
++        </div>
++      </div>
++    </BlockSection>
++  )
++}
+diff --git a/src/components/blocks/render-blocks.tsx b/src/components/blocks/render-blocks.tsx
+index eb70c82..43db845 100644
+--- a/src/components/blocks/render-blocks.tsx
++++ b/src/components/blocks/render-blocks.tsx
+@@ -2,6 +2,7 @@ import type { Locale } from '@/i18n/routing'
+ import type { Page, Project } from '@/payload-types'
+ 
+ import { ClientsBlock } from './clients-block'
++import { ContactFormBlock } from './contact-form'
+ import { Cta } from './cta'
+ import { Faq } from './faq'
+ import { Hero } from './hero'
+@@ -48,6 +49,8 @@ function renderBlock(block: LayoutBlock | NarrativeBlock, locale: Locale) {
+       return <Cta block={block} />
+     case 'faq':
+       return <Faq block={block} />
++    case 'contactForm':
++      return <ContactFormBlock block={block} locale={locale} />
+     case 'prose':
+       return <Prose block={block} />
+     default:
+diff --git a/src/payload-types.ts b/src/payload-types.ts
+index 13e8f4d..06fe621 100644
+--- a/src/payload-types.ts
++++ b/src/payload-types.ts
+@@ -538,6 +538,7 @@ export interface Page {
+     | TestimonialBlockType
+     | ClientsBlockType
+     | TeamBlockType
++    | ContactFormBlock
+     | CtaBlock
+     | FaqBlock
+   )[];
+@@ -794,6 +795,26 @@ export interface TeamBlockType {
+  * This interface was referenced by `Config`'s JSON-Schema
+  * via the `definition` "CtaBlock".
+  */
++export interface ContactFormBlock {
++  eyebrow?: string | null;
++  heading: string;
++  lead?: string | null;
++  /**
++   * Letti dalle Impostazioni globali, non duplicati qui.
++   */
++  showContactInfo?: boolean | null;
++  /**
++   * Fondo, respiro verticale e animazione di ingresso.
++   */
++  settings: {
++    background: 'paper' | 'sumi' | 'accent';
++    spacing: 'compact' | 'normal' | 'wide';
++    animate?: boolean | null;
++  };
++  id?: string | null;
++  blockName?: string | null;
++  blockType: 'contactForm';
++}
+ export interface CtaBlock {
+   /**
+    * Cambiare variante non perde contenuti né traduzioni.
+@@ -1124,6 +1145,7 @@ export interface PagesSelect<T extends boolean = true> {
+         testimonial?: T | TestimonialBlockTypeSelect<T>;
+         clients?: T | ClientsBlockTypeSelect<T>;
+         team?: T | TeamBlockTypeSelect<T>;
++        contactForm?: T | ContactFormBlockSelect<T>;
+         cta?: T | CtaBlockSelect<T>;
+         faq?: T | FaqBlockSelect<T>;
+       };
+@@ -1300,6 +1322,21 @@ export interface TeamBlockTypeSelect<T extends boolean = true> {
+  * This interface was referenced by `Config`'s JSON-Schema
+  * via the `definition` "CtaBlock_select".
+  */
++export interface ContactFormBlockSelect<T extends boolean = true> {
++  eyebrow?: T;
++  heading?: T;
++  lead?: T;
++  showContactInfo?: T;
++  settings?:
++    | T
++    | {
++        background?: T;
++        spacing?: T;
++        animate?: T;
++      };
++  id?: T;
++  blockName?: T;
++}
+ export interface CtaBlockSelect<T extends boolean = true> {
+   variant?: T;
+   heading?: T;
+diff --git a/src/seed/content/pages.ts b/src/seed/content/pages.ts
+index 4a224c3..343d849 100644
+--- a/src/seed/content/pages.ts
++++ b/src/seed/content/pages.ts
+@@ -216,6 +216,23 @@ export const aboutCopy = {
+   },
+ }
+ 
++export const contactCopy = {
++  title: { it: 'Contatti', en: 'Contact', zh: '联系我们' } satisfies Localized<string>,
++  form: {
++    eyebrow: { it: 'Contatti', en: 'Contact', zh: '联系' },
++    heading: {
++      it: 'Raccontaci il progetto in poche righe.',
++      en: 'Tell us about the project in a few lines.',
++      zh: '用几行字告诉我们你的项目。',
++    },
++    lead: {
++      it: 'Cosa vendete, a chi, e cosa non funziona adesso. Rispondiamo entro due giorni lavorativi.',
++      en: 'What you sell, to whom, and what is not working now. We answer within two working days.',
++      zh: '你们卖什么、卖给谁、现在哪里不顺。我们会在两个工作日内回复。',
++    },
++  },
++}
++
+ /**
+  * Placeholder legal copy. It is written to be structurally realistic — the
+  * right sections, the right lengths — and is explicitly not legal advice: the
+diff --git a/src/seed/index.ts b/src/seed/index.ts
+index e1bf2ae..8301f5c 100644
+--- a/src/seed/index.ts
++++ b/src/seed/index.ts
+@@ -2,7 +2,14 @@ import config from '@payload-config'
+ import { getPayload, type Payload } from 'payload'
+ 
+ import { locales, type Locale } from '../i18n/routing'
+-import { aboutCopy, globalsCopy, homeCopy, legalCopy, servicesCopy } from './content/pages'
++import {
++  aboutCopy,
++  contactCopy,
++  globalsCopy,
++  homeCopy,
++  legalCopy,
++  servicesCopy,
++} from './content/pages'
+ import { clients, team, testimonials } from './content/people'
+ import { projects } from './content/projects'
+ import { industries, services, type Localized } from './content/taxonomy'
+@@ -650,6 +657,28 @@ async function seed(): Promise<void> {
+     },
+   )
+ 
++  const contactLayout = (locale: Locale) => [
++    {
++      blockType: 'contactForm' as const,
++      eyebrow: contactCopy.form.eyebrow[locale],
++      heading: contactCopy.form.heading[locale],
++      lead: contactCopy.form.lead[locale],
++      showContactInfo: true,
++      ...blockSettings('paper', 'wide'),
++    },
++  ]
++
++  await createLocalized(
++    payload,
++    'pages',
++    { _status: 'published' },
++    {
++      it: { title: contactCopy.title.it, slug: 'contact', layout: contactLayout('it') },
++      en: { title: contactCopy.title.en, slug: 'contact', layout: contactLayout('en') },
++      zh: { title: contactCopy.title.zh, slug: 'contact', layout: contactLayout('zh') },
++    },
++  )
++
+   for (const page of [legalCopy.privacy, legalCopy.cookie]) {
+     const layout = (locale: Locale) => [
+       {
