@@ -99,7 +99,7 @@ export function LocaleSwitcher({ locale }: { locale: Locale }) {
       <ul
         id={menuId}
         hidden={!open}
-        className="absolute right-0 z-50 mt-8 min-w-[12rem] rounded-glass-sm border border-line bg-surface p-8 shadow-lg"
+        className="absolute left-0 z-50 mt-8 min-w-[12rem] rounded-glass-sm border border-line bg-surface p-8 shadow-lg tablet:left-auto tablet:right-0"
       >
         {locales.map((code) => {
           const isCurrent = code === locale
