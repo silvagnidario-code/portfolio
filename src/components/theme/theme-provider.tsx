@@ -3,7 +3,7 @@
 import { createContext, useCallback, useContext, useEffect, useState, type ReactNode } from 'react'
 
 import {
-  applyThemeMode,
+  applyResolvedTheme,
   defaultThemeMode,
   isThemeMode,
   THEME_STORAGE_KEY,
@@ -54,9 +54,19 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
     return () => query.removeEventListener('change', read)
   }, [])
 
+  const resolved: 'light' | 'dark' = mode === 'system' ? (systemDark ? 'dark' : 'light') : mode
+
+  // The single source of truth for what is painted. Re-applied on every
+  // render of `resolved` — mount, a route change, a system-preference flip,
+  // or an explicit choice — so the attribute can never drift from what React
+  // believes is showing, the way relying on a bare CSS media-query fallback
+  // for `system` could.
+  useEffect(() => {
+    applyResolvedTheme(resolved)
+  }, [resolved])
+
   const setMode = useCallback((next: ThemeMode) => {
     setModeState(next)
-    applyThemeMode(next)
 
     try {
       if (next === defaultThemeMode) {
@@ -68,8 +78,6 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
       // Preference simply does not persist.
     }
   }, [])
-
-  const resolved: 'light' | 'dark' = mode === 'system' ? (systemDark ? 'dark' : 'light') : mode
 
   return <ThemeContext value={{ mode, setMode, resolved, ready }}>{children}</ThemeContext>
 }
