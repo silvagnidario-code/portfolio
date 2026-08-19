@@ -20,13 +20,13 @@ export function isThemeMode(value: unknown): value is ThemeMode {
   return typeof value === 'string' && (themeModes as readonly string[]).includes(value)
 }
 
-/** Applies a mode to the document. `system` means: no attribute at all. */
-export function applyThemeMode(mode: ThemeMode): void {
-  const root = document.documentElement
-
-  if (mode === 'system') {
-    root.removeAttribute(THEME_ATTRIBUTE)
-  } else {
-    root.setAttribute(THEME_ATTRIBUTE, mode)
-  }
+/**
+ * Applies the resolved light/dark value directly, always as an explicit
+ * attribute. `system` is never applied as "no attribute": leaving it unset
+ * makes the visible theme depend on a native `prefers-color-scheme` CSS
+ * fallback, which can go out of sync with what React believes is showing
+ * across a route change. Setting it explicitly, every time, removes that gap.
+ */
+export function applyResolvedTheme(resolved: 'light' | 'dark'): void {
+  document.documentElement.setAttribute(THEME_ATTRIBUTE, resolved)
 }
