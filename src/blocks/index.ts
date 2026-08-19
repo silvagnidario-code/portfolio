@@ -30,12 +30,14 @@ export const layoutBlocks: Block[] = [
   TestimonialBlock,
   ClientsBlock,
   TeamBlock,
+  ContactForm,
   Cta,
   Faq,
 ]
 
 export {
   ClientsBlock,
+  ContactForm,
   Cta,
   Faq,
   Hero,
