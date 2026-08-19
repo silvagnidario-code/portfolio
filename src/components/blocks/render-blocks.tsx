@@ -2,6 +2,7 @@ import type { Locale } from '@/i18n/routing'
 import type { Page, Project } from '@/payload-types'
 
 import { ClientsBlock } from './clients-block'
+import { ContactFormBlock } from './contact-form'
 import { Cta } from './cta'
 import { Faq } from './faq'
 import { Hero } from './hero'
