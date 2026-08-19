@@ -53,6 +53,10 @@ function renderBlock(block: LayoutBlock | NarrativeBlock, locale: Locale) {
       return <Prose block={block} />
     default:
       return null
+    case 'faq':
+      return <Faq block={block} />
+    case 'contactForm':
+      return <ContactFormBlock block={block} locale={locale} />
   }
 }
 
