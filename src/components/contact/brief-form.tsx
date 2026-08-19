@@ -4,7 +4,7 @@ import { useTranslations } from 'next-intl'
 import { useActionState, useId } from 'react'
 
 import type { Locale } from '@/i18n/routing'
-import { budgetRanges, HONEYPOT_FIELD, projectTypes, timelines, type BriefState } from '@/lib/brief'
+import { HONEYPOT_FIELD, timelines, type BriefState } from '@/lib/brief'
 
 type BriefFormProps = {
   locale: Locale
@@ -110,39 +110,15 @@ export function BriefForm({ locale, action }: BriefFormProps) {
         <Error name="email" />
       </div>
 
-      <div className="grid gap-32 tablet:grid-cols-3">
-        <div>
-          <Label name="projectType">{t('projectType')}</Label>
-          <select id={fieldId('projectType')} name="projectType" className={fieldClasses}>
-            {projectTypes.map((value) => (
-              <option key={value} value={value}>
-                {t(`types.${value}`)}
-              </option>
-            ))}
-          </select>
-        </div>
-
-        <div>
-          <Label name="budget">{t('budget')}</Label>
-          <select id={fieldId('budget')} name="budget" className={fieldClasses}>
-            {budgetRanges.map((value) => (
-              <option key={value} value={value}>
-                {t(`budgets.${value}`)}
-              </option>
-            ))}
-          </select>
-        </div>
-
-        <div>
-          <Label name="timeline">{t('timeline')}</Label>
-          <select id={fieldId('timeline')} name="timeline" className={fieldClasses}>
-            {timelines.map((value) => (
-              <option key={value} value={value}>
-                {t(`timelines.${value}`)}
-              </option>
-            ))}
-          </select>
-        </div>
+      <div className="max-w-xs">
+        <Label name="timeline">{t('timeline')}</Label>
+        <select id={fieldId('timeline')} name="timeline" className={fieldClasses}>
+          {timelines.map((value) => (
+            <option key={value} value={value}>
+              {t(`timelines.${value}`)}
+            </option>
+          ))}
+        </select>
       </div>
 
       <div>
