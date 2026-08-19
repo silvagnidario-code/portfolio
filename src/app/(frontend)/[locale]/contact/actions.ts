@@ -32,8 +32,6 @@ export async function submitBrief(
     name: formData.get('name'),
     company: formData.get('company'),
     email: formData.get('email'),
-    projectType: formData.get('projectType'),
-    budget: formData.get('budget'),
     timeline: formData.get('timeline'),
     message: formData.get('message'),
   })
@@ -65,14 +63,12 @@ export async function submitBrief(
     return { status: 'error', message: 'notConfigured' }
   }
 
-  const { name, company, email, projectType, budget, timeline, message } = parsed.data
+  const { name, company, email, timeline, message } = parsed.data
 
   const body = [
     `Nome: ${name}`,
     company ? `Azienda: ${company}` : null,
     `Email: ${email}`,
-    `Tipo di progetto: ${projectType}`,
-    `Budget: ${budget}`,
     `Tempistiche: ${timeline}`,
     `Lingua: ${locale}`,
     '',
