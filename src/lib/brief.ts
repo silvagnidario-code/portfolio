@@ -5,16 +5,12 @@ import { z } from 'zod'
  * not a guarantee, and this form reaches an inbox.
  */
 
-export const projectTypes = ['identity', 'digital', 'campaign', 'other'] as const
-export const budgetRanges = ['under25', '25to50', '50to100', 'over100', 'unknown'] as const
 export const timelines = ['asap', 'quarter', 'halfYear', 'exploring'] as const
 
 export const briefSchema = z.object({
   name: z.string().trim().min(2).max(120),
   company: z.string().trim().max(160).optional().or(z.literal('')),
   email: z.email(),
-  projectType: z.enum(projectTypes),
-  budget: z.enum(budgetRanges),
   timeline: z.enum(timelines),
   message: z.string().trim().min(20).max(4000),
 })
