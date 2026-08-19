@@ -1,6 +1,7 @@
 import type { Block } from 'payload'
 
 import { ClientsBlock } from './clients'
+import { ContactForm } from './contact-form'
 import { Cta } from './cta'
 import { Faq } from './faq'
 import { Hero } from './hero'
