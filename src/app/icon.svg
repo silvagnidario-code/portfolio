@@ -1,0 +1,2021 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="Livello_1" xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 512 512">
+  <!-- Generator: Adobe Illustrator 30.7.0, SVG Export Plug-In . SVG Version: 2.1.4 Build 114)  -->
+  <defs>
+    <style>
+      .st0 {
+        fill: #fff;
+      }
+
+      .st1 {
+        fill: none;
+      }
+
+      .st2 {
+        fill: #a83a15;
+      }
+
+      .st3 {
+        clip-path: url(#clippath);
+      }
+    </style>
+    <clipPath id="clippath">
+      <rect class="st1" x="175.98" y="141.79" width="104.9" height="77.78"/>
+    </clipPath>
+  </defs>
+  <rect class="st2" y="0" width="512" height="512"/>
+  <g>
+    <rect class="st0" x="76.96" y="27.16" width="355.64" height="467.07"/>
+    <g>
+      <g>
+        <path class="st2" d="M254.78,282.95c-18.66,0-33.85,15.19-33.85,33.85s15.17,33.82,33.85,33.82,33.85-15.17,33.85-33.82-15.17-33.85-33.85-33.85Z"/>
+        <path class="st2" d="M218.54,116.23c-.22-.41-.49-.8-.69-1.24.22.41.44.82.69,1.24Z"/>
+        <path class="st2" d="M242.22,129.89h.19c-6.04-.16-11.98-2.14-16.76-5.63,4.62,3.52,10.33,5.63,16.57,5.63Z"/>
+        <path class="st2" d="M218.54,116.23c1.76,3.21,4.2,5.91,7.12,8.05-2.86-2.2-5.3-4.92-7.12-8.05Z"/>
+        <path class="st2" d="M381.74-18.56h-251.48c-47.09,0-85.28,38.19-85.28,85.28v378.55c0,47.09,38.19,85.28,85.28,85.28h251.48c47.09,0,85.28-38.19,85.28-85.28V66.72c0-47.09-38.19-85.28-85.28-85.28ZM288.63,27.08c30.47,0,55.17,24.7,55.17,55.17v234.56c0,49.07-39.92,88.99-88.99,88.99s-88.99-39.92-88.99-88.99,39.92-88.99,88.99-88.99c11.98,0,23.41,2.42,33.85,6.73V27.08h-.03ZM90.89,117.44c5.5-41.6,39.37-74.84,81.08-79.57,19.84-2.25,38.58,1.84,54.54,10.44,10.08-12.89,25.74-21.18,43.38-21.16l-.11,74.13c1.18,14.81-10.28,28.66-26.38,28.66h-.16c-.27,0-.55-.05-.8-.05h-.19c-6.24,0-11.98-2.12-16.57-5.63-2.91-2.14-5.36-4.84-7.12-8.05-.25-.41-.47-.82-.69-1.24-.05-.14-.16-.25-.22-.41-6.18-13.74-18.82-24.15-34.84-24.15-23.71,0-42.61,20.99-39.1,45.39,2.06,14.15,12.12,26.18,25.55,31.16,9.7,3.6,18.82,2.99,26.87.08v.08c.91-.3,1.79-.58,2.72-.96.14-.05.22-.05.36-.08,17.58-6.9,36.68-10.74,56.71-10.74,4.81,0,9.56.27,14.26.69v53.58c-16.68-2.47-32.78-.85-47.23,4.04l-.05-.05h0c-12.06,5.74-25.52,9.04-39.78,9.04-15.33,0-29.76-3.79-42.5-10.39h-.05s-1.81-.88-3.43-1.79h0s-.08-.05-.11-.08c-.38-.22-.77-.44-1.1-.63-.03,0-.03-.05-.05-.08-30.61-18.11-50.03-53.19-44.89-92.26l-.08.05ZM239.28,483.91c-74.84-7.09-136.11-65.09-147.32-139.16-3.49-23-1.98-45.17,3.38-65.83,27.31,0,50,21.07,51.79,48.22.08,1.1.16,2.23.27,3.35,5.33,55.12,53.19,97.98,108.75,97.59,59.29-.41,107.37-48.52,107.62-107.65h.03v-124.57c34.78,30.22,56.82,74.62,56.82,124.11,0,96.11-83,173.23-181.34,163.94Z"/>
+      </g>
+      <g class="st3">
+        <g>
+          <path class="st2" d="M337.73,236.36c.27-.47,1.04-.85,1.76-.8.25,0,.74.14.8.27l.11.49h-2.67v.03Z"/>
+          <path class="st2" d="M334.79,236.36c.05-.33.69-.82,1.26-.85s1.21.49,1.04.85h-2.31Z"/>
+          <path class="st2" d="M331.63,236.36c.05-.33.71-.82,1.26-.8.58,0,1.21.47,1.15.82h-2.42v-.03Z"/>
+          <path class="st2" d="M325.28,236.36c.16-.36.96-.8,1.54-.74.33,0,.99.55.77.74h-2.31Z"/>
+          <path class="st2" d="M328.47,236.36c.16-.38.91-.82,1.54-.77.33.03.96.55.88.77h-2.42Z"/>
+          <path class="st2" d="M322.12,236.36c.19-.38,1.18-.85,1.73-.69.25.08.77.55.69.69h-2.42Z"/>
+          <path class="st2" d="M318.96,236.36c.27-.3.96-.71,1.37-.74.36,0,.99.44,1.02.74h-2.39Z"/>
+          <path class="st2" d="M316.07,236.36c.08-.27.74-.74,1.13-.71s.99.44,1.02.71h-2.14Z"/>
+          <path class="st2" d="M312.89,236.36c.14-.27.77-.69,1.13-.69s.96.41,1.02.69h-2.14Z"/>
+          <path class="st2" d="M309.73,236.36c.16-.27.77-.71,1.13-.69s.93.44,1.02.69h-2.14Z"/>
+          <path class="st2" d="M306.68,236.36c.11-.22.69-.52,1.02-.52s.91.3,1.02.52h-2.03Z"/>
+          <path class="st2" d="M303.49,236.36c.11-.22.69-.52,1.02-.52s.91.3,1.02.52h-2.03Z"/>
+          <path class="st2" d="M300.33,236.36c.11-.22.69-.52,1.02-.52s.91.3,1.02.52h-2.03Z"/>
+          <path class="st2" d="M297.45,236.36c.03-.19.71-.66.99-.52l.74.52h-1.73Z"/>
+          <path class="st2" d="M294.29,236.36c.03-.19.71-.66.99-.52l.74.52h-1.73Z"/>
+          <path class="st2" d="M291.13,236.36c.05-.19.71-.66.99-.52l.74.52h-1.73Z"/>
+          <path class="st2" d="M287.94,236.36c.05-.19.71-.66.99-.52l.74.52h-1.73Z"/>
+          <path class="st2" d="M284.78,236.36l1.02-.49c.22-.08.69.33.71.49h-1.73Z"/>
+          <path class="st2" d="M281.59,236.36c.11-.16.71-.55.96-.44l.77.44h-1.73Z"/>
+          <path class="st2" d="M278.74,236.36c.05-.16.47-.58.69-.47l.77.47h-1.46Z"/>
+          <path class="st2" d="M275.55,236.36c.14-.16.49-.41.71-.41s.6.25.71.41h-1.43Z"/>
+          <path class="st2" d="M269.23,236.36c.41-.33,1.02-.33,1.43,0h-1.43Z"/>
+          <path class="st2" d="M272.39,236.36l.47-.25s.52.22.69.22h-1.15v.03Z"/>
+          <path class="st2" d="M266.04,236.36l.47-.25s.52.22.69.22h-1.15v.03Z"/>
+          <path class="st2" d="M253.65,236.36l.25-.22s.47.16.6.16c0,0-.85.05-.85.05Z"/>
+          <path class="st2" d="M256.84,236.36l.27-.19s.47.16.6.16l-.85.05-.03-.03Z"/>
+          <path class="st2" d="M260,236.36l.27-.19s.47.16.6.16l-.85.05-.03-.03Z"/>
+          <path class="st2" d="M263.16,236.36l.27-.19s.47.16.58.16l-.85.05v-.03Z"/>
+          <path class="st2" d="M250.49,236.36l.25-.22s.47.16.6.16h-.85v.05Z"/>
+          <path class="st2" d="M244.45,236.36l.49-.05-.49.05Z"/>
+          <path class="st2" d="M247.61,236.36l.49-.05-.49.05Z"/>
+          <ellipse class="st2" cx="339.21" cy="194.51" rx="1.48" ry="1.26"/>
+          <ellipse class="st2" cx="339.21" cy="231.49" rx="1.48" ry="1.26"/>
+          <ellipse class="st2" cx="339.21" cy="191.87" rx="1.48" ry="1.26"/>
+          <path class="st2" d="M339.79,158.71c-.74.25-1.73-.16-1.92-.58-.3-.66,0-1.54.69-1.73.63-.19,1.65.03,1.95.47.36.55.22,1.54-.71,1.84Z"/>
+          <ellipse class="st2" cx="339.21" cy="234.13" rx="1.48" ry="1.26"/>
+          <ellipse class="st2" cx="339.21" cy="223.58" rx="1.51" ry="1.26"/>
+          <ellipse class="st2" cx="339.21" cy="220.94" rx="1.48" ry="1.26"/>
+          <ellipse class="st2" cx="339.21" cy="149.62" rx="1.48" ry="1.26"/>
+          <ellipse class="st2" cx="339.21" cy="228.85" rx="1.48" ry="1.26"/>
+          <ellipse class="st2" cx="339.21" cy="178.68" rx="1.48" ry="1.26"/>
+          <ellipse class="st2" cx="339.21" cy="210.36" rx="1.51" ry="1.26"/>
+          <ellipse class="st2" cx="339.21" cy="154.89" rx="1.48" ry="1.26"/>
+          <ellipse class="st2" cx="339.21" cy="176.05" rx="1.48" ry="1.26"/>
+          <path class="st2" d="M339.79,182.48c-.8.25-1.68-.05-1.95-.63s0-1.43.74-1.7c.66-.22,1.65.03,1.98.6.3.52-.03,1.46-.8,1.73h.03Z"/>
+          <ellipse class="st2" cx="339.21" cy="152.25" rx="1.48" ry="1.26"/>
+          <ellipse class="st2" cx="339.21" cy="218.28" rx="1.48" ry="1.26"/>
+          <ellipse class="st2" cx="339.21" cy="144.34" rx="1.48" ry="1.26"/>
+          <ellipse class="st2" cx="336.05" cy="144.34" rx="1.48" ry="1.24"/>
+          <ellipse class="st2" cx="339.21" cy="173.41" rx="1.51" ry="1.26"/>
+          <ellipse class="st2" cx="339.21" cy="146.98" rx="1.48" ry="1.24"/>
+          <ellipse class="st2" cx="339.21" cy="189.24" rx="1.48" ry="1.26"/>
+          <ellipse class="st2" cx="339.21" cy="199.79" rx="1.48" ry="1.26"/>
+          <ellipse class="st2" cx="339.21" cy="226.22" rx="1.48" ry="1.24"/>
+          <ellipse class="st2" cx="336.05" cy="154.89" rx="1.48" ry="1.24"/>
+          <ellipse class="st2" cx="339.21" cy="202.42" rx="1.51" ry="1.26"/>
+          <ellipse class="st2" cx="339.21" cy="197.15" rx="1.48" ry="1.24"/>
+          <ellipse class="st2" cx="339.21" cy="186.6" rx="1.48" ry="1.24"/>
+          <path class="st2" d="M340.03,216.71c-.69.33-1.7.14-2.12-.36-.36-.47-.25-1.37.49-1.79.49-.27,1.54-.16,2.01.33.41.44.25,1.48-.41,1.79l.03.03Z"/>
+          <ellipse class="st2" cx="336.05" cy="146.98" rx="1.48" ry="1.24"/>
+          <ellipse class="st2" cx="339.21" cy="213" rx="1.51" ry="1.26"/>
+          <path class="st2" d="M339.32,182.72c.41-.03,1.18.38,1.32.71s-.05,1.1-.36,1.37c-.44.36-1.4.44-1.87.22s-.74-.91-.63-1.46c.08-.38.8-.8,1.57-.85h-.03Z"/>
+          <ellipse class="st2" cx="339.21" cy="205.09" rx="1.51" ry="1.26"/>
+          <ellipse class="st2" cx="336.05" cy="226.22" rx="1.46" ry="1.24"/>
+          <ellipse class="st2" cx="336.05" cy="205.06" rx="1.48" ry="1.24"/>
+          <ellipse class="st2" cx="336.05" cy="220.91" rx="1.46" ry="1.24"/>
+          <ellipse class="st2" cx="336.05" cy="207.73" rx="1.48" ry="1.24"/>
+          <ellipse class="st2" cx="339.21" cy="207.73" rx="1.51" ry="1.26"/>
+          <ellipse class="st2" cx="336.05" cy="173.38" rx="1.48" ry="1.24"/>
+          <ellipse class="st2" cx="336.05" cy="223.58" rx="1.46" ry="1.24"/>
+          <ellipse class="st2" cx="336.05" cy="197.15" rx="1.48" ry="1.24"/>
+          <ellipse class="st2" cx="336.05" cy="234.1" rx="1.48" ry="1.24"/>
+          <ellipse class="st2" cx="336.05" cy="228.85" rx="1.46" ry="1.24"/>
+          <ellipse class="st2" cx="339.21" cy="170.74" rx="1.48" ry="1.26"/>
+          <ellipse class="st2" cx="336.05" cy="176.05" rx="1.48" ry="1.24"/>
+          <ellipse class="st2" cx="336.05" cy="149.62" rx="1.46" ry="1.24"/>
+          <ellipse class="st2" cx="339.21" cy="165.47" rx="1.51" ry="1.26"/>
+          <ellipse class="st2" cx="336.05" cy="165.47" rx="1.48" ry="1.24"/>
+          <ellipse class="st2" cx="336.05" cy="178.68" rx="1.48" ry="1.24"/>
+          <path class="st2" d="M339.21,161.4c-.71,0-1.46-.6-1.48-1.04-.05-.8.55-1.4,1.37-1.43.77,0,1.46.41,1.57.99.14.71-.19,1.43-1.46,1.48Z"/>
+          <ellipse class="st2" cx="336.05" cy="218.28" rx="1.46" ry="1.24"/>
+          <ellipse class="st2" cx="332.92" cy="146.98" rx="1.46" ry="1.21"/>
+          <ellipse class="st2" cx="336.05" cy="168.11" rx="1.48" ry="1.24"/>
+          <ellipse class="st2" cx="339.21" cy="168.11" rx="1.51" ry="1.26"/>
+          <ellipse class="st2" cx="336.05" cy="157.53" rx="1.48" ry="1.24"/>
+          <ellipse class="st2" cx="336.08" cy="199.79" rx="1.48" ry="1.24"/>
+          <ellipse class="st2" cx="339.21" cy="162.83" rx="1.51" ry="1.26"/>
+          <ellipse class="st2" cx="332.92" cy="228.85" rx="1.46" ry="1.21"/>
+          <ellipse class="st2" cx="336.05" cy="162.83" rx="1.48" ry="1.24"/>
+          <path class="st2" d="M335.03,184.87c-.66-.52-.52-1.46.05-1.87s1.51-.33,2.09.14c.47.38.44,1.4-.22,1.84-.38.25-1.57.16-1.92-.11Z"/>
+          <ellipse class="st2" cx="336.05" cy="215.67" rx="1.48" ry="1.24"/>
+          <ellipse class="st2" cx="332.92" cy="162.83" rx="1.46" ry="1.24"/>
+          <ellipse class="st2" cx="336.05" cy="194.51" rx="1.48" ry="1.24"/>
+          <ellipse class="st2" cx="332.92" cy="149.62" rx="1.46" ry="1.21"/>
+          <ellipse class="st2" cx="336.05" cy="231.49" rx="1.46" ry="1.24"/>
+          <path class="st2" d="M336.98,188.36c.41.38.6,1.24.33,1.57s-1.15.58-1.7.47c-.93-.19-1.21-1.02-.93-1.68.25-.58,1.54-1.07,2.28-.36h.03Z"/>
+          <ellipse class="st2" cx="332.92" cy="165.47" rx="1.46" ry="1.24"/>
+          <ellipse class="st2" cx="336.05" cy="170.74" rx="1.48" ry="1.24"/>
+          <ellipse class="st2" cx="336.05" cy="213" rx="1.48" ry="1.24"/>
+          <ellipse class="st2" cx="336.05" cy="152.25" rx="1.46" ry="1.24"/>
+          <path class="st2" d="M334.73,185.97c.19-.44,1.46-.71,2.03-.47.63.27.88,1.1.6,1.59-.3.49-1.07.8-1.62.66-.88-.19-1.46-.8-1.02-1.79Z"/>
+          <ellipse class="st2" cx="336.08" cy="181.32" rx="1.48" ry="1.24"/>
+          <ellipse class="st2" cx="332.92" cy="223.58" rx="1.46" ry="1.21"/>
+          <ellipse class="st2" cx="332.89" cy="194.51" rx="1.46" ry="1.21"/>
+          <ellipse class="st2" cx="336.05" cy="202.45" rx="1.48" ry="1.24"/>
+          <ellipse class="st2" cx="332.89" cy="226.19" rx="1.46" ry="1.21"/>
+          <ellipse class="st2" cx="332.92" cy="144.34" rx="1.46" ry="1.21"/>
+          <ellipse class="st2" cx="336.05" cy="160.17" rx="1.48" ry="1.24"/>
+          <ellipse class="st2" cx="332.92" cy="215.64" rx="1.46" ry="1.21"/>
+          <ellipse class="st2" cx="332.92" cy="178.68" rx="1.46" ry="1.21"/>
+          <ellipse class="st2" cx="332.89" cy="220.91" rx="1.46" ry="1.21"/>
+          <ellipse class="st2" cx="332.92" cy="218.28" rx="1.46" ry="1.21"/>
+          <ellipse class="st2" cx="332.89" cy="183.93" rx="1.43" ry="1.21"/>
+          <ellipse class="st2" cx="332.92" cy="152.25" rx="1.46" ry="1.21"/>
+          <ellipse class="st2" cx="336.05" cy="191.87" rx="1.48" ry="1.24"/>
+          <ellipse class="st2" cx="332.89" cy="186.6" rx="1.46" ry="1.21"/>
+          <ellipse class="st2" cx="332.92" cy="205.09" rx="1.46" ry="1.21"/>
+          <ellipse class="st2" cx="332.89" cy="181.32" rx="1.46" ry="1.21"/>
+          <ellipse class="st2" cx="332.89" cy="154.89" rx="1.46" ry="1.21"/>
+          <ellipse class="st2" cx="336.05" cy="210.36" rx="1.48" ry="1.24"/>
+          <ellipse class="st2" cx="332.92" cy="170.74" rx="1.46" ry="1.21"/>
+          <ellipse class="st2" cx="332.92" cy="168.11" rx="1.46" ry="1.21"/>
+          <ellipse class="st2" cx="332.92" cy="202.45" rx="1.46" ry="1.21"/>
+          <ellipse class="st2" cx="332.92" cy="207.73" rx="1.46" ry="1.21"/>
+          <ellipse class="st2" cx="332.89" cy="189.24" rx="1.46" ry="1.21"/>
+          <ellipse class="st2" cx="332.92" cy="213" rx="1.46" ry="1.21"/>
+          <ellipse class="st2" cx="332.92" cy="199.79" rx="1.46" ry="1.21"/>
+          <ellipse class="st2" cx="332.92" cy="234.13" rx="1.46" ry="1.21"/>
+          <ellipse class="st2" cx="329.76" cy="149.62" rx="1.43" ry="1.21"/>
+          <ellipse class="st2" cx="332.89" cy="176.02" rx="1.46" ry="1.21"/>
+          <ellipse class="st2" cx="332.92" cy="173.38" rx="1.46" ry="1.21"/>
+          <ellipse class="st2" cx="332.92" cy="160.17" rx="1.46" ry="1.21"/>
+          <ellipse class="st2" cx="332.92" cy="197.15" rx="1.46" ry="1.24"/>
+          <ellipse class="st2" cx="332.92" cy="231.49" rx="1.43" ry="1.21"/>
+          <ellipse class="st2" cx="332.89" cy="210.36" rx="1.46" ry="1.21"/>
+          <ellipse class="st2" cx="329.76" cy="170.74" rx="1.43" ry="1.21"/>
+          <ellipse class="st2" cx="332.92" cy="157.53" rx="1.46" ry="1.21"/>
+          <ellipse class="st2" cx="329.76" cy="144.34" rx="1.43" ry="1.18"/>
+          <ellipse class="st2" cx="329.76" cy="226.22" rx="1.43" ry="1.18"/>
+          <ellipse class="st2" cx="329.76" cy="228.85" rx="1.43" ry="1.18"/>
+          <ellipse class="st2" cx="329.76" cy="223.58" rx="1.43" ry="1.21"/>
+          <ellipse class="st2" cx="329.76" cy="146.98" rx="1.43" ry="1.18"/>
+          <ellipse class="st2" cx="329.76" cy="191.87" rx="1.43" ry="1.18"/>
+          <ellipse class="st2" cx="332.89" cy="191.87" rx="1.43" ry="1.21"/>
+          <ellipse class="st2" cx="329.76" cy="162.83" rx="1.43" ry="1.21"/>
+          <ellipse class="st2" cx="329.76" cy="202.42" rx="1.43" ry="1.21"/>
+          <ellipse class="st2" cx="329.76" cy="160.17" rx="1.43" ry="1.21"/>
+          <ellipse class="st2" cx="329.76" cy="178.66" rx="1.43" ry="1.21"/>
+          <ellipse class="st2" cx="329.76" cy="176.02" rx="1.43" ry="1.21"/>
+          <ellipse class="st2" cx="329.76" cy="215.64" rx="1.43" ry="1.21"/>
+          <ellipse class="st2" cx="329.76" cy="220.91" rx="1.43" ry="1.18"/>
+          <ellipse class="st2" cx="329.76" cy="197.15" rx="1.43" ry="1.21"/>
+          <ellipse class="st2" cx="329.76" cy="168.11" rx="1.43" ry="1.21"/>
+          <ellipse class="st2" cx="329.76" cy="194.51" rx="1.43" ry="1.21"/>
+          <ellipse class="st2" cx="329.76" cy="205.09" rx="1.43" ry="1.21"/>
+          <ellipse class="st2" cx="329.76" cy="218.28" rx="1.43" ry="1.21"/>
+          <ellipse class="st2" cx="329.76" cy="207.73" rx="1.43" ry="1.21"/>
+          <ellipse class="st2" cx="329.76" cy="213" rx="1.43" ry="1.21"/>
+          <ellipse class="st2" cx="329.76" cy="154.89" rx="1.43" ry="1.21"/>
+          <ellipse class="st2" cx="329.76" cy="234.13" rx="1.43" ry="1.21"/>
+          <ellipse class="st2" cx="329.76" cy="173.38" rx="1.43" ry="1.21"/>
+          <ellipse class="st2" cx="329.76" cy="199.79" rx="1.43" ry="1.21"/>
+          <ellipse class="st2" cx="329.76" cy="165.47" rx="1.43" ry="1.21"/>
+          <ellipse class="st2" cx="329.76" cy="157.53" rx="1.43" ry="1.21"/>
+          <ellipse class="st2" cx="329.76" cy="231.49" rx="1.43" ry="1.18"/>
+          <ellipse class="st2" cx="329.76" cy="152.25" rx="1.43" ry="1.18"/>
+          <ellipse class="st2" cx="329.76" cy="210.36" rx="1.43" ry="1.18"/>
+          <ellipse class="st2" cx="326.6" cy="144.34" rx="1.4" ry="1.18"/>
+          <ellipse class="st2" cx="326.6" cy="154.89" rx="1.4" ry="1.18"/>
+          <ellipse class="st2" cx="326.6" cy="194.51" rx="1.4" ry="1.18"/>
+          <ellipse class="st2" cx="326.6" cy="149.62" rx="1.4" ry="1.18"/>
+          <path class="st2" d="M328.33,184.23c-.11-.41.19-1.04.47-1.18.33-.19,1.26-.38,1.59-.19.38.22.74.82.69,1.13s-.49.99-.85,1.1c-.58.19-1.76-.25-1.9-.85Z"/>
+          <ellipse class="st2" cx="326.6" cy="197.15" rx="1.4" ry="1.18"/>
+          <ellipse class="st2" cx="326.6" cy="178.66" rx="1.4" ry="1.18"/>
+          <ellipse class="st2" cx="326.6" cy="183.96" rx="1.4" ry="1.18"/>
+          <ellipse class="st2" cx="326.6" cy="234.13" rx="1.4" ry="1.18"/>
+          <ellipse class="st2" cx="326.6" cy="215.64" rx="1.4" ry="1.18"/>
+          <ellipse class="st2" cx="326.6" cy="228.85" rx="1.4" ry="1.18"/>
+          <ellipse class="st2" cx="326.6" cy="218.28" rx="1.4" ry="1.18"/>
+          <ellipse class="st2" cx="326.6" cy="146.98" rx="1.4" ry="1.18"/>
+          <ellipse class="st2" cx="326.6" cy="199.81" rx="1.4" ry="1.18"/>
+          <ellipse class="st2" cx="326.6" cy="173.38" rx="1.4" ry="1.18"/>
+          <ellipse class="st2" cx="326.6" cy="202.45" rx="1.4" ry="1.18"/>
+          <ellipse class="st2" cx="326.6" cy="231.49" rx="1.4" ry="1.18"/>
+          <ellipse class="st2" cx="326.6" cy="223.58" rx="1.4" ry="1.18"/>
+          <ellipse class="st2" cx="326.6" cy="213" rx="1.4" ry="1.18"/>
+          <ellipse class="st2" cx="329.73" cy="181.29" rx="1.43" ry="1.18"/>
+          <ellipse class="st2" cx="326.6" cy="176.02" rx="1.4" ry="1.18"/>
+          <ellipse class="st2" cx="326.6" cy="226.22" rx="1.4" ry="1.18"/>
+          <ellipse class="st2" cx="323.44" cy="146.98" rx="1.37" ry="1.15"/>
+          <ellipse class="st2" cx="326.6" cy="152.25" rx="1.4" ry="1.18"/>
+          <ellipse class="st2" cx="326.6" cy="157.56" rx="1.4" ry="1.18"/>
+          <ellipse class="st2" cx="326.6" cy="220.91" rx="1.4" ry="1.18"/>
+          <ellipse class="st2" cx="326.63" cy="205.09" rx="1.4" ry="1.18"/>
+          <ellipse class="st2" cx="323.44" cy="220.91" rx="1.37" ry="1.15"/>
+          <path class="st2" d="M328.36,186.54c-.05-.49.63-1.04,1.26-1.15.44-.08,1.13.3,1.4.74.22.33,0,1.15-.44,1.37s-1.1.3-1.43.19-.71-.71-.77-1.15h-.03Z"/>
+          <ellipse class="st2" cx="326.6" cy="168.11" rx="1.4" ry="1.18"/>
+          <ellipse class="st2" cx="326.6" cy="170.74" rx="1.4" ry="1.18"/>
+          <ellipse class="st2" cx="326.6" cy="207.73" rx="1.4" ry="1.18"/>
+          <ellipse class="st2" cx="326.6" cy="165.47" rx="1.4" ry="1.18"/>
+          <path class="st2" d="M329.84,188.14c1.1,0,1.43.77,1.29,1.43-.11.41-.77.88-1.48.88-.63,0-1.4-.63-1.29-1.29.08-.58.71-1.02,1.51-1.02h-.03Z"/>
+          <ellipse class="st2" cx="323.44" cy="231.49" rx="1.37" ry="1.15"/>
+          <ellipse class="st2" cx="323.44" cy="226.22" rx="1.37" ry="1.15"/>
+          <ellipse class="st2" cx="326.63" cy="210.36" rx="1.4" ry="1.18"/>
+          <ellipse class="st2" cx="326.6" cy="181.29" rx="1.4" ry="1.18"/>
+          <ellipse class="st2" cx="326.6" cy="191.87" rx="1.4" ry="1.18"/>
+          <ellipse class="st2" cx="323.47" cy="191.87" rx="1.37" ry="1.15"/>
+          <ellipse class="st2" cx="323.44" cy="223.55" rx="1.37" ry="1.15"/>
+          <ellipse class="st2" cx="326.6" cy="162.83" rx="1.4" ry="1.18"/>
+          <ellipse class="st2" cx="323.44" cy="152.25" rx="1.37" ry="1.15"/>
+          <ellipse class="st2" cx="323.44" cy="149.62" rx="1.37" ry="1.15"/>
+          <ellipse class="st2" cx="323.44" cy="160.17" rx="1.37" ry="1.15"/>
+          <path class="st2" d="M322.5,187.45c-.66-.38-.44-1.48.11-1.79.44-.27,1.29-.16,1.84.16.63.36.36,1.51-.22,1.76-.36.14-1.43.08-1.73-.11v-.03Z"/>
+          <ellipse class="st2" cx="323.44" cy="213" rx="1.37" ry="1.15"/>
+          <ellipse class="st2" cx="323.47" cy="162.83" rx="1.37" ry="1.15"/>
+          <ellipse class="st2" cx="326.6" cy="160.17" rx="1.4" ry="1.18"/>
+          <ellipse class="st2" cx="323.47" cy="210.36" rx="1.37" ry="1.15"/>
+          <ellipse class="st2" cx="323.44" cy="228.85" rx="1.37" ry="1.15"/>
+          <ellipse class="st2" cx="320.31" cy="210.36" rx="1.37" ry="1.15"/>
+          <ellipse class="st2" cx="320.31" cy="160.19" rx="1.37" ry="1.15"/>
+          <ellipse class="st2" cx="323.44" cy="144.34" rx="1.37" ry="1.15"/>
+          <ellipse class="st2" cx="320.31" cy="162.83" rx="1.37" ry="1.15"/>
+          <ellipse class="st2" cx="320.31" cy="157.56" rx="1.37" ry="1.15"/>
+          <ellipse class="st2" cx="323.44" cy="170.74" rx="1.37" ry="1.15"/>
+          <ellipse class="st2" cx="323.47" cy="176.02" rx="1.37" ry="1.15"/>
+          <ellipse class="st2" cx="323.44" cy="168.11" rx="1.37" ry="1.15"/>
+          <ellipse class="st2" cx="323.47" cy="165.47" rx="1.37" ry="1.15"/>
+          <ellipse class="st2" cx="323.47" cy="173.38" rx="1.37" ry="1.15"/>
+          <ellipse class="st2" cx="323.47" cy="207.73" rx="1.37" ry="1.15"/>
+          <ellipse class="st2" cx="323.44" cy="215.64" rx="1.37" ry="1.15"/>
+          <ellipse class="st2" cx="323.47" cy="199.79" rx="1.37" ry="1.15"/>
+          <ellipse class="st2" cx="320.31" cy="205.09" rx="1.37" ry="1.15"/>
+          <path class="st2" d="M322.83,188.25c1.24-.47,1.9.25,2.01.91s-.63,1.37-1.62,1.24c-.36-.05-.99-.49-1.13-.8-.14-.36.33-1.21.74-1.35Z"/>
+          <ellipse class="st2" cx="320.31" cy="170.74" rx="1.35" ry="1.13"/>
+          <ellipse class="st2" cx="323.44" cy="197.15" rx="1.37" ry="1.15"/>
+          <ellipse class="st2" cx="320.31" cy="202.42" rx="1.37" ry="1.15"/>
+          <ellipse class="st2" cx="323.47" cy="202.45" rx="1.37" ry="1.15"/>
+          <ellipse class="st2" cx="320.31" cy="220.91" rx="1.37" ry="1.15"/>
+          <ellipse class="st2" cx="320.31" cy="213" rx="1.35" ry="1.13"/>
+          <ellipse class="st2" cx="320.31" cy="168.11" rx="1.35" ry="1.13"/>
+          <ellipse class="st2" cx="320.31" cy="197.18" rx="1.37" ry="1.15"/>
+          <ellipse class="st2" cx="317.15" cy="205.06" rx="1.35" ry="1.13"/>
+          <ellipse class="st2" cx="320.31" cy="178.66" rx="1.37" ry="1.15"/>
+          <ellipse class="st2" cx="320.31" cy="176.02" rx="1.37" ry="1.15"/>
+          <ellipse class="st2" cx="320.31" cy="218.28" rx="1.37" ry="1.15"/>
+          <ellipse class="st2" cx="320.31" cy="173.38" rx="1.37" ry="1.15"/>
+          <ellipse class="st2" cx="323.47" cy="157.56" rx="1.37" ry="1.15"/>
+          <ellipse class="st2" cx="317.15" cy="207.73" rx="1.35" ry="1.13"/>
+          <ellipse class="st2" cx="320.31" cy="207.73" rx="1.37" ry="1.15"/>
+          <ellipse class="st2" cx="323.47" cy="205.09" rx="1.37" ry="1.15"/>
+          <ellipse class="st2" cx="326.6" cy="186.57" rx="1.37" ry="1.15"/>
+          <path class="st2" d="M322.23,184.23c-.08-.33-.08-.91.11-1.04s.63-.27,1.13-.36c.41-.08,1.26.44,1.37.77.14.47-.22,1.13-.8,1.37-.71.3-1.59.05-1.81-.74Z"/>
+          <ellipse class="st2" cx="323.47" cy="234.13" rx="1.37" ry="1.15"/>
+          <ellipse class="st2" cx="320.31" cy="234.13" rx="1.37" ry="1.15"/>
+          <ellipse class="st2" cx="320.31" cy="215.64" rx="1.37" ry="1.15"/>
+          <ellipse class="st2" cx="317.15" cy="213" rx="1.35" ry="1.13"/>
+          <ellipse class="st2" cx="320.31" cy="152.25" rx="1.37" ry="1.15"/>
+          <ellipse class="st2" cx="320.31" cy="165.47" rx="1.37" ry="1.15"/>
+          <ellipse class="st2" cx="317.15" cy="165.47" rx="1.35" ry="1.13"/>
+          <ellipse class="st2" cx="320.31" cy="194.51" rx="1.37" ry="1.15"/>
+          <ellipse class="st2" cx="317.15" cy="168.11" rx="1.32" ry="1.13"/>
+          <ellipse class="st2" cx="320.31" cy="228.83" rx="1.35" ry="1.13"/>
+          <ellipse class="st2" cx="320.31" cy="191.87" rx="1.37" ry="1.15"/>
+          <ellipse class="st2" cx="320.31" cy="144.34" rx="1.37" ry="1.15"/>
+          <ellipse class="st2" cx="320.28" cy="181.29" rx="1.37" ry="1.15"/>
+          <ellipse class="st2" cx="323.47" cy="178.66" rx="1.37" ry="1.15"/>
+          <ellipse class="st2" cx="320.31" cy="149.62" rx="1.37" ry="1.15"/>
+          <ellipse class="st2" cx="323.44" cy="194.51" rx="1.37" ry="1.15"/>
+          <ellipse class="st2" cx="323.44" cy="154.89" rx="1.37" ry="1.15"/>
+          <ellipse class="st2" cx="320.31" cy="154.89" rx="1.35" ry="1.13"/>
+          <ellipse class="st2" cx="317.15" cy="160.19" rx="1.35" ry="1.13"/>
+          <ellipse class="st2" cx="317.15" cy="210.36" rx="1.35" ry="1.13"/>
+          <path class="st2" d="M326.93,188.11c.66-.03,1.18.91,1.07,1.37-.19.69-1.29,1.04-1.92.85-1.02-.3-1.02-1.48-.55-1.9.19-.16.88-.3,1.4-.33Z"/>
+          <ellipse class="st2" cx="317.15" cy="199.79" rx="1.35" ry="1.13"/>
+          <ellipse class="st2" cx="317.15" cy="202.45" rx="1.35" ry="1.13"/>
+          <ellipse class="st2" cx="320.31" cy="199.81" rx="1.35" ry="1.13"/>
+          <ellipse class="st2" cx="317.15" cy="170.74" rx="1.35" ry="1.13"/>
+          <ellipse class="st2" cx="317.15" cy="162.83" rx="1.35" ry="1.13"/>
+          <ellipse class="st2" cx="323.44" cy="218.28" rx="1.37" ry="1.15"/>
+          <ellipse class="st2" cx="320.31" cy="231.49" rx="1.37" ry="1.15"/>
+          <ellipse class="st2" cx="320.31" cy="146.98" rx="1.37" ry="1.15"/>
+          <ellipse class="st2" cx="323.47" cy="181.29" rx="1.37" ry="1.15"/>
+          <ellipse class="st2" cx="317.15" cy="157.56" rx="1.35" ry="1.13"/>
+          <ellipse class="st2" cx="317.15" cy="154.92" rx="1.35" ry="1.13"/>
+          <ellipse class="st2" cx="317.15" cy="215.64" rx="1.35" ry="1.13"/>
+          <ellipse class="st2" cx="317.15" cy="218.28" rx="1.35" ry="1.13"/>
+          <ellipse class="st2" cx="317.15" cy="173.38" rx="1.35" ry="1.13"/>
+          <ellipse class="st2" cx="317.15" cy="197.15" rx="1.35" ry="1.13"/>
+          <ellipse class="st2" cx="320.31" cy="226.22" rx="1.37" ry="1.15"/>
+          <ellipse class="st2" cx="317.15" cy="234.13" rx="1.35" ry="1.13"/>
+          <ellipse class="st2" cx="317.15" cy="176.02" rx="1.35" ry="1.13"/>
+          <ellipse class="st2" cx="317.15" cy="191.87" rx="1.35" ry="1.13"/>
+          <ellipse class="st2" cx="320.31" cy="223.55" rx="1.37" ry="1.15"/>
+          <ellipse class="st2" cx="313.99" cy="202.45" rx="1.32" ry="1.1"/>
+          <ellipse class="st2" cx="317.15" cy="178.66" rx="1.35" ry="1.13"/>
+          <ellipse class="st2" cx="317.15" cy="220.91" rx="1.35" ry="1.13"/>
+          <ellipse class="st2" cx="317.17" cy="194.54" rx="1.35" ry="1.13"/>
+          <ellipse class="st2" cx="313.99" cy="213" rx="1.32" ry="1.1"/>
+          <ellipse class="st2" cx="317.15" cy="231.49" rx="1.35" ry="1.13"/>
+          <ellipse class="st2" cx="320.31" cy="189.24" rx="1.35" ry="1.13"/>
+          <ellipse class="st2" cx="317.15" cy="152.25" rx="1.35" ry="1.13"/>
+          <ellipse class="st2" cx="313.99" cy="197.15" rx="1.32" ry="1.1"/>
+          <ellipse class="st2" cx="313.99" cy="215.64" rx="1.32" ry="1.1"/>
+          <ellipse class="st2" cx="320.28" cy="183.96" rx="1.35" ry="1.13"/>
+          <ellipse class="st2" cx="317.15" cy="149.62" rx="1.35" ry="1.13"/>
+          <ellipse class="st2" cx="313.99" cy="176.02" rx="1.32" ry="1.1"/>
+          <ellipse class="st2" cx="314.01" cy="154.89" rx="1.32" ry="1.1"/>
+          <ellipse class="st2" cx="310.85" cy="165.47" rx="1.29" ry="1.07"/>
+          <ellipse class="st2" cx="313.99" cy="165.47" rx="1.32" ry="1.1"/>
+          <ellipse class="st2" cx="314.01" cy="162.83" rx="1.32" ry="1.1"/>
+          <ellipse class="st2" cx="314.01" cy="207.73" rx="1.29" ry="1.1"/>
+          <ellipse class="st2" cx="314.01" cy="205.09" rx="1.32" ry="1.1"/>
+          <ellipse class="st2" cx="313.99" cy="210.36" rx="1.32" ry="1.1"/>
+          <ellipse class="st2" cx="313.99" cy="157.56" rx="1.32" ry="1.1"/>
+          <ellipse class="st2" cx="320.28" cy="186.6" rx="1.37" ry="1.15"/>
+          <ellipse class="st2" cx="317.17" cy="223.55" rx="1.35" ry="1.13"/>
+          <ellipse class="st2" cx="313.99" cy="173.38" rx="1.32" ry="1.1"/>
+          <ellipse class="st2" cx="314.01" cy="223.55" rx="1.32" ry="1.1"/>
+          <ellipse class="st2" cx="313.99" cy="160.17" rx="1.32" ry="1.1"/>
+          <ellipse class="st2" cx="317.15" cy="144.34" rx="1.35" ry="1.13"/>
+          <ellipse class="st2" cx="314.01" cy="144.34" rx="1.32" ry="1.1"/>
+          <ellipse class="st2" cx="314.01" cy="228.85" rx="1.32" ry="1.1"/>
+          <ellipse class="st2" cx="317.17" cy="183.96" rx="1.32" ry="1.1"/>
+          <ellipse class="st2" cx="314.01" cy="226.22" rx="1.32" ry="1.1"/>
+          <ellipse class="st2" cx="314.01" cy="146.98" rx="1.32" ry="1.1"/>
+          <ellipse class="st2" cx="317.15" cy="228.85" rx="1.32" ry="1.13"/>
+          <ellipse class="st2" cx="317.17" cy="146.98" rx="1.35" ry="1.13"/>
+          <ellipse class="st2" cx="313.99" cy="170.74" rx="1.29" ry="1.1"/>
+          <ellipse class="st2" cx="317.15" cy="226.22" rx="1.35" ry="1.13"/>
+          <ellipse class="st2" cx="313.99" cy="168.11" rx="1.32" ry="1.1"/>
+          <ellipse class="st2" cx="313.99" cy="199.79" rx="1.29" ry="1.1"/>
+          <ellipse class="st2" cx="314.01" cy="189.24" rx="1.32" ry="1.1"/>
+          <ellipse class="st2" cx="317.15" cy="186.6" rx="1.35" ry="1.13"/>
+          <ellipse class="st2" cx="313.99" cy="194.51" rx="1.32" ry="1.1"/>
+          <ellipse class="st2" cx="313.99" cy="234.13" rx="1.32" ry="1.1"/>
+          <ellipse class="st2" cx="317.15" cy="181.29" rx="1.35" ry="1.13"/>
+          <ellipse class="st2" cx="313.99" cy="149.62" rx="1.32" ry="1.1"/>
+          <ellipse class="st2" cx="313.99" cy="152.25" rx="1.32" ry="1.1"/>
+          <ellipse class="st2" cx="314.01" cy="191.87" rx="1.32" ry="1.1"/>
+          <ellipse class="st2" cx="310.85" cy="162.83" rx="1.29" ry="1.07"/>
+          <ellipse class="st2" cx="313.99" cy="218.28" rx="1.32" ry="1.1"/>
+          <ellipse class="st2" cx="310.85" cy="210.36" rx="1.26" ry="1.07"/>
+          <ellipse class="st2" cx="313.99" cy="220.91" rx="1.32" ry="1.1"/>
+          <ellipse class="st2" cx="310.85" cy="207.73" rx="1.26" ry="1.07"/>
+          <ellipse class="st2" cx="310.85" cy="205.09" rx="1.26" ry="1.07"/>
+          <ellipse class="st2" cx="317.15" cy="189.26" rx="1.32" ry="1.1"/>
+          <ellipse class="st2" cx="313.99" cy="178.66" rx="1.32" ry="1.1"/>
+          <ellipse class="st2" cx="314.01" cy="183.96" rx="1.32" ry="1.1"/>
+          <ellipse class="st2" cx="310.85" cy="170.74" rx="1.29" ry="1.07"/>
+          <ellipse class="st2" cx="314.01" cy="181.32" rx="1.32" ry="1.1"/>
+          <ellipse class="st2" cx="314.01" cy="231.49" rx="1.32" ry="1.1"/>
+          <ellipse class="st2" cx="310.85" cy="202.45" rx="1.29" ry="1.07"/>
+          <path class="st2" d="M312.7,186.6c0,.6.58,1.1,1.32,1.1s1.32-.49,1.32-1.1-.58-1.1-1.32-1.1-1.32.49-1.32,1.1ZM313.55,185.91l-.19.14.19-.14Z"/>
+          <ellipse class="st2" cx="310.85" cy="176.02" rx="1.29" ry="1.07"/>
+          <ellipse class="st2" cx="310.85" cy="191.87" rx="1.29" ry="1.07"/>
+          <ellipse class="st2" cx="310.85" cy="168.11" rx="1.26" ry="1.07"/>
+          <ellipse class="st2" cx="310.85" cy="199.79" rx="1.29" ry="1.07"/>
+          <ellipse class="st2" cx="310.85" cy="152.25" rx="1.29" ry="1.07"/>
+          <ellipse class="st2" cx="310.85" cy="220.91" rx="1.29" ry="1.07"/>
+          <ellipse class="st2" cx="310.85" cy="186.6" rx="1.29" ry="1.07"/>
+          <ellipse class="st2" cx="307.69" cy="144.34" rx="1.26" ry="1.07"/>
+          <ellipse class="st2" cx="310.85" cy="223.58" rx="1.29" ry="1.07"/>
+          <ellipse class="st2" cx="310.85" cy="218.28" rx="1.29" ry="1.07"/>
+          <ellipse class="st2" cx="310.85" cy="234.13" rx="1.29" ry="1.07"/>
+          <ellipse class="st2" cx="310.85" cy="154.89" rx="1.29" ry="1.07"/>
+          <ellipse class="st2" cx="310.85" cy="213" rx="1.26" ry="1.07"/>
+          <ellipse class="st2" cx="310.85" cy="194.51" rx="1.29" ry="1.07"/>
+          <ellipse class="st2" cx="310.85" cy="149.62" rx="1.29" ry="1.07"/>
+          <ellipse class="st2" cx="310.85" cy="178.66" rx="1.29" ry="1.07"/>
+          <ellipse class="st2" cx="310.85" cy="231.49" rx="1.29" ry="1.07"/>
+          <ellipse class="st2" cx="310.85" cy="173.38" rx="1.26" ry="1.07"/>
+          <ellipse class="st2" cx="310.85" cy="160.17" rx="1.26" ry="1.07"/>
+          <ellipse class="st2" cx="310.85" cy="197.15" rx="1.29" ry="1.07"/>
+          <ellipse class="st2" cx="310.85" cy="144.34" rx="1.29" ry="1.07"/>
+          <ellipse class="st2" cx="310.85" cy="215.67" rx="1.26" ry="1.07"/>
+          <ellipse class="st2" cx="310.85" cy="157.53" rx="1.29" ry="1.07"/>
+          <ellipse class="st2" cx="307.69" cy="223.55" rx="1.26" ry="1.04"/>
+          <ellipse class="st2" cx="307.69" cy="146.98" rx="1.26" ry="1.04"/>
+          <ellipse class="st2" cx="310.85" cy="146.98" rx="1.29" ry="1.07"/>
+          <ellipse class="st2" cx="307.69" cy="218.28" rx="1.26" ry="1.04"/>
+          <ellipse class="st2" cx="307.69" cy="220.91" rx="1.26" ry="1.04"/>
+          <ellipse class="st2" cx="310.85" cy="226.19" rx="1.26" ry="1.07"/>
+          <ellipse class="st2" cx="307.69" cy="226.19" rx="1.26" ry="1.04"/>
+          <ellipse class="st2" cx="310.85" cy="228.85" rx="1.29" ry="1.07"/>
+          <path class="st2" d="M309.73,180.8c.16-.44,1.13-.69,1.62-.52.44.14.91.85.71,1.35-.27.63-1.02.91-1.76.69-.47-.14-.88-.69-.58-1.48v-.03Z"/>
+          <ellipse class="st2" cx="307.69" cy="191.87" rx="1.26" ry="1.04"/>
+          <ellipse class="st2" cx="307.69" cy="186.6" rx="1.26" ry="1.04"/>
+          <ellipse class="st2" cx="310.85" cy="183.93" rx="1.29" ry="1.07"/>
+          <ellipse class="st2" cx="307.69" cy="152.25" rx="1.26" ry="1.04"/>
+          <ellipse class="st2" cx="307.69" cy="170.74" rx="1.26" ry="1.04"/>
+          <ellipse class="st2" cx="307.69" cy="168.11" rx="1.26" ry="1.04"/>
+          <ellipse class="st2" cx="307.69" cy="154.89" rx="1.26" ry="1.04"/>
+          <ellipse class="st2" cx="307.69" cy="207.73" rx="1.26" ry="1.04"/>
+          <ellipse class="st2" cx="307.69" cy="178.66" rx="1.26" ry="1.04"/>
+          <ellipse class="st2" cx="307.69" cy="149.62" rx="1.26" ry="1.04"/>
+          <ellipse class="st2" cx="307.69" cy="228.85" rx="1.26" ry="1.04"/>
+          <ellipse class="st2" cx="307.69" cy="160.19" rx="1.26" ry="1.04"/>
+          <path class="st2" d="M309.78,188.69c.41-.69,1.32-.66,1.95-.19.41.27.49,1.04.19,1.4s-1.26.47-1.79.27c-.41-.16-.66-.93-.36-1.48Z"/>
+          <ellipse class="st2" cx="307.69" cy="213" rx="1.26" ry="1.04"/>
+          <ellipse class="st2" cx="307.69" cy="194.51" rx="1.26" ry="1.04"/>
+          <ellipse class="st2" cx="307.69" cy="189.24" rx="1.26" ry="1.07"/>
+          <ellipse class="st2" cx="307.69" cy="197.15" rx="1.26" ry="1.04"/>
+          <ellipse class="st2" cx="307.69" cy="176.02" rx="1.26" ry="1.04"/>
+          <ellipse class="st2" cx="307.69" cy="231.49" rx="1.26" ry="1.04"/>
+          <ellipse class="st2" cx="304.56" cy="231.49" rx="1.24" ry="1.04"/>
+          <ellipse class="st2" cx="304.54" cy="149.62" rx="1.24" ry="1.04"/>
+          <ellipse class="st2" cx="307.69" cy="165.47" rx="1.26" ry="1.04"/>
+          <ellipse class="st2" cx="307.69" cy="234.13" rx="1.26" ry="1.04"/>
+          <ellipse class="st2" cx="304.54" cy="228.85" rx="1.24" ry="1.04"/>
+          <ellipse class="st2" cx="307.69" cy="210.36" rx="1.26" ry="1.04"/>
+          <ellipse class="st2" cx="307.69" cy="202.45" rx="1.26" ry="1.04"/>
+          <ellipse class="st2" cx="307.69" cy="215.64" rx="1.26" ry="1.04"/>
+          <ellipse class="st2" cx="307.69" cy="157.53" rx="1.26" ry="1.04"/>
+          <ellipse class="st2" cx="304.54" cy="144.34" rx="1.24" ry="1.04"/>
+          <ellipse class="st2" cx="304.54" cy="223.55" rx="1.24" ry="1.04"/>
+          <ellipse class="st2" cx="307.69" cy="162.83" rx="1.24" ry="1.04"/>
+          <ellipse class="st2" cx="307.69" cy="173.38" rx="1.26" ry="1.04"/>
+          <ellipse class="st2" cx="304.54" cy="226.19" rx="1.24" ry="1.04"/>
+          <ellipse class="st2" cx="304.54" cy="234.13" rx="1.24" ry="1.04"/>
+          <ellipse class="st2" cx="304.56" cy="205.09" rx="1.24" ry="1.04"/>
+          <ellipse class="st2" cx="307.69" cy="205.09" rx="1.24" ry="1.04"/>
+          <ellipse class="st2" cx="307.69" cy="199.79" rx="1.26" ry="1.04"/>
+          <ellipse class="st2" cx="301.4" cy="197.15" rx="1.21" ry="1.02"/>
+          <ellipse class="st2" cx="304.54" cy="189.24" rx="1.24" ry="1.04"/>
+          <ellipse class="st2" cx="304.54" cy="199.79" rx="1.24" ry="1.04"/>
+          <ellipse class="st2" cx="304.56" cy="197.15" rx="1.24" ry="1.04"/>
+          <ellipse class="st2" cx="301.4" cy="173.38" rx="1.21" ry="1.02"/>
+          <ellipse class="st2" cx="304.54" cy="176.02" rx="1.24" ry="1.04"/>
+          <path class="st2" d="M305.03,183.03c.47.27.77.55.85.8s-.3.82-.55.93c-.38.16-1.26.25-1.57.05-.36-.22-.47-1.04-.27-1.43.19-.33,1.18-.58,1.57-.36h-.03Z"/>
+          <ellipse class="st2" cx="304.56" cy="146.98" rx="1.24" ry="1.04"/>
+          <ellipse class="st2" cx="304.56" cy="220.91" rx="1.24" ry="1.04"/>
+          <ellipse class="st2" cx="304.54" cy="202.42" rx="1.24" ry="1.04"/>
+          <ellipse class="st2" cx="304.56" cy="215.64" rx="1.24" ry="1.04"/>
+          <ellipse class="st2" cx="301.4" cy="176.02" rx="1.21" ry="1.02"/>
+          <ellipse class="st2" cx="304.54" cy="160.17" rx="1.24" ry="1.04"/>
+          <ellipse class="st2" cx="304.54" cy="157.53" rx="1.24" ry="1.04"/>
+          <ellipse class="st2" cx="304.54" cy="213" rx="1.24" ry="1.04"/>
+          <ellipse class="st2" cx="304.56" cy="194.51" rx="1.24" ry="1.04"/>
+          <ellipse class="st2" cx="301.4" cy="215.64" rx="1.21" ry="1.02"/>
+          <ellipse class="st2" cx="304.54" cy="154.89" rx="1.24" ry="1.04"/>
+          <ellipse class="st2" cx="301.4" cy="154.89" rx="1.21" ry="1.02"/>
+          <ellipse class="st2" cx="304.54" cy="218.28" rx="1.24" ry="1.04"/>
+          <ellipse class="st2" cx="304.56" cy="173.38" rx="1.24" ry="1.04"/>
+          <ellipse class="st2" cx="301.4" cy="144.34" rx="1.21" ry="1.02"/>
+          <ellipse class="st2" cx="301.38" cy="231.49" rx="1.21" ry="1.02"/>
+          <ellipse class="st2" cx="301.4" cy="213" rx="1.21" ry="1.02"/>
+          <ellipse class="st2" cx="304.54" cy="165.44" rx="1.24" ry="1.04"/>
+          <ellipse class="st2" cx="304.54" cy="178.66" rx="1.24" ry="1.04"/>
+          <ellipse class="st2" cx="304.54" cy="210.36" rx="1.24" ry="1.04"/>
+          <ellipse class="st2" cx="301.4" cy="178.68" rx="1.21" ry="1.02"/>
+          <ellipse class="st2" cx="301.4" cy="191.87" rx="1.21" ry="1.02"/>
+          <ellipse class="st2" cx="301.4" cy="220.94" rx="1.21" ry="1.02"/>
+          <ellipse class="st2" cx="304.56" cy="162.83" rx="1.24" ry="1.04"/>
+          <ellipse class="st2" cx="304.54" cy="191.87" rx="1.24" ry="1.04"/>
+          <ellipse class="st2" cx="304.54" cy="168.11" rx="1.24" ry="1.04"/>
+          <ellipse class="st2" cx="304.54" cy="152.25" rx="1.24" ry="1.04"/>
+          <ellipse class="st2" cx="301.4" cy="194.51" rx="1.21" ry="1.02"/>
+          <path class="st2" d="M303.74,180.53c.47-.22,1.13-.41,1.29-.25l.69.71c.22.22-.08.99-.41,1.1-.55.22-1.46.19-1.76-.11-.3-.27-.25-1.29.19-1.48v.03Z"/>
+          <ellipse class="st2" cx="301.4" cy="152.25" rx="1.21" ry="1.02"/>
+          <ellipse class="st2" cx="304.56" cy="170.74" rx="1.24" ry="1.04"/>
+          <ellipse class="st2" cx="304.51" cy="186.6" rx="1.24" ry="1.02"/>
+          <ellipse class="st2" cx="301.38" cy="234.13" rx="1.21" ry="1.02"/>
+          <ellipse class="st2" cx="301.38" cy="199.79" rx="1.21" ry="1.02"/>
+          <ellipse class="st2" cx="301.4" cy="157.53" rx="1.21" ry="1.02"/>
+          <ellipse class="st2" cx="301.4" cy="226.22" rx="1.21" ry="1.02"/>
+          <ellipse class="st2" cx="301.4" cy="149.62" rx="1.21" ry="1.02"/>
+          <ellipse class="st2" cx="301.4" cy="202.42" rx="1.21" ry="1.02"/>
+          <ellipse class="st2" cx="298.24" cy="213" rx="1.18" ry=".99"/>
+          <ellipse class="st2" cx="301.4" cy="189.24" rx="1.21" ry="1.02"/>
+          <ellipse class="st2" cx="307.75" cy="183.96" rx="1.21" ry="1.02"/>
+          <ellipse class="st2" cx="301.4" cy="210.36" rx="1.21" ry="1.02"/>
+          <ellipse class="st2" cx="301.4" cy="228.85" rx="1.21" ry="1.02"/>
+          <ellipse class="st2" cx="301.4" cy="160.17" rx="1.21" ry="1.02"/>
+          <ellipse class="st2" cx="301.4" cy="146.98" rx="1.21" ry="1.02"/>
+          <ellipse class="st2" cx="304.56" cy="207.73" rx="1.24" ry="1.04"/>
+          <ellipse class="st2" cx="301.4" cy="218.28" rx="1.21" ry="1.02"/>
+          <ellipse class="st2" cx="301.4" cy="170.74" rx="1.21" ry="1.02"/>
+          <ellipse class="st2" cx="301.4" cy="223.58" rx="1.21" ry="1.02"/>
+          <ellipse class="st2" cx="298.24" cy="199.79" rx="1.18" ry=".99"/>
+          <ellipse class="st2" cx="298.24" cy="146.98" rx="1.18" ry=".99"/>
+          <path class="st2" d="M306.54,181.05c0-.27.6-.74.91-.8.36-.05,1.29.19,1.26.49l-.11,1.21c0,.25-.91.47-1.21.38-.36-.08-.82-.55-.85-1.29Z"/>
+          <ellipse class="st2" cx="298.24" cy="223.55" rx="1.18" ry=".99"/>
+          <ellipse class="st2" cx="298.24" cy="181.32" rx="1.18" ry=".99"/>
+          <ellipse class="st2" cx="295.08" cy="146.98" rx="1.15" ry=".99"/>
+          <path class="st2" d="M300.33,181.76c-.22-.69.11-1.29.71-1.48.44-.11,1.32.22,1.54.66.19.38-.25,1.04-.93,1.32-.36.14-1.26-.22-1.35-.52l.03.03Z"/>
+          <ellipse class="st2" cx="295.08" cy="220.91" rx="1.15" ry=".99"/>
+          <ellipse class="st2" cx="298.24" cy="231.49" rx="1.18" ry=".99"/>
+          <ellipse class="st2" cx="298.27" cy="183.96" rx="1.18" ry=".99"/>
+          <ellipse class="st2" cx="298.24" cy="191.87" rx="1.18" ry=".99"/>
+          <ellipse class="st2" cx="298.24" cy="152.25" rx="1.18" ry=".99"/>
+          <ellipse class="st2" cx="298.24" cy="228.85" rx="1.18" ry=".99"/>
+          <ellipse class="st2" cx="298.24" cy="186.6" rx="1.18" ry=".99"/>
+          <ellipse class="st2" cx="298.24" cy="160.17" rx="1.18" ry=".99"/>
+          <ellipse class="st2" cx="301.4" cy="207.73" rx="1.21" ry="1.02"/>
+          <ellipse class="st2" cx="301.4" cy="205.09" rx="1.21" ry="1.02"/>
+          <ellipse class="st2" cx="295.08" cy="149.62" rx="1.15" ry=".96"/>
+          <ellipse class="st2" cx="301.4" cy="162.83" rx="1.21" ry="1.02"/>
+          <ellipse class="st2" cx="295.08" cy="223.58" rx="1.15" ry=".96"/>
+          <ellipse class="st2" cx="298.24" cy="173.38" rx="1.18" ry=".99"/>
+          <ellipse class="st2" cx="298.24" cy="194.51" rx="1.18" ry=".99"/>
+          <ellipse class="st2" cx="298.24" cy="144.34" rx="1.18" ry=".99"/>
+          <ellipse class="st2" cx="298.24" cy="149.62" rx="1.18" ry=".99"/>
+          <ellipse class="st2" cx="298.24" cy="215.64" rx="1.18" ry=".99"/>
+          <ellipse class="st2" cx="298.24" cy="154.89" rx="1.18" ry=".99"/>
+          <path class="st2" d="M302.25,185.88c.22.25.41.63.44.82,0,.25-.44.69-.77.8-.49.16-1.4-.03-1.59-.36-.19-.36-.03-1.1.3-1.37.3-.25,1.35-.16,1.62.14v-.03Z"/>
+          <ellipse class="st2" cx="298.24" cy="218.28" rx="1.18" ry=".99"/>
+          <ellipse class="st2" cx="298.24" cy="207.73" rx="1.21" ry=".99"/>
+          <ellipse class="st2" cx="298.24" cy="157.53" rx="1.18" ry=".99"/>
+          <ellipse class="st2" cx="298.24" cy="178.68" rx="1.18" ry=".99"/>
+          <ellipse class="st2" cx="298.24" cy="170.74" rx="1.18" ry=".99"/>
+          <ellipse class="st2" cx="295.08" cy="144.34" rx="1.15" ry=".96"/>
+          <ellipse class="st2" cx="295.08" cy="226.22" rx="1.15" ry=".96"/>
+          <ellipse class="st2" cx="298.24" cy="226.22" rx="1.18" ry=".99"/>
+          <ellipse class="st2" cx="301.4" cy="168.11" rx="1.21" ry="1.02"/>
+          <ellipse class="st2" cx="295.08" cy="234.13" rx="1.15" ry=".99"/>
+          <ellipse class="st2" cx="301.38" cy="165.47" rx="1.21" ry="1.02"/>
+          <ellipse class="st2" cx="298.24" cy="234.13" rx="1.18" ry=".99"/>
+          <ellipse class="st2" cx="295.08" cy="191.87" rx="1.15" ry=".99"/>
+          <ellipse class="st2" cx="295.08" cy="194.51" rx="1.15" ry=".96"/>
+          <ellipse class="st2" cx="301.43" cy="183.96" rx="1.18" ry=".99"/>
+          <ellipse class="st2" cx="298.24" cy="162.8" rx="1.18" ry=".99"/>
+          <ellipse class="st2" cx="295.08" cy="152.25" rx="1.15" ry=".96"/>
+          <ellipse class="st2" cx="295.08" cy="228.85" rx="1.15" ry=".96"/>
+          <ellipse class="st2" cx="295.08" cy="231.49" rx="1.18" ry=".99"/>
+          <ellipse class="st2" cx="298.24" cy="220.91" rx="1.18" ry=".99"/>
+          <ellipse class="st2" cx="298.24" cy="176.02" rx="1.18" ry=".99"/>
+          <ellipse class="st2" cx="298.24" cy="168.11" rx="1.18" ry=".99"/>
+          <ellipse class="st2" cx="291.95" cy="191.87" rx="1.13" ry=".96"/>
+          <path class="st2" d="M297.06,189.24c0,.55.52.99,1.18.99s1.18-.44,1.18-.99-.52-.99-1.18-.99-1.18.44-1.18.99ZM297.5,188.93l.19-.11-.19.11Z"/>
+          <ellipse class="st2" cx="291.95" cy="220.94" rx="1.13" ry=".96"/>
+          <ellipse class="st2" cx="291.95" cy="152.25" rx="1.13" ry=".96"/>
+          <ellipse class="st2" cx="295.08" cy="218.28" rx="1.15" ry=".96"/>
+          <ellipse class="st2" cx="291.92" cy="228.85" rx="1.13" ry=".96"/>
+          <ellipse class="st2" cx="298.24" cy="165.47" rx="1.18" ry=".99"/>
+          <ellipse class="st2" cx="298.24" cy="202.42" rx="1.18" ry=".99"/>
+          <ellipse class="st2" cx="298.24" cy="210.36" rx="1.18" ry=".99"/>
+          <ellipse class="st2" cx="298.24" cy="197.15" rx="1.18" ry=".99"/>
+          <ellipse class="st2" cx="295.08" cy="178.68" rx="1.15" ry=".96"/>
+          <ellipse class="st2" cx="295.08" cy="186.6" rx="1.15" ry=".96"/>
+          <ellipse class="st2" cx="298.24" cy="205.09" rx="1.18" ry=".99"/>
+          <ellipse class="st2" cx="291.92" cy="144.34" rx="1.13" ry=".96"/>
+          <ellipse class="st2" cx="295.08" cy="215.64" rx="1.15" ry=".96"/>
+          <ellipse class="st2" cx="291.95" cy="231.49" rx="1.13" ry=".96"/>
+          <ellipse class="st2" cx="291.95" cy="146.98" rx="1.13" ry=".96"/>
+          <path class="st2" d="M294.18,181.87c-.38-.27-.19-1.13.19-1.37s1.43-.19,1.65.25c.25.49.16,1.1-.08,1.32-.33.27-1.18.22-1.76-.19Z"/>
+          <ellipse class="st2" cx="291.95" cy="149.62" rx="1.13" ry=".93"/>
+          <ellipse class="st2" cx="291.95" cy="226.22" rx="1.13" ry=".96"/>
+          <ellipse class="st2" cx="295.08" cy="197.15" rx="1.15" ry=".96"/>
+          <ellipse class="st2" cx="295.08" cy="154.89" rx="1.15" ry=".96"/>
+          <ellipse class="st2" cx="291.95" cy="223.58" rx="1.13" ry=".96"/>
+          <path class="st2" d="M294.12,188.74c.14-.27.96-.58,1.29-.47.52.19,1.02.85.82,1.24-.19.41-.96.74-1.4.66-.66-.14-1.04-.71-.71-1.43Z"/>
+          <ellipse class="st2" cx="295.08" cy="168.11" rx="1.15" ry=".99"/>
+          <ellipse class="st2" cx="291.95" cy="218.28" rx="1.15" ry=".96"/>
+          <ellipse class="st2" cx="295.08" cy="213" rx="1.15" ry=".99"/>
+          <ellipse class="st2" cx="295.08" cy="170.74" rx="1.15" ry=".99"/>
+          <path class="st2" d="M294.2,183.3c.38-.19,1.32-.3,1.57-.16.3.16.47.63.49,1.04,0,.3-.69.82-1.04.74-.44-.11-.93-.3-1.18-.44s-.11-1.04.16-1.15v-.03Z"/>
+          <ellipse class="st2" cx="295.08" cy="165.47" rx="1.18" ry=".99"/>
+          <ellipse class="st2" cx="295.08" cy="157.53" rx="1.15" ry=".96"/>
+          <ellipse class="st2" cx="295.08" cy="210.36" rx="1.15" ry=".99"/>
+          <ellipse class="st2" cx="291.95" cy="181.32" rx="1.13" ry=".96"/>
+          <ellipse class="st2" cx="291.95" cy="234.13" rx="1.13" ry=".96"/>
+          <ellipse class="st2" cx="295.08" cy="176.02" rx="1.15" ry=".96"/>
+          <ellipse class="st2" cx="291.95" cy="178.66" rx="1.13" ry=".96"/>
+          <ellipse class="st2" cx="295.08" cy="199.79" rx="1.15" ry=".96"/>
+          <ellipse class="st2" cx="295.08" cy="160.19" rx="1.15" ry=".96"/>
+          <ellipse class="st2" cx="291.95" cy="194.51" rx="1.13" ry=".96"/>
+          <path class="st2" d="M291.21,185.86c.49-.11,1.07-.16,1.35-.11.3.05.66.74.52.99-.19.36-.69.82-1.04.82s-.93-.27-1.15-.49,0-1.13.33-1.21Z"/>
+          <ellipse class="st2" cx="288.79" cy="144.34" rx="1.13" ry=".93"/>
+          <ellipse class="st2" cx="291.95" cy="157.53" rx="1.13" ry=".96"/>
+          <ellipse class="st2" cx="291.95" cy="215.64" rx="1.13" ry=".96"/>
+          <ellipse class="st2" cx="288.79" cy="152.25" rx="1.13" ry=".93"/>
+          <ellipse class="st2" cx="291.95" cy="173.38" rx="1.13" ry=".96"/>
+          <ellipse class="st2" cx="291.95" cy="176.02" rx="1.13" ry=".96"/>
+          <ellipse class="st2" cx="288.79" cy="146.98" rx="1.1" ry=".93"/>
+          <ellipse class="st2" cx="295.08" cy="207.73" rx="1.15" ry=".99"/>
+          <ellipse class="st2" cx="288.79" cy="223.55" rx="1.1" ry=".93"/>
+          <ellipse class="st2" cx="288.79" cy="194.51" rx="1.13" ry=".93"/>
+          <ellipse class="st2" cx="288.79" cy="228.85" rx="1.1" ry=".93"/>
+          <ellipse class="st2" cx="291.95" cy="202.45" rx="1.13" ry=".96"/>
+          <ellipse class="st2" cx="295.08" cy="205.06" rx="1.15" ry=".96"/>
+          <ellipse class="st2" cx="291.95" cy="197.15" rx="1.13" ry=".96"/>
+          <ellipse class="st2" cx="295.08" cy="202.42" rx="1.15" ry=".96"/>
+          <ellipse class="st2" cx="291.95" cy="213" rx="1.13" ry=".96"/>
+          <ellipse class="st2" cx="288.79" cy="226.22" rx="1.13" ry=".93"/>
+          <ellipse class="st2" cx="288.79" cy="149.62" rx="1.1" ry=".93"/>
+          <ellipse class="st2" cx="295.08" cy="162.83" rx="1.15" ry=".96"/>
+          <ellipse class="st2" cx="288.79" cy="189.24" rx="1.1" ry=".93"/>
+          <ellipse class="st2" cx="291.95" cy="199.79" rx="1.13" ry=".96"/>
+          <ellipse class="st2" cx="288.79" cy="154.89" rx="1.13" ry=".93"/>
+          <ellipse class="st2" cx="291.95" cy="170.74" rx="1.13" ry=".96"/>
+          <ellipse class="st2" cx="285.63" cy="226.22" rx="1.1" ry=".91"/>
+          <ellipse class="st2" cx="288.79" cy="199.79" rx="1.13" ry=".93"/>
+          <ellipse class="st2" cx="288.79" cy="205.09" rx="1.13" ry=".93"/>
+          <ellipse class="st2" cx="288.79" cy="202.42" rx="1.13" ry=".93"/>
+          <ellipse class="st2" cx="291.92" cy="189.24" rx="1.1" ry=".93"/>
+          <ellipse class="st2" cx="295.08" cy="173.38" rx="1.15" ry=".96"/>
+          <ellipse class="st2" cx="288.79" cy="162.83" rx="1.13" ry=".93"/>
+          <ellipse class="st2" cx="291.95" cy="210.36" rx="1.13" ry=".96"/>
+          <ellipse class="st2" cx="288.79" cy="191.87" rx="1.13" ry=".93"/>
+          <ellipse class="st2" cx="288.79" cy="173.38" rx="1.13" ry=".93"/>
+          <ellipse class="st2" cx="291.95" cy="154.89" rx="1.13" ry=".96"/>
+          <ellipse class="st2" cx="288.79" cy="160.17" rx="1.13" ry=".93"/>
+          <ellipse class="st2" cx="288.79" cy="176.02" rx="1.13" ry=".93"/>
+          <ellipse class="st2" cx="291.95" cy="207.73" rx="1.13" ry=".96"/>
+          <ellipse class="st2" cx="288.79" cy="207.73" rx="1.13" ry=".93"/>
+          <ellipse class="st2" cx="291.95" cy="162.83" rx="1.13" ry=".96"/>
+          <ellipse class="st2" cx="291.95" cy="205.06" rx="1.13" ry=".96"/>
+          <ellipse class="st2" cx="288.79" cy="165.47" rx="1.13" ry=".93"/>
+          <ellipse class="st2" cx="288.79" cy="168.11" rx="1.13" ry=".93"/>
+          <ellipse class="st2" cx="291.95" cy="168.11" rx="1.13" ry=".96"/>
+          <ellipse class="st2" cx="288.79" cy="197.15" rx="1.13" ry=".93"/>
+          <ellipse class="st2" cx="288.79" cy="178.68" rx="1.13" ry=".93"/>
+          <ellipse class="st2" cx="288.79" cy="183.96" rx="1.1" ry=".93"/>
+          <ellipse class="st2" cx="288.79" cy="186.6" rx="1.1" ry=".93"/>
+          <ellipse class="st2" cx="288.79" cy="220.91" rx="1.13" ry=".93"/>
+          <ellipse class="st2" cx="288.79" cy="218.28" rx="1.13" ry=".93"/>
+          <ellipse class="st2" cx="288.79" cy="170.74" rx="1.1" ry=".93"/>
+          <ellipse class="st2" cx="291.95" cy="165.44" rx="1.13" ry=".93"/>
+          <ellipse class="st2" cx="288.79" cy="215.64" rx="1.13" ry=".93"/>
+          <ellipse class="st2" cx="288.79" cy="213" rx="1.1" ry=".93"/>
+          <ellipse class="st2" cx="288.79" cy="210.36" rx="1.13" ry=".93"/>
+          <ellipse class="st2" cx="288.79" cy="157.53" rx="1.13" ry=".93"/>
+          <ellipse class="st2" cx="291.95" cy="160.19" rx="1.13" ry=".93"/>
+          <path class="st2" d="M291.18,184.65c-.41-.11-.47-1.15-.14-1.37s1.35-.25,1.76,0,.27,1.26-.19,1.46c-.19.08-1.04.03-1.43-.08Z"/>
+          <ellipse class="st2" cx="288.79" cy="231.49" rx="1.1" ry=".93"/>
+          <ellipse class="st2" cx="285.63" cy="144.34" rx="1.1" ry=".91"/>
+          <ellipse class="st2" cx="288.79" cy="234.13" rx="1.1" ry=".93"/>
+          <ellipse class="st2" cx="285.66" cy="168.11" rx="1.1" ry=".91"/>
+          <ellipse class="st2" cx="285.66" cy="146.98" rx="1.07" ry=".91"/>
+          <ellipse class="st2" cx="285.63" cy="162.83" rx="1.1" ry=".91"/>
+          <ellipse class="st2" cx="285.63" cy="207.73" rx="1.1" ry=".91"/>
+          <ellipse class="st2" cx="285.63" cy="157.53" rx="1.1" ry=".91"/>
+          <ellipse class="st2" cx="282.5" cy="168.11" rx="1.07" ry=".91"/>
+          <ellipse class="st2" cx="288.79" cy="181.29" rx="1.1" ry=".93"/>
+          <ellipse class="st2" cx="285.63" cy="178.68" rx="1.1" ry=".91"/>
+          <ellipse class="st2" cx="285.63" cy="220.91" rx="1.07" ry=".91"/>
+          <ellipse class="st2" cx="285.63" cy="176.02" rx="1.1" ry=".91"/>
+          <ellipse class="st2" cx="285.63" cy="210.36" rx="1.1" ry=".91"/>
+          <ellipse class="st2" cx="285.63" cy="202.42" rx="1.1" ry=".91"/>
+          <ellipse class="st2" cx="285.63" cy="199.79" rx="1.1" ry=".91"/>
+          <ellipse class="st2" cx="285.63" cy="160.17" rx="1.1" ry=".91"/>
+          <ellipse class="st2" cx="285.63" cy="205.09" rx="1.1" ry=".91"/>
+          <ellipse class="st2" cx="285.63" cy="170.74" rx="1.1" ry=".91"/>
+          <ellipse class="st2" cx="285.63" cy="234.13" rx="1.1" ry=".91"/>
+          <ellipse class="st2" cx="285.63" cy="189.24" rx="1.1" ry=".91"/>
+          <ellipse class="st2" cx="285.63" cy="215.64" rx="1.1" ry=".91"/>
+          <ellipse class="st2" cx="282.47" cy="210.36" rx="1.07" ry=".91"/>
+          <ellipse class="st2" cx="282.47" cy="207.73" rx="1.07" ry=".91"/>
+          <ellipse class="st2" cx="285.66" cy="228.85" rx="1.1" ry=".91"/>
+          <ellipse class="st2" cx="282.47" cy="162.8" rx="1.07" ry=".91"/>
+          <ellipse class="st2" cx="282.5" cy="205.09" rx="1.07" ry=".91"/>
+          <ellipse class="st2" cx="285.66" cy="173.38" rx="1.1" ry=".91"/>
+          <ellipse class="st2" cx="285.63" cy="152.25" rx="1.07" ry=".91"/>
+          <ellipse class="st2" cx="285.63" cy="213" rx="1.1" ry=".91"/>
+          <ellipse class="st2" cx="285.63" cy="191.87" rx="1.07" ry=".91"/>
+          <ellipse class="st2" cx="285.63" cy="165.47" rx="1.1" ry=".91"/>
+          <ellipse class="st2" cx="282.47" cy="165.47" rx="1.07" ry=".91"/>
+          <ellipse class="st2" cx="285.63" cy="197.15" rx="1.1" ry=".91"/>
+          <ellipse class="st2" cx="282.47" cy="202.42" rx="1.07" ry=".91"/>
+          <ellipse class="st2" cx="285.63" cy="218.28" rx="1.1" ry=".91"/>
+          <ellipse class="st2" cx="282.47" cy="213" rx="1.07" ry=".91"/>
+          <ellipse class="st2" cx="285.66" cy="194.51" rx="1.07" ry=".91"/>
+          <ellipse class="st2" cx="279.34" cy="210.36" rx="1.04" ry=".88"/>
+          <ellipse class="st2" cx="285.66" cy="223.55" rx="1.1" ry=".91"/>
+          <ellipse class="st2" cx="285.63" cy="154.89" rx="1.1" ry=".91"/>
+          <ellipse class="st2" cx="285.66" cy="149.62" rx="1.1" ry=".91"/>
+          <ellipse class="st2" cx="285.63" cy="231.49" rx="1.1" ry=".91"/>
+          <ellipse class="st2" cx="282.5" cy="234.13" rx="1.07" ry=".88"/>
+          <ellipse class="st2" cx="279.34" cy="170.74" rx="1.04" ry=".88"/>
+          <ellipse class="st2" cx="282.5" cy="170.74" rx="1.07" ry=".88"/>
+          <ellipse class="st2" cx="285.69" cy="186.6" rx="1.04" ry=".88"/>
+          <ellipse class="st2" cx="279.34" cy="168.11" rx="1.04" ry=".88"/>
+          <ellipse class="st2" cx="282.47" cy="157.56" rx="1.07" ry=".88"/>
+          <ellipse class="st2" cx="285.71" cy="183.96" rx="1.04" ry=".88"/>
+          <ellipse class="st2" cx="282.47" cy="197.15" rx="1.07" ry=".88"/>
+          <ellipse class="st2" cx="279.34" cy="205.09" rx="1.04" ry=".88"/>
+          <ellipse class="st2" cx="279.34" cy="202.45" rx="1.04" ry=".88"/>
+          <ellipse class="st2" cx="282.47" cy="199.81" rx="1.07" ry=".88"/>
+          <ellipse class="st2" cx="282.47" cy="154.89" rx="1.07" ry=".88"/>
+          <ellipse class="st2" cx="282.47" cy="178.66" rx="1.07" ry=".88"/>
+          <ellipse class="st2" cx="279.34" cy="162.83" rx="1.04" ry=".88"/>
+          <ellipse class="st2" cx="282.5" cy="194.51" rx="1.07" ry=".88"/>
+          <ellipse class="st2" cx="282.47" cy="231.49" rx="1.07" ry=".88"/>
+          <ellipse class="st2" cx="282.47" cy="176.02" rx="1.07" ry=".88"/>
+          <ellipse class="st2" cx="282.5" cy="160.19" rx="1.07" ry=".88"/>
+          <ellipse class="st2" cx="279.34" cy="220.91" rx="1.04" ry=".88"/>
+          <ellipse class="st2" cx="282.47" cy="215.64" rx="1.07" ry=".91"/>
+          <ellipse class="st2" cx="282.47" cy="218.28" rx="1.07" ry=".88"/>
+          <ellipse class="st2" cx="282.47" cy="173.38" rx="1.07" ry=".88"/>
+          <ellipse class="st2" cx="279.34" cy="165.47" rx="1.04" ry=".88"/>
+          <ellipse class="st2" cx="279.34" cy="191.87" rx="1.04" ry=".88"/>
+          <ellipse class="st2" cx="285.63" cy="181.29" rx="1.07" ry=".91"/>
+          <ellipse class="st2" cx="282.5" cy="152.25" rx="1.07" ry=".88"/>
+          <ellipse class="st2" cx="282.5" cy="191.87" rx="1.07" ry=".88"/>
+          <ellipse class="st2" cx="279.34" cy="157.56" rx="1.04" ry=".88"/>
+          <ellipse class="st2" cx="279.34" cy="213" rx="1.04" ry=".88"/>
+          <ellipse class="st2" cx="279.34" cy="197.18" rx="1.04" ry=".88"/>
+          <ellipse class="st2" cx="282.5" cy="149.62" rx="1.07" ry=".88"/>
+          <ellipse class="st2" cx="279.34" cy="160.19" rx="1.04" ry=".88"/>
+          <ellipse class="st2" cx="279.34" cy="199.79" rx="1.04" ry=".88"/>
+          <ellipse class="st2" cx="279.34" cy="207.73" rx="1.04" ry=".88"/>
+          <ellipse class="st2" cx="279.34" cy="176.02" rx="1.04" ry=".88"/>
+          <ellipse class="st2" cx="282.5" cy="220.91" rx="1.07" ry=".88"/>
+          <ellipse class="st2" cx="279.34" cy="215.64" rx="1.04" ry=".88"/>
+          <ellipse class="st2" cx="279.34" cy="194.51" rx="1.04" ry=".88"/>
+          <ellipse class="st2" cx="276.18" cy="173.38" rx="1.02" ry=".85"/>
+          <ellipse class="st2" cx="279.34" cy="173.38" rx="1.04" ry=".88"/>
+          <ellipse class="st2" cx="282.5" cy="186.6" rx="1.07" ry=".88"/>
+          <ellipse class="st2" cx="276.18" cy="157.56" rx="1.02" ry=".85"/>
+          <ellipse class="st2" cx="276.18" cy="215.64" rx="1.02" ry=".85"/>
+          <ellipse class="st2" cx="282.5" cy="228.85" rx="1.07" ry=".91"/>
+          <ellipse class="st2" cx="276.21" cy="205.09" rx="1.02" ry=".85"/>
+          <ellipse class="st2" cx="276.18" cy="162.83" rx="1.02" ry=".85"/>
+          <ellipse class="st2" cx="276.18" cy="176.02" rx="1.02" ry=".85"/>
+          <ellipse class="st2" cx="279.34" cy="152.25" rx="1.04" ry=".88"/>
+          <ellipse class="st2" cx="279.34" cy="181.32" rx="1.04" ry=".88"/>
+          <ellipse class="st2" cx="276.21" cy="207.73" rx="1.02" ry=".85"/>
+          <ellipse class="st2" cx="276.18" cy="202.42" rx="1.02" ry=".85"/>
+          <ellipse class="st2" cx="276.18" cy="194.51" rx="1.02" ry=".85"/>
+          <ellipse class="st2" cx="276.18" cy="213" rx="1.02" ry=".85"/>
+          <ellipse class="st2" cx="282.5" cy="146.98" rx="1.07" ry=".88"/>
+          <ellipse class="st2" cx="282.5" cy="226.22" rx="1.07" ry=".88"/>
+          <ellipse class="st2" cx="279.34" cy="218.28" rx="1.04" ry=".88"/>
+          <ellipse class="st2" cx="282.5" cy="181.32" rx="1.07" ry=".88"/>
+          <ellipse class="st2" cx="282.5" cy="144.34" rx="1.07" ry=".91"/>
+          <ellipse class="st2" cx="276.18" cy="197.15" rx="1.02" ry=".85"/>
+          <ellipse class="st2" cx="276.18" cy="160.19" rx="1.02" ry=".85"/>
+          <ellipse class="st2" cx="276.18" cy="154.89" rx="1.02" ry=".85"/>
+          <ellipse class="st2" cx="279.34" cy="234.13" rx="1.04" ry=".88"/>
+          <ellipse class="st2" cx="276.18" cy="234.13" rx="1.02" ry=".85"/>
+          <ellipse class="st2" cx="276.18" cy="210.36" rx="1.02" ry=".85"/>
+          <ellipse class="st2" cx="279.34" cy="154.92" rx="1.04" ry=".88"/>
+          <ellipse class="st2" cx="276.21" cy="165.47" rx="1.02" ry=".85"/>
+          <ellipse class="st2" cx="279.34" cy="231.49" rx="1.04" ry=".88"/>
+          <ellipse class="st2" cx="282.47" cy="189.24" rx="1.04" ry=".88"/>
+          <ellipse class="st2" cx="276.18" cy="178.66" rx="1.02" ry=".85"/>
+          <ellipse class="st2" cx="279.34" cy="178.66" rx="1.04" ry=".88"/>
+          <ellipse class="st2" cx="279.34" cy="223.58" rx="1.04" ry=".88"/>
+          <ellipse class="st2" cx="276.21" cy="170.74" rx="1.02" ry=".85"/>
+          <ellipse class="st2" cx="276.18" cy="228.83" rx="1.02" ry=".85"/>
+          <ellipse class="st2" cx="276.18" cy="168.11" rx=".99" ry=".85"/>
+          <ellipse class="st2" cx="276.21" cy="191.87" rx="1.02" ry=".85"/>
+          <ellipse class="st2" cx="279.34" cy="228.85" rx="1.04" ry=".88"/>
+          <ellipse class="st2" cx="282.5" cy="223.58" rx="1.07" ry=".88"/>
+          <ellipse class="st2" cx="276.18" cy="199.79" rx="1.02" ry=".85"/>
+          <ellipse class="st2" cx="279.34" cy="144.34" rx="1.04" ry=".88"/>
+          <ellipse class="st2" cx="282.47" cy="183.93" rx="1.04" ry=".88"/>
+          <ellipse class="st2" cx="276.18" cy="149.62" rx="1.02" ry=".85"/>
+          <ellipse class="st2" cx="276.18" cy="218.28" rx="1.02" ry=".85"/>
+          <ellipse class="st2" cx="279.34" cy="149.62" rx="1.04" ry=".88"/>
+          <ellipse class="st2" cx="273.05" cy="202.45" rx=".99" ry=".82"/>
+          <ellipse class="st2" cx="276.18" cy="220.91" rx="1.02" ry=".85"/>
+          <ellipse class="st2" cx="273.05" cy="173.38" rx=".99" ry=".82"/>
+          <ellipse class="st2" cx="273.05" cy="168.11" rx=".99" ry=".82"/>
+          <ellipse class="st2" cx="276.18" cy="152.25" rx="1.02" ry=".85"/>
+          <ellipse class="st2" cx="273.02" cy="191.87" rx=".99" ry=".85"/>
+          <ellipse class="st2" cx="276.21" cy="223.55" rx="1.02" ry=".85"/>
+          <ellipse class="st2" cx="273.05" cy="210.36" rx=".99" ry=".82"/>
+          <ellipse class="st2" cx="269.89" cy="210.36" rx=".96" ry=".82"/>
+          <ellipse class="st2" cx="276.21" cy="231.49" rx="1.02" ry=".85"/>
+          <ellipse class="st2" cx="276.18" cy="144.34" rx="1.02" ry=".85"/>
+          <ellipse class="st2" cx="273.05" cy="197.15" rx=".99" ry=".82"/>
+          <ellipse class="st2" cx="273.05" cy="146.98" rx=".99" ry=".82"/>
+          <ellipse class="st2" cx="279.34" cy="186.57" rx="1.02" ry=".85"/>
+          <ellipse class="st2" cx="273.02" cy="149.62" rx=".99" ry=".82"/>
+          <ellipse class="st2" cx="279.34" cy="183.96" rx="1.04" ry=".88"/>
+          <ellipse class="st2" cx="269.89" cy="202.45" rx=".96" ry=".82"/>
+          <ellipse class="st2" cx="279.31" cy="189.26" rx="1.02" ry=".85"/>
+          <ellipse class="st2" cx="269.89" cy="160.19" rx=".96" ry=".82"/>
+          <ellipse class="st2" cx="269.89" cy="157.53" rx=".96" ry=".8"/>
+          <ellipse class="st2" cx="273.05" cy="157.53" rx=".99" ry=".82"/>
+          <ellipse class="st2" cx="273.02" cy="223.55" rx=".99" ry=".82"/>
+          <ellipse class="st2" cx="273.02" cy="144.34" rx=".99" ry=".82"/>
+          <ellipse class="st2" cx="273.05" cy="213" rx=".99" ry=".82"/>
+          <ellipse class="st2" cx="273.05" cy="165.47" rx=".99" ry=".82"/>
+          <ellipse class="st2" cx="273.02" cy="226.22" rx=".99" ry=".82"/>
+          <ellipse class="st2" cx="276.18" cy="226.22" rx="1.02" ry=".85"/>
+          <ellipse class="st2" cx="279.34" cy="226.22" rx="1.04" ry=".88"/>
+          <ellipse class="st2" cx="273.05" cy="162.83" rx=".99" ry=".82"/>
+          <ellipse class="st2" cx="269.89" cy="205.06" rx=".96" ry=".8"/>
+          <ellipse class="st2" cx="273.05" cy="205.09" rx=".99" ry=".82"/>
+          <ellipse class="st2" cx="276.18" cy="181.32" rx="1.02" ry=".85"/>
+          <ellipse class="st2" cx="273.05" cy="170.74" rx=".99" ry=".82"/>
+          <ellipse class="st2" cx="273.05" cy="160.19" rx=".99" ry=".82"/>
+          <ellipse class="st2" cx="273.02" cy="228.85" rx=".99" ry=".82"/>
+          <ellipse class="st2" cx="273.05" cy="199.79" rx=".99" ry=".82"/>
+          <ellipse class="st2" cx="279.34" cy="146.98" rx="1.04" ry=".88"/>
+          <ellipse class="st2" cx="269.89" cy="162.83" rx=".96" ry=".82"/>
+          <ellipse class="st2" cx="276.18" cy="146.98" rx="1.02" ry=".85"/>
+          <ellipse class="st2" cx="269.89" cy="165.47" rx=".96" ry=".8"/>
+          <ellipse class="st2" cx="269.89" cy="197.15" rx=".96" ry=".82"/>
+          <path class="st2" d="M275.25,189.56c-.14-.27.19-1.04.49-1.13.38-.11,1.21.16,1.4.47s-.25,1.13-.66,1.18c-.25.03-1.15-.3-1.26-.52h.03Z"/>
+          <ellipse class="st2" cx="269.89" cy="234.1" rx=".96" ry=".82"/>
+          <ellipse class="st2" cx="269.89" cy="168.11" rx=".96" ry=".8"/>
+          <ellipse class="st2" cx="273.02" cy="152.25" rx=".99" ry=".82"/>
+          <ellipse class="st2" cx="273.05" cy="154.89" rx=".99" ry=".82"/>
+          <ellipse class="st2" cx="269.89" cy="199.79" rx=".96" ry=".82"/>
+          <ellipse class="st2" cx="273.05" cy="231.49" rx=".99" ry=".82"/>
+          <path class="st2" d="M275.27,186.21c.19-.14.96-.44,1.21-.44.41,0,.88.88.66,1.18s-.99.55-1.4.41c-.38-.11-.77-.93-.47-1.18v.03Z"/>
+          <ellipse class="st2" cx="269.89" cy="173.38" rx=".96" ry=".82"/>
+          <ellipse class="st2" cx="273.05" cy="194.51" rx=".99" ry=".82"/>
+          <ellipse class="st2" cx="273.02" cy="189.24" rx=".99" ry=".82"/>
+          <ellipse class="st2" cx="273.05" cy="178.68" rx=".99" ry=".82"/>
+          <ellipse class="st2" cx="273.05" cy="215.64" rx=".99" ry=".82"/>
+          <ellipse class="st2" cx="269.89" cy="207.73" rx=".96" ry=".8"/>
+          <ellipse class="st2" cx="273.05" cy="207.73" rx=".99" ry=".82"/>
+          <ellipse class="st2" cx="273.05" cy="220.91" rx=".99" ry=".82"/>
+          <ellipse class="st2" cx="273.05" cy="218.3" rx=".99" ry=".82"/>
+          <ellipse class="st2" cx="269.89" cy="215.64" rx=".96" ry=".82"/>
+          <ellipse class="st2" cx="269.89" cy="178.68" rx=".96" ry=".82"/>
+          <ellipse class="st2" cx="269.89" cy="176.02" rx=".96" ry=".82"/>
+          <ellipse class="st2" cx="273.05" cy="176.02" rx=".99" ry=".82"/>
+          <ellipse class="st2" cx="269.89" cy="170.74" rx=".96" ry=".8"/>
+          <ellipse class="st2" cx="276.18" cy="183.96" rx="1.02" ry=".85"/>
+          <ellipse class="st2" cx="269.89" cy="213" rx=".96" ry=".82"/>
+          <ellipse class="st2" cx="269.89" cy="220.94" rx=".96" ry=".82"/>
+          <ellipse class="st2" cx="269.89" cy="154.89" rx=".96" ry=".8"/>
+          <ellipse class="st2" cx="266.76" cy="173.38" rx=".93" ry=".8"/>
+          <ellipse class="st2" cx="273.05" cy="186.54" rx=".96" ry=".8"/>
+          <ellipse class="st2" cx="266.76" cy="170.74" rx=".96" ry=".8"/>
+          <ellipse class="st2" cx="269.89" cy="186.6" rx=".96" ry=".8"/>
+          <ellipse class="st2" cx="273.02" cy="181.29" rx=".99" ry=".82"/>
+          <ellipse class="st2" cx="266.73" cy="168.11" rx=".93" ry=".8"/>
+          <ellipse class="st2" cx="269.89" cy="226.22" rx=".96" ry=".82"/>
+          <ellipse class="st2" cx="269.89" cy="231.49" rx=".96" ry=".82"/>
+          <ellipse class="st2" cx="269.86" cy="183.93" rx=".93" ry=".8"/>
+          <ellipse class="st2" cx="269.89" cy="228.85" rx=".96" ry=".82"/>
+          <ellipse class="st2" cx="266.73" cy="202.42" rx=".93" ry=".8"/>
+          <ellipse class="st2" cx="269.86" cy="189.24" rx=".96" ry=".8"/>
+          <ellipse class="st2" cx="273.05" cy="234.13" rx=".99" ry=".82"/>
+          <ellipse class="st2" cx="266.76" cy="199.79" rx=".93" ry=".8"/>
+          <ellipse class="st2" cx="266.76" cy="234.13" rx=".93" ry=".8"/>
+          <ellipse class="st2" cx="269.89" cy="146.98" rx=".96" ry=".8"/>
+          <ellipse class="st2" cx="266.76" cy="157.53" rx=".96" ry=".8"/>
+          <ellipse class="st2" cx="269.89" cy="152.25" rx=".96" ry=".8"/>
+          <ellipse class="st2" cx="266.76" cy="154.89" rx=".93" ry=".8"/>
+          <ellipse class="st2" cx="273.08" cy="183.96" rx=".96" ry=".82"/>
+          <ellipse class="st2" cx="269.89" cy="181.32" rx=".96" ry=".8"/>
+          <ellipse class="st2" cx="266.76" cy="210.36" rx=".93" ry=".8"/>
+          <path class="st2" d="M268.95,194.79c-.11-.22,0-.85.25-.91.36-.08.99-.11,1.32,0s.41.96.19,1.18c-.47.41-1.54.19-1.73-.25l-.03-.03Z"/>
+          <ellipse class="st2" cx="266.76" cy="160.17" rx=".93" ry=".8"/>
+          <ellipse class="st2" cx="266.73" cy="149.62" rx=".93" ry=".8"/>
+          <ellipse class="st2" cx="266.76" cy="178.68" rx=".93" ry=".8"/>
+          <ellipse class="st2" cx="266.73" cy="162.8" rx=".93" ry=".8"/>
+          <ellipse class="st2" cx="266.76" cy="176.02" rx=".93" ry=".8"/>
+          <ellipse class="st2" cx="269.89" cy="218.28" rx=".96" ry=".8"/>
+          <ellipse class="st2" cx="269.89" cy="149.62" rx=".96" ry=".8"/>
+          <ellipse class="st2" cx="266.76" cy="144.34" rx=".93" ry=".8"/>
+          <ellipse class="st2" cx="266.73" cy="220.91" rx=".93" ry=".8"/>
+          <ellipse class="st2" cx="266.76" cy="218.28" rx=".93" ry=".8"/>
+          <ellipse class="st2" cx="266.76" cy="215.64" rx=".93" ry=".8"/>
+          <ellipse class="st2" cx="266.73" cy="152.25" rx=".93" ry=".8"/>
+          <ellipse class="st2" cx="266.76" cy="191.87" rx=".93" ry=".8"/>
+          <ellipse class="st2" cx="266.76" cy="223.58" rx=".93" ry=".8"/>
+          <ellipse class="st2" cx="269.89" cy="144.34" rx=".96" ry=".8"/>
+          <ellipse class="st2" cx="269.89" cy="223.58" rx=".96" ry=".82"/>
+          <ellipse class="st2" cx="266.76" cy="213" rx=".93" ry=".8"/>
+          <ellipse class="st2" cx="266.76" cy="226.22" rx=".93" ry=".8"/>
+          <ellipse class="st2" cx="266.76" cy="146.98" rx=".93" ry=".8"/>
+          <ellipse class="st2" cx="266.76" cy="231.49" rx=".93" ry=".8"/>
+          <ellipse class="st2" cx="266.76" cy="205.09" rx=".93" ry=".8"/>
+          <ellipse class="st2" cx="266.76" cy="228.85" rx=".93" ry=".8"/>
+          <ellipse class="st2" cx="266.73" cy="165.47" rx=".93" ry=".8"/>
+          <ellipse class="st2" cx="266.73" cy="207.73" rx=".93" ry=".8"/>
+          <ellipse class="st2" cx="266.76" cy="189.24" rx=".93" ry=".8"/>
+          <ellipse class="st2" cx="263.57" cy="197.18" rx=".91" ry=".77"/>
+          <ellipse class="st2" cx="263.6" cy="213" rx=".91" ry=".77"/>
+          <ellipse class="st2" cx="263.6" cy="199.79" rx=".93" ry=".77"/>
+          <ellipse class="st2" cx="263.6" cy="215.64" rx=".93" ry=".77"/>
+          <ellipse class="st2" cx="266.73" cy="183.96" rx=".91" ry=".77"/>
+          <ellipse class="st2" cx="263.6" cy="176.02" rx=".93" ry=".77"/>
+          <ellipse class="st2" cx="263.6" cy="210.36" rx=".91" ry=".77"/>
+          <ellipse class="st2" cx="263.6" cy="223.55" rx=".93" ry=".77"/>
+          <ellipse class="st2" cx="263.6" cy="170.74" rx=".93" ry=".77"/>
+          <path class="st2" d="M265.88,181.05c.03-.3.88-.69,1.18-.55s.74.77.55.99c-.25.33-.63.63-.88.66-.38.05-.93-.41-.85-1.1Z"/>
+          <ellipse class="st2" cx="263.6" cy="152.25" rx=".91" ry=".77"/>
+          <ellipse class="st2" cx="263.6" cy="220.94" rx=".91" ry=".77"/>
+          <ellipse class="st2" cx="263.6" cy="168.11" rx=".91" ry=".77"/>
+          <ellipse class="st2" cx="263.62" cy="183.96" rx=".91" ry=".74"/>
+          <ellipse class="st2" cx="260.44" cy="226.22" rx=".88" ry=".74"/>
+          <ellipse class="st2" cx="263.6" cy="165.47" rx=".93" ry=".77"/>
+          <ellipse class="st2" cx="260.44" cy="152.25" rx=".91" ry=".77"/>
+          <ellipse class="st2" cx="263.6" cy="189.24" rx=".91" ry=".77"/>
+          <ellipse class="st2" cx="263.6" cy="228.83" rx=".91" ry=".77"/>
+          <ellipse class="st2" cx="263.6" cy="146.98" rx=".93" ry=".77"/>
+          <ellipse class="st2" cx="263.6" cy="154.89" rx=".91" ry=".77"/>
+          <ellipse class="st2" cx="263.6" cy="218.28" rx=".91" ry=".77"/>
+          <ellipse class="st2" cx="266.7" cy="186.6" rx=".91" ry=".77"/>
+          <ellipse class="st2" cx="263.6" cy="173.41" rx=".93" ry=".77"/>
+          <ellipse class="st2" cx="260.44" cy="220.91" rx=".91" ry=".74"/>
+          <ellipse class="st2" cx="257.28" cy="144.34" rx=".88" ry=".74"/>
+          <ellipse class="st2" cx="260.44" cy="144.34" rx=".88" ry=".74"/>
+          <ellipse class="st2" cx="263.6" cy="144.34" rx=".91" ry=".77"/>
+          <ellipse class="st2" cx="260.44" cy="228.85" rx=".88" ry=".74"/>
+          <ellipse class="st2" cx="263.6" cy="202.42" rx=".91" ry=".77"/>
+          <ellipse class="st2" cx="257.28" cy="228.85" rx=".88" ry=".74"/>
+          <ellipse class="st2" cx="260.44" cy="231.49" rx=".91" ry=".74"/>
+          <ellipse class="st2" cx="260.44" cy="146.98" rx=".91" ry=".74"/>
+          <ellipse class="st2" cx="263.6" cy="160.17" rx=".93" ry=".77"/>
+          <ellipse class="st2" cx="263.6" cy="231.49" rx=".93" ry=".77"/>
+          <ellipse class="st2" cx="263.6" cy="234.13" rx=".93" ry=".77"/>
+          <ellipse class="st2" cx="263.62" cy="186.6" rx=".91" ry=".77"/>
+          <ellipse class="st2" cx="260.44" cy="186.6" rx=".91" ry=".77"/>
+          <ellipse class="st2" cx="263.6" cy="178.66" rx=".91" ry=".77"/>
+          <ellipse class="st2" cx="263.6" cy="181.29" rx=".91" ry=".77"/>
+          <ellipse class="st2" cx="263.6" cy="226.22" rx=".91" ry=".77"/>
+          <ellipse class="st2" cx="263.6" cy="162.8" rx=".93" ry=".77"/>
+          <ellipse class="st2" cx="263.6" cy="157.53" rx=".93" ry=".77"/>
+          <ellipse class="st2" cx="260.44" cy="223.55" rx=".91" ry=".74"/>
+          <ellipse class="st2" cx="266.73" cy="194.48" rx=".91" ry=".77"/>
+          <ellipse class="st2" cx="266.76" cy="197.18" rx=".93" ry=".8"/>
+          <ellipse class="st2" cx="260.44" cy="191.87" rx=".91" ry=".74"/>
+          <ellipse class="st2" cx="260.44" cy="149.62" rx=".91" ry=".74"/>
+          <ellipse class="st2" cx="263.6" cy="149.62" rx=".91" ry=".77"/>
+          <ellipse class="st2" cx="260.44" cy="178.66" rx=".88" ry=".74"/>
+          <ellipse class="st2" cx="257.31" cy="146.98" rx=".85" ry=".71"/>
+          <ellipse class="st2" cx="263.6" cy="205.06" rx=".93" ry=".77"/>
+          <ellipse class="st2" cx="260.44" cy="189.26" rx=".88" ry=".74"/>
+          <ellipse class="st2" cx="269.92" cy="191.87" rx=".96" ry=".8"/>
+          <ellipse class="st2" cx="263.6" cy="207.73" rx=".93" ry=".77"/>
+          <ellipse class="st2" cx="260.44" cy="207.73" rx=".91" ry=".74"/>
+          <ellipse class="st2" cx="260.44" cy="154.89" rx=".91" ry=".74"/>
+          <ellipse class="st2" cx="257.28" cy="223.55" rx=".85" ry=".71"/>
+          <ellipse class="st2" cx="254.15" cy="144.34" rx=".85" ry=".71"/>
+          <ellipse class="st2" cx="260.41" cy="183.96" rx=".88" ry=".74"/>
+          <ellipse class="st2" cx="254.15" cy="181.29" rx=".85" ry=".71"/>
+          <ellipse class="st2" cx="257.28" cy="226.19" rx=".85" ry=".71"/>
+          <ellipse class="st2" cx="260.44" cy="165.47" rx=".91" ry=".74"/>
+          <ellipse class="st2" cx="263.6" cy="191.87" rx=".88" ry=".74"/>
+          <path class="st2" d="M261.15,180.72l-.14,1.26-1.24-.11c-.3-.03-.25-.96,0-1.1.3-.16.93-.16,1.37-.05Z"/>
+          <ellipse class="st2" cx="260.44" cy="234.13" rx=".91" ry=".74"/>
+          <ellipse class="st2" cx="263.57" cy="194.51" rx=".88" ry=".74"/>
+          <ellipse class="st2" cx="260.44" cy="205.09" rx=".91" ry=".74"/>
+          <ellipse class="st2" cx="260.44" cy="176.05" rx=".88" ry=".74"/>
+          <ellipse class="st2" cx="260.44" cy="202.42" rx=".91" ry=".74"/>
+          <ellipse class="st2" cx="257.28" cy="176.05" rx=".85" ry=".71"/>
+          <ellipse class="st2" cx="260.44" cy="213" rx=".88" ry=".74"/>
+          <ellipse class="st2" cx="257.28" cy="234.13" rx=".88" ry=".74"/>
+          <ellipse class="st2" cx="254.15" cy="223.58" rx=".85" ry=".71"/>
+          <ellipse class="st2" cx="257.28" cy="191.87" rx=".85" ry=".71"/>
+          <ellipse class="st2" cx="254.12" cy="228.83" rx=".85" ry=".71"/>
+          <ellipse class="st2" cx="254.12" cy="191.87" rx=".85" ry=".71"/>
+          <ellipse class="st2" cx="260.44" cy="168.11" rx=".91" ry=".77"/>
+          <ellipse class="st2" cx="260.44" cy="160.19" rx=".88" ry=".74"/>
+          <ellipse class="st2" cx="257.28" cy="152.25" rx=".88" ry=".71"/>
+          <ellipse class="st2" cx="254.12" cy="152.25" rx=".85" ry=".71"/>
+          <ellipse class="st2" cx="257.28" cy="178.68" rx=".85" ry=".71"/>
+          <ellipse class="st2" cx="257.25" cy="186.6" rx=".85" ry=".71"/>
+          <ellipse class="st2" cx="254.15" cy="146.98" rx=".85" ry=".71"/>
+          <ellipse class="st2" cx="257.28" cy="194.51" rx=".85" ry=".71"/>
+          <ellipse class="st2" cx="260.44" cy="218.3" rx=".88" ry=".74"/>
+          <ellipse class="st2" cx="254.12" cy="231.46" rx=".85" ry=".71"/>
+          <ellipse class="st2" cx="257.28" cy="231.49" rx=".85" ry=".71"/>
+          <ellipse class="st2" cx="257.28" cy="215.64" rx=".88" ry=".71"/>
+          <ellipse class="st2" cx="260.44" cy="157.53" rx=".88" ry=".74"/>
+          <ellipse class="st2" cx="260.44" cy="173.38" rx=".88" ry=".74"/>
+          <ellipse class="st2" cx="260.44" cy="199.79" rx=".88" ry=".74"/>
+          <ellipse class="st2" cx="260.44" cy="194.51" rx=".88" ry=".74"/>
+          <ellipse class="st2" cx="260.44" cy="215.64" rx=".88" ry=".74"/>
+          <ellipse class="st2" cx="260.44" cy="162.8" rx=".91" ry=".74"/>
+          <ellipse class="st2" cx="257.28" cy="197.15" rx=".88" ry=".74"/>
+          <ellipse class="st2" cx="260.44" cy="197.15" rx=".91" ry=".74"/>
+          <ellipse class="st2" cx="257.28" cy="220.94" rx=".85" ry=".71"/>
+          <ellipse class="st2" cx="254.15" cy="220.94" rx=".85" ry=".71"/>
+          <ellipse class="st2" cx="257.28" cy="157.53" rx=".88" ry=".71"/>
+          <ellipse class="st2" cx="254.15" cy="226.22" rx=".85" ry=".71"/>
+          <ellipse class="st2" cx="254.15" cy="183.96" rx=".85" ry=".71"/>
+          <ellipse class="st2" cx="254.12" cy="149.62" rx=".85" ry=".71"/>
+          <ellipse class="st2" cx="257.28" cy="149.62" rx=".85" ry=".71"/>
+          <ellipse class="st2" cx="257.28" cy="218.3" rx=".85" ry=".71"/>
+          <ellipse class="st2" cx="257.31" cy="154.89" rx=".88" ry=".74"/>
+          <path class="st2" d="M256.95,188.6c.52-.08,1.4.47,1.18.85-.14.27-.66.63-.88.52l-.77-.41c-.25-.14.16-.91.47-.96Z"/>
+          <ellipse class="st2" cx="254.15" cy="154.89" rx=".85" ry=".71"/>
+          <ellipse class="st2" cx="257.28" cy="162.83" rx=".88" ry=".71"/>
+          <path class="st2" d="M258.1,181.02c.08.16,0,.8-.22.82l-.88.11c-.22.03-.77-.41-.63-.58l.6-.82c.16-.22,1.02.22,1.13.47Z"/>
+          <ellipse class="st2" cx="254.15" cy="218.28" rx=".85" ry=".71"/>
+          <ellipse class="st2" cx="257.28" cy="173.38" rx=".88" ry=".74"/>
+          <ellipse class="st2" cx="257.31" cy="165.47" rx=".88" ry=".74"/>
+          <ellipse class="st2" cx="257.28" cy="199.81" rx=".88" ry=".74"/>
+          <ellipse class="st2" cx="260.44" cy="170.74" rx=".91" ry=".74"/>
+          <ellipse class="st2" cx="254.15" cy="234.13" rx=".85" ry=".71"/>
+          <ellipse class="st2" cx="257.28" cy="160.19" rx=".88" ry=".74"/>
+          <ellipse class="st2" cx="260.44" cy="210.36" rx=".91" ry=".74"/>
+          <ellipse class="st2" cx="254.15" cy="194.51" rx=".85" ry=".71"/>
+          <ellipse class="st2" cx="250.99" cy="213" rx=".82" ry=".69"/>
+          <path class="st2" d="M340.88,142.17h2.88c-.3.41-.99.8-1.51.77-.41,0-.96-.36-1.4-.77h.03Z"/>
+          <ellipse class="st2" cx="250.99" cy="218.28" rx=".82" ry=".69"/>
+          <ellipse class="st2" cx="254.15" cy="215.64" rx=".85" ry=".71"/>
+          <ellipse class="st2" cx="250.99" cy="215.64" rx=".82" ry=".69"/>
+          <ellipse class="st2" cx="257.31" cy="213" rx=".85" ry=".71"/>
+          <ellipse class="st2" cx="254.15" cy="213" rx=".85" ry=".71"/>
+          <ellipse class="st2" cx="257.28" cy="210.36" rx=".88" ry=".71"/>
+          <ellipse class="st2" cx="254.15" cy="210.36" rx=".85" ry=".71"/>
+          <ellipse class="st2" cx="250.99" cy="223.55" rx=".82" ry=".69"/>
+          <ellipse class="st2" cx="250.99" cy="210.36" rx=".82" ry=".69"/>
+          <ellipse class="st2" cx="257.28" cy="207.73" rx=".88" ry=".71"/>
+          <ellipse class="st2" cx="254.15" cy="207.73" rx=".85" ry=".71"/>
+          <ellipse class="st2" cx="257.28" cy="205.09" rx=".88" ry=".74"/>
+          <ellipse class="st2" cx="254.15" cy="205.09" rx=".85" ry=".71"/>
+          <ellipse class="st2" cx="250.99" cy="205.09" rx=".82" ry=".69"/>
+          <ellipse class="st2" cx="257.31" cy="202.42" rx=".88" ry=".71"/>
+          <ellipse class="st2" cx="254.15" cy="202.45" rx=".85" ry=".71"/>
+          <ellipse class="st2" cx="250.99" cy="202.45" rx=".82" ry=".69"/>
+          <ellipse class="st2" cx="247.83" cy="202.45" rx=".8" ry=".69"/>
+          <ellipse class="st2" cx="254.15" cy="199.79" rx=".85" ry=".71"/>
+          <ellipse class="st2" cx="250.99" cy="199.81" rx=".82" ry=".69"/>
+          <ellipse class="st2" cx="254.15" cy="197.15" rx=".85" ry=".71"/>
+          <ellipse class="st2" cx="250.99" cy="197.15" rx=".82" ry=".69"/>
+          <ellipse class="st2" cx="250.99" cy="191.87" rx=".82" ry=".69"/>
+          <ellipse class="st2" cx="254.15" cy="189.26" rx=".85" ry=".71"/>
+          <ellipse class="st2" cx="250.99" cy="189.24" rx=".82" ry=".69"/>
+          <path class="st2" d="M257.09,183.25c.38.05.99.33,1.13.52.16.27-.47.93-.85.88s-.8-.22-.93-.41c-.19-.22.3-1.07.66-1.02v.03Z"/>
+          <ellipse class="st2" cx="254.15" cy="178.66" rx=".85" ry=".71"/>
+          <ellipse class="st2" cx="254.15" cy="176.02" rx=".85" ry=".71"/>
+          <ellipse class="st2" cx="250.99" cy="176.02" rx=".82" ry=".69"/>
+          <ellipse class="st2" cx="250.99" cy="234.1" rx=".82" ry=".69"/>
+          <ellipse class="st2" cx="254.15" cy="173.38" rx=".85" ry=".71"/>
+          <ellipse class="st2" cx="250.99" cy="173.38" rx=".82" ry=".69"/>
+          <ellipse class="st2" cx="257.31" cy="170.74" rx=".88" ry=".74"/>
+          <ellipse class="st2" cx="254.15" cy="170.74" rx=".85" ry=".71"/>
+          <ellipse class="st2" cx="250.99" cy="170.74" rx=".82" ry=".69"/>
+          <ellipse class="st2" cx="257.28" cy="168.11" rx=".88" ry=".71"/>
+          <ellipse class="st2" cx="254.15" cy="168.11" rx=".85" ry=".71"/>
+          <ellipse class="st2" cx="250.99" cy="168.11" rx=".82" ry=".69"/>
+          <ellipse class="st2" cx="254.15" cy="162.83" rx=".85" ry=".71"/>
+          <ellipse class="st2" cx="250.99" cy="162.83" rx=".82" ry=".69"/>
+          <ellipse class="st2" cx="250.99" cy="220.94" rx=".82" ry=".69"/>
+          <ellipse class="st2" cx="254.15" cy="160.19" rx=".85" ry=".71"/>
+          <ellipse class="st2" cx="250.99" cy="160.19" rx=".82" ry=".69"/>
+          <ellipse class="st2" cx="254.15" cy="157.53" rx=".85" ry=".71"/>
+          <ellipse class="st2" cx="250.99" cy="157.53" rx=".82" ry=".69"/>
+          <ellipse class="st2" cx="250.99" cy="154.89" rx=".82" ry=".69"/>
+          <ellipse class="st2" cx="250.99" cy="152.28" rx=".82" ry=".69"/>
+          <ellipse class="st2" cx="247.83" cy="210.36" rx=".8" ry=".66"/>
+          <ellipse class="st2" cx="247.83" cy="205.09" rx=".8" ry=".66"/>
+          <ellipse class="st2" cx="250.99" cy="178.66" rx=".82" ry=".69"/>
+          <ellipse class="st2" cx="250.99" cy="149.62" rx=".82" ry=".69"/>
+          <ellipse class="st2" cx="247.83" cy="168.11" rx=".8" ry=".66"/>
+          <ellipse class="st2" cx="254.15" cy="186.54" rx=".8" ry=".66"/>
+          <ellipse class="st2" cx="250.99" cy="228.85" rx=".82" ry=".69"/>
+          <ellipse class="st2" cx="254.12" cy="165.47" rx=".85" ry=".71"/>
+          <ellipse class="st2" cx="247.85" cy="213" rx=".8" ry=".66"/>
+          <ellipse class="st2" cx="250.99" cy="231.49" rx=".82" ry=".69"/>
+          <ellipse class="st2" cx="247.85" cy="144.34" rx=".8" ry=".66"/>
+          <ellipse class="st2" cx="250.99" cy="144.34" rx=".82" ry=".69"/>
+          <ellipse class="st2" cx="250.99" cy="165.47" rx=".82" ry=".69"/>
+          <ellipse class="st2" cx="250.99" cy="146.98" rx=".82" ry=".69"/>
+          <ellipse class="st2" cx="247.85" cy="170.74" rx=".8" ry=".69"/>
+          <ellipse class="st2" cx="250.99" cy="207.73" rx=".82" ry=".69"/>
+          <ellipse class="st2" cx="247.83" cy="207.73" rx=".8" ry=".69"/>
+          <ellipse class="st2" cx="250.99" cy="194.51" rx=".82" ry=".69"/>
+          <ellipse class="st2" cx="250.99" cy="226.22" rx=".82" ry=".69"/>
+          <ellipse class="st2" cx="247.83" cy="165.47" rx=".8" ry=".66"/>
+          <ellipse class="st2" cx="247.83" cy="162.8" rx=".8" ry=".66"/>
+          <ellipse class="st2" cx="247.85" cy="218.28" rx=".8" ry=".66"/>
+          <ellipse class="st2" cx="247.85" cy="149.62" rx=".8" ry=".66"/>
+          <ellipse class="st2" cx="247.85" cy="189.24" rx=".8" ry=".66"/>
+          <ellipse class="st2" cx="244.69" cy="220.91" rx=".77" ry=".63"/>
+          <ellipse class="st2" cx="247.85" cy="220.91" rx=".8" ry=".66"/>
+          <path class="st2" d="M337.89,142.2h2.64c-.49.82-1.84,1.15-2.64,0Z"/>
+          <ellipse class="st2" cx="251.04" cy="183.96" rx=".8" ry=".66"/>
+          <ellipse class="st2" cx="247.85" cy="223.55" rx=".8" ry=".66"/>
+          <ellipse class="st2" cx="247.85" cy="234.13" rx=".8" ry=".66"/>
+          <ellipse class="st2" cx="244.69" cy="234.13" rx=".77" ry=".63"/>
+          <ellipse class="st2" cx="244.69" cy="218.28" rx=".77" ry=".66"/>
+          <ellipse class="st2" cx="247.85" cy="231.49" rx=".8" ry=".66"/>
+          <ellipse class="st2" cx="247.85" cy="215.64" rx=".8" ry=".66"/>
+          <ellipse class="st2" cx="247.85" cy="176.02" rx=".8" ry=".66"/>
+          <ellipse class="st2" cx="244.69" cy="191.87" rx=".77" ry=".66"/>
+          <ellipse class="st2" cx="247.85" cy="191.87" rx=".8" ry=".66"/>
+          <ellipse class="st2" cx="244.69" cy="176.02" rx=".77" ry=".66"/>
+          <ellipse class="st2" cx="247.85" cy="178.66" rx=".8" ry=".66"/>
+          <ellipse class="st2" cx="244.69" cy="178.66" rx=".77" ry=".66"/>
+          <ellipse class="st2" cx="247.85" cy="152.25" rx=".8" ry=".66"/>
+          <ellipse class="st2" cx="247.83" cy="154.89" rx=".8" ry=".66"/>
+          <path class="st2" d="M244.69,156.9c.42,0,.77.3.77.66s-.34.66-.77.66-.77-.3-.77-.66.34-.66.77-.66Z"/>
+          <path class="st2" d="M247.85,156.9c.44,0,.8.3.8.66s-.36.66-.8.66-.8-.3-.8-.66.36-.66.8-.66Z"/>
+          <ellipse class="st2" cx="247.85" cy="181.29" rx=".8" ry=".66"/>
+          <ellipse class="st2" cx="250.99" cy="186.6" rx=".82" ry=".69"/>
+          <ellipse class="st2" cx="247.85" cy="199.81" rx=".8" ry=".66"/>
+          <ellipse class="st2" cx="247.83" cy="160.17" rx=".8" ry=".66"/>
+          <ellipse class="st2" cx="247.85" cy="173.38" rx=".8" ry=".66"/>
+          <ellipse class="st2" cx="247.85" cy="194.51" rx=".8" ry=".66"/>
+          <ellipse class="st2" cx="244.69" cy="197.18" rx=".77" ry=".63"/>
+          <ellipse class="st2" cx="247.85" cy="197.18" rx=".8" ry=".66"/>
+          <ellipse class="st2" cx="247.85" cy="226.22" rx=".8" ry=".66"/>
+          <ellipse class="st2" cx="244.69" cy="231.49" rx=".77" ry=".63"/>
+          <ellipse class="st2" cx="244.69" cy="152.28" rx=".77" ry=".63"/>
+          <ellipse class="st2" cx="244.69" cy="168.11" rx=".77" ry=".66"/>
+          <ellipse class="st2" cx="247.85" cy="146.98" rx=".8" ry=".66"/>
+          <ellipse class="st2" cx="244.69" cy="205.09" rx=".77" ry=".63"/>
+          <ellipse class="st2" cx="244.69" cy="165.47" rx=".77" ry=".63"/>
+          <ellipse class="st2" cx="244.69" cy="215.64" rx=".77" ry=".63"/>
+          <ellipse class="st2" cx="247.85" cy="228.85" rx=".8" ry=".66"/>
+          <ellipse class="st2" cx="244.69" cy="194.54" rx=".77" ry=".63"/>
+          <ellipse class="st2" cx="244.69" cy="149.62" rx=".77" ry=".63"/>
+          <ellipse class="st2" cx="244.69" cy="207.7" rx=".77" ry=".63"/>
+          <path class="st2" d="M250.16,181.35c-.19-.16.58-.82.77-.71l.82.52c.25.16-.25.69-.71.96l-.88-.77Z"/>
+          <ellipse class="st2" cx="244.69" cy="154.89" rx=".77" ry=".63"/>
+          <path class="st2" d="M331.6,142.2h2.69c-.44.36-.82.58-1.26.71-.33.08-.88-.19-1.43-.71Z"/>
+          <ellipse class="st2" cx="244.69" cy="213" rx=".77" ry=".63"/>
+          <path class="st2" d="M334.73,142.2h2.75c-.44.33-.85.6-1.26.71-.33.08-.88-.16-1.46-.71h-.03Z"/>
+          <ellipse class="st2" cx="241.53" cy="234.13" rx=".74" ry=".63"/>
+          <ellipse class="st2" cx="244.69" cy="223.58" rx=".77" ry=".66"/>
+          <ellipse class="st2" cx="244.69" cy="144.34" rx=".77" ry=".63"/>
+          <ellipse class="st2" cx="241.53" cy="176.02" rx=".74" ry=".63"/>
+          <ellipse class="st2" cx="247.85" cy="183.96" rx=".8" ry=".66"/>
+          <ellipse class="st2" cx="244.69" cy="210.36" rx=".77" ry=".63"/>
+          <ellipse class="st2" cx="244.69" cy="170.74" rx=".77" ry=".63"/>
+          <ellipse class="st2" cx="244.69" cy="146.98" rx=".77" ry=".63"/>
+          <ellipse class="st2" cx="244.69" cy="202.45" rx=".77" ry=".63"/>
+          <ellipse class="st2" cx="241.53" cy="215.64" rx=".74" ry=".63"/>
+          <ellipse class="st2" cx="244.69" cy="189.26" rx=".74" ry=".63"/>
+          <ellipse class="st2" cx="244.69" cy="160.19" rx=".77" ry=".63"/>
+          <ellipse class="st2" cx="244.69" cy="199.81" rx=".77" ry=".63"/>
+          <ellipse class="st2" cx="244.69" cy="162.83" rx=".77" ry=".63"/>
+          <ellipse class="st2" cx="244.69" cy="173.38" rx=".77" ry=".63"/>
+          <ellipse class="st2" cx="241.53" cy="197.18" rx=".74" ry=".63"/>
+          <ellipse class="st2" cx="244.69" cy="226.22" rx=".77" ry=".63"/>
+          <ellipse class="st2" cx="244.69" cy="181.29" rx=".8" ry=".66"/>
+          <ellipse class="st2" cx="241.53" cy="173.38" rx=".74" ry=".63"/>
+          <ellipse class="st2" cx="244.69" cy="228.85" rx=".77" ry=".63"/>
+          <ellipse class="st2" cx="247.91" cy="186.62" rx=".77" ry=".63"/>
+          <ellipse class="st2" cx="238.37" cy="215.64" rx=".74" ry=".6"/>
+          <ellipse class="st2" cx="241.53" cy="160.19" rx=".74" ry=".63"/>
+          <path class="st2" d="M241.53,156.92c.41,0,.74.28.74.63s-.33.63-.74.63-.74-.28-.74-.63.33-.63.74-.63Z"/>
+          <path class="st2" d="M328.44,142.2h2.64c-.36.3-.88.66-1.21.69-.44,0-1.04-.3-1.43-.69Z"/>
+          <path class="st2" d="M325.31,142.2h2.61c-.36.3-.88.66-1.21.69-.38,0-1.02-.33-1.4-.69Z"/>
+          <ellipse class="st2" cx="241.53" cy="199.81" rx=".74" ry=".63"/>
+          <ellipse class="st2" cx="241.53" cy="178.66" rx=".74" ry=".63"/>
+          <ellipse class="st2" cx="241.53" cy="213" rx=".74" ry=".63"/>
+          <ellipse class="st2" cx="241.53" cy="154.89" rx=".74" ry=".63"/>
+          <ellipse class="st2" cx="235.24" cy="199.81" rx=".71" ry=".58"/>
+          <ellipse class="st2" cx="235.21" cy="183.96" rx=".71" ry=".6"/>
+          <ellipse class="st2" cx="238.37" cy="199.79" rx=".71" ry=".6"/>
+          <ellipse class="st2" cx="241.53" cy="149.62" rx=".77" ry=".63"/>
+          <ellipse class="st2" cx="238.37" cy="173.38" rx=".71" ry=".6"/>
+          <ellipse class="st2" cx="238.37" cy="149.62" rx=".74" ry=".6"/>
+          <ellipse class="st2" cx="238.37" cy="191.87" rx=".74" ry=".63"/>
+          <ellipse class="st2" cx="241.53" cy="191.87" rx=".74" ry=".63"/>
+          <ellipse class="st2" cx="241.53" cy="218.28" rx=".74" ry=".63"/>
+          <ellipse class="st2" cx="241.53" cy="146.98" rx=".74" ry=".63"/>
+          <ellipse class="st2" cx="238.37" cy="146.98" rx=".74" ry=".6"/>
+          <ellipse class="st2" cx="235.21" cy="146.98" rx=".71" ry=".6"/>
+          <ellipse class="st2" cx="241.53" cy="144.31" rx=".74" ry=".63"/>
+          <ellipse class="st2" cx="241.53" cy="223.55" rx=".74" ry=".63"/>
+          <ellipse class="st2" cx="238.4" cy="223.55" rx=".74" ry=".6"/>
+          <ellipse class="st2" cx="235.24" cy="223.55" rx=".71" ry=".6"/>
+          <ellipse class="st2" cx="238.37" cy="144.34" rx=".74" ry=".6"/>
+          <ellipse class="st2" cx="235.24" cy="144.34" rx=".71" ry=".6"/>
+          <path class="st2" d="M322.17,142.2h2.53c-.38.3-.88.6-1.21.66s-.85-.25-1.32-.66Z"/>
+          <ellipse class="st2" cx="241.53" cy="170.74" rx=".74" ry=".63"/>
+          <ellipse class="st2" cx="238.4" cy="170.74" rx=".71" ry=".6"/>
+          <ellipse class="st2" cx="241.53" cy="228.85" rx=".74" ry=".63"/>
+          <ellipse class="st2" cx="238.37" cy="228.85" rx=".74" ry=".6"/>
+          <ellipse class="st2" cx="235.21" cy="170.74" rx=".71" ry=".6"/>
+          <ellipse class="st2" cx="238.37" cy="197.18" rx=".74" ry=".6"/>
+          <ellipse class="st2" cx="235.24" cy="202.42" rx=".69" ry=".58"/>
+          <ellipse class="st2" cx="244.67" cy="183.99" rx=".74" ry=".6"/>
+          <ellipse class="st2" cx="241.53" cy="183.96" rx=".77" ry=".63"/>
+          <ellipse class="st2" cx="238.37" cy="183.93" rx=".74" ry=".6"/>
+          <ellipse class="st2" cx="244.67" cy="186.6" rx=".77" ry=".66"/>
+          <ellipse class="st2" cx="241.53" cy="186.6" rx=".74" ry=".63"/>
+          <ellipse class="st2" cx="238.37" cy="186.6" rx=".74" ry=".63"/>
+          <ellipse class="st2" cx="238.37" cy="234.13" rx=".74" ry=".63"/>
+          <ellipse class="st2" cx="235.21" cy="186.6" rx=".71" ry=".6"/>
+          <ellipse class="st2" cx="238.37" cy="202.42" rx=".71" ry=".6"/>
+          <ellipse class="st2" cx="241.53" cy="194.51" rx=".74" ry=".63"/>
+          <ellipse class="st2" cx="241.53" cy="202.42" rx=".74" ry=".63"/>
+          <ellipse class="st2" cx="241.53" cy="168.11" rx=".74" ry=".63"/>
+          <ellipse class="st2" cx="238.4" cy="181.29" rx=".71" ry=".6"/>
+          <ellipse class="st2" cx="238.37" cy="168.11" rx=".71" ry=".6"/>
+          <ellipse class="st2" cx="235.21" cy="168.11" rx=".69" ry=".58"/>
+          <ellipse class="st2" cx="235.21" cy="205.09" rx=".69" ry=".58"/>
+          <ellipse class="st2" cx="238.37" cy="205.09" rx=".71" ry=".6"/>
+          <ellipse class="st2" cx="241.53" cy="205.09" rx=".74" ry=".63"/>
+          <ellipse class="st2" cx="241.53" cy="165.47" rx=".74" ry=".63"/>
+          <ellipse class="st2" cx="238.37" cy="178.66" rx=".74" ry=".63"/>
+          <ellipse class="st2" cx="238.37" cy="165.47" rx=".71" ry=".6"/>
+          <ellipse class="st2" cx="235.24" cy="165.47" rx=".69" ry=".58"/>
+          <ellipse class="st2" cx="232.08" cy="165.47" rx=".69" ry=".58"/>
+          <ellipse class="st2" cx="241.53" cy="220.91" rx=".74" ry=".63"/>
+          <ellipse class="st2" cx="238.37" cy="220.91" rx=".74" ry=".63"/>
+          <ellipse class="st2" cx="235.24" cy="220.91" rx=".71" ry=".6"/>
+          <ellipse class="st2" cx="241.53" cy="162.83" rx=".74" ry=".63"/>
+          <ellipse class="st2" cx="238.4" cy="162.83" rx=".71" ry=".6"/>
+          <ellipse class="st2" cx="235.21" cy="162.8" rx=".69" ry=".58"/>
+          <ellipse class="st2" cx="241.53" cy="226.22" rx=".74" ry=".63"/>
+          <ellipse class="st2" cx="238.37" cy="226.22" rx=".74" ry=".6"/>
+          <ellipse class="st2" cx="235.24" cy="226.19" rx=".71" ry=".6"/>
+          <ellipse class="st2" cx="235.24" cy="207.73" rx=".69" ry=".58"/>
+          <ellipse class="st2" cx="238.37" cy="189.24" rx=".74" ry=".63"/>
+          <ellipse class="st2" cx="235.21" cy="189.24" rx=".71" ry=".6"/>
+          <ellipse class="st2" cx="238.37" cy="207.7" rx=".71" ry=".6"/>
+          <ellipse class="st2" cx="241.53" cy="207.73" rx=".74" ry=".63"/>
+          <ellipse class="st2" cx="241.53" cy="231.49" rx=".74" ry=".63"/>
+          <ellipse class="st2" cx="238.37" cy="231.49" rx=".74" ry=".6"/>
+          <ellipse class="st2" cx="238.4" cy="160.19" rx=".74" ry=".6"/>
+          <ellipse class="st2" cx="235.21" cy="210.36" rx=".69" ry=".58"/>
+          <ellipse class="st2" cx="238.4" cy="210.36" rx=".71" ry=".6"/>
+          <ellipse class="st2" cx="241.53" cy="210.36" rx=".74" ry=".63"/>
+          <ellipse class="st2" cx="238.37" cy="157.53" rx=".74" ry=".6"/>
+          <ellipse class="st2" cx="238.4" cy="213" rx=".71" ry=".6"/>
+          <ellipse class="st2" cx="241.53" cy="152.25" rx=".74" ry=".63"/>
+          <ellipse class="st2" cx="232.08" cy="207.73" rx=".69" ry=".58"/>
+          <ellipse class="st2" cx="238.37" cy="218.28" rx=".74" ry=".6"/>
+          <ellipse class="st2" cx="232.08" cy="168.11" rx=".69" ry=".58"/>
+          <ellipse class="st2" cx="235.24" cy="228.85" rx=".71" ry=".6"/>
+          <ellipse class="st2" cx="241.51" cy="189.29" rx=".71" ry=".6"/>
+          <ellipse class="st2" cx="238.37" cy="152.25" rx=".74" ry=".63"/>
+          <ellipse class="st2" cx="241.51" cy="181.32" rx=".74" ry=".6"/>
+          <ellipse class="st2" cx="238.37" cy="194.51" rx=".74" ry=".6"/>
+          <ellipse class="st2" cx="235.24" cy="231.49" rx=".71" ry=".6"/>
+          <ellipse class="st2" cx="235.24" cy="149.62" rx=".71" ry=".6"/>
+          <ellipse class="st2" cx="235.24" cy="191.87" rx=".71" ry=".6"/>
+          <ellipse class="st2" cx="232.08" cy="173.38" rx=".69" ry=".58"/>
+          <ellipse class="st2" cx="235.21" cy="218.28" rx=".69" ry=".58"/>
+          <ellipse class="st2" cx="232.08" cy="218.28" rx=".69" ry=".58"/>
+          <ellipse class="st2" cx="235.24" cy="173.38" rx=".69" ry=".58"/>
+          <ellipse class="st2" cx="235.21" cy="215.64" rx=".71" ry=".6"/>
+          <ellipse class="st2" cx="232.08" cy="215.64" rx=".69" ry=".58"/>
+          <ellipse class="st2" cx="232.08" cy="199.79" rx=".69" ry=".58"/>
+          <ellipse class="st2" cx="228.92" cy="202.42" rx=".66" ry=".55"/>
+          <ellipse class="st2" cx="232.08" cy="213" rx=".69" ry=".58"/>
+          <ellipse class="st2" cx="235.21" cy="213" rx=".71" ry=".6"/>
+          <ellipse class="st2" cx="238.37" cy="154.89" rx=".71" ry=".6"/>
+          <ellipse class="st2" cx="232.08" cy="202.42" rx=".69" ry=".58"/>
+          <ellipse class="st2" cx="228.92" cy="170.74" rx=".66" ry=".55"/>
+          <ellipse class="st2" cx="232.08" cy="170.74" rx=".69" ry=".58"/>
+          <ellipse class="st2" cx="235.24" cy="160.17" rx=".69" ry=".58"/>
+          <ellipse class="st2" cx="232.08" cy="160.17" rx=".69" ry=".58"/>
+          <ellipse class="st2" cx="232.08" cy="176.02" rx=".66" ry=".55"/>
+          <ellipse class="st2" cx="235.24" cy="176.05" rx=".71" ry=".6"/>
+          <ellipse class="st2" cx="238.37" cy="176.02" rx=".74" ry=".6"/>
+          <ellipse class="st2" cx="235.21" cy="234.13" rx=".71" ry=".58"/>
+          <ellipse class="st2" cx="232.08" cy="234.13" rx=".69" ry=".58"/>
+          <ellipse class="st2" cx="232.06" cy="154.89" rx=".69" ry=".58"/>
+          <ellipse class="st2" cx="232.08" cy="191.87" rx=".69" ry=".58"/>
+          <ellipse class="st2" cx="235.21" cy="197.15" rx=".71" ry=".6"/>
+          <ellipse class="st2" cx="232.08" cy="226.22" rx=".69" ry=".58"/>
+          <ellipse class="st2" cx="228.92" cy="226.22" rx=".66" ry=".55"/>
+          <ellipse class="st2" cx="232.08" cy="197.15" rx=".69" ry=".58"/>
+          <ellipse class="st2" cx="232.08" cy="186.6" rx=".69" ry=".58"/>
+          <ellipse class="st2" cx="228.92" cy="186.6" rx=".66" ry=".55"/>
+          <ellipse class="st2" cx="232.08" cy="157.53" rx=".69" ry=".58"/>
+          <ellipse class="st2" cx="232.08" cy="223.58" rx=".69" ry=".58"/>
+          <ellipse class="st2" cx="232.08" cy="194.51" rx=".69" ry=".58"/>
+          <ellipse class="st2" cx="235.21" cy="178.66" rx=".69" ry=".58"/>
+          <ellipse class="st2" cx="228.92" cy="146.98" rx=".66" ry=".55"/>
+          <ellipse class="st2" cx="232.08" cy="146.98" rx=".69" ry=".58"/>
+          <ellipse class="st2" cx="232.08" cy="205.09" rx=".69" ry=".58"/>
+          <ellipse class="st2" cx="232.08" cy="178.66" rx=".69" ry=".58"/>
+          <ellipse class="st2" cx="232.08" cy="152.25" rx=".69" ry=".58"/>
+          <ellipse class="st2" cx="235.24" cy="152.25" rx=".71" ry=".58"/>
+          <ellipse class="st2" cx="232.08" cy="144.34" rx=".69" ry=".58"/>
+          <ellipse class="st2" cx="232.08" cy="149.62" rx=".69" ry=".58"/>
+          <ellipse class="st2" cx="228.92" cy="210.36" rx=".66" ry=".55"/>
+          <ellipse class="st2" cx="228.92" cy="213" rx=".66" ry=".55"/>
+          <ellipse class="st2" cx="235.24" cy="181.32" rx=".71" ry=".6"/>
+          <ellipse class="st2" cx="232.08" cy="210.36" rx=".69" ry=".58"/>
+          <ellipse class="st2" cx="232.08" cy="162.83" rx=".69" ry=".58"/>
+          <ellipse class="st2" cx="235.21" cy="157.53" rx=".71" ry=".6"/>
+          <ellipse class="st2" cx="235.21" cy="154.89" rx=".71" ry=".6"/>
+          <ellipse class="st2" cx="235.21" cy="194.51" rx=".71" ry=".58"/>
+          <ellipse class="st2" cx="232.08" cy="183.93" rx=".69" ry=".58"/>
+          <ellipse class="st2" cx="225.79" cy="218.28" rx=".63" ry=".52"/>
+          <ellipse class="st2" cx="225.79" cy="178.68" rx=".63" ry=".52"/>
+          <ellipse class="st2" cx="228.92" cy="165.47" rx=".66" ry=".55"/>
+          <ellipse class="st2" cx="228.92" cy="197.15" rx=".63" ry=".52"/>
+          <ellipse class="st2" cx="228.92" cy="176.02" rx=".66" ry=".55"/>
+          <ellipse class="st2" cx="225.79" cy="176.02" rx=".63" ry=".52"/>
+          <ellipse class="st2" cx="228.92" cy="160.17" rx=".66" ry=".55"/>
+          <ellipse class="st2" cx="232.08" cy="189.24" rx=".69" ry=".58"/>
+          <ellipse class="st2" cx="228.92" cy="189.24" rx=".66" ry=".55"/>
+          <ellipse class="st2" cx="228.92" cy="199.81" rx=".63" ry=".55"/>
+          <ellipse class="st2" cx="225.79" cy="189.24" rx=".63" ry=".52"/>
+          <ellipse class="st2" cx="228.92" cy="173.38" rx=".66" ry=".55"/>
+          <ellipse class="st2" cx="225.79" cy="173.38" rx=".63" ry=".52"/>
+          <ellipse class="st2" cx="228.92" cy="168.11" rx=".66" ry=".55"/>
+          <ellipse class="st2" cx="228.92" cy="207.73" rx=".66" ry=".55"/>
+          <ellipse class="st2" cx="228.92" cy="162.83" rx=".66" ry=".55"/>
+          <ellipse class="st2" cx="228.92" cy="234.13" rx=".66" ry=".55"/>
+          <ellipse class="st2" cx="225.79" cy="234.13" rx=".63" ry=".52"/>
+          <ellipse class="st2" cx="228.92" cy="205.09" rx=".66" ry=".55"/>
+          <ellipse class="st2" cx="228.92" cy="144.34" rx=".66" ry=".55"/>
+          <ellipse class="st2" cx="225.79" cy="144.34" rx=".63" ry=".52"/>
+          <ellipse class="st2" cx="225.79" cy="152.25" rx=".63" ry=".52"/>
+          <ellipse class="st2" cx="228.92" cy="152.25" rx=".66" ry=".55"/>
+          <path class="st2" d="M319.15,142.22l2.25-.08c-.44.63-1.46.82-2.25.08Z"/>
+          <ellipse class="st2" cx="225.79" cy="149.62" rx=".63" ry=".52"/>
+          <ellipse class="st2" cx="228.92" cy="149.62" rx=".66" ry=".55"/>
+          <ellipse class="st2" cx="228.95" cy="223.55" rx=".66" ry=".55"/>
+          <ellipse class="st2" cx="225.79" cy="191.87" rx=".63" ry=".52"/>
+          <ellipse class="st2" cx="228.92" cy="191.87" rx=".66" ry=".55"/>
+          <ellipse class="st2" cx="232.08" cy="231.49" rx=".69" ry=".58"/>
+          <ellipse class="st2" cx="228.92" cy="231.49" rx=".66" ry=".55"/>
+          <ellipse class="st2" cx="225.79" cy="231.49" rx=".63" ry=".52"/>
+          <ellipse class="st2" cx="228.92" cy="183.96" rx=".66" ry=".55"/>
+          <ellipse class="st2" cx="225.79" cy="154.89" rx=".63" ry=".52"/>
+          <ellipse class="st2" cx="225.79" cy="146.95" rx=".6" ry=".52"/>
+          <ellipse class="st2" cx="228.92" cy="154.89" rx=".63" ry=".55"/>
+          <ellipse class="st2" cx="225.79" cy="194.51" rx=".6" ry=".52"/>
+          <ellipse class="st2" cx="228.95" cy="194.51" rx=".66" ry=".55"/>
+          <ellipse class="st2" cx="232.08" cy="181.29" rx=".69" ry=".58"/>
+          <ellipse class="st2" cx="228.92" cy="215.64" rx=".63" ry=".55"/>
+          <ellipse class="st2" cx="228.92" cy="181.32" rx=".66" ry=".55"/>
+          <ellipse class="st2" cx="225.79" cy="181.32" rx=".63" ry=".52"/>
+          <ellipse class="st2" cx="225.79" cy="215.64" rx=".63" ry=".52"/>
+          <ellipse class="st2" cx="228.92" cy="218.3" rx=".66" ry=".55"/>
+          <ellipse class="st2" cx="232.08" cy="228.85" rx=".69" ry=".58"/>
+          <ellipse class="st2" cx="228.92" cy="228.85" rx=".66" ry=".55"/>
+          <path class="st2" d="M225.79,157.01c.35,0,.63.23.63.52s-.28.52-.63.52-.63-.23-.63-.52.28-.52.63-.52Z"/>
+          <ellipse class="st2" cx="232.08" cy="220.91" rx=".69" ry=".58"/>
+          <ellipse class="st2" cx="228.92" cy="220.94" rx=".66" ry=".55"/>
+          <ellipse class="st2" cx="225.79" cy="220.94" rx=".63" ry=".52"/>
+          <path class="st2" d="M228.92,156.98c.35,0,.63.25.63.55s-.28.55-.63.55-.63-.25-.63-.55.28-.55.63-.55Z"/>
+          <ellipse class="st2" cx="228.92" cy="178.68" rx=".63" ry=".55"/>
+          <ellipse class="st2" cx="222.63" cy="144.34" rx=".6" ry=".49"/>
+          <ellipse class="st2" cx="225.76" cy="228.83" rx=".6" ry=".52"/>
+          <ellipse class="st2" cx="225.79" cy="197.15" rx=".6" ry=".52"/>
+          <ellipse class="st2" cx="225.76" cy="183.96" rx=".63" ry=".52"/>
+          <path class="st2" d="M316.18,142.17h2.03c-.41.63-1.46.82-2.03,0Z"/>
+          <path class="st2" d="M306.68,142.17h2.03c-.41.63-1.46.82-2.03,0Z"/>
+          <path class="st2" d="M313,142.17h2.03c-.41.63-1.46.82-2.03,0Z"/>
+          <ellipse class="st2" cx="225.79" cy="226.22" rx=".6" ry=".52"/>
+          <ellipse class="st2" cx="222.63" cy="146.98" rx=".6" ry=".49"/>
+          <ellipse class="st2" cx="225.79" cy="223.55" rx=".63" ry=".52"/>
+          <ellipse class="st2" cx="222.63" cy="223.55" rx=".6" ry=".49"/>
+          <ellipse class="st2" cx="225.79" cy="186.6" rx=".6" ry=".52"/>
+          <ellipse class="st2" cx="222.63" cy="181.32" rx=".6" ry=".49"/>
+          <ellipse class="st2" cx="225.79" cy="213" rx=".6" ry=".52"/>
+          <path class="st2" d="M309.84,142.17h2.03c-.41.63-1.46.82-2.03,0Z"/>
+          <ellipse class="st2" cx="222.63" cy="218.3" rx=".58" ry=".49"/>
+          <ellipse class="st2" cx="225.79" cy="210.36" rx=".6" ry=".52"/>
+          <ellipse class="st2" cx="222.63" cy="152.23" rx=".6" ry=".49"/>
+          <ellipse class="st2" cx="222.63" cy="173.38" rx=".6" ry=".49"/>
+          <ellipse class="st2" cx="222.63" cy="183.96" rx=".6" ry=".49"/>
+          <ellipse class="st2" cx="222.63" cy="189.24" rx=".58" ry=".49"/>
+          <ellipse class="st2" cx="222.63" cy="194.51" rx=".6" ry=".49"/>
+          <ellipse class="st2" cx="225.79" cy="199.79" rx=".6" ry=".52"/>
+          <ellipse class="st2" cx="225.82" cy="202.45" rx=".63" ry=".52"/>
+          <ellipse class="st2" cx="222.63" cy="154.89" rx=".6" ry=".49"/>
+          <ellipse class="st2" cx="222.63" cy="149.62" rx=".6" ry=".49"/>
+          <ellipse class="st2" cx="222.63" cy="213" rx=".6" ry=".49"/>
+          <ellipse class="st2" cx="222.63" cy="234.1" rx=".6" ry=".49"/>
+          <ellipse class="st2" cx="222.63" cy="157.53" rx=".6" ry=".49"/>
+          <ellipse class="st2" cx="225.82" cy="160.17" rx=".63" ry=".52"/>
+          <ellipse class="st2" cx="222.63" cy="160.19" rx=".6" ry=".49"/>
+          <ellipse class="st2" cx="222.63" cy="215.67" rx=".6" ry=".49"/>
+          <ellipse class="st2" cx="222.63" cy="197.15" rx=".6" ry=".49"/>
+          <ellipse class="st2" cx="222.63" cy="176.05" rx=".6" ry=".49"/>
+          <ellipse class="st2" cx="222.63" cy="231.49" rx=".58" ry=".49"/>
+          <ellipse class="st2" cx="222.63" cy="178.68" rx=".58" ry=".49"/>
+          <path class="st2" d="M303.44,142.2h2.14c-.27.25-.8.58-1.04.47l-1.13-.47h.03Z"/>
+          <ellipse class="st2" cx="222.63" cy="228.83" rx=".58" ry=".49"/>
+          <ellipse class="st2" cx="222.63" cy="199.79" rx=".6" ry=".49"/>
+          <ellipse class="st2" cx="219.5" cy="194.51" rx=".58" ry=".49"/>
+          <ellipse class="st2" cx="222.63" cy="220.94" rx=".58" ry=".49"/>
+          <ellipse class="st2" cx="222.63" cy="191.87" rx=".6" ry=".49"/>
+          <ellipse class="st2" cx="219.47" cy="176.05" rx=".58" ry=".49"/>
+          <ellipse class="st2" cx="225.79" cy="170.74" rx=".63" ry=".52"/>
+          <ellipse class="st2" cx="222.66" cy="210.36" rx=".6" ry=".49"/>
+          <ellipse class="st2" cx="219.47" cy="157.53" rx=".58" ry=".49"/>
+          <ellipse class="st2" cx="222.63" cy="170.74" rx=".6" ry=".49"/>
+          <ellipse class="st2" cx="225.79" cy="205.09" rx=".63" ry=".52"/>
+          <ellipse class="st2" cx="222.63" cy="205.06" rx=".6" ry=".49"/>
+          <ellipse class="st2" cx="222.63" cy="207.73" rx=".58" ry=".49"/>
+          <ellipse class="st2" cx="219.47" cy="197.15" rx=".58" ry=".49"/>
+          <ellipse class="st2" cx="219.47" cy="218.3" rx=".58" ry=".49"/>
+          <ellipse class="st2" cx="225.79" cy="207.73" rx=".63" ry=".52"/>
+          <path class="st2" d="M297.36,142.2h1.9c-.36.22-.6.44-.82.47-.27.05-.77-.22-1.07-.47Z"/>
+          <ellipse class="st2" cx="222.63" cy="186.6" rx=".6" ry=".49"/>
+          <ellipse class="st2" cx="219.47" cy="186.6" rx=".58" ry=".49"/>
+          <path class="st2" d="M300.55,142.2h1.9c-.36.22-.6.44-.82.47-.27.05-.77-.22-1.07-.47Z"/>
+          <ellipse class="st2" cx="225.79" cy="162.83" rx=".6" ry=".52"/>
+          <ellipse class="st2" cx="219.47" cy="178.68" rx=".58" ry=".49"/>
+          <ellipse class="st2" cx="222.63" cy="162.83" rx=".6" ry=".49"/>
+          <ellipse class="st2" cx="222.63" cy="202.45" rx=".6" ry=".49"/>
+          <ellipse class="st2" cx="225.79" cy="165.47" rx=".6" ry=".52"/>
+          <ellipse class="st2" cx="222.63" cy="165.44" rx=".6" ry=".49"/>
+          <ellipse class="st2" cx="222.66" cy="168.11" rx=".6" ry=".49"/>
+          <ellipse class="st2" cx="219.47" cy="149.62" rx=".58" ry=".47"/>
+          <ellipse class="st2" cx="222.63" cy="226.22" rx=".6" ry=".49"/>
+          <ellipse class="st2" cx="219.47" cy="226.22" rx=".58" ry=".49"/>
+          <ellipse class="st2" cx="225.79" cy="168.11" rx=".63" ry=".52"/>
+          <ellipse class="st2" cx="219.47" cy="146.98" rx=".58" ry=".49"/>
+          <ellipse class="st2" cx="219.47" cy="154.89" rx=".58" ry=".49"/>
+          <ellipse class="st2" cx="216.34" cy="197.15" rx=".58" ry=".47"/>
+          <ellipse class="st2" cx="213.18" cy="160.17" rx=".55" ry=".47"/>
+          <ellipse class="st2" cx="216.34" cy="160.17" rx=".58" ry=".47"/>
+          <ellipse class="st2" cx="216.34" cy="165.44" rx=".58" ry=".47"/>
+          <ellipse class="st2" cx="213.18" cy="165.47" rx=".55" ry=".44"/>
+          <ellipse class="st2" cx="216.34" cy="176.02" rx=".58" ry=".47"/>
+          <ellipse class="st2" cx="219.47" cy="160.17" rx=".58" ry=".49"/>
+          <ellipse class="st2" cx="219.47" cy="170.74" rx=".6" ry=".49"/>
+          <ellipse class="st2" cx="216.31" cy="170.74" rx=".58" ry=".47"/>
+          <ellipse class="st2" cx="213.18" cy="170.74" rx=".55" ry=".47"/>
+          <ellipse class="st2" cx="216.31" cy="194.51" rx=".55" ry=".47"/>
+          <ellipse class="st2" cx="213.18" cy="199.79" rx=".55" ry=".47"/>
+          <ellipse class="st2" cx="216.34" cy="199.79" rx=".55" ry=".47"/>
+          <ellipse class="st2" cx="219.47" cy="199.79" rx=".58" ry=".49"/>
+          <ellipse class="st2" cx="219.47" cy="234.13" rx=".58" ry=".47"/>
+          <ellipse class="st2" cx="216.31" cy="191.87" rx=".55" ry=".47"/>
+          <ellipse class="st2" cx="219.47" cy="207.73" rx=".6" ry=".49"/>
+          <ellipse class="st2" cx="219.47" cy="173.38" rx=".58" ry=".49"/>
+          <ellipse class="st2" cx="219.47" cy="223.58" rx=".58" ry=".47"/>
+          <ellipse class="st2" cx="216.34" cy="173.38" rx=".58" ry=".47"/>
+          <ellipse class="st2" cx="219.47" cy="168.11" rx=".6" ry=".49"/>
+          <ellipse class="st2" cx="216.31" cy="168.11" rx=".58" ry=".47"/>
+          <ellipse class="st2" cx="213.18" cy="168.11" rx=".55" ry=".47"/>
+          <ellipse class="st2" cx="219.47" cy="189.24" rx=".58" ry=".49"/>
+          <ellipse class="st2" cx="213.18" cy="162.8" rx=".55" ry=".44"/>
+          <ellipse class="st2" cx="216.31" cy="162.83" rx=".58" ry=".47"/>
+          <ellipse class="st2" cx="219.47" cy="162.8" rx=".58" ry=".49"/>
+          <ellipse class="st2" cx="216.31" cy="207.73" rx=".58" ry=".47"/>
+          <ellipse class="st2" cx="213.18" cy="207.73" rx=".55" ry=".44"/>
+          <ellipse class="st2" cx="210.02" cy="207.73" rx=".52" ry=".44"/>
+          <ellipse class="st2" cx="219.47" cy="165.47" rx=".6" ry=".49"/>
+          <ellipse class="st2" cx="213.18" cy="205.09" rx=".55" ry=".44"/>
+          <ellipse class="st2" cx="216.31" cy="205.06" rx=".55" ry=".47"/>
+          <ellipse class="st2" cx="219.47" cy="231.46" rx=".58" ry=".47"/>
+          <ellipse class="st2" cx="216.31" cy="231.49" rx=".55" ry=".47"/>
+          <ellipse class="st2" cx="219.47" cy="215.64" rx=".58" ry=".49"/>
+          <ellipse class="st2" cx="216.34" cy="215.64" rx=".58" ry=".47"/>
+          <ellipse class="st2" cx="219.47" cy="220.94" rx=".58" ry=".47"/>
+          <ellipse class="st2" cx="216.31" cy="220.94" rx=".55" ry=".47"/>
+          <ellipse class="st2" cx="219.47" cy="205.09" rx=".58" ry=".49"/>
+          <ellipse class="st2" cx="219.47" cy="181.32" rx=".58" ry=".49"/>
+          <ellipse class="st2" cx="219.47" cy="144.34" rx=".58" ry=".47"/>
+          <ellipse class="st2" cx="216.31" cy="181.29" rx=".55" ry=".47"/>
+          <ellipse class="st2" cx="219.47" cy="202.45" rx=".58" ry=".49"/>
+          <path class="st2" d="M294.26,142.22l1.84-.08-.63.38c-.25.16-.85.05-1.21-.3Z"/>
+          <ellipse class="st2" cx="219.47" cy="152.25" rx=".58" ry=".47"/>
+          <ellipse class="st2" cx="219.47" cy="228.85" rx=".58" ry=".49"/>
+          <ellipse class="st2" cx="219.47" cy="183.96" rx=".55" ry=".47"/>
+          <ellipse class="st2" cx="216.34" cy="157.53" rx=".58" ry=".47"/>
+          <ellipse class="st2" cx="216.31" cy="202.45" rx=".55" ry=".47"/>
+          <ellipse class="st2" cx="213.18" cy="202.42" rx=".52" ry=".44"/>
+          <ellipse class="st2" cx="216.31" cy="218.28" rx=".55" ry=".47"/>
+          <ellipse class="st2" cx="219.47" cy="213" rx=".58" ry=".49"/>
+          <ellipse class="st2" cx="219.47" cy="191.87" rx=".58" ry=".47"/>
+          <ellipse class="st2" cx="216.31" cy="213" rx=".58" ry=".47"/>
+          <ellipse class="st2" cx="219.47" cy="210.36" rx=".58" ry=".49"/>
+          <ellipse class="st2" cx="216.34" cy="210.36" rx=".58" ry=".47"/>
+          <ellipse class="st2" cx="213.18" cy="210.36" rx=".52" ry=".44"/>
+          <ellipse class="st2" cx="213.18" cy="213" rx=".55" ry=".47"/>
+          <path class="st2" d="M291.13,142.2h1.79l-.66.36c-.16.11-.47-.05-1.13-.36Z"/>
+          <path class="st2" d="M287.94,142.2h1.79l-.66.36c-.16.08-.47-.05-1.13-.36Z"/>
+          <ellipse class="st2" cx="216.34" cy="189.24" rx=".55" ry=".47"/>
+          <ellipse class="st2" cx="210.02" cy="165.47" rx=".49" ry=".41"/>
+          <ellipse class="st2" cx="216.31" cy="154.89" rx=".55" ry=".47"/>
+          <ellipse class="st2" cx="216.31" cy="234.13" rx=".55" ry=".47"/>
+          <ellipse class="st2" cx="213.18" cy="173.38" rx=".52" ry=".44"/>
+          <ellipse class="st2" cx="216.34" cy="183.96" rx=".52" ry=".44"/>
+          <ellipse class="st2" cx="210.02" cy="168.11" rx=".49" ry=".41"/>
+          <ellipse class="st2" cx="210.02" cy="162.83" rx=".49" ry=".44"/>
+          <ellipse class="st2" cx="213.18" cy="146.98" rx=".52" ry=".44"/>
+          <ellipse class="st2" cx="216.34" cy="146.98" rx=".52" ry=".44"/>
+          <ellipse class="st2" cx="213.18" cy="149.62" rx=".52" ry=".44"/>
+          <ellipse class="st2" cx="210.02" cy="210.36" rx=".52" ry=".44"/>
+          <ellipse class="st2" cx="216.31" cy="178.68" rx=".55" ry=".47"/>
+          <ellipse class="st2" cx="216.34" cy="228.85" rx=".55" ry=".44"/>
+          <ellipse class="st2" cx="213.18" cy="228.85" rx=".52" ry=".44"/>
+          <ellipse class="st2" cx="216.34" cy="186.6" rx=".52" ry=".44"/>
+          <ellipse class="st2" cx="213.15" cy="176.02" rx=".52" ry=".44"/>
+          <path class="st2" d="M284.78,142.2h1.79l-.66.36c-.16.08-.47-.05-1.13-.36Z"/>
+          <ellipse class="st2" cx="216.31" cy="152.25" rx=".55" ry=".47"/>
+          <ellipse class="st2" cx="213.18" cy="197.15" rx=".52" ry=".44"/>
+          <ellipse class="st2" cx="216.34" cy="226.22" rx=".52" ry=".44"/>
+          <ellipse class="st2" cx="213.18" cy="226.22" rx=".52" ry=".44"/>
+          <ellipse class="st2" cx="210.02" cy="202.45" rx=".49" ry=".41"/>
+          <ellipse class="st2" cx="210.02" cy="205.09" rx=".49" ry=".41"/>
+          <ellipse class="st2" cx="213.18" cy="183.96" rx=".52" ry=".44"/>
+          <ellipse class="st2" cx="216.34" cy="144.34" rx=".55" ry=".44"/>
+          <ellipse class="st2" cx="213.18" cy="186.6" rx=".52" ry=".44"/>
+          <ellipse class="st2" cx="216.34" cy="149.62" rx=".52" ry=".44"/>
+          <ellipse class="st2" cx="216.34" cy="223.58" rx=".55" ry=".47"/>
+          <path class="st2" d="M213.15,157.09c.29,0,.52.2.52.44s-.23.44-.52.44-.52-.2-.52-.44.23-.44.52-.44Z"/>
+          <ellipse class="st2" cx="210.02" cy="157.56" rx=".49" ry=".41"/>
+          <ellipse class="st2" cx="206.86" cy="220.94" rx=".47" ry=".38"/>
+          <ellipse class="st2" cx="210.02" cy="170.74" rx=".49" ry=".41"/>
+          <ellipse class="st2" cx="206.86" cy="197.18" rx=".47" ry=".38"/>
+          <ellipse class="st2" cx="206.86" cy="157.56" rx=".47" ry=".38"/>
+          <ellipse class="st2" cx="210.02" cy="191.87" rx=".49" ry=".41"/>
+          <ellipse class="st2" cx="210.02" cy="197.15" rx=".49" ry=".41"/>
+          <ellipse class="st2" cx="213.18" cy="234.13" rx=".52" ry=".44"/>
+          <ellipse class="st2" cx="210.02" cy="234.13" rx=".49" ry=".41"/>
+          <ellipse class="st2" cx="206.86" cy="234.13" rx=".47" ry=".38"/>
+          <ellipse class="st2" cx="210.02" cy="176.02" rx=".49" ry=".41"/>
+          <ellipse class="st2" cx="210.02" cy="194.51" rx=".49" ry=".41"/>
+          <ellipse class="st2" cx="210.02" cy="146.98" rx=".52" ry=".44"/>
+          <ellipse class="st2" cx="213.18" cy="231.49" rx=".52" ry=".44"/>
+          <ellipse class="st2" cx="206.89" cy="231.49" rx=".47" ry=".41"/>
+          <ellipse class="st2" cx="206.86" cy="199.81" rx=".47" ry=".38"/>
+          <ellipse class="st2" cx="210.02" cy="199.81" rx=".49" ry=".41"/>
+          <ellipse class="st2" cx="210.02" cy="228.85" rx=".49" ry=".41"/>
+          <ellipse class="st2" cx="213.18" cy="218.28" rx=".52" ry=".44"/>
+          <ellipse class="st2" cx="210.02" cy="218.28" rx=".49" ry=".41"/>
+          <ellipse class="st2" cx="206.89" cy="218.28" rx=".47" ry=".41"/>
+          <ellipse class="st2" cx="210.02" cy="213" rx=".52" ry=".44"/>
+          <ellipse class="st2" cx="213.18" cy="152.25" rx=".52" ry=".44"/>
+          <ellipse class="st2" cx="213.18" cy="189.24" rx=".52" ry=".44"/>
+          <ellipse class="st2" cx="210.05" cy="189.21" rx=".49" ry=".41"/>
+          <ellipse class="st2" cx="206.89" cy="207.73" rx=".47" ry=".38"/>
+          <ellipse class="st2" cx="213.18" cy="144.34" rx=".52" ry=".44"/>
+          <ellipse class="st2" cx="213.18" cy="191.87" rx=".52" ry=".44"/>
+          <ellipse class="st2" cx="206.89" cy="149.62" rx=".47" ry=".41"/>
+          <ellipse class="st2" cx="210.02" cy="149.62" rx=".49" ry=".41"/>
+          <ellipse class="st2" cx="210.02" cy="231.49" rx=".49" ry=".41"/>
+          <ellipse class="st2" cx="203.73" cy="165.47" rx=".47" ry=".38"/>
+          <ellipse class="st2" cx="210.02" cy="152.25" rx=".49" ry=".41"/>
+          <ellipse class="st2" cx="213.18" cy="223.58" rx=".52" ry=".44"/>
+          <ellipse class="st2" cx="210.02" cy="223.58" rx=".52" ry=".44"/>
+          <ellipse class="st2" cx="210.02" cy="178.66" rx=".49" ry=".41"/>
+          <ellipse class="st2" cx="206.89" cy="205.09" rx=".47" ry=".38"/>
+          <ellipse class="st2" cx="206.86" cy="154.89" rx=".47" ry=".38"/>
+          <ellipse class="st2" cx="206.86" cy="152.25" rx=".47" ry=".38"/>
+          <ellipse class="st2" cx="210.02" cy="183.96" rx=".52" ry=".44"/>
+          <ellipse class="st2" cx="213.18" cy="194.51" rx=".52" ry=".44"/>
+          <ellipse class="st2" cx="213.18" cy="220.91" rx=".52" ry=".44"/>
+          <ellipse class="st2" cx="210.02" cy="220.91" rx=".52" ry=".44"/>
+          <ellipse class="st2" cx="213.18" cy="215.64" rx=".52" ry=".44"/>
+          <ellipse class="st2" cx="210.02" cy="215.64" rx=".49" ry=".41"/>
+          <ellipse class="st2" cx="206.86" cy="215.64" rx=".47" ry=".41"/>
+          <ellipse class="st2" cx="206.86" cy="213" rx=".47" ry=".38"/>
+          <ellipse class="st2" cx="210.02" cy="144.34" rx=".52" ry=".44"/>
+          <ellipse class="st2" cx="210.02" cy="160.19" rx=".49" ry=".41"/>
+          <ellipse class="st2" cx="206.86" cy="178.68" rx=".47" ry=".41"/>
+          <ellipse class="st2" cx="213.18" cy="178.66" rx=".52" ry=".44"/>
+          <ellipse class="st2" cx="213.18" cy="181.32" rx=".52" ry=".44"/>
+          <ellipse class="st2" cx="210.02" cy="154.89" rx=".49" ry=".41"/>
+          <ellipse class="st2" cx="206.86" cy="191.85" rx=".47" ry=".38"/>
+          <ellipse class="st2" cx="210.02" cy="181.32" rx=".49" ry=".41"/>
+          <ellipse class="st2" cx="206.86" cy="176.02" rx=".47" ry=".41"/>
+          <ellipse class="st2" cx="206.86" cy="181.32" rx=".49" ry=".41"/>
+          <ellipse class="st2" cx="206.89" cy="165.47" rx=".47" ry=".41"/>
+          <ellipse class="st2" cx="210.02" cy="173.38" rx=".49" ry=".41"/>
+          <ellipse class="st2" cx="206.86" cy="194.51" rx=".47" ry=".38"/>
+          <ellipse class="st2" cx="213.18" cy="154.92" rx=".52" ry=".44"/>
+          <ellipse class="st2" cx="206.86" cy="173.38" rx=".49" ry=".41"/>
+          <ellipse class="st2" cx="203.73" cy="202.45" rx=".44" ry=".38"/>
+          <path class="st2" d="M203.29,220.94c-.08-.3.8-.36.85,0,0,.16-.8.16-.85,0Z"/>
+          <path class="st2" d="M203.29,147.03c-.08-.27.8-.36.85,0,0,.16-.8.16-.85,0Z"/>
+          <path class="st2" d="M206.45,147.03c-.08-.3.8-.33.85,0,.03.16-.8.16-.85,0Z"/>
+          <path class="st2" d="M203.29,231.57c-.08-.3.8-.33.85,0,0,.16-.8.16-.85,0Z"/>
+          <path class="st2" d="M206.45,228.91c-.08-.3.8-.33.85,0,0,.16-.8.16-.85,0Z"/>
+          <path class="st2" d="M203.29,228.91c-.11-.33.8-.33.85,0,0,.16-.8.19-.85,0Z"/>
+          <ellipse class="st2" cx="203.73" cy="218.3" rx=".47" ry=".38"/>
+          <path class="st2" d="M209.61,226.24c-.08-.33.8-.36.85,0,0,.16-.8.16-.85,0Z"/>
+          <path class="st2" d="M206.45,226.24c-.08-.33.8-.36.85,0,0,.16-.8.16-.85,0Z"/>
+          <path class="st2" d="M203.29,226.24c-.08-.3.8-.33.85,0,0,.16-.8.19-.85,0Z"/>
+          <path class="st2" d="M203.29,149.7c-.08-.33.8-.36.85,0,0,.16-.8.16-.85,0Z"/>
+          <path class="st2" d="M206.45,223.58c-.08-.3.8-.33.85,0,.03.16-.8.16-.85,0Z"/>
+          <path class="st2" d="M203.29,223.61c-.08-.3.8-.36.85,0,.03.16-.8.16-.85,0Z"/>
+          <ellipse class="st2" cx="203.73" cy="160.19" rx=".47" ry=".38"/>
+          <ellipse class="st2" cx="206.89" cy="160.19" rx=".47" ry=".38"/>
+          <ellipse class="st2" cx="206.86" cy="210.36" rx=".47" ry=".38"/>
+          <ellipse class="st2" cx="203.73" cy="213" rx=".47" ry=".38"/>
+          <ellipse class="st2" cx="200.57" cy="213" rx=".44" ry=".36"/>
+          <ellipse class="st2" cx="200.57" cy="165.47" rx=".44" ry=".36"/>
+          <ellipse class="st2" cx="203.73" cy="210.36" rx=".44" ry=".38"/>
+          <ellipse class="st2" cx="203.73" cy="176.05" rx=".47" ry=".38"/>
+          <ellipse class="st2" cx="200.57" cy="210.36" rx=".44" ry=".36"/>
+          <ellipse class="st2" cx="203.73" cy="194.51" rx=".47" ry=".38"/>
+          <polygon class="st2" points="200.57 158.02 199.99 157.5 200.57 157.06 201.15 157.58 200.57 158.02"/>
+          <ellipse class="st2" cx="200.57" cy="199.79" rx=".44" ry=".36"/>
+          <ellipse class="st2" cx="203.73" cy="199.79" rx=".44" ry=".38"/>
+          <ellipse class="st2" cx="200.57" cy="202.45" rx=".44" ry=".36"/>
+          <ellipse class="st2" cx="203.73" cy="205.09" rx=".47" ry=".38"/>
+          <path class="st2" d="M203.29,183.99c-.08-.3.8-.36.85,0,.03.16-.8.19-.85,0Z"/>
+          <polygon class="st2" points="206.72 168.6 206.28 168 207 167.61 207.44 168.22 206.72 168.6"/>
+          <ellipse class="st2" cx="203.73" cy="168.11" rx=".47" ry=".38"/>
+          <ellipse class="st2" cx="203.73" cy="215.67" rx=".47" ry=".38"/>
+          <ellipse class="st2" cx="203.73" cy="170.74" rx=".47" ry=".38"/>
+          <path class="st2" d="M206.45,186.62c-.08-.3.8-.33.85,0,.03.16-.8.16-.85,0Z"/>
+          <path class="st2" d="M209.61,186.62c-.08-.3.8-.33.85,0,.03.16-.8.16-.85,0Z"/>
+          <ellipse class="st2" cx="203.73" cy="197.15" rx=".47" ry=".38"/>
+          <polygon class="st2" points="203.59 208.19 203.15 207.62 203.84 207.23 204.28 207.81 203.59 208.19"/>
+          <path class="st2" d="M206.45,144.37c-.08-.3.8-.33.85,0,0,.16-.8.16-.85,0Z"/>
+          <path class="st2" d="M203.29,144.37c-.11-.33.8-.33.85-.03,0,.16-.8.19-.85.03Z"/>
+          <path class="st2" d="M203.29,191.96c-.11-.33.8-.3.85-.03,0,.16-.8.19-.85.03Z"/>
+          <path class="st2" d="M203.29,186.65c-.08-.3.8-.36.85,0,0,.16-.8.16-.85,0Z"/>
+          <ellipse class="st2" cx="206.89" cy="202.45" rx=".47" ry=".38"/>
+          <path class="st2" d="M203.29,189.29c-.08-.27.8-.33.85,0,.03.16-.8.19-.85,0Z"/>
+          <path class="st2" d="M206.45,183.99c-.08-.3.8-.33.85,0,0,.16-.8.19-.85,0Z"/>
+          <ellipse class="st2" cx="203.73" cy="162.83" rx=".47" ry=".38"/>
+          <ellipse class="st2" cx="206.89" cy="162.83" rx=".47" ry=".38"/>
+          <ellipse class="st2" cx="200.57" cy="173.41" rx=".44" ry=".36"/>
+          <path class="st2" d="M203.29,181.32c-.11-.33.8-.36.85-.03,0,.16-.8.19-.85.03Z"/>
+          <ellipse class="st2" cx="203.73" cy="157.53" rx=".47" ry=".38"/>
+          <ellipse class="st2" cx="200.57" cy="160.17" rx=".44" ry=".36"/>
+          <ellipse class="st2" cx="203.73" cy="173.38" rx=".47" ry=".38"/>
+          <path class="st2" d="M206.45,189.29c-.08-.33.8-.36.85,0,.03.16-.8.16-.85,0Z"/>
+          <ellipse class="st2" cx="206.89" cy="170.74" rx=".47" ry=".38"/>
+          <path class="st2" d="M203.4,234.05c-.3.05.16-.03.6-.11.22.33-.11.88-.6.11Z"/>
+          <path class="st2" d="M200.21,194.43c-.3.05.16-.03.6-.11.22.33-.11.88-.6.11Z"/>
+          <path class="st2" d="M203.21,178.79l.66-.58.25.52s-.33.08-.91.03v.03Z"/>
+          <path class="st2" d="M200.21,168.02c.41-.47,1.07-.27.47.36.03,0-.14-.11-.47-.36Z"/>
+          <ellipse class="st2" cx="200.54" cy="205.09" rx=".44" ry=".36"/>
+          <ellipse class="st2" cx="200.54" cy="207.73" rx=".44" ry=".36"/>
+          <path class="st2" d="M200.21,170.66c.41-.47,1.07-.27.47.36.03,0-.14-.11-.47-.36Z"/>
+          <ellipse class="st2" cx="200.54" cy="162.83" rx=".44" ry=".36"/>
+          <path class="st2" d="M197.02,160.25l.47-.36c.58.63-.05.82-.47.36Z"/>
+          <path class="st2" d="M203.4,154.81c-.3.05.16-.03.6-.11.22.33-.11.88-.6.11Z"/>
+          <path class="st2" d="M203.4,152.17c-.3.05.16-.03.6-.11.22.33-.11.88-.6.11Z"/>
+          <polygon class="st2" points="281.87 142.2 283.19 142.14 283.35 142.33 282.03 142.42 281.87 142.2"/>
+          <path class="st2" d="M201.04,226.3c-.33.08-.69.16-.66.05l.14-.41s.33.16.49.36h.03Z"/>
+          <ellipse class="st2" cx="197.49" cy="226.22" rx=".33" ry=".27"/>
+          <path class="st2" d="M194.69,226.3c-.33.08-.69.16-.66.05l.14-.41s.33.16.49.36h.03Z"/>
+          <ellipse class="st2" cx="191.14" cy="226.22" rx=".33" ry=".27"/>
+          <path class="st2" d="M194.69,213c-.33.08-.69.16-.66.05l.14-.41s.33.16.49.36h.03Z"/>
+          <ellipse class="st2" cx="197.49" cy="212.92" rx=".33" ry=".27"/>
+          <path class="st2" d="M197.85,194.65c-.33.08-.69.16-.66.05l.14-.41s.33.16.49.36h.03Z"/>
+          <path class="st2" d="M197.24,207.45s.6.22.52.27l-.49.36v-.63h-.03Z"/>
+          <ellipse class="st2" cx="194.3" cy="194.57" rx=".33" ry=".27"/>
+          <ellipse class="st2" cx="191.14" cy="194.57" rx=".33" ry=".27"/>
+          <ellipse class="st2" cx="187.99" cy="194.57" rx=".33" ry=".27"/>
+          <ellipse class="st2" cx="197.49" cy="189.26" rx=".33" ry=".27"/>
+          <ellipse class="st2" cx="194.3" cy="189.26" rx=".33" ry=".27"/>
+          <ellipse class="st2" cx="187.99" cy="226.22" rx=".33" ry=".27"/>
+          <ellipse class="st2" cx="187.99" cy="149.64" rx=".33" ry=".27"/>
+          <ellipse class="st2" cx="191.14" cy="149.64" rx=".33" ry=".27"/>
+          <ellipse class="st2" cx="194.3" cy="149.64" rx=".33" ry=".27"/>
+          <path class="st2" d="M197.85,149.73c-.33.08-.69.16-.66.05l.14-.41s.33.16.49.36h.03Z"/>
+          <ellipse class="st2" cx="200.65" cy="149.64" rx=".33" ry=".27"/>
+          <path class="st2" d="M185.18,226.3c-.33.08-.69.16-.66.05l.14-.41s.33.16.49.36h.03Z"/>
+          <path class="st2" d="M201.04,223.63c-.33.08-.69.16-.66.05l.14-.41s.33.16.49.36h.03Z"/>
+          <ellipse class="st2" cx="197.49" cy="223.55" rx=".33" ry=".27"/>
+          <ellipse class="st2" cx="194.3" cy="223.55" rx=".33" ry=".27"/>
+          <ellipse class="st2" cx="191.14" cy="223.55" rx=".33" ry=".27"/>
+          <ellipse class="st2" cx="187.99" cy="223.55" rx=".33" ry=".27"/>
+          <path class="st2" d="M197.22,162.5c.19.08.6.25.55.3l-.49.36-.05-.66Z"/>
+          <ellipse class="st2" cx="184.8" cy="183.93" rx=".33" ry=".27"/>
+          <ellipse class="st2" cx="187.99" cy="183.93" rx=".33" ry=".27"/>
+          <ellipse class="st2" cx="191.14" cy="183.93" rx=".33" ry=".27"/>
+          <ellipse class="st2" cx="200.65" cy="154.95" rx=".33" ry=".27"/>
+          <ellipse class="st2" cx="197.49" cy="154.95" rx=".33" ry=".27"/>
+          <ellipse class="st2" cx="194.3" cy="154.95" rx=".33" ry=".27"/>
+          <ellipse class="st2" cx="191.14" cy="154.95" rx=".33" ry=".27"/>
+          <path class="st2" d="M197.22,167.83c.16.05.6.25.55.27l-.49.36-.05-.66v.03Z"/>
+          <ellipse class="st2" cx="187.99" cy="154.95" rx=".33" ry=".27"/>
+          <ellipse class="st2" cx="191.14" cy="189.26" rx=".33" ry=".27"/>
+          <path class="st2" d="M185.18,223.63c-.33.08-.69.16-.66.05l.14-.41s.33.16.49.36h.03Z"/>
+          <ellipse class="st2" cx="200.65" cy="189.26" rx=".33" ry=".27"/>
+          <ellipse class="st2" cx="197.49" cy="199.87" rx=".33" ry=".27"/>
+          <ellipse class="st2" cx="194.3" cy="199.87" rx=".33" ry=".27"/>
+          <ellipse class="st2" cx="200.65" cy="215.58" rx=".33" ry=".27"/>
+          <path class="st2" d="M197.24,165.19s.6.22.52.27l-.49.36v-.63h-.03Z"/>
+          <ellipse class="st2" cx="194.3" cy="183.93" rx=".33" ry=".27"/>
+          <ellipse class="st2" cx="197.49" cy="183.93" rx=".33" ry=".27"/>
+          <ellipse class="st2" cx="200.65" cy="183.93" rx=".33" ry=".27"/>
+          <ellipse class="st2" cx="197.49" cy="215.58" rx=".33" ry=".27"/>
+          <ellipse class="st2" cx="200.65" cy="197.23" rx=".33" ry=".27"/>
+          <ellipse class="st2" cx="194.3" cy="215.58" rx=".33" ry=".27"/>
+          <path class="st2" d="M188.34,152.39c-.33.08-.69.16-.66.05l.14-.41s.33.16.49.36h.03Z"/>
+          <path class="st2" d="M191.53,152.39c-.33.08-.69.16-.66.05l.14-.41s.33.16.49.36h.03Z"/>
+          <ellipse class="st2" cx="194.3" cy="152.31" rx=".33" ry=".27"/>
+          <ellipse class="st2" cx="197.49" cy="152.31" rx=".33" ry=".27"/>
+          <path class="st2" d="M201.04,152.39c-.33.08-.69.16-.66.05l.14-.41s.33.16.49.36h.03Z"/>
+          <ellipse class="st2" cx="187.99" cy="191.9" rx=".33" ry=".27"/>
+          <ellipse class="st2" cx="191.14" cy="191.9" rx=".33" ry=".27"/>
+          <ellipse class="st2" cx="194.3" cy="191.9" rx=".33" ry=".27"/>
+          <ellipse class="st2" cx="184.8" cy="186.6" rx=".33" ry=".27"/>
+          <ellipse class="st2" cx="187.99" cy="189.26" rx=".33" ry=".27"/>
+          <path class="st2" d="M185.18,189.35c-.33.08-.69.16-.66.05l.14-.41s.33.16.49.36h.03Z"/>
+          <ellipse class="st2" cx="197.49" cy="191.9" rx=".33" ry=".27"/>
+          <path class="st2" d="M201.04,191.98c-.33.08-.69.16-.66.05l.14-.41s.33.16.49.36h.03Z"/>
+          <path class="st2" d="M269.23,142.22l1.15.05-1.15-.05Z"/>
+          <path class="st2" d="M272.39,142.22l1.15.05-1.15-.05Z"/>
+          <path class="st2" d="M275.55,142.22l1.15.05-1.15-.05Z"/>
+          <path class="st2" d="M278.74,142.22l1.15.05-1.15-.05Z"/>
+          <ellipse class="st2" cx="191.14" cy="175.96" rx=".33" ry=".27"/>
+          <ellipse class="st2" cx="194.3" cy="175.96" rx=".33" ry=".27"/>
+          <ellipse class="st2" cx="197.49" cy="175.96" rx=".33" ry=".27"/>
+          <ellipse class="st2" cx="200.65" cy="175.96" rx=".33" ry=".27"/>
+          <ellipse class="st2" cx="197.49" cy="170.66" rx=".33" ry=".27"/>
+          <path class="st2" d="M197.22,204.79c.22.08.63.25.55.3l-.49.36-.05-.66Z"/>
+          <ellipse class="st2" cx="200.65" cy="186.6" rx=".33" ry=".27"/>
+          <ellipse class="st2" cx="197.49" cy="173.3" rx=".33" ry=".27"/>
+          <ellipse class="st2" cx="184.8" cy="144.31" rx=".33" ry=".27"/>
+          <path class="st2" d="M188.34,144.42c-.33.08-.69.16-.66.05l.14-.41s.33.16.49.36h.03Z"/>
+          <ellipse class="st2" cx="191.14" cy="144.31" rx=".33" ry=".27"/>
+          <ellipse class="st2" cx="194.3" cy="144.31" rx=".33" ry=".27"/>
+          <ellipse class="st2" cx="197.49" cy="144.31" rx=".33" ry=".27"/>
+          <path class="st2" d="M201.04,144.42c-.33.08-.69.16-.66.05l.14-.41s.33.16.49.36h.03Z"/>
+          <ellipse class="st2" cx="197.49" cy="186.6" rx=".33" ry=".27"/>
+          <ellipse class="st2" cx="200.65" cy="220.89" rx=".33" ry=".27"/>
+          <ellipse class="st2" cx="197.49" cy="220.89" rx=".33" ry=".27"/>
+          <path class="st2" d="M191.53,220.97c-.33.08-.69.16-.66.05l.14-.41s.33.16.49.36h.03Z"/>
+          <path class="st2" d="M188.34,178.71c-.33.08-.69.16-.66.05l.14-.41s.33.16.49.36h.03Z"/>
+          <path class="st2" d="M191.53,178.71c-.33.08-.69.16-.66.05l.14-.41s.33.16.49.36h.03Z"/>
+          <ellipse class="st2" cx="194.3" cy="178.63" rx=".33" ry=".27"/>
+          <path class="st2" d="M197.85,178.71c-.33.08-.69.16-.66.05l.14-.41s.33.16.49.36h.03Z"/>
+          <path class="st2" d="M201.04,178.71c-.33.08-.69.16-.66.05l.14-.41s.33.16.49.36h.03Z"/>
+          <ellipse class="st2" cx="187.99" cy="220.89" rx=".33" ry=".27"/>
+          <path class="st2" d="M197.85,197.31c-.33.08-.69.16-.66.05l.14-.41s.33.16.49.36h.03Z"/>
+          <ellipse class="st2" cx="194.3" cy="197.23" rx=".33" ry=".27"/>
+          <ellipse class="st2" cx="191.14" cy="197.23" rx=".33" ry=".27"/>
+          <ellipse class="st2" cx="184.8" cy="220.89" rx=".33" ry=".27"/>
+          <ellipse class="st2" cx="200.65" cy="234.18" rx=".33" ry=".27"/>
+          <ellipse class="st2" cx="197.49" cy="234.18" rx=".33" ry=".27"/>
+          <path class="st2" d="M194.69,234.27c-.33.08-.69.16-.66.05l.14-.41s.33.16.49.36h.03Z"/>
+          <path class="st2" d="M197.22,202.12c.19.08.6.25.55.3l-.49.36-.05-.66Z"/>
+          <ellipse class="st2" cx="194.3" cy="186.6" rx=".33" ry=".27"/>
+          <ellipse class="st2" cx="191.14" cy="234.18" rx=".33" ry=".27"/>
+          <path class="st2" d="M188.34,234.27c-.33.08-.69.16-.66.05l.14-.41s.33.16.49.36h.03Z"/>
+          <ellipse class="st2" cx="184.8" cy="146.98" rx=".33" ry=".27"/>
+          <ellipse class="st2" cx="187.99" cy="146.98" rx=".33" ry=".27"/>
+          <ellipse class="st2" cx="191.14" cy="146.98" rx=".33" ry=".27"/>
+          <path class="st2" d="M194.69,147.06c-.33.08-.69.16-.66.05l.14-.41s.33.16.49.36h.03Z"/>
+          <path class="st2" d="M197.85,147.06c-.33.08-.69.16-.66.05l.14-.41s.33.16.49.36h.03Z"/>
+          <path class="st2" d="M197.85,157.69c-.33.08-.69.16-.66.05l.14-.41s.33.16.49.36h.03Z"/>
+          <ellipse class="st2" cx="194.3" cy="157.61" rx=".33" ry=".27"/>
+          <ellipse class="st2" cx="191.14" cy="186.6" rx=".33" ry=".27"/>
+          <path class="st2" d="M201.04,147.06c-.33.08-.69.16-.66.05l.14-.41s.33.16.49.36h.03Z"/>
+          <ellipse class="st2" cx="200.65" cy="231.52" rx=".33" ry=".27"/>
+          <ellipse class="st2" cx="197.49" cy="231.52" rx=".33" ry=".27"/>
+          <ellipse class="st2" cx="194.3" cy="231.52" rx=".33" ry=".27"/>
+          <ellipse class="st2" cx="191.14" cy="231.52" rx=".33" ry=".27"/>
+          <ellipse class="st2" cx="187.99" cy="186.6" rx=".33" ry=".27"/>
+          <ellipse class="st2" cx="187.99" cy="231.52" rx=".33" ry=".27"/>
+          <ellipse class="st2" cx="194.3" cy="220.89" rx=".33" ry=".27"/>
+          <ellipse class="st2" cx="200.65" cy="228.85" rx=".33" ry=".27"/>
+          <ellipse class="st2" cx="197.49" cy="228.85" rx=".33" ry=".27"/>
+          <ellipse class="st2" cx="194.3" cy="228.85" rx=".33" ry=".27"/>
+          <ellipse class="st2" cx="191.14" cy="228.85" rx=".33" ry=".27"/>
+          <path class="st2" d="M188.34,228.94c-.33.08-.69.16-.66.05l.14-.41s.33.16.49.36h.03Z"/>
+          <ellipse class="st2" cx="184.8" cy="228.85" rx=".33" ry=".27"/>
+          <path class="st2" d="M188.34,181.38c-.33.08-.69.16-.66.05l.14-.41s.33.16.49.36h.03Z"/>
+          <ellipse class="st2" cx="191.14" cy="181.27" rx=".33" ry=".27"/>
+          <path class="st2" d="M194.69,181.38c-.33.08-.69.16-.66.05l.14-.41s.33.16.49.36h.03Z"/>
+          <ellipse class="st2" cx="197.49" cy="181.27" rx=".33" ry=".27"/>
+          <ellipse class="st2" cx="200.65" cy="218.22" rx=".33" ry=".27"/>
+          <ellipse class="st2" cx="197.49" cy="218.22" rx=".33" ry=".27"/>
+          <ellipse class="st2" cx="200.65" cy="181.27" rx=".33" ry=".27"/>
+          <path class="st2" d="M194.69,218.33c-.33.08-.69.16-.66.05l.14-.41s.33.16.49.36h.03Z"/>
+          <path class="st2" d="M191.53,218.33c-.33.08-.69.16-.66.05l.14-.41s.33.16.49.36h.03Z"/>
+          <ellipse class="st2" cx="187.99" cy="218.22" rx=".33" ry=".27"/>
+          <path class="st2" d="M194.47,170.8s-.47.08-.44,0l.11-.38s.27.3.33.38Z"/>
+          <path class="st2" d="M194.47,207.75s-.47.08-.44,0l.11-.38s.27.3.33.38Z"/>
+          <path class="st2" d="M191.31,173.46s-.47.08-.44,0l.08-.38s.27.3.33.38h.03Z"/>
+          <path class="st2" d="M194.47,173.46s-.47.08-.44,0l.08-.38s.27.3.33.38h.03Z"/>
+          <ellipse class="st2" cx="194.28" cy="205.17" rx=".27" ry=".25"/>
+          <path class="st2" d="M266.56,142.22c-.3,0-.19,0,.14,0,.69.05.63.05-.14,0Z"/>
+          <path class="st2" d="M263.38,142.22c-.3,0-.19,0,.14,0,.69.05.63.05-.14,0Z"/>
+          <path class="st2" d="M260.22,142.22c-.3,0-.19,0,.14,0,.69.05.63.05-.14,0Z"/>
+          <path class="st2" d="M257.03,142.22c-.3,0-.19,0,.14,0,.69.05.63.05-.14,0Z"/>
+          <ellipse class="st2" cx="194.28" cy="165.55" rx=".27" ry=".25"/>
+          <ellipse class="st2" cx="194.28" cy="160.22" rx=".27" ry=".25"/>
+          <path class="st2" d="M194.47,210.42s-.47.05-.44,0l.11-.38s.25.27.33.41v-.03Z"/>
+          <path class="st2" d="M197.66,210.42s-.47.08-.44,0l.08-.38s.27.3.33.38h.03Z"/>
+          <ellipse class="st2" cx="194.28" cy="202.51" rx=".27" ry=".25"/>
+          <ellipse class="st2" cx="191.09" cy="157.58" rx=".27" ry=".25"/>
+          <path class="st2" d="M181.89,181.43s-.58.05-.52,0l.33-.33s.19.22.19.33Z"/>
+          <ellipse class="st2" cx="194.28" cy="162.89" rx=".27" ry=".25"/>
+          <path class="st2" d="M191.31,213.08s-.47.08-.44,0l.08-.38s.27.3.33.38h.03Z"/>
+          <path class="st2" d="M191.31,215.72s-.47.08-.44,0l.11-.38s.27.3.33.38Z"/>
+          <path class="st2" d="M185.07,192.04s-.47-.05-.44-.14l.08-.27s.33.33.38.41h-.03Z"/>
+          <path class="st2" d="M194.47,168.16s-.47.08-.44,0l.11-.38s.27.27.33.38Z"/>
+          <path class="st2" d="M185.07,149.75s-.47-.05-.44-.14l.08-.27s.33.33.36.41Z"/>
+          <path class="st2" d="M181.91,149.75s-.47-.05-.44-.14l.08-.27s.3.3.36.41Z"/>
+          <path class="st2" d="M185.07,231.63s-.47-.05-.44-.11l.08-.27s.33.33.36.41v-.03Z"/>
+          <polygon class="st2" points="181.72 207.73 181.53 207.73 181.34 207.73 181.53 207.73 181.72 207.73 181.91 207.73 181.72 207.73"/>
+          <polygon class="st2" points="184.91 207.73 184.72 207.73 184.52 207.73 184.72 207.73 184.91 207.73 185.1 207.73 184.91 207.73"/>
+          <polygon class="st2" points="188.07 207.73 187.88 207.73 187.68 207.73 187.88 207.73 188.07 207.73 188.26 207.73 188.07 207.73"/>
+          <polygon class="st2" points="191.23 207.73 191.03 207.73 190.84 207.73 191.03 207.73 191.23 207.73 191.42 207.73 191.23 207.73"/>
+          <polygon class="st2" points="181.72 205.09 181.53 205.09 181.34 205.06 181.53 205.06 181.72 205.06 181.91 205.06 181.72 205.09"/>
+          <polygon class="st2" points="181.72 154.84 181.53 154.84 181.34 154.84 181.53 154.81 181.72 154.81 181.91 154.84 181.72 154.84"/>
+          <polygon class="st2" points="181.72 194.46 181.53 194.46 181.34 194.46 181.53 194.43 181.72 194.43 181.91 194.46 181.72 194.46"/>
+          <polygon class="st2" points="178.56 168.13 178.37 168.13 178.18 168.11 178.37 168.11 178.56 168.11 178.75 168.11 178.56 168.13"/>
+          <polygon class="st2" points="181.72 168.13 181.53 168.13 181.34 168.11 181.53 168.11 181.72 168.11 181.91 168.11 181.72 168.13"/>
+          <polygon class="st2" points="191.23 162.8 191.03 162.8 190.84 162.8 191.03 162.8 191.23 162.8 191.42 162.8 191.23 162.8"/>
+          <polygon class="st2" points="188.07 162.8 187.88 162.8 187.68 162.8 187.88 162.8 188.07 162.8 188.26 162.8 188.07 162.8"/>
+          <polygon class="st2" points="184.91 162.8 184.72 162.8 184.52 162.8 184.72 162.8 184.91 162.8 185.1 162.8 184.91 162.8"/>
+          <polygon class="st2" points="181.72 162.8 181.53 162.8 181.34 162.8 181.53 162.8 181.72 162.8 181.91 162.8 181.72 162.8"/>
+          <polygon class="st2" points="181.72 215.72 181.53 215.72 181.34 215.69 181.53 215.69 181.72 215.69 181.91 215.69 181.72 215.72"/>
+          <polygon class="st2" points="184.91 215.72 184.72 215.72 184.52 215.69 184.72 215.69 184.91 215.69 185.1 215.69 184.91 215.72"/>
+          <polygon class="st2" points="184.91 168.13 184.72 168.13 184.52 168.11 184.72 168.11 184.91 168.11 185.1 168.11 184.91 168.13"/>
+          <polygon class="st2" points="188.07 168.13 187.88 168.13 187.68 168.11 187.88 168.11 188.07 168.11 188.26 168.11 188.07 168.13"/>
+          <polygon class="st2" points="191.23 168.13 191.03 168.13 190.84 168.11 191.03 168.11 191.23 168.11 191.42 168.11 191.23 168.13"/>
+          <polygon class="st2" points="191.23 199.76 191.03 199.76 190.84 199.76 191.03 199.76 191.23 199.76 191.42 199.76 191.23 199.76"/>
+          <polygon class="st2" points="188.07 199.76 187.88 199.76 187.68 199.76 187.88 199.76 188.07 199.76 188.26 199.76 188.07 199.76"/>
+          <polygon class="st2" points="184.91 199.76 184.72 199.76 184.52 199.76 184.72 199.76 184.91 199.76 185.1 199.76 184.91 199.76"/>
+          <polygon class="st2" points="184.91 194.46 184.72 194.46 184.52 194.46 184.72 194.43 184.91 194.43 185.1 194.46 184.91 194.46"/>
+          <polygon class="st2" points="181.72 199.76 181.53 199.76 181.34 199.76 181.53 199.76 181.72 199.76 181.91 199.76 181.72 199.76"/>
+          <polygon class="st2" points="181.78 223.8 181.78 223.63 181.78 223.47 181.78 223.3 181.8 223.47 181.8 223.63 181.78 223.8"/>
+          <polygon class="st2" points="184.91 154.84 184.72 154.84 184.52 154.84 184.72 154.81 184.91 154.81 185.1 154.84 184.91 154.84"/>
+          <polygon class="st2" points="191.23 165.47 191.03 165.47 190.84 165.47 191.03 165.44 191.23 165.44 191.42 165.47 191.23 165.47"/>
+          <polygon class="st2" points="181.78 184.18 181.78 184.01 181.78 183.85 181.78 183.69 181.8 183.85 181.8 184.01 181.78 184.18"/>
+          <polygon class="st2" points="178.62 184.18 178.59 184.01 178.59 183.85 178.62 183.69 178.62 183.85 178.62 184.01 178.62 184.18"/>
+          <polygon class="st2" points="188.07 213.06 187.88 213.06 187.68 213.03 187.88 213.03 188.07 213.03 188.26 213.03 188.07 213.06"/>
+          <polygon class="st2" points="184.91 213.06 184.72 213.06 184.52 213.03 184.72 213.03 184.91 213.03 185.1 213.03 184.91 213.06"/>
+          <polygon class="st2" points="181.72 213.06 181.53 213.06 181.34 213.03 181.53 213.03 181.72 213.03 181.91 213.03 181.72 213.06"/>
+          <polygon class="st2" points="178.56 210.39 178.37 210.39 178.18 210.39 178.37 210.36 178.56 210.36 178.75 210.39 178.56 210.39"/>
+          <polygon class="st2" points="178.56 165.47 178.37 165.47 178.18 165.47 178.37 165.44 178.56 165.44 178.75 165.47 178.56 165.47"/>
+          <polygon class="st2" points="188.07 165.47 187.88 165.47 187.68 165.47 187.88 165.44 188.07 165.44 188.26 165.47 188.07 165.47"/>
+          <polygon class="st2" points="184.91 152.2 184.72 152.2 184.52 152.17 184.72 152.17 184.91 152.17 185.1 152.17 184.91 152.2"/>
+          <polygon class="st2" points="181.72 152.2 181.53 152.2 181.34 152.17 181.53 152.17 181.72 152.17 181.91 152.17 181.72 152.2"/>
+          <polygon class="st2" points="178.62 226.44 178.59 226.3 178.59 226.13 178.62 225.97 178.62 226.13 178.62 226.3 178.62 226.44"/>
+          <polygon class="st2" points="178.62 186.84 178.59 186.68 178.59 186.52 178.62 186.35 178.62 186.52 178.62 186.68 178.62 186.84"/>
+          <polygon class="st2" points="188.07 215.72 187.88 215.72 187.68 215.69 187.88 215.69 188.07 215.69 188.26 215.69 188.07 215.72"/>
+          <polygon class="st2" points="175.43 226.44 175.43 226.3 175.43 226.13 175.43 225.97 175.46 226.13 175.46 226.3 175.43 226.44"/>
+          <polygon class="st2" points="181.72 165.47 181.53 165.47 181.34 165.47 181.53 165.44 181.72 165.44 181.91 165.47 181.72 165.47"/>
+          <polygon class="st2" points="181.78 226.44 181.78 226.3 181.78 226.13 181.78 225.97 181.8 226.13 181.8 226.3 181.78 226.44"/>
+          <polygon class="st2" points="181.78 186.84 181.78 186.68 181.78 186.52 181.78 186.35 181.8 186.52 181.8 186.68 181.78 186.84"/>
+          <polygon class="st2" points="181.72 218.36 181.53 218.36 181.34 218.36 181.53 218.33 181.72 218.33 181.91 218.36 181.72 218.36"/>
+          <polygon class="st2" points="184.91 218.36 184.72 218.36 184.52 218.36 184.72 218.33 184.91 218.33 185.1 218.36 184.91 218.36"/>
+          <polygon class="st2" points="178.56 202.42 178.37 202.42 178.18 202.42 178.37 202.4 178.56 202.4 178.75 202.42 178.56 202.42"/>
+          <polygon class="st2" points="181.72 202.42 181.53 202.42 181.34 202.42 181.53 202.4 181.72 202.4 181.91 202.42 181.72 202.42"/>
+          <polygon class="st2" points="178.62 229.1 178.59 228.94 178.59 228.77 178.62 228.63 178.62 228.77 178.62 228.94 178.62 229.1"/>
+          <polygon class="st2" points="181.78 229.1 181.78 228.94 181.78 228.77 181.78 228.63 181.8 228.77 181.8 228.94 181.78 229.1"/>
+          <polygon class="st2" points="184.91 181.4 184.72 181.4 184.52 181.4 184.72 181.38 184.91 181.38 185.1 181.4 184.91 181.4"/>
+          <polygon class="st2" points="184.91 202.42 184.72 202.42 184.52 202.42 184.72 202.4 184.91 202.4 185.1 202.42 184.91 202.42"/>
+          <polygon class="st2" points="188.07 202.42 187.88 202.42 187.68 202.42 187.88 202.4 188.07 202.4 188.26 202.42 188.07 202.42"/>
+          <polygon class="st2" points="181.72 231.41 181.53 231.41 181.34 231.41 181.53 231.38 181.72 231.38 181.91 231.41 181.72 231.41"/>
+          <polygon class="st2" points="181.72 157.5 181.53 157.5 181.34 157.5 181.53 157.47 181.72 157.47 181.91 157.5 181.72 157.5"/>
+          <polygon class="st2" points="184.91 157.5 184.72 157.5 184.52 157.5 184.72 157.47 184.91 157.47 185.1 157.5 184.91 157.5"/>
+          <polygon class="st2" points="188.07 157.5 187.88 157.5 187.68 157.5 187.88 157.47 188.07 157.47 188.26 157.5 188.07 157.5"/>
+          <polygon class="st2" points="181.78 147.23 181.78 147.06 181.78 146.9 181.78 146.73 181.8 146.9 181.8 147.06 181.78 147.23"/>
+          <polygon class="st2" points="178.62 147.23 178.59 147.06 178.59 146.9 178.62 146.73 178.62 146.9 178.62 147.06 178.62 147.23"/>
+          <polygon class="st2" points="181.72 234.07 181.53 234.07 181.34 234.05 181.53 234.05 181.72 234.05 181.91 234.05 181.72 234.07"/>
+          <polygon class="st2" points="184.91 234.07 184.72 234.07 184.52 234.05 184.72 234.05 184.91 234.05 185.1 234.05 184.91 234.07"/>
+          <polygon class="st2" points="191.23 202.42 191.03 202.42 190.84 202.42 191.03 202.4 191.23 202.4 191.42 202.42 191.23 202.42"/>
+          <polygon class="st2" points="178.62 189.48 178.59 189.35 178.59 189.18 178.62 189.02 178.62 189.18 178.62 189.35 178.62 189.48"/>
+          <polygon class="st2" points="181.72 197.12 181.53 197.12 181.34 197.09 181.53 197.09 181.72 197.09 181.91 197.09 181.72 197.12"/>
+          <polygon class="st2" points="184.91 197.12 184.72 197.12 184.52 197.09 184.72 197.09 184.91 197.09 185.1 197.09 184.91 197.12"/>
+          <polygon class="st2" points="184.91 173.44 184.72 173.44 184.52 173.44 184.72 173.41 184.91 173.41 185.1 173.44 184.91 173.44"/>
+          <polygon class="st2" points="188.07 197.12 187.88 197.12 187.68 197.09 187.88 197.09 188.07 197.09 188.26 197.09 188.07 197.12"/>
+          <polygon class="st2" points="184.91 178.77 184.72 178.77 184.52 178.74 184.72 178.74 184.91 178.74 185.1 178.74 184.91 178.77"/>
+          <polygon class="st2" points="178.62 223.8 178.59 223.63 178.59 223.47 178.62 223.3 178.62 223.47 178.62 223.63 178.62 223.8"/>
+          <polygon class="st2" points="191.23 170.77 191.03 170.77 190.84 170.77 191.03 170.77 191.23 170.77 191.42 170.77 191.23 170.77"/>
+          <polygon class="st2" points="181.78 189.48 181.78 189.35 181.78 189.18 181.78 189.02 181.8 189.18 181.8 189.35 181.78 189.48"/>
+          <polygon class="st2" points="181.78 144.56 181.78 144.4 181.78 144.23 181.78 144.09 181.8 144.23 181.8 144.4 181.78 144.56"/>
+          <polygon class="st2" points="178.62 144.56 178.59 144.4 178.59 144.23 178.62 144.09 178.62 144.23 178.62 144.4 178.62 144.56"/>
+          <polygon class="st2" points="188.07 170.77 187.88 170.77 187.68 170.77 187.88 170.77 188.07 170.77 188.26 170.77 188.07 170.77"/>
+          <polygon class="st2" points="184.91 170.77 184.72 170.77 184.52 170.77 184.72 170.77 184.91 170.77 185.1 170.77 184.91 170.77"/>
+          <polygon class="st2" points="181.72 170.77 181.53 170.77 181.34 170.77 181.53 170.77 181.72 170.77 181.91 170.77 181.72 170.77"/>
+          <polygon class="st2" points="191.23 210.39 191.03 210.39 190.84 210.39 191.03 210.36 191.23 210.36 191.42 210.39 191.23 210.39"/>
+          <polygon class="st2" points="181.72 173.44 181.53 173.44 181.34 173.44 181.53 173.41 181.72 173.41 181.91 173.44 181.72 173.44"/>
+          <polygon class="st2" points="188.07 210.39 187.88 210.39 187.68 210.39 187.88 210.36 188.07 210.36 188.26 210.39 188.07 210.39"/>
+          <polygon class="st2" points="184.91 210.39 184.72 210.39 184.52 210.39 184.72 210.36 184.91 210.36 185.1 210.39 184.91 210.39"/>
+          <polygon class="st2" points="181.72 210.39 181.53 210.39 181.34 210.39 181.53 210.36 181.72 210.36 181.91 210.39 181.72 210.39"/>
+          <polygon class="st2" points="188.07 173.44 187.88 173.44 187.68 173.44 187.88 173.41 188.07 173.41 188.26 173.44 188.07 173.44"/>
+          <polygon class="st2" points="181.72 160.17 181.53 160.17 181.34 160.14 181.53 160.14 181.72 160.14 181.91 160.14 181.72 160.17"/>
+          <polygon class="st2" points="184.91 160.17 184.72 160.17 184.52 160.14 184.72 160.14 184.91 160.14 185.1 160.14 184.91 160.17"/>
+          <polygon class="st2" points="188.07 160.17 187.88 160.17 187.68 160.14 187.88 160.14 188.07 160.14 188.26 160.14 188.07 160.17"/>
+          <polygon class="st2" points="191.23 160.17 191.03 160.17 190.84 160.14 191.03 160.14 191.23 160.14 191.42 160.14 191.23 160.17"/>
+          <polygon class="st2" points="175.43 186.84 175.43 186.68 175.43 186.52 175.43 186.35 175.46 186.52 175.46 186.68 175.43 186.84"/>
+          <polygon class="st2" points="191.23 205.09 191.03 205.09 190.84 205.06 191.03 205.06 191.23 205.06 191.42 205.06 191.23 205.09"/>
+          <polygon class="st2" points="188.07 205.09 187.88 205.09 187.68 205.06 187.88 205.06 188.07 205.06 188.26 205.06 188.07 205.09"/>
+          <polygon class="st2" points="184.91 205.09 184.72 205.09 184.52 205.06 184.72 205.06 184.91 205.06 185.1 205.06 184.91 205.09"/>
+          <polygon class="st2" points="188.07 176.1 187.88 176.1 187.68 176.07 187.88 176.07 188.07 176.07 188.26 176.07 188.07 176.1"/>
+          <polygon class="st2" points="184.91 176.1 184.72 176.1 184.52 176.07 184.72 176.07 184.91 176.07 185.1 176.07 184.91 176.1"/>
+          <polygon class="st2" points="181.72 176.1 181.53 176.1 181.34 176.07 181.53 176.07 181.72 176.07 181.91 176.07 181.72 176.1"/>
+          <polygon class="st2" points="181.72 191.79 181.53 191.79 181.34 191.79 181.53 191.76 181.72 191.76 181.91 191.79 181.72 191.79"/>
+          <polygon class="st2" points="184.91 165.47 184.72 165.47 184.52 165.47 184.72 165.44 184.91 165.44 185.1 165.47 184.91 165.47"/>
+          <polygon class="st2" points="254.34 142.28 254.15 142.28 253.95 142.28 254.15 142.25 254.34 142.25 254.53 142.28 254.34 142.28"/>
+          <polygon class="st2" points="251.18 142.28 250.96 142.28 250.79 142.28 250.96 142.25 251.18 142.25 251.34 142.28 251.18 142.28"/>
+          <polygon class="st2" points="172.27 231.52 172.13 231.41 172.27 231.27 172.41 231.41 172.27 231.52"/>
+          <polygon class="st2" points="178.62 162.91 178.48 162.8 178.62 162.69 178.75 162.8 178.62 162.91"/>
+          <polygon class="st2" points="175.43 231.52 175.29 231.41 175.43 231.27 175.59 231.41 175.43 231.52"/>
+          <polygon class="st2" points="178.62 231.52 178.48 231.41 178.62 231.27 178.75 231.41 178.62 231.52"/>
+          <polygon class="st2" points="175.43 162.91 175.29 162.8 175.43 162.69 175.59 162.8 175.43 162.91"/>
+          <polygon class="st2" points="172.27 162.91 172.13 162.8 172.27 162.69 172.41 162.8 172.27 162.91"/>
+          <polygon class="st2" points="169.11 162.91 168.94 162.8 169.11 162.69 169.25 162.8 169.11 162.91"/>
+          <polygon class="st2" points="169.11 157.61 168.94 157.5 169.11 157.36 169.25 157.5 169.11 157.61"/>
+          <polygon class="st2" points="172.27 157.61 172.13 157.5 172.27 157.36 172.41 157.5 172.27 157.61"/>
+          <polygon class="st2" points="175.43 157.61 175.29 157.5 175.43 157.36 175.59 157.5 175.43 157.61"/>
+          <polygon class="st2" points="178.62 157.61 178.48 157.5 178.62 157.36 178.75 157.5 178.62 157.61"/>
+          <polygon class="st2" points="165.92 162.91 165.79 162.8 165.92 162.69 166.09 162.8 165.92 162.91"/>
+          <polygon class="st2" points="169.11 170.88 168.94 170.77 169.11 170.66 169.25 170.77 169.11 170.88"/>
+          <polygon class="st2" points="165.92 170.88 165.79 170.77 165.92 170.66 166.09 170.77 165.92 170.88"/>
+          <polygon class="st2" points="172.27 207.84 172.13 207.73 172.27 207.62 172.41 207.73 172.27 207.84"/>
+          <polygon class="st2" points="178.62 199.87 178.48 199.76 178.62 199.65 178.75 199.76 178.62 199.87"/>
+          <polygon class="st2" points="175.43 199.87 175.29 199.76 175.43 199.65 175.59 199.76 175.43 199.87"/>
+          <polygon class="st2" points="172.27 199.87 172.13 199.76 172.27 199.65 172.41 199.76 172.27 199.87"/>
+          <polygon class="st2" points="178.62 218.47 178.48 218.36 178.62 218.22 178.75 218.36 178.62 218.47"/>
+          <polygon class="st2" points="169.11 199.87 168.94 199.76 169.11 199.65 169.25 199.76 169.11 199.87"/>
+          <polygon class="st2" points="175.43 146.98 175.29 146.87 175.43 146.73 175.59 146.87 175.43 146.98"/>
+          <polygon class="st2" points="169.11 176.21 168.94 176.07 169.11 175.96 169.25 176.07 169.11 176.21"/>
+          <polygon class="st2" points="165.92 210.5 165.79 210.39 165.92 210.25 166.09 210.39 165.92 210.5"/>
+          <polygon class="st2" points="169.11 234.18 168.94 234.05 169.11 233.94 169.25 234.05 169.11 234.18"/>
+          <polygon class="st2" points="172.27 234.18 172.13 234.05 172.27 233.94 172.41 234.05 172.27 234.18"/>
+          <polygon class="st2" points="175.43 234.18 175.29 234.05 175.43 233.94 175.59 234.05 175.43 234.18"/>
+          <polygon class="st2" points="178.62 234.18 178.48 234.05 178.62 233.94 178.75 234.05 178.62 234.18"/>
+          <polygon class="st2" points="169.11 210.5 168.94 210.39 169.11 210.25 169.25 210.39 169.11 210.5"/>
+          <polygon class="st2" points="172.27 210.5 172.13 210.39 172.27 210.25 172.41 210.39 172.27 210.5"/>
+          <polygon class="st2" points="165.92 197.23 165.79 197.09 165.92 196.98 166.09 197.09 165.92 197.23"/>
+          <polygon class="st2" points="169.11 197.23 168.94 197.09 169.11 196.98 169.25 197.09 169.11 197.23"/>
+          <polygon class="st2" points="175.43 210.5 175.29 210.39 175.43 210.25 175.59 210.39 175.43 210.5"/>
+          <polygon class="st2" points="172.27 197.23 172.13 197.09 172.27 196.98 172.41 197.09 172.27 197.23"/>
+          <polygon class="st2" points="172.27 176.21 172.13 176.07 172.27 175.96 172.41 176.07 172.27 176.21"/>
+          <polygon class="st2" points="175.43 189.26 175.29 189.13 175.43 189.02 175.59 189.13 175.43 189.26"/>
+          <polygon class="st2" points="175.43 176.21 175.29 176.07 175.43 175.96 175.59 176.07 175.43 176.21"/>
+          <polygon class="st2" points="178.62 152.31 178.48 152.17 178.62 152.06 178.75 152.17 178.62 152.31"/>
+          <polygon class="st2" points="175.43 152.31 175.29 152.17 175.43 152.06 175.59 152.17 175.43 152.31"/>
+          <polygon class="st2" points="172.27 152.31 172.13 152.17 172.27 152.06 172.41 152.17 172.27 152.31"/>
+          <polygon class="st2" points="165.92 202.53 165.79 202.42 165.92 202.29 166.09 202.42 165.92 202.53"/>
+          <polygon class="st2" points="175.43 197.23 175.29 197.09 175.43 196.98 175.59 197.09 175.43 197.23"/>
+          <polygon class="st2" points="178.62 197.23 178.48 197.09 178.62 196.98 178.75 197.09 178.62 197.23"/>
+          <polygon class="st2" points="175.43 191.9 175.29 191.79 175.43 191.65 175.59 191.79 175.43 191.9"/>
+          <polygon class="st2" points="172.27 191.9 172.13 191.79 172.27 191.65 172.41 191.79 172.27 191.9"/>
+          <polygon class="st2" points="169.11 191.9 168.94 191.79 169.11 191.65 169.25 191.79 169.11 191.9"/>
+          <polygon class="st2" points="169.11 154.95 168.94 154.84 169.11 154.7 169.25 154.84 169.11 154.95"/>
+          <polygon class="st2" points="172.27 154.95 172.13 154.84 172.27 154.7 172.41 154.84 172.27 154.95"/>
+          <polygon class="st2" points="175.43 154.95 175.29 154.84 175.43 154.7 175.59 154.84 175.43 154.95"/>
+          <polygon class="st2" points="178.62 154.95 178.48 154.84 178.62 154.7 178.75 154.84 178.62 154.95"/>
+          <polygon class="st2" points="169.11 221.13 168.94 221.02 169.11 220.89 169.25 221.02 169.11 221.13"/>
+          <polygon class="st2" points="175.43 221.13 175.29 221.02 175.43 220.89 175.59 221.02 175.43 221.13"/>
+          <polygon class="st2" points="178.62 221.13 178.48 221.02 178.62 220.89 178.75 221.02 178.62 221.13"/>
+          <polygon class="st2" points="181.78 221.13 181.64 221.02 181.78 220.89 181.91 221.02 181.78 221.13"/>
+          <polygon class="st2" points="169.11 215.83 168.94 215.69 169.11 215.58 169.25 215.69 169.11 215.83"/>
+          <polygon class="st2" points="169.11 207.84 168.94 207.73 169.11 207.62 169.25 207.73 169.11 207.84"/>
+          <polygon class="st2" points="172.27 215.83 172.13 215.69 172.27 215.58 172.41 215.69 172.27 215.83"/>
+          <polygon class="st2" points="181.78 178.88 181.64 178.74 181.78 178.63 181.91 178.74 181.78 178.88"/>
+          <polygon class="st2" points="178.62 178.88 178.48 178.74 178.62 178.63 178.75 178.74 178.62 178.88"/>
+          <polygon class="st2" points="172.27 223.8 172.13 223.66 172.27 223.55 172.41 223.66 172.27 223.8"/>
+          <polygon class="st2" points="169.11 173.55 168.94 173.44 169.11 173.3 169.25 173.44 169.11 173.55"/>
+          <polygon class="st2" points="172.27 173.55 172.13 173.44 172.27 173.3 172.41 173.44 172.27 173.55"/>
+          <polygon class="st2" points="175.43 173.55 175.29 173.44 175.43 173.3 175.59 173.44 175.43 173.55"/>
+          <polygon class="st2" points="175.43 223.8 175.29 223.66 175.43 223.55 175.59 223.66 175.43 223.8"/>
+          <polygon class="st2" points="175.43 178.88 175.29 178.74 175.43 178.63 175.59 178.74 175.43 178.88"/>
+          <polygon class="st2" points="169.11 165.58 168.94 165.47 169.11 165.33 169.25 165.47 169.11 165.58"/>
+          <polygon class="st2" points="165.92 165.58 165.79 165.47 165.92 165.33 166.09 165.47 165.92 165.58"/>
+          <polygon class="st2" points="175.43 184.18 175.29 184.07 175.43 183.93 175.59 184.07 175.43 184.18"/>
+          <polygon class="st2" points="175.43 215.83 175.29 215.69 175.43 215.58 175.59 215.69 175.43 215.83"/>
+          <polygon class="st2" points="172.27 184.18 172.13 184.07 172.27 183.93 172.41 184.07 172.27 184.18"/>
+          <polygon class="st2" points="172.27 178.88 172.13 178.74 172.27 178.63 172.41 178.74 172.27 178.88"/>
+          <polygon class="st2" points="169.11 178.88 168.94 178.74 169.11 178.63 169.25 178.74 169.11 178.88"/>
+          <polygon class="st2" points="169.11 202.53 168.94 202.42 169.11 202.29 169.25 202.42 169.11 202.53"/>
+          <polygon class="st2" points="172.27 202.53 172.13 202.42 172.27 202.29 172.41 202.42 172.27 202.53"/>
+          <polygon class="st2" points="175.43 202.53 175.29 202.42 175.43 202.29 175.59 202.42 175.43 202.53"/>
+          <polygon class="st2" points="178.62 215.83 178.48 215.69 178.62 215.58 178.75 215.69 178.62 215.83"/>
+          <polygon class="st2" points="175.43 144.56 175.29 144.45 175.43 144.31 175.59 144.45 175.43 144.56"/>
+          <polygon class="st2" points="172.27 144.56 172.13 144.45 172.27 144.31 172.41 144.45 172.27 144.56"/>
+          <polygon class="st2" points="172.27 194.57 172.13 194.46 172.27 194.32 172.41 194.46 172.27 194.57"/>
+          <polygon class="st2" points="175.43 194.57 175.29 194.46 175.43 194.32 175.59 194.46 175.43 194.57"/>
+          <polygon class="st2" points="178.62 194.57 178.48 194.46 178.62 194.32 178.75 194.46 178.62 194.57"/>
+          <polygon class="st2" points="178.62 149.64 178.48 149.51 178.62 149.4 178.75 149.51 178.62 149.64"/>
+          <polygon class="st2" points="178.62 173.55 178.48 173.44 178.62 173.3 178.75 173.44 178.62 173.55"/>
+          <polygon class="st2" points="175.43 149.64 175.29 149.51 175.43 149.4 175.59 149.51 175.43 149.64"/>
+          <polygon class="st2" points="172.27 221.13 172.13 221.02 172.27 220.89 172.41 221.02 172.27 221.13"/>
+          <polygon class="st2" points="172.27 149.64 172.13 149.51 172.27 149.4 172.41 149.51 172.27 149.64"/>
+          <polygon class="st2" points="178.62 213.17 178.48 213.03 178.62 212.92 178.75 213.03 178.62 213.17"/>
+          <polygon class="st2" points="175.43 213.17 175.29 213.03 175.43 212.92 175.59 213.03 175.43 213.17"/>
+          <polygon class="st2" points="169.11 160.28 168.94 160.14 169.11 160.03 169.25 160.14 169.11 160.28"/>
+          <polygon class="st2" points="178.62 170.88 178.48 170.77 178.62 170.66 178.75 170.77 178.62 170.88"/>
+          <polygon class="st2" points="175.43 170.88 175.29 170.77 175.43 170.66 175.59 170.77 175.43 170.88"/>
+          <polygon class="st2" points="172.27 213.17 172.13 213.03 172.27 212.92 172.41 213.03 172.27 213.17"/>
+          <polygon class="st2" points="175.43 165.58 175.29 165.47 175.43 165.33 175.59 165.47 175.43 165.58"/>
+          <polygon class="st2" points="172.27 165.58 172.13 165.47 172.27 165.33 172.41 165.47 172.27 165.58"/>
+          <polygon class="st2" points="175.43 228.85 175.29 228.74 175.43 228.61 175.59 228.74 175.43 228.85"/>
+          <polygon class="st2" points="172.27 218.47 172.13 218.36 172.27 218.22 172.41 218.36 172.27 218.47"/>
+          <polygon class="st2" points="175.43 218.47 175.29 218.36 175.43 218.22 175.59 218.36 175.43 218.47"/>
+          <polygon class="st2" points="172.27 160.28 172.13 160.14 172.27 160.03 172.41 160.14 172.27 160.28"/>
+          <polygon class="st2" points="175.43 207.84 175.29 207.73 175.43 207.62 175.59 207.73 175.43 207.84"/>
+          <polygon class="st2" points="175.43 160.28 175.29 160.14 175.43 160.03 175.59 160.14 175.43 160.28"/>
+          <polygon class="st2" points="178.62 160.28 178.48 160.14 178.62 160.03 178.75 160.14 178.62 160.28"/>
+          <polygon class="st2" points="178.62 207.84 178.48 207.73 178.62 207.62 178.75 207.73 178.62 207.84"/>
+          <polygon class="st2" points="169.11 213.17 168.94 213.03 169.11 212.92 169.25 213.03 169.11 213.17"/>
+          <polygon class="st2" points="178.62 205.2 178.48 205.06 178.62 204.95 178.75 205.06 178.62 205.2"/>
+          <polygon class="st2" points="175.43 205.2 175.29 205.06 175.43 204.95 175.59 205.06 175.43 205.2"/>
+          <polygon class="st2" points="172.27 205.2 172.13 205.06 172.27 204.95 172.41 205.06 172.27 205.2"/>
+          <polygon class="st2" points="172.27 170.88 172.13 170.77 172.27 170.66 172.41 170.77 172.27 170.88"/>
+          <polygon class="st2" points="169.11 205.2 168.94 205.06 169.11 204.95 169.25 205.06 169.11 205.2"/>
+          <polygon class="st2" points="172.27 189.26 172.13 189.13 172.27 189.02 172.41 189.13 172.27 189.26"/>
+          <polygon class="st2" points="165.92 207.84 165.79 207.73 165.92 207.62 166.09 207.73 165.92 207.84"/>
+          <polygon class="st2" points="165.92 205.2 165.79 205.06 165.92 204.95 166.09 205.06 165.92 205.2"/>
+          <polygon class="st2" points="165.92 168.24 165.79 168.11 165.92 168 166.09 168.11 165.92 168.24"/>
+          <polygon class="st2" points="178.62 181.51 178.48 181.4 178.62 181.27 178.75 181.4 178.62 181.51"/>
+          <polygon class="st2" points="178.62 176.21 178.48 176.07 178.62 175.96 178.75 176.07 178.62 176.21"/>
+          <polygon class="st2" points="175.43 181.51 175.29 181.4 175.43 181.27 175.59 181.4 175.43 181.51"/>
+          <polygon class="st2" points="178.62 191.9 178.48 191.79 178.62 191.65 178.75 191.79 178.62 191.9"/>
+          <polygon class="st2" points="172.27 181.51 172.13 181.4 172.27 181.27 172.41 181.4 172.27 181.51"/>
+          <polygon class="st2" points="169.11 168.24 168.94 168.11 169.11 168 169.25 168.11 169.11 168.24"/>
+          <polygon class="st2" points="172.27 168.24 172.13 168.11 172.27 168 172.41 168.11 172.27 168.24"/>
+          <polygon class="st2" points="175.43 168.24 175.29 168.11 175.43 168 175.59 168.11 175.43 168.24"/>
+          <polygon class="st2" points="247.74 142.39 247.61 142.28 247.74 142.14 247.91 142.28 247.74 142.39"/>
+        </g>
+      </g>
+    </g>
+  </g>
+</svg>
