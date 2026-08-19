@@ -23,18 +23,6 @@
   background-color: var(--glass-fill);
 
   /*
-   * A soft, off-centre glare: light catching a curved pane rather than a flat
-   * one. It is a gradient, not a filter — the compositor treats it as an
-   * ordinary paint, so it costs nothing extra during scroll, unlike a true
-   * displacement filter would.
-   */
-  background-image: radial-gradient(
-    140% 120% at 18% -15%,
-    var(--glass-highlight) 0%,
-    transparent 48%
-  );
-
-  /*
    * 3 — specular edge: a mid border, a bright top, a darker underside, plus a
    * soft inner sheen that carries the highlight a little way down the pane.
    * The outer shadow lifts the surface off the page: without it a translucent
