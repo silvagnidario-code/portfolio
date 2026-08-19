@@ -96,6 +96,31 @@ export default async function LocaleLayout({ children, params }: LayoutProps) {
         {locale === 'zh' ? <CjkStylesheet /> : null}
       </head>
       <body>
+        {/*
+          Hidden filter for the experimental "glass--refract" class in
+          glass.css — registers #glass-refraction for backdrop-filter to
+          reference. Renders nothing by itself and costs nothing unless a
+          surface actually opts in via that class.
+        */}
+        <svg width="0" height="0" style={{ position: 'absolute' }} aria-hidden="true">
+          <filter id="glass-refraction" x="-20%" y="-20%" width="140%" height="140%">
+            <feTurbulence
+              type="fractalNoise"
+              baseFrequency="0.008 0.012"
+              numOctaves={2}
+              seed={7}
+              result="noise"
+            />
+            <feGaussianBlur in="noise" stdDeviation={2} result="softNoise" />
+            <feDisplacementMap
+              in="SourceGraphic"
+              in2="softNoise"
+              scale={16}
+              xChannelSelector="R"
+              yChannelSelector="G"
+            />
+          </filter>
+        </svg>
         <NextIntlClientProvider>
           <ThemeProvider>
             <MotionPreferencesProvider>
