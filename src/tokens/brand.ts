@@ -140,50 +140,7 @@ export const glass = {
    * A heavier blur and a stronger saturation than §7's starting point: asked
    * for explicitly, and the room was there. What could not move is the fill
    * opacity — see `glass.ts`, where the floor is computed rather than chosen.
-   */
-  blur: 36,
-  saturate: 2.1,
-  borderWidth: 1,
-  /** Tint of the fill, per theme. */
-  fill: { light: grey.paper50, dark: grey.sumi950 },
-  /**
-   * Alpha of the specular edge, per theme: brighter on top, darker underneath,
-   * to read as refraction on the corner rather than as a drawn outline.
-   */
-  edge: {
-    light: { highlight: 0.85, shade: 0.26, border: 0.18 },
-    dark: { highlight: 0.45, shade: 0.6, border: 0.22 },
-  },
-  /**
-   * The pane casts a shadow: without it a translucent surface reads as a hole
-   * in the page rather than as something floating above it.
-   */
-  lift: {
-    light: { blur: 48, spread: -12, y: 16, alpha: 0.12 },
-    dark: { blur: 48, spread: -12, y: 16, alpha: 0.4 },
-  },
-  /**
-   * `backdrop-filter` is one of the most expensive properties in CSS and here
-   * it already shares the frame with smooth scroll and a WebGL canvas.
-   */
-  maxSimultaneous: 4,
-} as const
-
-/**
- * Vertical breathing room between sections, the `spacing` property every block
- * exposes. Fluid: the specification asks for at least 128px on desktop, which
- * would swallow a phone screen whole.
- */
-export const sectionSpacing = {
-  compact: { min: 48, max: 96 },
-  normal: { min: 64, max: 128 },
-  wide: { min: 96, max: 192 },
-} as const
-
-export type SectionSpacing = keyof typeof sectionSpacing
-
-/** Comfortable reading measure for running text. */
-export const measure = '62ch'
-
-/** Breakpoints in px. */
-export const breakpoint = { tablet: 768, desktop: 1180 } as const
+   *
+   * A more aggressive blur/saturate combination was tried and reverted: some
+   * mobile browsers render an overly heavy `backdrop-filter` chain as no
+   * effect at all rather than a lighter one, so pushing further here is
