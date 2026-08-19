@@ -78,7 +78,7 @@ export function NavBar({ locale, wordmark, logo, items }: NavBarProps) {
       <GlassSurface
         as="nav"
         variant="navbar"
-        className="pointer-events-auto flex flex-col gap-16 px-24 py-16 tablet:flex-row tablet:items-center tablet:justify-between"
+        className="glass--refract pointer-events-auto flex flex-col gap-16 px-24 py-16 tablet:flex-row tablet:items-center tablet:justify-between"
       >
         <div className="flex items-center justify-between gap-24">
           <Link href="/" className="flex items-center">
