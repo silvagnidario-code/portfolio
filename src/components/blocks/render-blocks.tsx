@@ -14,6 +14,7 @@ import { ServicesBlock } from './services-block'
 import { Statement } from './statement'
 import { TeamBlock } from './team-block'
 import { TestimonialBlock } from './testimonial-block'
+import { TextImageBlock } from './text-image-block'
 
 type LayoutBlock = NonNullable<Page['layout']>[number]
 type NarrativeBlock = NonNullable<Project['execution']>[number]
@@ -51,12 +52,12 @@ function renderBlock(block: LayoutBlock | NarrativeBlock, locale: Locale) {
       return <Faq block={block} />
     case 'prose':
       return <Prose block={block} />
-    default:
-      return null
-    case 'faq':
-      return <Faq block={block} />
+    case 'textImage':
+      return <TextImageBlock block={block} />
     case 'contactForm':
       return <ContactFormBlock block={block} locale={locale} />
+    default:
+      return null
   }
 }
 
@@ -68,7 +69,6 @@ export function RenderBlocks({
   locale: Locale
 }) {
   if (!blocks || blocks.length === 0) return null
-
   return (
     <>
       {blocks.map((block, index) => (
