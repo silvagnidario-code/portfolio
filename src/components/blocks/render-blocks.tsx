@@ -55,7 +55,8 @@ function renderBlock(block: LayoutBlock | NarrativeBlock, locale: Locale) {
     case 'contactForm':
       return <ContactFormBlock block={block} locale={locale} />
     default:
-            return (block as any)?.blockType === 'textImage' ? <TextImageBlock block={block as any} /> : null
+                  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      return (block as any)?.blockType === 'textImage' ? <TextImageBlock block={block as any} /> : null
   }
 }
 
