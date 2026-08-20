@@ -55,12 +55,7 @@ function renderBlock(block: LayoutBlock | NarrativeBlock, locale: Locale) {
     case 'contactForm':
       return <ContactFormBlock block={block} locale={locale} />
     default:
-      // "textImage" non è ancora nei tipi generati da Payload (src/payload-types.ts).
-      // Gestito qui finché non vengono rigenerati con `payload generate:types`.
-      if ((block.blockType as string) === 'textImage') {
-        return <TextImageBlock block={block as never} />
-      }
-      return null
+            return (block as any)?.blockType === 'textImage' ? <TextImageBlock block={block as any} /> : null
   }
 }
 
