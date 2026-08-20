@@ -65,8 +65,6 @@
     "name": "姓名",
     "company": "公司",
     "email": "电子邮箱",
-    "projectType": "项目类型",
-    "budget": "预算范围",
     "timeline": "时间安排",
     "message": "项目说明",
     "messageHint": "至少二十个字符。两句实话胜过一页铺垫。",
@@ -74,19 +72,6 @@
     "submit": "发送需求",
     "sending": "发送中…",
     "honeypot": "请勿填写此字段",
-    "types": {
-      "identity": "品牌识别",
-      "digital": "网站或数字产品",
-      "campaign": "营销活动或内容",
-      "other": "其他"
-    },
-    "budgets": {
-      "under25": "2.5 万欧元以下",
-      "25to50": "2.5 万 – 5 万欧元",
-      "50to100": "5 万 – 10 万欧元",
-      "over100": "10 万欧元以上",
-      "unknown": "待定"
-    },
     "timelines": {
       "asap": "尽快",
       "quarter": "三个月内",
