@@ -28,7 +28,11 @@ export async function SiteHeader({ locale }: { locale: Locale }) {
   // logo è una relazione 'upload': se popolata è un oggetto Media, altrimenti resta null/undefined.
   const logo =
     seo.logo && typeof seo.logo === 'object'
-      ? { url: seo.logo.url ?? '', width: seo.logo.width ?? undefined, height: seo.logo.height ?? undefined }
+      ? {
+          url: seo.logo.url ?? '',
+          width: seo.logo.width ?? undefined,
+          height: seo.logo.height ?? undefined,
+        }
       : null
   return <NavBar locale={locale} wordmark={seo.siteName} logo={logo} items={items} />
 }
