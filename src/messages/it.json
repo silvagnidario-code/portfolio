@@ -65,8 +65,6 @@
     "name": "Nome",
     "company": "Azienda",
     "email": "Email",
-    "projectType": "Tipo di progetto",
-    "budget": "Budget indicativo",
     "timeline": "Tempistiche",
     "message": "Il progetto",
     "messageHint": "Almeno venti caratteri. Meglio due frasi vere che una pagina di premesse.",
@@ -74,19 +72,6 @@
     "submit": "Invia il brief",
     "sending": "Invio…",
     "honeypot": "Lascia vuoto questo campo",
-    "types": {
-      "identity": "Identità di marca",
-      "digital": "Sito o prodotto digitale",
-      "campaign": "Campagna o contenuti",
-      "other": "Altro"
-    },
-    "budgets": {
-      "under25": "Sotto 25.000 €",
-      "25to50": "25.000 – 50.000 €",
-      "50to100": "50.000 – 100.000 €",
-      "over100": "Oltre 100.000 €",
-      "unknown": "Da definire"
-    },
     "timelines": {
       "asap": "Il prima possibile",
       "quarter": "Entro tre mesi",
