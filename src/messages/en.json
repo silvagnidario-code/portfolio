@@ -65,8 +65,6 @@
     "name": "Name",
     "company": "Company",
     "email": "Email",
-    "projectType": "Project type",
-    "budget": "Indicative budget",
     "timeline": "Timing",
     "message": "The project",
     "messageHint": "Twenty characters at least. Two true sentences beat a page of preamble.",
@@ -74,19 +72,6 @@
     "submit": "Send the brief",
     "sending": "Sending…",
     "honeypot": "Leave this field empty",
-    "types": {
-      "identity": "Brand identity",
-      "digital": "Site or digital product",
-      "campaign": "Campaign or content",
-      "other": "Something else"
-    },
-    "budgets": {
-      "under25": "Under €25,000",
-      "25to50": "€25,000 – 50,000",
-      "50to100": "€50,000 – 100,000",
-      "over100": "Over €100,000",
-      "unknown": "To be defined"
-    },
     "timelines": {
       "asap": "As soon as possible",
       "quarter": "Within three months",
