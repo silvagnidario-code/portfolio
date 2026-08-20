@@ -21,11 +21,11 @@ export function MediaBlock({ block }: { block: MediaBlockType }) {
   if (variant === 'videoLoop') {
     return (
       <BlockSection settings={settings}>
-        <figure>
-          <div className="aspect-video w-full overflow-hidden">
+        <figure className="page-margin">
+          <div className="mx-auto max-w-full overflow-hidden" style={{ width: 'fit-content' }}>
             {typeof video === 'object' && video?.url ? (
               <video
-                className="h-full w-full object-cover"
+                className="block h-auto max-h-[80vh] w-auto max-w-full"
                 autoPlay
                 playsInline
                 muted
@@ -36,7 +36,11 @@ export function MediaBlock({ block }: { block: MediaBlockType }) {
                 <source src={video.url} type={video.mimeType ?? undefined} />
               </video>
             ) : (
-              <MediaImage media={poster} sizes="100vw" className="h-full w-full object-cover" />
+              <MediaImage
+                media={poster}
+                sizes="100vw"
+                className="h-auto max-h-[80vh] w-auto max-w-full"
+              />
             )}
           </div>
           <Caption>{caption}</Caption>
