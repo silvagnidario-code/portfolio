@@ -72,8 +72,8 @@ export function requiredFillOpacity(theme: ThemeName): number {
  * computed floor.
  */
 export const fillOpacity: Record<ThemeName, number> = {
-  light: 0.6,
-  dark: 0.65,
+  light: 0.55,
+  dark: 0.631,
 }
 
 /**
