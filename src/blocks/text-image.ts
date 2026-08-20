@@ -6,6 +6,7 @@ import type { Block } from 'payload'
  */
 export const TextImage: Block = {
   slug: 'textImage',
+  interfaceName: 'TextImageBlockType',
   labels: { singular: 'Testo + Immagine', plural: 'Testo + Immagine' },
   fields: [
     { name: 'eyebrow', type: 'text', localized: true, label: 'Eyebrow' },
