@@ -12,7 +12,6 @@ import { ServicesBlock } from './services'
 import { Statement } from './statement'
 import { TeamBlock } from './team'
 import { TestimonialBlock } from './testimonial'
-import { TextImage } from './text-image'
 
 /**
  * The block library, §5. Every page is composed from these; the renderer that
@@ -33,8 +32,7 @@ export const layoutBlocks: Block[] = [
   TeamBlock,
   ContactForm,
   Cta,
-  Faq,
-  TextImage,
+  Faq,  
 ]
 
 export {
@@ -49,6 +47,5 @@ export {
   ServicesBlock,
   Statement,
   TeamBlock,
-  TestimonialBlock,
-  TextImage,
+  TestimonialBlock,  
 }
