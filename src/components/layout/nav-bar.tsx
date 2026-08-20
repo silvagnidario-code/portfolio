@@ -51,7 +51,7 @@ export function NavBar({ locale, wordmark, logo, items }: NavBarProps) {
   const links = items.map((item) => (
     <li key={`${item.href}-${item.label}`}>
       {item.external ? (
-        
+        <a
           href={item.href}
           rel="noreferrer"
           target="_blank"
