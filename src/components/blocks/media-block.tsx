@@ -1,11 +1,9 @@
 import { MediaImage } from '@/components/media/media-image'
 import type { MediaBlockType } from '@/payload-types'
-
 import { BlockSection } from './block-section'
 
 function Caption({ children }: { children?: string | null }) {
   if (!children) return null
-
   return (
     <figcaption className="page-margin mt-16 font-mono text-caption uppercase text-ink-muted">
       {children}
@@ -28,10 +26,11 @@ export function MediaBlock({ block }: { block: MediaBlockType }) {
             {typeof video === 'object' && video?.url ? (
               <video
                 className="h-full w-full object-cover"
+                autoPlay
                 playsInline
                 muted
                 loop
-                preload="none"
+                preload="auto"
                 poster={typeof poster === 'object' ? (poster?.url ?? undefined) : undefined}
               >
                 <source src={video.url} type={video.mimeType ?? undefined} />
@@ -102,7 +101,6 @@ export function MediaBlock({ block }: { block: MediaBlockType }) {
   }
 
   const first = (items ?? [])[0]
-
   return (
     <BlockSection settings={settings}>
       <figure>
