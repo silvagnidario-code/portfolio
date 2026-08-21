@@ -9,7 +9,7 @@ export const MediaBlock: Block = {
   fields: [
     variantField([
       { label: 'Full bleed', value: 'fullBleed' },
-      { label: 'Coppia affiancata', value: 'pair' },
+      { label: 'Coppia o griglia', value: 'pair' },
       { label: 'Loop video', value: 'videoLoop' },
       { label: 'Confronto prima/dopo', value: 'beforeAfter' },
     ]),
@@ -17,10 +17,12 @@ export const MediaBlock: Block = {
       name: 'items',
       type: 'array',
       minRows: 1,
-      maxRows: 2,
+      maxRows: 12,
       admin: {
         condition: (_, siblings) =>
           siblings?.variant === 'fullBleed' || siblings?.variant === 'pair',
+        description:
+          'Con uno o due elementi è la coppia affiancata. Da tre in su diventa una griglia: 3 colonne su desktop, 2 su tablet, 1 su mobile. Ogni elemento può essere una foto o un video.',
       },
       fields: [
         { name: 'media', type: 'upload', relationTo: 'media', required: true },
