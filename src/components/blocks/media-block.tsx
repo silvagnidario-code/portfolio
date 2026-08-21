@@ -72,22 +72,38 @@ export function MediaBlock({ block }: { block: MediaBlockType }) {
   }
 
   if (variant === 'pair') {
+    const pairItems = items ?? []
+    /**
+     * Up to two items keep the deliberately unbalanced pair — a wide left and
+     * a narrow right, offset. From three on that asymmetry stops reading as a
+     * composition and starts reading as a mistake, so the same variant lays
+     * the items out as an even grid instead: 3 across on desktop, 2 on tablet,
+     * 1 on mobile.
+     */
+    const isGrid = pairItems.length > 2
+
     return (
       <BlockSection settings={settings}>
         <figure>
-          <div className="page-grid items-end">
-            {(items ?? []).map((item, index) => (
+          <div className={isGrid ? 'page-grid' : 'page-grid items-end'}>
+            {pairItems.map((item, index) => (
               <div
                 key={item.id ?? index}
                 className={
-                  index === 0
-                    ? 'col-span-4 tablet:col-span-4 desktop:col-span-7'
-                    : 'col-span-4 tablet:col-span-2 desktop:col-span-4 desktop:col-start-9'
+                  isGrid
+                    ? 'col-span-4 tablet:col-span-3 desktop:col-span-4'
+                    : index === 0
+                      ? 'col-span-4 tablet:col-span-4 desktop:col-span-7'
+                      : 'col-span-4 tablet:col-span-2 desktop:col-span-4 desktop:col-start-9'
                 }
               >
                 <MediaImage
                   media={item.media}
-                  sizes="(min-width: 768px) 50vw, 100vw"
+                  sizes={
+                    isGrid
+                      ? '(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw'
+                      : '(min-width: 768px) 50vw, 100vw'
+                  }
                   className="w-full"
                 />
                 {item.caption ? (
