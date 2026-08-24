@@ -26,7 +26,7 @@ const variantsByBlock: Record<string, string[]> = {
   hero: ['typographic', 'webglImage', 'videoFullscreen'],
   statement: ['asymmetric', 'twoColumns', 'horizontalScroll'],
   projectGrid: ['staggeredTwo', 'compactThree', 'draggableRow'],
-  media: ['fullBleed', 'pair', 'videoLoop', 'beforeAfter'],
+  media: ['fullBleed', 'pair', 'gallery', 'videoLoop', 'beforeAfter'],
   services: ['accordion', 'cards', 'numberedList'],
   results: ['animatedCounters', 'staticGrid'],
   testimonial: ['fullPage', 'slider', 'quoteWithLogo'],
