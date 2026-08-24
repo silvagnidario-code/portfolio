@@ -1,12 +1,30 @@
 import { MigrateUpArgs, MigrateDownArgs, sql } from '@payloadcms/db-postgres'
 
+/**
+ * Every statement below is wrapped to be safe to re-run: this migration has
+ * never successfully completed in production (it kept failing on `CREATE
+ * TYPE`, because a past dev-mode run pushed the same schema straight to the
+ * database with `push: true`, outside the migration ledger). Rather than
+ * hand-editing `payload_migrations` to fake a completed run, this makes the
+ * migration idempotent so it can finally run to completion and record itself
+ * — regardless of which of these objects already exist from that push.
+ */
 export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   await db.execute(sql`
-   CREATE TYPE "public"."enum_pages_blocks_contact_form_settings_background" AS ENUM('paper', 'sumi', 'accent');
-  CREATE TYPE "public"."enum_pages_blocks_contact_form_settings_spacing" AS ENUM('compact', 'normal', 'wide');
-  CREATE TYPE "public"."enum__pages_v_blocks_contact_form_settings_background" AS ENUM('paper', 'sumi', 'accent');
-  CREATE TYPE "public"."enum__pages_v_blocks_contact_form_settings_spacing" AS ENUM('compact', 'normal', 'wide');
-  CREATE TABLE "pages_blocks_contact_form" (
+   DO $$ BEGIN
+    CREATE TYPE "public"."enum_pages_blocks_contact_form_settings_background" AS ENUM('paper', 'sumi', 'accent');
+  EXCEPTION WHEN duplicate_object THEN null; END $$;
+  DO $$ BEGIN
+    CREATE TYPE "public"."enum_pages_blocks_contact_form_settings_spacing" AS ENUM('compact', 'normal', 'wide');
+  EXCEPTION WHEN duplicate_object THEN null; END $$;
+  DO $$ BEGIN
+    CREATE TYPE "public"."enum__pages_v_blocks_contact_form_settings_background" AS ENUM('paper', 'sumi', 'accent');
+  EXCEPTION WHEN duplicate_object THEN null; END $$;
+  DO $$ BEGIN
+    CREATE TYPE "public"."enum__pages_v_blocks_contact_form_settings_spacing" AS ENUM('compact', 'normal', 'wide');
+  EXCEPTION WHEN duplicate_object THEN null; END $$;
+
+  CREATE TABLE IF NOT EXISTS "pages_blocks_contact_form" (
   	"_order" integer NOT NULL,
   	"_parent_id" integer NOT NULL,
   	"_path" text NOT NULL,
@@ -17,8 +35,8 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   	"settings_animate" boolean DEFAULT true,
   	"block_name" varchar
   );
-  
-  CREATE TABLE "pages_blocks_contact_form_locales" (
+
+  CREATE TABLE IF NOT EXISTS "pages_blocks_contact_form_locales" (
   	"eyebrow" varchar,
   	"heading" varchar,
   	"lead" varchar,
@@ -26,8 +44,8 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   	"_locale" "_locales" NOT NULL,
   	"_parent_id" varchar NOT NULL
   );
-  
-  CREATE TABLE "_pages_v_blocks_contact_form" (
+
+  CREATE TABLE IF NOT EXISTS "_pages_v_blocks_contact_form" (
   	"_order" integer NOT NULL,
   	"_parent_id" integer NOT NULL,
   	"_path" text NOT NULL,
@@ -39,8 +57,8 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   	"_uuid" varchar,
   	"block_name" varchar
   );
-  
-  CREATE TABLE "_pages_v_blocks_contact_form_locales" (
+
+  CREATE TABLE IF NOT EXISTS "_pages_v_blocks_contact_form_locales" (
   	"eyebrow" varchar,
   	"heading" varchar,
   	"lead" varchar,
@@ -48,19 +66,28 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   	"_locale" "_locales" NOT NULL,
   	"_parent_id" integer NOT NULL
   );
-  
-  ALTER TABLE "pages_blocks_contact_form" ADD CONSTRAINT "pages_blocks_contact_form_parent_id_fk" FOREIGN KEY ("_parent_id") REFERENCES "public"."pages"("id") ON DELETE cascade ON UPDATE no action;
-  ALTER TABLE "pages_blocks_contact_form_locales" ADD CONSTRAINT "pages_blocks_contact_form_locales_parent_id_fk" FOREIGN KEY ("_parent_id") REFERENCES "public"."pages_blocks_contact_form"("id") ON DELETE cascade ON UPDATE no action;
-  ALTER TABLE "_pages_v_blocks_contact_form" ADD CONSTRAINT "_pages_v_blocks_contact_form_parent_id_fk" FOREIGN KEY ("_parent_id") REFERENCES "public"."_pages_v"("id") ON DELETE cascade ON UPDATE no action;
-  ALTER TABLE "_pages_v_blocks_contact_form_locales" ADD CONSTRAINT "_pages_v_blocks_contact_form_locales_parent_id_fk" FOREIGN KEY ("_parent_id") REFERENCES "public"."_pages_v_blocks_contact_form"("id") ON DELETE cascade ON UPDATE no action;
-  CREATE INDEX "pages_blocks_contact_form_order_idx" ON "pages_blocks_contact_form" USING btree ("_order");
-  CREATE INDEX "pages_blocks_contact_form_parent_id_idx" ON "pages_blocks_contact_form" USING btree ("_parent_id");
-  CREATE INDEX "pages_blocks_contact_form_path_idx" ON "pages_blocks_contact_form" USING btree ("_path");
-  CREATE UNIQUE INDEX "pages_blocks_contact_form_locales_locale_parent_id_unique" ON "pages_blocks_contact_form_locales" USING btree ("_locale","_parent_id");
-  CREATE INDEX "_pages_v_blocks_contact_form_order_idx" ON "_pages_v_blocks_contact_form" USING btree ("_order");
-  CREATE INDEX "_pages_v_blocks_contact_form_parent_id_idx" ON "_pages_v_blocks_contact_form" USING btree ("_parent_id");
-  CREATE INDEX "_pages_v_blocks_contact_form_path_idx" ON "_pages_v_blocks_contact_form" USING btree ("_path");
-  CREATE UNIQUE INDEX "_pages_v_blocks_contact_form_locales_locale_parent_id_unique" ON "_pages_v_blocks_contact_form_locales" USING btree ("_locale","_parent_id");`)
+
+  DO $$ BEGIN
+    ALTER TABLE "pages_blocks_contact_form" ADD CONSTRAINT "pages_blocks_contact_form_parent_id_fk" FOREIGN KEY ("_parent_id") REFERENCES "public"."pages"("id") ON DELETE cascade ON UPDATE no action;
+  EXCEPTION WHEN duplicate_object THEN null; END $$;
+  DO $$ BEGIN
+    ALTER TABLE "pages_blocks_contact_form_locales" ADD CONSTRAINT "pages_blocks_contact_form_locales_parent_id_fk" FOREIGN KEY ("_parent_id") REFERENCES "public"."pages_blocks_contact_form"("id") ON DELETE cascade ON UPDATE no action;
+  EXCEPTION WHEN duplicate_object THEN null; END $$;
+  DO $$ BEGIN
+    ALTER TABLE "_pages_v_blocks_contact_form" ADD CONSTRAINT "_pages_v_blocks_contact_form_parent_id_fk" FOREIGN KEY ("_parent_id") REFERENCES "public"."_pages_v"("id") ON DELETE cascade ON UPDATE no action;
+  EXCEPTION WHEN duplicate_object THEN null; END $$;
+  DO $$ BEGIN
+    ALTER TABLE "_pages_v_blocks_contact_form_locales" ADD CONSTRAINT "_pages_v_blocks_contact_form_locales_parent_id_fk" FOREIGN KEY ("_parent_id") REFERENCES "public"."_pages_v_blocks_contact_form"("id") ON DELETE cascade ON UPDATE no action;
+  EXCEPTION WHEN duplicate_object THEN null; END $$;
+
+  CREATE INDEX IF NOT EXISTS "pages_blocks_contact_form_order_idx" ON "pages_blocks_contact_form" USING btree ("_order");
+  CREATE INDEX IF NOT EXISTS "pages_blocks_contact_form_parent_id_idx" ON "pages_blocks_contact_form" USING btree ("_parent_id");
+  CREATE INDEX IF NOT EXISTS "pages_blocks_contact_form_path_idx" ON "pages_blocks_contact_form" USING btree ("_path");
+  CREATE UNIQUE INDEX IF NOT EXISTS "pages_blocks_contact_form_locales_locale_parent_id_unique" ON "pages_blocks_contact_form_locales" USING btree ("_locale","_parent_id");
+  CREATE INDEX IF NOT EXISTS "_pages_v_blocks_contact_form_order_idx" ON "_pages_v_blocks_contact_form" USING btree ("_order");
+  CREATE INDEX IF NOT EXISTS "_pages_v_blocks_contact_form_parent_id_idx" ON "_pages_v_blocks_contact_form" USING btree ("_parent_id");
+  CREATE INDEX IF NOT EXISTS "_pages_v_blocks_contact_form_path_idx" ON "_pages_v_blocks_contact_form" USING btree ("_path");
+  CREATE UNIQUE INDEX IF NOT EXISTS "_pages_v_blocks_contact_form_locales_locale_parent_id_unique" ON "_pages_v_blocks_contact_form_locales" USING btree ("_locale","_parent_id");`)
 }
 
 export async function down({ db, payload, req }: MigrateDownArgs): Promise<void> {
