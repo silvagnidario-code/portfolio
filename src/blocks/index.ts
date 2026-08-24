@@ -1,5 +1,6 @@
 import type { Block } from 'payload'
 
+import { Bio } from './bio'
 import { ClientsBlock } from './clients'
 import { ContactForm } from './contact-form'
 import { Cta } from './cta'
@@ -25,6 +26,7 @@ export const layoutBlocks: Block[] = [
   Statement,
   ProjectGrid,
   MediaBlock,
+  Bio,
   ServicesBlock,
   Results,
   TestimonialBlock,
@@ -32,10 +34,11 @@ export const layoutBlocks: Block[] = [
   TeamBlock,
   ContactForm,
   Cta,
-  Faq,  
+  Faq,
 ]
 
 export {
+  Bio,
   ClientsBlock,
   ContactForm,
   Cta,
@@ -47,5 +50,5 @@ export {
   ServicesBlock,
   Statement,
   TeamBlock,
-  TestimonialBlock,  
+  TestimonialBlock,
 }
