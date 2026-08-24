@@ -25,4 +25,9 @@ export const migrations = [
     down: migration_20260819_171003.down,
     name: '20260819_171003'
   },
+  {
+    up: migration_20260824_170500_add_gallery_variant.up,
+    down: migration_20260824_170500_add_gallery_variant.down,
+    name: '20260824_170500_add_gallery_variant',
+  },
 ];
