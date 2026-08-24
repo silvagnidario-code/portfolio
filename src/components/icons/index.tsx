@@ -76,3 +76,40 @@ export function CheckIcon(props: IconProps) {
     </Icon>
   )
 }
+
+/** Closes the lightbox and anything else that needs a plain dismiss. */
+export function CloseIcon(props: IconProps) {
+  return (
+    <Icon {...props}>
+      <path d="M6 6l12 12M18 6 6 18" />
+    </Icon>
+  )
+}
+
+export function ChevronLeftIcon(props: IconProps) {
+  return (
+    <Icon {...props}>
+      <path d="M14.5 5.5 8 12l6.5 6.5" />
+    </Icon>
+  )
+}
+
+export function ChevronRightIcon(props: IconProps) {
+  return (
+    <Icon {...props}>
+      <path d="M9.5 5.5 16 12l-6.5 6.5" />
+    </Icon>
+  )
+}
+
+/** Four open corners, the fullscreen-enlarge convention: hovers a gallery thumbnail. */
+export function ExpandIcon(props: IconProps) {
+  return (
+    <Icon {...props}>
+      <path d="M4 9V5a1 1 0 0 1 1-1h4" />
+      <path d="M15 4h4a1 1 0 0 1 1 1v4" />
+      <path d="M4 15v4a1 1 0 0 0 1 1h4" />
+      <path d="M20 15v4a1 1 0 0 1-1 1h-4" />
+    </Icon>
+  )
+}
