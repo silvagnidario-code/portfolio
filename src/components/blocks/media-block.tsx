@@ -1,4 +1,5 @@
 import { MediaImage } from '@/components/media/media-image'
+import { PhotoGallery } from '@/components/media/photo-gallery'
 import type { MediaBlockType } from '@/payload-types'
 import { BlockSection } from './block-section'
 
@@ -64,6 +65,19 @@ export function MediaBlock({ block }: { block: MediaBlockType }) {
             <div className="col-span-4 tablet:col-span-3 desktop:col-span-6">
               <MediaImage media={after} sizes="(min-width: 768px) 50vw, 100vw" className="w-full" />
             </div>
+          </div>
+          <Caption>{caption}</Caption>
+        </figure>
+      </BlockSection>
+    )
+  }
+
+  if (variant === 'gallery') {
+    return (
+      <BlockSection settings={settings}>
+        <figure>
+          <div className="page-margin">
+            <PhotoGallery items={items ?? []} />
           </div>
           <Caption>{caption}</Caption>
         </figure>
