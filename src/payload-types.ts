@@ -413,7 +413,7 @@ export interface MediaBlockType {
   /**
    * Cambiare variante non perde contenuti né traduzioni.
    */
-  variant: 'fullBleed' | 'pair' | 'videoLoop' | 'beforeAfter';
+  variant: 'fullBleed' | 'pair' | 'gallery' | 'videoLoop' | 'beforeAfter';
   items?:
     | {
         media: number | Media;
