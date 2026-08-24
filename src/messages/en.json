@@ -20,6 +20,14 @@
     "social": "Social",
     "toTop": "Back to top"
   },
+  "PhotoGallery": {
+    "open": "Open photo {index} of {total} full screen",
+    "dialogLabel": "Full-screen photo",
+    "close": "Close",
+    "previous": "Previous photo",
+    "next": "Next photo",
+    "counter": "{current} of {total}"
+  },
   "Theme": {
     "legend": "Theme",
     "system": "System",
