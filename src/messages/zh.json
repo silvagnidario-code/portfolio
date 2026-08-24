@@ -20,6 +20,14 @@
     "social": "社交媒体",
     "toTop": "回到顶部"
   },
+  "PhotoGallery": {
+    "open": "全屏打开第 {index} 张，共 {total} 张照片",
+    "dialogLabel": "全屏照片",
+    "close": "关闭",
+    "previous": "上一张",
+    "next": "下一张",
+    "counter": "第 {current} 张，共 {total} 张"
+  },
   "Theme": {
     "legend": "主题",
     "system": "跟随系统",
