@@ -414,6 +414,9 @@ export interface MediaBlockType {
    * Cambiare variante non perde contenuti né traduzioni.
    */
   variant: 'fullBleed' | 'pair' | 'gallery' | 'videoLoop' | 'beforeAfter';
+  /**
+   * Con uno o due elementi è la coppia affiancata. Da tre in su diventa una griglia: 3 colonne su desktop, 2 su tablet, 1 su mobile. "Galleria" le dispone invece in una griglia dinamica in stile masonry, rispettando le proporzioni reali di ogni foto, e apre ogni immagine a schermo intero al click, con zoom e navigazione tra le foto. Ogni elemento può essere una foto o un video.
+   */
   items?:
     | {
         media: number | Media;
@@ -533,6 +536,7 @@ export interface Page {
     | StatementBlock
     | ProjectGridBlock
     | MediaBlockType
+    | BioBlockType
     | ServicesBlockType
     | ResultsBlock
     | TestimonialBlockType
@@ -642,6 +646,49 @@ export interface ProjectGridBlock {
   id?: string | null;
   blockName?: string | null;
   blockType: 'projectGrid';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "BioBlockType".
+ */
+export interface BioBlockType {
+  eyebrow?: string | null;
+  heading: string;
+  body?: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
+  links?:
+    | {
+        label: string;
+        url: string;
+        id?: string | null;
+      }[]
+    | null;
+  photo: number | Media;
+  imagePosition: 'right' | 'left';
+  /**
+   * Fondo, respiro verticale e animazione di ingresso.
+   */
+  settings: {
+    background: 'paper' | 'sumi' | 'accent';
+    spacing: 'compact' | 'normal' | 'wide';
+    animate?: boolean | null;
+  };
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'bio';
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -793,7 +840,7 @@ export interface TeamBlockType {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "CtaBlock".
+ * via the `definition` "ContactFormBlock".
  */
 export interface ContactFormBlock {
   eyebrow?: string | null;
@@ -815,6 +862,10 @@ export interface ContactFormBlock {
   blockName?: string | null;
   blockType: 'contactForm';
 }
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "CtaBlock".
+ */
 export interface CtaBlock {
   /**
    * Cambiare variante non perde contenuti né traduzioni.
@@ -1140,6 +1191,7 @@ export interface PagesSelect<T extends boolean = true> {
         statement?: T | StatementBlockSelect<T>;
         projectGrid?: T | ProjectGridBlockSelect<T>;
         media?: T | MediaBlockTypeSelect<T>;
+        bio?: T | BioBlockTypeSelect<T>;
         services?: T | ServicesBlockTypeSelect<T>;
         results?: T | ResultsBlockSelect<T>;
         testimonial?: T | TestimonialBlockTypeSelect<T>;
@@ -1210,6 +1262,33 @@ export interface ProjectGridBlockSelect<T extends boolean = true> {
   projects?: T;
   service?: T;
   limit?: T;
+  settings?:
+    | T
+    | {
+        background?: T;
+        spacing?: T;
+        animate?: T;
+      };
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "BioBlockType_select".
+ */
+export interface BioBlockTypeSelect<T extends boolean = true> {
+  eyebrow?: T;
+  heading?: T;
+  body?: T;
+  links?:
+    | T
+    | {
+        label?: T;
+        url?: T;
+        id?: T;
+      };
+  photo?: T;
+  imagePosition?: T;
   settings?:
     | T
     | {
@@ -1320,7 +1399,7 @@ export interface TeamBlockTypeSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "CtaBlock_select".
+ * via the `definition` "ContactFormBlock_select".
  */
 export interface ContactFormBlockSelect<T extends boolean = true> {
   eyebrow?: T;
@@ -1337,6 +1416,10 @@ export interface ContactFormBlockSelect<T extends boolean = true> {
   id?: T;
   blockName?: T;
 }
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "CtaBlock_select".
+ */
 export interface CtaBlockSelect<T extends boolean = true> {
   variant?: T;
   heading?: T;
