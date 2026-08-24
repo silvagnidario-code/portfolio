@@ -1,6 +1,7 @@
 import type { Locale } from '@/i18n/routing'
 import type { Page, Project } from '@/payload-types'
 
+import { BioBlock } from './bio-block'
 import { ClientsBlock } from './clients-block'
 import { ContactFormBlock } from './contact-form'
 import { Cta } from './cta'
@@ -36,6 +37,8 @@ function renderBlock(block: LayoutBlock | NarrativeBlock, locale: Locale) {
       return <ProjectGrid block={block} locale={locale} />
     case 'media':
       return <MediaBlock block={block} />
+    case 'bio':
+      return <BioBlock block={block} />
     case 'services':
       return <ServicesBlock block={block} locale={locale} />
     case 'results':
