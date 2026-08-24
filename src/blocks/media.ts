@@ -1,133 +1,65 @@
-import type { Metadata } from 'next'
-import { getTranslations, setRequestLocale } from 'next-intl/server'
+import type { Block } from 'payload'
 
-import { RenderBlocks } from '@/components/blocks/render-blocks'
-import { hasLocale } from 'next-intl'
+import { blockSettings, variantField } from './shared'
 
-import { routing, type Locale } from '@/i18n/routing'
-import { getPayloadClient } from '@/lib/payload'
-import type { Page, Project } from '@/payload-types'
-
-type LayoutBlock = NonNullable<Page['layout']>[number]
-
-/**
- * The block catalogue: every block of the library, in every variant, filled
- * with the real content of the CMS.
- *
- * It cycles the `variant` field on the *same* block object rather than
- * building one fixture per variant — which is what makes it a proof rather than
- * a demo: if switching variant lost content or translations, this page would
- * show it immediately.
- *
- * Internal tooling, never indexed.
- */
-
-const variantsByBlock: Record<string, string[]> = {
-  hero: ['typographic', 'webglImage', 'videoFullscreen'],
-  statement: ['asymmetric', 'twoColumns', 'horizontalScroll'],
-  projectGrid: ['staggeredTwo', 'compactThree', 'draggableRow'],
-  media: ['fullBleed', 'pair', 'gallery', 'videoLoop', 'beforeAfter'],
-  services: ['accordion', 'cards', 'numberedList'],
-  results: ['animatedCounters', 'staticGrid'],
-  testimonial: ['fullPage', 'slider', 'quoteWithLogo'],
-  clients: ['staticGrid', 'marquee'],
-  team: ['photoGrid', 'listReveal'],
-  cta: ['typographicBanner', 'inlineForm', 'minimalRow'],
-  faq: ['accordion'],
-}
-
-const order = Object.keys(variantsByBlock)
-
-type PageProps = { params: Promise<{ locale: string }> }
-
-export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
-  const { locale } = await params
-  const t = await getTranslations({ locale, namespace: 'BlocksPage' })
-
-  return { title: t('title'), robots: { index: false, follow: false } }
-}
-
-/** Picks one instance of every block type out of the seeded pages. */
-async function collectBlocks(locale: Locale): Promise<Map<string, LayoutBlock>> {
-  const payload = await getPayloadClient()
-
-  const pages = await payload.find({
-    collection: 'pages',
-    locale,
-    depth: 2,
-    limit: 20,
-  })
-
-  const found = new Map<string, LayoutBlock>()
-
-  for (const page of pages.docs) {
-    for (const block of page.layout ?? []) {
-      if (!found.has(block.blockType)) found.set(block.blockType, block)
-    }
-  }
-
-  // `media` and `results` live inside case studies, not inside pages.
-  const projects = await payload.find({ collection: 'projects', locale, depth: 2, limit: 1 })
-  const project: Project | undefined = projects.docs[0]
-
-  if (project) {
-    const media = (project.gallery ?? [])[0]
-    if (media && !found.has('media')) found.set('media', media as LayoutBlock)
-
-    if (!found.has('results') && (project.results ?? []).length > 0) {
-      found.set('results', {
-        blockType: 'results',
-        variant: 'staticGrid',
-        heading: project.title,
-        items: project.results,
-        settings: { background: 'paper', spacing: 'normal', animate: true },
-      } as LayoutBlock)
-    }
-  }
-
-  return found
-}
-
-export default async function BlocksPage({ params }: PageProps) {
-  const { locale } = await params
-  setRequestLocale(locale)
-
-  if (!hasLocale(routing.locales, locale)) return null
-
-  const t = await getTranslations('BlocksPage')
-  const blocks = await collectBlocks(locale)
-
-  return (
-    <main className="pb-96">
-      <header className="page-margin pb-64">
-        <h1 className="text-display">{t('title')}</h1>
-        <p className="mt-32 max-w-measure text-body-lg text-ink-2">{t('intro')}</p>
-      </header>
-
-      {order.map((blockType) => {
-        const block = blocks.get(blockType)
-
-        return (
-          <section key={blockType} className="border-t border-line">
-            <h2 className="page-margin py-32 font-mono text-caption uppercase text-ink-muted">
-              {blockType}
-            </h2>
-
-            {block ? (
-              (variantsByBlock[blockType] ?? []).map((variant) => (
-                <div key={variant}>
-                  <p className="page-margin border-t border-line py-16 font-mono text-caption uppercase text-ink-muted">
-                    {blockType} · {variant}
-                  </p>
-                  <RenderBlocks blocks={[{ ...block, variant } as LayoutBlock]} locale={locale} />
-                </div>
-              ))
-            ) : (
-              <p className="page-margin pb-32 text-body text-ink-muted">{t('empty')}</p>
-            )}
-          </section>
-        )
-      })}
-    </main>
-  )
+export const MediaBlock: Block = {
+  slug: 'media',
+  interfaceName: 'MediaBlockType',
+  labels: { singular: 'Media', plural: 'Media' },
+  fields: [
+    variantField([
+      { label: 'Full bleed', value: 'fullBleed' },
+      { label: 'Coppia o griglia', value: 'pair' },
+      { label: 'Galleria (griglia dinamica con zoom)', value: 'gallery' },
+      { label: 'Loop video', value: 'videoLoop' },
+      { label: 'Confronto prima/dopo', value: 'beforeAfter' },
+    ]),
+    {
+      name: 'items',
+      type: 'array',
+      minRows: 1,
+      maxRows: 12,
+      admin: {
+        condition: (_, siblings) =>
+          siblings?.variant === 'fullBleed' ||
+          siblings?.variant === 'pair' ||
+          siblings?.variant === 'gallery',
+        description:
+          'Con uno o due elementi è la coppia affiancata. Da tre in su diventa una griglia: 3 colonne su desktop, 2 su tablet, 1 su mobile. "Galleria" le dispone invece in una griglia dinamica in stile masonry, rispettando le proporzioni reali di ogni foto, e apre ogni immagine a schermo intero al click, con zoom e navigazione tra le foto. Ogni elemento può essere una foto o un video.',
+      },
+      fields: [
+        { name: 'media', type: 'upload', relationTo: 'media', required: true },
+        { name: 'caption', type: 'text', localized: true },
+      ],
+    },
+    {
+      name: 'video',
+      type: 'upload',
+      relationTo: 'media',
+      admin: { condition: (_, siblings) => siblings?.variant === 'videoLoop' },
+    },
+    {
+      name: 'poster',
+      type: 'upload',
+      relationTo: 'media',
+      admin: {
+        condition: (_, siblings) => siblings?.variant === 'videoLoop',
+        description: 'Obbligatorio: il video non parte mai senza poster.',
+      },
+    },
+    {
+      name: 'before',
+      type: 'upload',
+      relationTo: 'media',
+      admin: { condition: (_, siblings) => siblings?.variant === 'beforeAfter' },
+    },
+    {
+      name: 'after',
+      type: 'upload',
+      relationTo: 'media',
+      admin: { condition: (_, siblings) => siblings?.variant === 'beforeAfter' },
+    },
+    { name: 'caption', type: 'text', localized: true },
+    blockSettings,
+  ],
 }
