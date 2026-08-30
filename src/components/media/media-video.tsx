@@ -20,6 +20,7 @@ type MediaVideoProps = {
   className?: string
   style?: CSSProperties
   ariaLabel?: string
+  /** `always` for lightbox/full-size views, `hover` for gallery thumbnails. */
   chrome?: 'always' | 'hover'
 }
 
@@ -100,27 +101,43 @@ export function MediaVideo({
       <div
         className={
           chrome === 'hover'
-            ? 'pointer-events-none absolute inset-x-0 bottom-16 flex justify-center gap-8 opacity-0 transition duration-fast ease-reveal group-hover/video:opacity-100 group-focus-within/video:opacity-100'
-            : 'pointer-events-none absolute inset-x-0 bottom-16 flex justify-center gap-8 tablet:bottom-24'
+            ? 'pointer-events-none absolute inset-x-0 bottom-12 flex justify-center gap-6 opacity-0 transition duration-fast ease-reveal group-hover/video:opacity-100 group-focus-within/video:opacity-100'
+            : 'pointer-events-none absolute inset-x-0 bottom-16 flex justify-center gap-6 tablet:bottom-24'
         }
       >
-        <GlassSurface variant="chrome" className="pointer-events-auto">
+        <GlassSurface
+          variant="chrome"
+          className={
+            chrome === 'hover'
+              ? 'pointer-events-auto rounded-glass-sm border border-line/80 shadow-none'
+              : 'pointer-events-auto rounded-glass-sm border border-line/80 shadow-none'
+          }
+        >
           <button
             type="button"
             onClick={togglePlay}
             aria-label={playing ? t('pause') : t('play')}
-            className="flex p-12"
+            aria-pressed={playing}
+            className="flex h-40 w-40 items-center justify-center rounded-glass-sm text-ink transition hover:text-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink focus-visible:ring-offset-2 focus-visible:ring-offset-transparent"
           >
             {playing ? <PauseIcon /> : <PlayIcon />}
           </button>
         </GlassSurface>
 
-        <GlassSurface variant="chrome" className="pointer-events-auto">
+        <GlassSurface
+          variant="chrome"
+          className={
+            chrome === 'hover'
+              ? 'pointer-events-auto rounded-glass-sm border border-line/80 shadow-none'
+              : 'pointer-events-auto rounded-glass-sm border border-line/80 shadow-none'
+          }
+        >
           <button
             type="button"
             onClick={toggleMute}
             aria-label={muted ? t('unmute') : t('mute')}
-            className="flex p-12"
+            aria-pressed={muted}
+            className="flex h-40 w-40 items-center justify-center rounded-glass-sm text-ink transition hover:text-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink focus-visible:ring-offset-2 focus-visible:ring-offset-transparent"
           >
             {muted ? <MuteIcon /> : <UnmuteIcon />}
           </button>
