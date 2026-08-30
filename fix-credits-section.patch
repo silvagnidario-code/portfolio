@@ -1,0 +1,159 @@
+From 12b93f8322c2f86246909c9efa3b1aff10aa575b Mon Sep 17 00:00:00 2001
+From: Dario Silvagni <dario@silvagnidario.com>
+Date: Thu, 20 Aug 2026 15:53:26 +0000
+Subject: [PATCH] fix: hide empty Credits section on case study pages
+
+The Credits heading and BlockSection always rendered even when
+Team, Partners, Awards, and Live URL were all empty, leaving a
+dangling empty heading at the bottom of project pages (e.g.
+/it/work/provethemwrong). Now the whole section is conditional,
+matching the pattern already used for Results, Testimonial, and
+Related.
+---
+ .../(frontend)/[locale]/work/[slug]/page.tsx  | 127 ++++++++++--------
+ 1 file changed, 68 insertions(+), 59 deletions(-)
+
+diff --git a/src/app/(frontend)/[locale]/work/[slug]/page.tsx b/src/app/(frontend)/[locale]/work/[slug]/page.tsx
+index c194afa..689f061 100644
+--- a/src/app/(frontend)/[locale]/work/[slug]/page.tsx
++++ b/src/app/(frontend)/[locale]/work/[slug]/page.tsx
+@@ -188,68 +188,77 @@ export default async function CaseStudyPage({ params }: PageProps) {
+ 
+       <RenderBlocks blocks={project.gallery} locale={locale} />
+ 
+-      <BlockSection settings={{ background: 'paper', spacing: 'normal' }}>
+-        <h2 className="page-margin mb-48 font-mono text-caption uppercase text-ink-muted">
+-          {t('credits')}
+-        </h2>
+-        <div className="page-grid gap-y-48">
+-          {team.length > 0 ? (
+-            <div className="col-span-4 tablet:col-span-3 desktop:col-span-4">
+-              <h3 className="font-mono text-caption uppercase text-ink-muted">{t('team')}</h3>
+-              <ul className="mt-16 flex flex-col gap-8">
+-                {team.map((member) => (
+-                  <li key={member.id} className="text-body">
+-                    {member.name} — <span className="text-ink-2">{member.role}</span>
+-                  </li>
+-                ))}
+-              </ul>
+-            </div>
+-          ) : null}
++      {team.length > 0 ||
++      (project.partners ?? []).length > 0 ||
++      (project.awards ?? []).length > 0 ||
++      project.liveUrl ? (
++        <BlockSection settings={{ background: 'paper', spacing: 'normal' }}>
++          <h2 className="page-margin mb-48 font-mono text-caption uppercase text-ink-muted">
++            {t('credits')}
++          </h2>
++          <div className="page-grid gap-y-48">
++            {team.length > 0 ? (
++              <div className="col-span-4 tablet:col-span-3 desktop:col-span-4">
++                <h3 className="font-mono text-caption uppercase text-ink-muted">{t('team')}</h3>
++                <ul className="mt-16 flex flex-col gap-8">
++                  {team.map((member) => (
++                    <li key={member.id} className="text-body">
++                      {member.name} — <span className="text-ink-2">{member.role}</span>
++                    </li>
++                  ))}
++                </ul>
++              </div>
++            ) : null}
+ 
+-          {(project.partners ?? []).length > 0 ? (
+-            <div className="col-span-4 tablet:col-span-3 desktop:col-span-4">
+-              <h3 className="font-mono text-caption uppercase text-ink-muted">{t('partners')}</h3>
+-              <ul className="mt-16 flex flex-col gap-8">
+-                {(project.partners ?? []).map((partner) => (
+-                  <li key={partner.id ?? partner.name} className="text-body">
+-                    {partner.name} — <span className="text-ink-2">{partner.role}</span>
+-                  </li>
+-                ))}
+-              </ul>
+-            </div>
+-          ) : null}
++            {(project.partners ?? []).length > 0 ? (
++              <div className="col-span-4 tablet:col-span-3 desktop:col-span-4">
++                <h3 className="font-mono text-caption uppercase text-ink-muted">
++                  {t('partners')}
++                </h3>
++                <ul className="mt-16 flex flex-col gap-8">
++                  {(project.partners ?? []).map((partner) => (
++                    <li key={partner.id ?? partner.name} className="text-body">
++                      {partner.name} — <span className="text-ink-2">{partner.role}</span>
++                    </li>
++                  ))}
++                </ul>
++              </div>
++            ) : null}
+ 
+-          {(project.awards ?? []).length > 0 ? (
+-            <div className="col-span-4 tablet:col-span-3 desktop:col-span-3">
+-              <h3 className="font-mono text-caption uppercase text-ink-muted">{t('awards')}</h3>
+-              <ul className="mt-16 flex flex-col gap-8">
+-                {(project.awards ?? []).map((award) => (
+-                  <li key={award.id ?? award.name} className="text-body">
+-                    {award.name}
+-                    {award.category ? (
+-                      <span className="text-ink-2"> — {award.category}</span>
+-                    ) : null}
+-                    {award.year ? <span className="text-ink-muted"> · {award.year}</span> : null}
+-                  </li>
+-                ))}
+-              </ul>
+-            </div>
+-          ) : null}
+-        </div>
++            {(project.awards ?? []).length > 0 ? (
++              <div className="col-span-4 tablet:col-span-3 desktop:col-span-3">
++                <h3 className="font-mono text-caption uppercase text-ink-muted">{t('awards')}</h3>
++                <ul className="mt-16 flex flex-col gap-8">
++                  {(project.awards ?? []).map((award) => (
++                    <li key={award.id ?? award.name} className="text-body">
++                      {award.name}
++                      {award.category ? (
++                        <span className="text-ink-2"> — {award.category}</span>
++                      ) : null}
++                      {award.year ? (
++                        <span className="text-ink-muted"> · {award.year}</span>
++                      ) : null}
++                    </li>
++                  ))}
++                </ul>
++              </div>
++            ) : null}
++          </div>
+ 
+-        {project.liveUrl ? (
+-          <p className="page-margin mt-48">
+-            <a
+-              href={project.liveUrl}
+-              rel="noreferrer"
+-              target="_blank"
+-              className="text-body-lg text-accent underline"
+-            >
+-              {t('liveUrl')}
+-            </a>
+-          </p>
+-        ) : null}
+-      </BlockSection>
++          {project.liveUrl ? (
++            <p className="page-margin mt-48">
++              <a
++                href={project.liveUrl}
++                rel="noreferrer"
++                target="_blank"
++                className="text-body-lg text-accent underline"
++              >
++                {t('liveUrl')}
++              </a>
++            </p>
++          ) : null}
++        </BlockSection>
++      ) : null}
+ 
+       {related.length > 0 ? (
+         <BlockSection settings={{ background: 'paper', spacing: 'wide' }}>
+-- 
+2.43.0
+

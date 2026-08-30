@@ -188,68 +188,77 @@ export default async function CaseStudyPage({ params }: PageProps) {
 
       <RenderBlocks blocks={project.gallery} locale={locale} />
 
-      <BlockSection settings={{ background: 'paper', spacing: 'normal' }}>
-        <h2 className="page-margin mb-48 font-mono text-caption uppercase text-ink-muted">
-          {t('credits')}
-        </h2>
-        <div className="page-grid gap-y-48">
-          {team.length > 0 ? (
-            <div className="col-span-4 tablet:col-span-3 desktop:col-span-4">
-              <h3 className="font-mono text-caption uppercase text-ink-muted">{t('team')}</h3>
-              <ul className="mt-16 flex flex-col gap-8">
-                {team.map((member) => (
-                  <li key={member.id} className="text-body">
-                    {member.name} — <span className="text-ink-2">{member.role}</span>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          ) : null}
+      {team.length > 0 ||
+      (project.partners ?? []).length > 0 ||
+      (project.awards ?? []).length > 0 ||
+      project.liveUrl ? (
+        <BlockSection settings={{ background: 'paper', spacing: 'normal' }}>
+          <h2 className="page-margin mb-48 font-mono text-caption uppercase text-ink-muted">
+            {t('credits')}
+          </h2>
+          <div className="page-grid gap-y-48">
+            {team.length > 0 ? (
+              <div className="col-span-4 tablet:col-span-3 desktop:col-span-4">
+                <h3 className="font-mono text-caption uppercase text-ink-muted">{t('team')}</h3>
+                <ul className="mt-16 flex flex-col gap-8">
+                  {team.map((member) => (
+                    <li key={member.id} className="text-body">
+                      {member.name} — <span className="text-ink-2">{member.role}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ) : null}
 
-          {(project.partners ?? []).length > 0 ? (
-            <div className="col-span-4 tablet:col-span-3 desktop:col-span-4">
-              <h3 className="font-mono text-caption uppercase text-ink-muted">{t('partners')}</h3>
-              <ul className="mt-16 flex flex-col gap-8">
-                {(project.partners ?? []).map((partner) => (
-                  <li key={partner.id ?? partner.name} className="text-body">
-                    {partner.name} — <span className="text-ink-2">{partner.role}</span>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          ) : null}
+            {(project.partners ?? []).length > 0 ? (
+              <div className="col-span-4 tablet:col-span-3 desktop:col-span-4">
+                <h3 className="font-mono text-caption uppercase text-ink-muted">
+                  {t('partners')}
+                </h3>
+                <ul className="mt-16 flex flex-col gap-8">
+                  {(project.partners ?? []).map((partner) => (
+                    <li key={partner.id ?? partner.name} className="text-body">
+                      {partner.name} — <span className="text-ink-2">{partner.role}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ) : null}
 
-          {(project.awards ?? []).length > 0 ? (
-            <div className="col-span-4 tablet:col-span-3 desktop:col-span-3">
-              <h3 className="font-mono text-caption uppercase text-ink-muted">{t('awards')}</h3>
-              <ul className="mt-16 flex flex-col gap-8">
-                {(project.awards ?? []).map((award) => (
-                  <li key={award.id ?? award.name} className="text-body">
-                    {award.name}
-                    {award.category ? (
-                      <span className="text-ink-2"> — {award.category}</span>
-                    ) : null}
-                    {award.year ? <span className="text-ink-muted"> · {award.year}</span> : null}
-                  </li>
-                ))}
-              </ul>
-            </div>
-          ) : null}
-        </div>
+            {(project.awards ?? []).length > 0 ? (
+              <div className="col-span-4 tablet:col-span-3 desktop:col-span-3">
+                <h3 className="font-mono text-caption uppercase text-ink-muted">{t('awards')}</h3>
+                <ul className="mt-16 flex flex-col gap-8">
+                  {(project.awards ?? []).map((award) => (
+                    <li key={award.id ?? award.name} className="text-body">
+                      {award.name}
+                      {award.category ? (
+                        <span className="text-ink-2"> — {award.category}</span>
+                      ) : null}
+                      {award.year ? (
+                        <span className="text-ink-muted"> · {award.year}</span>
+                      ) : null}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ) : null}
+          </div>
 
-        {project.liveUrl ? (
-          <p className="page-margin mt-48">
-            <a
-              href={project.liveUrl}
-              rel="noreferrer"
-              target="_blank"
-              className="text-body-lg text-accent underline"
-            >
-              {t('liveUrl')}
-            </a>
-          </p>
-        ) : null}
-      </BlockSection>
+          {project.liveUrl ? (
+            <p className="page-margin mt-48">
+              <a
+                href={project.liveUrl}
+                rel="noreferrer"
+                target="_blank"
+                className="text-body-lg text-accent underline"
+              >
+                {t('liveUrl')}
+              </a>
+            </p>
+          ) : null}
+        </BlockSection>
+      ) : null}
 
       {related.length > 0 ? (
         <BlockSection settings={{ background: 'paper', spacing: 'wide' }}>

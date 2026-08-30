@@ -413,7 +413,7 @@ export interface MediaBlockType {
   /**
    * Cambiare variante non perde contenuti né traduzioni.
    */
-  variant: 'fullBleed' | 'pair' | 'videoLoop' | 'beforeAfter';
+  variant: 'fullBleed' | 'pair' | 'videoLoop' | 'beforeAfter' | 'grid';
   items?:
     | {
         media: number | Media;
@@ -426,6 +426,20 @@ export interface MediaBlockType {
    * Obbligatorio: il video non parte mai senza poster.
    */
   poster?: (number | null) | Media;
+  /**
+   * Ogni cella riproduce un video in loop. Griglia di 3 colonne su desktop, 2 su tablet, 1 su mobile.
+   */
+  gridItems?:
+    | {
+        video: number | Media;
+        /**
+         * Obbligatorio: il video non parte mai senza poster.
+         */
+        poster?: (number | null) | Media;
+        caption?: string | null;
+        id?: string | null;
+      }[]
+    | null;
   before?: (number | null) | Media;
   after?: (number | null) | Media;
   caption?: string | null;
@@ -793,7 +807,7 @@ export interface TeamBlockType {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "CtaBlock".
+ * via the `definition` "ContactFormBlock".
  */
 export interface ContactFormBlock {
   eyebrow?: string | null;
@@ -815,6 +829,10 @@ export interface ContactFormBlock {
   blockName?: string | null;
   blockType: 'contactForm';
 }
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "CtaBlock".
+ */
 export interface CtaBlock {
   /**
    * Cambiare variante non perde contenuti né traduzioni.
@@ -1095,6 +1113,14 @@ export interface MediaBlockTypeSelect<T extends boolean = true> {
       };
   video?: T;
   poster?: T;
+  gridItems?:
+    | T
+    | {
+        video?: T;
+        poster?: T;
+        caption?: T;
+        id?: T;
+      };
   before?: T;
   after?: T;
   caption?: T;
@@ -1320,7 +1346,7 @@ export interface TeamBlockTypeSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "CtaBlock_select".
+ * via the `definition` "ContactFormBlock_select".
  */
 export interface ContactFormBlockSelect<T extends boolean = true> {
   eyebrow?: T;
@@ -1337,6 +1363,10 @@ export interface ContactFormBlockSelect<T extends boolean = true> {
   id?: T;
   blockName?: T;
 }
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "CtaBlock_select".
+ */
 export interface CtaBlockSelect<T extends boolean = true> {
   variant?: T;
   heading?: T;

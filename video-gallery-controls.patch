@@ -1,0 +1,364 @@
+From 4f735e5dff899bd87e029f1749532880152482b3 Mon Sep 17 00:00:00 2001
+From: Claude <noreply@anthropic.com>
+Date: Sun, 30 Aug 2026 21:40:41 +0000
+Subject: [PATCH] Add play/pause and mute controls to gallery videos
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Gallery videos autoplayed silently in a loop with no way to stop or
+unmute them. Adds a minimal glass-chrome overlay (play/pause, mute)
+to the gallery lightbox and the standalone videoLoop media block, in
+it/en/zh. Hero backgrounds and project-card cover loops keep their
+original silent, uncontrolled behavior — they're decorative, not
+content being viewed.
+---
+ src/components/blocks/media-block.tsx  |  14 +--
+ src/components/icons/index.tsx         |  40 ++++++++
+ src/components/media/media-image.tsx   |  29 +++++-
+ src/components/media/media-video.tsx   | 128 +++++++++++++++++++++++++
+ src/components/media/photo-gallery.tsx |   1 +
+ src/messages/en.json                   |   6 ++
+ src/messages/it.json                   |   6 ++
+ src/messages/zh.json                   |   6 ++
+ 8 files changed, 218 insertions(+), 12 deletions(-)
+ create mode 100644 src/components/media/media-video.tsx
+
+diff --git a/src/components/blocks/media-block.tsx b/src/components/blocks/media-block.tsx
+index b2e3ce6..22241b0 100644
+--- a/src/components/blocks/media-block.tsx
++++ b/src/components/blocks/media-block.tsx
+@@ -1,4 +1,5 @@
+ import { MediaImage } from '@/components/media/media-image'
++import { MediaVideo } from '@/components/media/media-video'
+ import { PhotoGallery } from '@/components/media/photo-gallery'
+ import type { MediaBlockType } from '@/payload-types'
+ import { BlockSection } from './block-section'
+@@ -25,17 +26,12 @@ export function MediaBlock({ block }: { block: MediaBlockType }) {
+         <figure className="page-margin">
+           <div className="mx-auto max-w-full overflow-hidden" style={{ width: 'fit-content' }}>
+             {typeof video === 'object' && video?.url ? (
+-              <video
++              <MediaVideo
++                src={video.url}
++                mimeType={video.mimeType}
+                 className="block h-auto max-h-[80vh] w-auto max-w-full"
+-                autoPlay
+-                playsInline
+-                muted
+-                loop
+-                preload="auto"
+                 poster={typeof poster === 'object' ? (poster?.url ?? undefined) : undefined}
+-              >
+-                <source src={video.url} type={video.mimeType ?? undefined} />
+-              </video>
++              />
+             ) : (
+               <MediaImage
+                 media={poster}
+diff --git a/src/components/icons/index.tsx b/src/components/icons/index.tsx
+index 24e5e81..49e7cfe 100644
+--- a/src/components/icons/index.tsx
++++ b/src/components/icons/index.tsx
+@@ -113,3 +113,43 @@ export function ExpandIcon(props: IconProps) {
+     </Icon>
+   )
+ }
++
++/** Resumes a paused gallery video. Filled, unlike the rest of the set: at
++ * this size an outlined triangle disappears against video content. */
++export function PlayIcon(props: IconProps) {
++  return (
++    <Icon {...props} fill="currentColor" stroke="none">
++      <path d="M8 5.5v13l11-6.5-11-6.5Z" />
++    </Icon>
++  )
++}
++
++/** Stops a playing gallery video. */
++export function PauseIcon(props: IconProps) {
++  return (
++    <Icon {...props} fill="currentColor" stroke="none">
++      <rect x="6.5" y="5" width="4" height="14" rx="1" />
++      <rect x="13.5" y="5" width="4" height="14" rx="1" />
++    </Icon>
++  )
++}
++
++export function MuteIcon(props: IconProps) {
++  return (
++    <Icon {...props}>
++      <path d="M4 9.5h3.5L12 6v12l-4.5-3.5H4v-5Z" />
++      <path d="M16 9.5 21 14.5" />
++      <path d="M21 9.5 16 14.5" />
++    </Icon>
++  )
++}
++
++export function UnmuteIcon(props: IconProps) {
++  return (
++    <Icon {...props}>
++      <path d="M4 9.5h3.5L12 6v12l-4.5-3.5H4v-5Z" />
++      <path d="M16.5 9c1.2 1 1.2 5 0 6" />
++      <path d="M19 7c2.4 2.2 2.4 7.8 0 10" />
++    </Icon>
++  )
++}
+diff --git a/src/components/media/media-image.tsx b/src/components/media/media-image.tsx
+index b7ba73f..de2792b 100644
+--- a/src/components/media/media-image.tsx
++++ b/src/components/media/media-image.tsx
+@@ -2,12 +2,22 @@ import Image from 'next/image'
+ 
+ import type { Media } from '@/payload-types'
+ 
++import { MediaVideo } from './media-video'
++
+ type MediaImageProps = {
+   media?: number | Media | null
+   /** Sizes attribute: how much of the viewport the image occupies. */
+   sizes: string
+   className?: string
+   priority?: boolean
++  /**
++   * Adds the play/pause + mute overlay when the media is a video. Off by
++   * default — a hero background or a project-card cover stays a silent,
++   * uncontrolled loop; a gallery view (the lightbox, a standalone showcase)
++   * turns it on. `hover` keeps the same overlay but only reveals it on
++   * hover/focus, for a video sitting in a grid thumbnail.
++   */
++  controls?: boolean | 'hover'
+ }
+ 
+ /**
+@@ -19,10 +29,10 @@ type MediaImageProps = {
+  * a generic upload, so nothing stops an editor picking an mp4 for a cover, a
+  * hero or a gallery item. `next/image` cannot decode a video stream, so those
+  * used to render as a broken-image icon showing only the alt text. Here the
+- * mime type decides: a video becomes a muted, looping `<video>`, which is what
+- * the site wants anyway — silent, autoplaying loops, never a player chrome.
++ * mime type decides: a video becomes a muted, looping `<video>` — with a
++ * minimal play/pause and mute overlay wherever `controls` asks for one.
+  */
+-export function MediaImage({ media, sizes, className, priority }: MediaImageProps) {
++export function MediaImage({ media, sizes, className, priority, controls = false }: MediaImageProps) {
+   if (!media || typeof media === 'number' || !media.url) return null
+ 
+   const { url, alt, width, height, focalX, focalY, mimeType } = media
+@@ -30,6 +40,19 @@ export function MediaImage({ media, sizes, className, priority }: MediaImageProp
+     typeof focalX === 'number' && typeof focalY === 'number' ? `${focalX}% ${focalY}%` : undefined
+ 
+   if (mimeType?.startsWith('video/')) {
++    if (controls) {
++      return (
++        <MediaVideo
++          src={url}
++          mimeType={mimeType}
++          className={className}
++          style={{ objectPosition }}
++          ariaLabel={alt ?? undefined}
++          chrome={controls === 'hover' ? 'hover' : 'always'}
++        />
++      )
++    }
++
+     return (
+       <video
+         className={className}
+diff --git a/src/components/media/media-video.tsx b/src/components/media/media-video.tsx
+new file mode 100644
+index 0000000..3c629d5
+--- /dev/null
++++ b/src/components/media/media-video.tsx
+@@ -0,0 +1,128 @@
++'use client'
++
++import { type CSSProperties, type MouseEvent, useCallback, useEffect, useRef, useState } from 'react'
++import { useTranslations } from 'next-intl'
++
++import { GlassSurface } from '@/components/glass/glass-surface'
++import { MuteIcon, PauseIcon, PlayIcon, UnmuteIcon } from '@/components/icons'
++
++type MediaVideoProps = {
++  src: string
++  mimeType?: string | null
++  poster?: string
++  className?: string
++  style?: CSSProperties
++  ariaLabel?: string
++  /**
++   * Where the chrome sits. `always` for a video shown at its own scale — the
++   * videoLoop block, the gallery lightbox. `hover` for a grid thumbnail,
++   * matching the ExpandIcon treatment already used there.
++   */
++  chrome?: 'always' | 'hover'
++}
++
++/**
++ * A gallery video: still the same silent, autoplaying loop as before by
++ * default, but with a minimal play/pause and mute/unmute overlay — glass
++ * chrome, the same material as the lightbox nav — so a viewer can stop the
++ * loop or turn the sound on instead of it running unattended.
++ */
++export function MediaVideo({
++  src,
++  mimeType,
++  poster,
++  className,
++  style,
++  ariaLabel,
++  chrome = 'always',
++}: MediaVideoProps) {
++  const t = useTranslations('MediaVideo')
++  const videoRef = useRef<HTMLVideoElement>(null)
++  const [playing, setPlaying] = useState(true)
++  const [muted, setMuted] = useState(true)
++
++  useEffect(() => {
++    const el = videoRef.current
++    if (!el) return
++
++    const onPlay = () => setPlaying(true)
++    const onPause = () => setPlaying(false)
++    const onVolumeChange = () => setMuted(el.muted)
++
++    el.addEventListener('play', onPlay)
++    el.addEventListener('pause', onPause)
++    el.addEventListener('volumechange', onVolumeChange)
++
++    return () => {
++      el.removeEventListener('play', onPlay)
++      el.removeEventListener('pause', onPause)
++      el.removeEventListener('volumechange', onVolumeChange)
++    }
++  }, [])
++
++  const togglePlay = useCallback((event: MouseEvent) => {
++    event.stopPropagation()
++    const el = videoRef.current
++    if (!el) return
++    if (el.paused) {
++      void el.play()
++    } else {
++      el.pause()
++    }
++  }, [])
++
++  const toggleMute = useCallback((event: MouseEvent) => {
++    event.stopPropagation()
++    const el = videoRef.current
++    if (!el) return
++    el.muted = !el.muted
++  }, [])
++
++  return (
++    <div className={chrome === 'hover' ? 'group/video relative' : 'relative'}>
++      <video
++        ref={videoRef}
++        className={className}
++        style={style}
++        autoPlay
++        playsInline
++        muted
++        loop
++        preload="auto"
++        poster={poster}
++        aria-label={ariaLabel}
++      >
++        <source src={src} type={mimeType ?? undefined} />
++      </video>
++
++      <div
++        className={
++          chrome === 'hover'
++            ? 'pointer-events-none absolute inset-x-0 bottom-16 flex justify-center gap-8 opacity-0 transition duration-fast ease-reveal group-hover/video:opacity-100 group-focus-within/video:opacity-100'
++            : 'pointer-events-none absolute inset-x-0 bottom-16 flex justify-center gap-8 tablet:bottom-24'
++        }
++      >
++        <GlassSurface variant="chrome" className="pointer-events-auto">
++          <button
++            type="button"
++            onClick={togglePlay}
++            aria-label={playing ? t('pause') : t('play')}
++            className="flex p-12"
++          >
++            {playing ? <PauseIcon /> : <PlayIcon />}
++          </button>
++        </GlassSurface>
++        <GlassSurface variant="chrome" className="pointer-events-auto">
++          <button
++            type="button"
++            onClick={toggleMute}
++            aria-label={muted ? t('unmute') : t('mute')}
++            className="flex p-12"
++          >
++            {muted ? <MuteIcon /> : <UnmuteIcon />}
++          </button>
++        </GlassSurface>
++      </div>
++    </div>
++  )
++}
+diff --git a/src/components/media/photo-gallery.tsx b/src/components/media/photo-gallery.tsx
+index 258ea91..6953762 100644
+--- a/src/components/media/photo-gallery.tsx
++++ b/src/components/media/photo-gallery.tsx
+@@ -161,6 +161,7 @@ export function PhotoGallery({ items }: { items: GalleryItem[] }) {
+               sizes="90vw"
+               className="max-h-[85vh] w-auto max-w-[90vw] object-contain"
+               priority
++              controls
+             />
+             {active.caption || items.length > 1 ? (
+               <figcaption className="text-center font-mono text-caption uppercase text-ink-inverse">
+diff --git a/src/messages/en.json b/src/messages/en.json
+index 879ead0..a0fc57e 100644
+--- a/src/messages/en.json
++++ b/src/messages/en.json
+@@ -212,5 +212,11 @@
+       "token": "Token",
+       "value": "Value"
+     }
++  },
++  "MediaVideo": {
++    "play": "Play",
++    "pause": "Pause",
++    "mute": "Mute",
++    "unmute": "Unmute"
+   }
+ }
+diff --git a/src/messages/it.json b/src/messages/it.json
+index eaf29ee..a03fa6b 100644
+--- a/src/messages/it.json
++++ b/src/messages/it.json
+@@ -212,5 +212,11 @@
+       "token": "Token",
+       "value": "Valore"
+     }
++  },
++  "MediaVideo": {
++    "play": "Riproduci",
++    "pause": "Metti in pausa",
++    "mute": "Disattiva audio",
++    "unmute": "Attiva audio"
+   }
+ }
+diff --git a/src/messages/zh.json b/src/messages/zh.json
+index 48fbda9..abc7509 100644
+--- a/src/messages/zh.json
++++ b/src/messages/zh.json
+@@ -212,5 +212,11 @@
+       "token": "Token",
+       "value": "取值"
+     }
++  },
++  "MediaVideo": {
++    "play": "播放",
++    "pause": "暂停",
++    "mute": "静音",
++    "unmute": "取消静音"
+   }
+ }
+-- 
+2.43.0
+

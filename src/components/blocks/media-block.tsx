@@ -1,4 +1,5 @@
 import { MediaImage } from '@/components/media/media-image'
+import { MediaVideo } from '@/components/media/media-video'
 import type { MediaBlockType } from '@/payload-types'
 
 import { BlockSection } from './block-section'
@@ -14,11 +15,11 @@ function Caption({ children }: { children?: string | null }) {
 }
 
 /**
- * Media, four variants. Containers are square-cornered and never rounded:
+ * Media, five variants. Containers are square-cornered and never rounded:
  * content is paper.
  */
 export function MediaBlock({ block }: { block: MediaBlockType }) {
-  const { variant, items, video, poster, before, after, caption, settings } = block
+  const { variant, items, video, poster, before, after, gridItems, caption, settings } = block
 
   if (variant === 'videoLoop') {
     return (
@@ -26,16 +27,12 @@ export function MediaBlock({ block }: { block: MediaBlockType }) {
         <figure>
           <div className="aspect-video w-full overflow-hidden">
             {typeof video === 'object' && video?.url ? (
-              <video
+              <MediaVideo
+                src={video.url}
+                mimeType={video.mimeType}
                 className="h-full w-full object-cover"
-                playsInline
-                muted
-                loop
-                preload="none"
                 poster={typeof poster === 'object' ? (poster?.url ?? undefined) : undefined}
-              >
-                <source src={video.url} type={video.mimeType ?? undefined} />
-              </video>
+              />
             ) : (
               <MediaImage media={poster} sizes="100vw" className="h-full w-full object-cover" />
             )}
@@ -61,6 +58,38 @@ export function MediaBlock({ block }: { block: MediaBlockType }) {
             <div className="col-span-4 tablet:col-span-3 desktop:col-span-6">
               <MediaImage media={after} sizes="(min-width: 768px) 50vw, 100vw" className="w-full" />
             </div>
+          </div>
+          <Caption>{caption}</Caption>
+        </figure>
+      </BlockSection>
+    )
+  }
+
+  if (variant === 'grid') {
+    return (
+      <BlockSection settings={settings}>
+        <figure>
+          <div className="page-grid">
+            {(gridItems ?? []).map((item, index) => (
+              <div
+                key={item.id ?? index}
+                className="col-span-4 tablet:col-span-3 desktop:col-span-4"
+              >
+                <div className="aspect-[9/16] w-full overflow-hidden">
+                  <MediaImage
+                    media={item.video}
+                    poster={item.poster}
+                    sizes="(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw"
+                    className="h-full w-full object-cover"
+                  />
+                </div>
+                {item.caption ? (
+                  <p className="mt-16 font-mono text-caption uppercase text-ink-muted">
+                    {item.caption}
+                  </p>
+                ) : null}
+              </div>
+            ))}
           </div>
           <Caption>{caption}</Caption>
         </figure>

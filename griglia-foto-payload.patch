@@ -1,0 +1,424 @@
+diff --git a/src/app/(frontend)/[locale]/blocks/page.tsx b/src/app/(frontend)/[locale]/blocks/page.tsx
+index 52a3934..b4fc5e0 100644
+--- a/src/app/(frontend)/[locale]/blocks/page.tsx
++++ b/src/app/(frontend)/[locale]/blocks/page.tsx
+@@ -26,7 +26,7 @@ const variantsByBlock: Record<string, string[]> = {
+   hero: ['typographic', 'webglImage', 'videoFullscreen'],
+   statement: ['asymmetric', 'twoColumns', 'horizontalScroll'],
+   projectGrid: ['staggeredTwo', 'compactThree', 'draggableRow'],
+-  media: ['fullBleed', 'pair', 'videoLoop', 'beforeAfter'],
++  media: ['fullBleed', 'pair', 'gallery', 'videoLoop', 'beforeAfter'],
+   services: ['accordion', 'cards', 'numberedList'],
+   results: ['animatedCounters', 'staticGrid'],
+   testimonial: ['fullPage', 'slider', 'quoteWithLogo'],
+diff --git a/src/blocks/media.ts b/src/blocks/media.ts
+index 08bbeb8..4625d56 100644
+--- a/src/blocks/media.ts
++++ b/src/blocks/media.ts
+@@ -10,6 +10,7 @@ export const MediaBlock: Block = {
+     variantField([
+       { label: 'Full bleed', value: 'fullBleed' },
+       { label: 'Coppia o griglia', value: 'pair' },
++      { label: 'Galleria (griglia dinamica con zoom)', value: 'gallery' },
+       { label: 'Loop video', value: 'videoLoop' },
+       { label: 'Confronto prima/dopo', value: 'beforeAfter' },
+     ]),
+@@ -20,9 +21,11 @@ export const MediaBlock: Block = {
+       maxRows: 12,
+       admin: {
+         condition: (_, siblings) =>
+-          siblings?.variant === 'fullBleed' || siblings?.variant === 'pair',
++          siblings?.variant === 'fullBleed' ||
++          siblings?.variant === 'pair' ||
++          siblings?.variant === 'gallery',
+         description:
+-          'Con uno o due elementi è la coppia affiancata. Da tre in su diventa una griglia: 3 colonne su desktop, 2 su tablet, 1 su mobile. Ogni elemento può essere una foto o un video.',
++          'Con uno o due elementi è la coppia affiancata. Da tre in su diventa una griglia: 3 colonne su desktop, 2 su tablet, 1 su mobile. "Galleria" le dispone invece in una griglia dinamica in stile masonry, rispettando le proporzioni reali di ogni foto, e apre ogni immagine a schermo intero al click, con zoom e navigazione tra le foto. Ogni elemento può essere una foto o un video.',
+       },
+       fields: [
+         { name: 'media', type: 'upload', relationTo: 'media', required: true },
+diff --git a/src/components/blocks/media-block.tsx b/src/components/blocks/media-block.tsx
+index 0feb9ae..b2e3ce6 100644
+--- a/src/components/blocks/media-block.tsx
++++ b/src/components/blocks/media-block.tsx
+@@ -1,4 +1,5 @@
+ import { MediaImage } from '@/components/media/media-image'
++import { PhotoGallery } from '@/components/media/photo-gallery'
+ import type { MediaBlockType } from '@/payload-types'
+ import { BlockSection } from './block-section'
+ 
+@@ -71,6 +72,19 @@ export function MediaBlock({ block }: { block: MediaBlockType }) {
+     )
+   }
+ 
++  if (variant === 'gallery') {
++    return (
++      <BlockSection settings={settings}>
++        <figure>
++          <div className="page-margin">
++            <PhotoGallery items={items ?? []} />
++          </div>
++          <Caption>{caption}</Caption>
++        </figure>
++      </BlockSection>
++    )
++  }
++
+   if (variant === 'pair') {
+     const pairItems = items ?? []
+     /**
+diff --git a/src/components/icons/index.tsx b/src/components/icons/index.tsx
+index ef7ceea..24e5e81 100644
+--- a/src/components/icons/index.tsx
++++ b/src/components/icons/index.tsx
+@@ -76,3 +76,40 @@ export function CheckIcon(props: IconProps) {
+     </Icon>
+   )
+ }
++
++/** Closes the lightbox and anything else that needs a plain dismiss. */
++export function CloseIcon(props: IconProps) {
++  return (
++    <Icon {...props}>
++      <path d="M6 6l12 12M18 6 6 18" />
++    </Icon>
++  )
++}
++
++export function ChevronLeftIcon(props: IconProps) {
++  return (
++    <Icon {...props}>
++      <path d="M14.5 5.5 8 12l6.5 6.5" />
++    </Icon>
++  )
++}
++
++export function ChevronRightIcon(props: IconProps) {
++  return (
++    <Icon {...props}>
++      <path d="M9.5 5.5 16 12l-6.5 6.5" />
++    </Icon>
++  )
++}
++
++/** Four open corners, the fullscreen-enlarge convention: hovers a gallery thumbnail. */
++export function ExpandIcon(props: IconProps) {
++  return (
++    <Icon {...props}>
++      <path d="M4 9V5a1 1 0 0 1 1-1h4" />
++      <path d="M15 4h4a1 1 0 0 1 1 1v4" />
++      <path d="M4 15v4a1 1 0 0 0 1 1h4" />
++      <path d="M20 15v4a1 1 0 0 1-1 1h-4" />
++    </Icon>
++  )
++}
+diff --git a/src/components/media/photo-gallery.tsx b/src/components/media/photo-gallery.tsx
+new file mode 100644
+index 0000000..258ea91
+--- /dev/null
++++ b/src/components/media/photo-gallery.tsx
+@@ -0,0 +1,184 @@
++'use client'
++
++import { useCallback, useEffect, useState } from 'react'
++import { useTranslations } from 'next-intl'
++
++import { GlassSurface } from '@/components/glass/glass-surface'
++import { ChevronLeftIcon, ChevronRightIcon, CloseIcon, ExpandIcon } from '@/components/icons'
++import { MediaImage } from '@/components/media/media-image'
++import type { MediaBlockType } from '@/payload-types'
++
++type GalleryItem = NonNullable<MediaBlockType['items']>[number]
++
++/**
++ * The `gallery` variant of the media block: photos keep their natural
++ * proportions and interlock in CSS columns instead of sitting in equal-height
++ * grid rows, so mismatched portraits and landscapes still fit together
++ * without gaps. Every photo opens full-screen to be examined at size, with
++ * keyboard and glass-chrome navigation between the others in the set.
++ *
++ * Client-only on purpose: the grid is inert without the click handlers, so
++ * unlike the rest of `MediaBlock` this branch pays the JS cost deliberately
++ * instead of leaking it into the server-rendered variants.
++ */
++export function PhotoGallery({ items }: { items: GalleryItem[] }) {
++  const t = useTranslations('PhotoGallery')
++  const [activeIndex, setActiveIndex] = useState<number | null>(null)
++
++  const close = useCallback(() => setActiveIndex(null), [])
++
++  const showPrev = useCallback(() => {
++    setActiveIndex((index) => (index === null ? null : (index - 1 + items.length) % items.length))
++  }, [items.length])
++
++  const showNext = useCallback(() => {
++    setActiveIndex((index) => (index === null ? null : (index + 1) % items.length))
++  }, [items.length])
++
++  // Escape and the arrow keys drive the viewer; the document is frozen while
++  // it's open so the page behind it can't scroll along with it.
++  useEffect(() => {
++    if (activeIndex === null) return
++
++    const onKeyDown = (event: KeyboardEvent) => {
++      if (event.key === 'Escape') close()
++      if (event.key === 'ArrowLeft') showPrev()
++      if (event.key === 'ArrowRight') showNext()
++    }
++
++    const root = document.documentElement
++    const previousOverflow = root.style.overflow
++    root.style.overflow = 'hidden'
++    window.addEventListener('keydown', onKeyDown)
++
++    return () => {
++      root.style.overflow = previousOverflow
++      window.removeEventListener('keydown', onKeyDown)
++    }
++  }, [activeIndex, close, showPrev, showNext])
++
++  if (items.length === 0) return null
++
++  const active = activeIndex !== null ? items[activeIndex] : null
++
++  return (
++    <>
++      <div className="columns-1 gap-16 tablet:columns-2 desktop:columns-3 [&>*]:mb-16">
++        {items.map((item, index) => (
++          <button
++            key={item.id ?? index}
++            type="button"
++            onClick={() => setActiveIndex(index)}
++            aria-haspopup="dialog"
++            aria-label={t('open', { index: index + 1, total: items.length })}
++            className="group relative block w-full break-inside-avoid text-left"
++          >
++            <MediaImage
++              media={item.media}
++              sizes="(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw"
++              className="w-full"
++            />
++            <span
++              aria-hidden="true"
++              className="pointer-events-none absolute inset-0 flex items-center justify-center bg-surface-inverse/0 text-ink-inverse opacity-0 transition duration-fast ease-reveal group-hover:bg-surface-inverse/40 group-hover:opacity-100"
++            >
++              <ExpandIcon width="28" height="28" />
++            </span>
++            {item.caption ? (
++              <span className="mt-16 block font-mono text-caption uppercase text-ink-muted">
++                {item.caption}
++              </span>
++            ) : null}
++          </button>
++        ))}
++      </div>
++
++      {active ? (
++        <div
++          role="dialog"
++          aria-modal="true"
++          aria-label={t('dialogLabel')}
++          className="fixed inset-0 z-50 flex items-center justify-center bg-surface-inverse/90 p-24"
++          onClick={close}
++        >
++          <GlassSurface variant="chrome" className="absolute right-24 top-24">
++            <button
++              type="button"
++              onClick={(event) => {
++                event.stopPropagation()
++                close()
++              }}
++              aria-label={t('close')}
++              className="flex p-12"
++            >
++              <CloseIcon />
++            </button>
++          </GlassSurface>
++
++          {items.length > 1 ? (
++            <>
++              <GlassSurface
++                variant="chrome"
++                className="absolute left-16 top-1/2 -translate-y-1/2 tablet:left-24"
++              >
++                <button
++                  type="button"
++                  onClick={(event) => {
++                    event.stopPropagation()
++                    showPrev()
++                  }}
++                  aria-label={t('previous')}
++                  className="flex p-12"
++                >
++                  <ChevronLeftIcon />
++                </button>
++              </GlassSurface>
++              <GlassSurface
++                variant="chrome"
++                className="absolute right-16 top-1/2 -translate-y-1/2 tablet:right-24"
++              >
++                <button
++                  type="button"
++                  onClick={(event) => {
++                    event.stopPropagation()
++                    showNext()
++                  }}
++                  aria-label={t('next')}
++                  className="flex p-12"
++                >
++                  <ChevronRightIcon />
++                </button>
++              </GlassSurface>
++            </>
++          ) : null}
++
++          <figure
++            className="flex max-h-full max-w-full flex-col items-center gap-16"
++            onClick={(event) => event.stopPropagation()}
++          >
++            <MediaImage
++              media={active.media}
++              sizes="90vw"
++              className="max-h-[85vh] w-auto max-w-[90vw] object-contain"
++              priority
++            />
++            {active.caption || items.length > 1 ? (
++              <figcaption className="text-center font-mono text-caption uppercase text-ink-inverse">
++                {active.caption}
++                {items.length > 1 ? (
++                  <span className="text-ink-inverse/70">
++                    {active.caption ? ' — ' : null}
++                    {t('counter', {
++                      current: activeIndex !== null ? activeIndex + 1 : 0,
++                      total: items.length,
++                    })}
++                  </span>
++                ) : null}
++              </figcaption>
++            ) : null}
++          </figure>
++        </div>
++      ) : null}
++    </>
++  )
++}
+diff --git a/src/messages/en.json b/src/messages/en.json
+index 6f8f343..879ead0 100644
+--- a/src/messages/en.json
++++ b/src/messages/en.json
+@@ -20,6 +20,14 @@
+     "social": "Social",
+     "toTop": "Back to top"
+   },
++  "PhotoGallery": {
++    "open": "Open photo {index} of {total} full screen",
++    "dialogLabel": "Full-screen photo",
++    "close": "Close",
++    "previous": "Previous photo",
++    "next": "Next photo",
++    "counter": "{current} of {total}"
++  },
+   "Theme": {
+     "legend": "Theme",
+     "system": "System",
+diff --git a/src/messages/it.json b/src/messages/it.json
+index af7f5b8..eaf29ee 100644
+--- a/src/messages/it.json
++++ b/src/messages/it.json
+@@ -20,6 +20,14 @@
+     "social": "Social",
+     "toTop": "Torna su"
+   },
++  "PhotoGallery": {
++    "open": "Apri la foto {index} di {total} a schermo intero",
++    "dialogLabel": "Foto a schermo intero",
++    "close": "Chiudi",
++    "previous": "Foto precedente",
++    "next": "Foto successiva",
++    "counter": "{current} di {total}"
++  },
+   "Theme": {
+     "legend": "Tema",
+     "system": "Sistema",
+diff --git a/src/messages/zh.json b/src/messages/zh.json
+index ad7729a..48fbda9 100644
+--- a/src/messages/zh.json
++++ b/src/messages/zh.json
+@@ -20,6 +20,14 @@
+     "social": "社交媒体",
+     "toTop": "回到顶部"
+   },
++  "PhotoGallery": {
++    "open": "全屏打开第 {index} 张，共 {total} 张照片",
++    "dialogLabel": "全屏照片",
++    "close": "关闭",
++    "previous": "上一张",
++    "next": "下一张",
++    "counter": "第 {current} 张，共 {total} 张"
++  },
+   "Theme": {
+     "legend": "主题",
+     "system": "跟随系统",
+diff --git a/src/payload-types.ts b/src/payload-types.ts
+index 75db21c..6f03f62 100644
+--- a/src/payload-types.ts
++++ b/src/payload-types.ts
+@@ -413,7 +413,10 @@ export interface MediaBlockType {
+   /**
+    * Cambiare variante non perde contenuti né traduzioni.
+    */
+-  variant: 'fullBleed' | 'pair' | 'videoLoop' | 'beforeAfter';
++  variant: 'fullBleed' | 'pair' | 'gallery' | 'videoLoop' | 'beforeAfter';
++  /**
++   * Con uno o due elementi è la coppia affiancata. Da tre in su diventa una griglia: 3 colonne su desktop, 2 su tablet, 1 su mobile. "Galleria" le dispone invece in una griglia dinamica in stile masonry, rispettando le proporzioni reali di ogni foto, e apre ogni immagine a schermo intero al click, con zoom e navigazione tra le foto. Ogni elemento può essere una foto o un video.
++   */
+   items?:
+     | {
+         media: number | Media;
+@@ -793,7 +796,7 @@ export interface TeamBlockType {
+ }
+ /**
+  * This interface was referenced by `Config`'s JSON-Schema
+- * via the `definition` "CtaBlock".
++ * via the `definition` "ContactFormBlock".
+  */
+ export interface ContactFormBlock {
+   eyebrow?: string | null;
+@@ -815,6 +818,10 @@ export interface ContactFormBlock {
+   blockName?: string | null;
+   blockType: 'contactForm';
+ }
++/**
++ * This interface was referenced by `Config`'s JSON-Schema
++ * via the `definition` "CtaBlock".
++ */
+ export interface CtaBlock {
+   /**
+    * Cambiare variante non perde contenuti né traduzioni.
+@@ -1320,7 +1327,7 @@ export interface TeamBlockTypeSelect<T extends boolean = true> {
+ }
+ /**
+  * This interface was referenced by `Config`'s JSON-Schema
+- * via the `definition` "CtaBlock_select".
++ * via the `definition` "ContactFormBlock_select".
+  */
+ export interface ContactFormBlockSelect<T extends boolean = true> {
+   eyebrow?: T;
+@@ -1337,6 +1344,10 @@ export interface ContactFormBlockSelect<T extends boolean = true> {
+   id?: T;
+   blockName?: T;
+ }
++/**
++ * This interface was referenced by `Config`'s JSON-Schema
++ * via the `definition` "CtaBlock_select".
++ */
+ export interface CtaBlockSelect<T extends boolean = true> {
+   variant?: T;
+   heading?: T;
+@@ -1811,4 +1822,4 @@ export interface Auth {
+ 
+ declare module 'payload' {
+   export interface GeneratedTypes extends Config {}
+-}
++}
+\ No newline at end of file
