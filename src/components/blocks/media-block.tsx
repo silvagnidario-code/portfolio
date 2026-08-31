@@ -115,6 +115,7 @@ export function MediaBlock({ block }: { block: MediaBlockType }) {
                   media={item.media}
                   sizes="(min-width: 768px) 50vw, 100vw"
                   className="w-full"
+                  controls="hover"
                 />
                 {item.caption ? (
                   <p className="mt-16 font-mono text-caption uppercase text-ink-muted">
@@ -135,7 +136,12 @@ export function MediaBlock({ block }: { block: MediaBlockType }) {
   return (
     <BlockSection settings={settings}>
       <figure>
-        <MediaImage media={first?.media} sizes="100vw" className="w-full" />
+        <MediaImage
+          media={first?.media}
+          sizes="100vw"
+          className="w-full"
+          controls="hover"
+        />
         <Caption>{first?.caption ?? caption}</Caption>
       </figure>
     </BlockSection>
