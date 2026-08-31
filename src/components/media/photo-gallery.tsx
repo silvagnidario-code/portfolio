@@ -161,6 +161,7 @@ export function PhotoGallery({ items }: { items: GalleryItem[] }) {
               sizes="90vw"
               className="max-h-[85vh] w-auto max-w-[90vw] object-contain"
               priority
+              controls
             />
             {active.caption || items.length > 1 ? (
               <figcaption className="text-center font-mono text-caption uppercase text-ink-inverse">

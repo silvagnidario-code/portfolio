@@ -212,5 +212,11 @@
       "token": "Token",
       "value": "Value"
     }
+  },
+  "MediaVideo": {
+    "play": "Play",
+    "pause": "Pause",
+    "mute": "Mute",
+    "unmute": "Unmute"
   }
 }
