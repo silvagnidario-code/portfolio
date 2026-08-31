@@ -53,6 +53,9 @@ type MediaVideoProps = {
  * present — `pointer-fine` distinguishes the two instead of guessing from
  * screen width, since a touch laptop or a desktop with a stylus doesn't
  * split neatly along a breakpoint.
+ *
+ * Only carries a `<source>` — and therefore only decodes — near the
+ * viewport; see the `active` effect below for why.
  */
 export function MediaVideo({
   src,
@@ -70,6 +73,16 @@ export function MediaVideo({
   const [playing, setPlaying] = useState(true)
   const [muted, setMuted] = useState(true)
   const [isFullscreen, setIsFullscreen] = useState(false)
+  // A page can carry a dozen of these; mobile browsers cap how many videos
+  // can decode at once (iOS Safari's hardware decoder tops out around 4-6),
+  // and the ones over that limit just never play. `active` gates the actual
+  // <source> — only videos near the viewport carry one — so a grid of eleven
+  // never asks the decoder for more than a handful at a time.
+  const [active, setActive] = useState(false)
+  // Whether the viewer paused this one on purpose, as opposed to it going
+  // idle because it scrolled out of view — only the former should stay
+  // paused once it scrolls back in.
+  const userPausedRef = useRef(false)
 
   useEffect(() => {
     const el = videoRef.current
@@ -114,14 +127,53 @@ export function MediaVideo({
     return () => document.removeEventListener('fullscreenchange', onFullscreenChange)
   }, [])
 
+  // Only decode video that's actually near the viewport. `rootMargin` starts
+  // it a little early so it's already playing by the time it's on screen,
+  // and drops it again once it's well past — freeing that decoder slot for
+  // whichever thumbnail the viewer has scrolled to next.
+  useEffect(() => {
+    const container = containerRef.current
+    if (!container || typeof IntersectionObserver === 'undefined') {
+      setActive(true)
+      return
+    }
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const entry = entries[0]
+        if (entry) setActive(entry.isIntersecting)
+      },
+      { rootMargin: '300px 0px' },
+    )
+    observer.observe(container)
+    return () => observer.disconnect()
+  }, [])
+
+  // Fires on every activation and deactivation: `load()` is what actually
+  // makes a browser let go of a dropped source instead of holding onto it,
+  // and resumes playback on the way back in unless the viewer paused it.
+  useEffect(() => {
+    const el = videoRef.current
+    if (!el) return
+
+    el.load()
+    if (active && !userPausedRef.current) {
+      void el.play()
+    } else if (!active) {
+      setPlaying(false)
+    }
+  }, [active])
+
   const togglePlay = useCallback((event: MouseEvent) => {
     event.stopPropagation()
     const el = videoRef.current
     if (!el) return
 
     if (el.paused) {
+      userPausedRef.current = false
       void el.play()
     } else {
+      userPausedRef.current = true
       el.pause()
     }
   }, [])
@@ -182,15 +234,14 @@ export function MediaVideo({
         ref={videoRef}
         className={className}
         style={style}
-        autoPlay
         playsInline
         muted
         loop
-        preload="auto"
+        preload={active ? 'auto' : 'none'}
         poster={poster}
         aria-label={ariaLabel}
       >
-        <source src={src} type={mimeType ?? undefined} />
+        {active ? <source src={src} type={mimeType ?? undefined} /> : null}
       </video>
 
       <div
