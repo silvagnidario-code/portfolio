@@ -113,3 +113,42 @@ export function ExpandIcon(props: IconProps) {
     </Icon>
   )
 }
+
+/** Resumes a paused gallery video. Filled, unlike the rest of the set. */
+export function PlayIcon(props: IconProps) {
+  return (
+    <Icon {...props} fill="currentColor" stroke="none">
+      <path d="M8 5.5v13l11-6.5-11-6.5Z" />
+    </Icon>
+  )
+}
+
+/** Stops a playing gallery video. */
+export function PauseIcon(props: IconProps) {
+  return (
+    <Icon {...props} fill="currentColor" stroke="none">
+      <rect x="6.5" y="5" width="4" height="14" rx="1" />
+      <rect x="13.5" y="5" width="4" height="14" rx="1" />
+    </Icon>
+  )
+}
+
+export function MuteIcon(props: IconProps) {
+  return (
+    <Icon {...props}>
+      <path d="M4 9.5h3.5L12 6v12l-4.5-3.5H4v-5Z" />
+      <path d="M16 9.5 21 14.5" />
+      <path d="M21 9.5 16 14.5" />
+    </Icon>
+  )
+}
+
+export function UnmuteIcon(props: IconProps) {
+  return (
+    <Icon {...props}>
+      <path d="M4 9.5h3.5L12 6v12l-4.5-3.5H4v-5Z" />
+      <path d="M16.5 9c1.2 1 1.2 5 0 6" />
+      <path d="M19 7c2.4 2.2 2.4 7.8 0 10" />
+    </Icon>
+  )
+}
