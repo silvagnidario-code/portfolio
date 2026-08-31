@@ -217,6 +217,8 @@
     "play": "Riproduci",
     "pause": "Metti in pausa",
     "mute": "Disattiva audio",
-    "unmute": "Attiva audio"
+    "unmute": "Attiva audio",
+    "fullscreen": "Schermo intero",
+    "exitFullscreen": "Esci da schermo intero"
   }
 }

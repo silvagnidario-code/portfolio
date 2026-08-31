@@ -114,6 +114,18 @@ export function ExpandIcon(props: IconProps) {
   )
 }
 
+/** Four corners folding inward: ExpandIcon reversed, for leaving fullscreen. */
+export function CollapseIcon(props: IconProps) {
+  return (
+    <Icon {...props}>
+      <path d="M9 4v4a1 1 0 0 1-1 1H4" />
+      <path d="M15 4v4a1 1 0 0 0 1 1h4" />
+      <path d="M9 20v-4a1 1 0 0 0-1-1H4" />
+      <path d="M15 20v-4a1 1 0 0 1 1-1h4" />
+    </Icon>
+  )
+}
+
 /** Resumes a paused gallery video. Filled, unlike the rest of the set. */
 export function PlayIcon(props: IconProps) {
   return (

@@ -12,7 +12,14 @@ import {
 import { useTranslations } from 'next-intl'
 
 import { GlassSurface } from '@/components/glass/glass-surface'
-import { MuteIcon, PauseIcon, PlayIcon, UnmuteIcon } from '@/components/icons'
+import {
+  CollapseIcon,
+  ExpandIcon,
+  MuteIcon,
+  PauseIcon,
+  PlayIcon,
+  UnmuteIcon,
+} from '@/components/icons'
 
 /**
  * One video's audio at a time. Every `MediaVideo` on the page listens for
@@ -22,6 +29,10 @@ import { MuteIcon, PauseIcon, PlayIcon, UnmuteIcon } from '@/components/icons'
  * share a React tree, and there's nothing here worth a context provider.
  */
 const UNMUTED_EVENT = 'media-video:unmuted'
+
+/** Safari on iOS never implemented the standard Fullscreen API on anything
+ * but the video element itself; it exposes its own method instead. */
+type SafariVideoElement = HTMLVideoElement & { webkitEnterFullscreen?: () => void }
 
 type MediaVideoProps = {
   src: string
@@ -36,7 +47,12 @@ type MediaVideoProps = {
 
 /**
  * Gallery and showcase videos stay silent autoplay loops by default, but they
- * gain a minimal glass control bar when the viewer needs to pause or unmute.
+ * gain a minimal glass control bar when the viewer needs to pause, unmute or
+ * go fullscreen. The bar is always visible on touch (there's no hover to
+ * reveal it there) and reveals on hover only where a mouse is actually
+ * present — `pointer-fine` distinguishes the two instead of guessing from
+ * screen width, since a touch laptop or a desktop with a stylus doesn't
+ * split neatly along a breakpoint.
  */
 export function MediaVideo({
   src,
@@ -49,9 +65,11 @@ export function MediaVideo({
 }: MediaVideoProps) {
   const t = useTranslations('MediaVideo')
   const instanceId = useId()
+  const containerRef = useRef<HTMLDivElement>(null)
   const videoRef = useRef<HTMLVideoElement>(null)
   const [playing, setPlaying] = useState(true)
   const [muted, setMuted] = useState(true)
+  const [isFullscreen, setIsFullscreen] = useState(false)
 
   useEffect(() => {
     const el = videoRef.current
@@ -86,6 +104,16 @@ export function MediaVideo({
     return () => window.removeEventListener(UNMUTED_EVENT, onOtherUnmuted)
   }, [instanceId])
 
+  // Tracks fullscreen state for this instance specifically — `fullscreenchange`
+  // is a document-level event shared by every video on the page.
+  useEffect(() => {
+    const onFullscreenChange = () => {
+      setIsFullscreen(document.fullscreenElement === containerRef.current)
+    }
+    document.addEventListener('fullscreenchange', onFullscreenChange)
+    return () => document.removeEventListener('fullscreenchange', onFullscreenChange)
+  }, [])
+
   const togglePlay = useCallback((event: MouseEvent) => {
     event.stopPropagation()
     const el = videoRef.current
@@ -112,8 +140,44 @@ export function MediaVideo({
     [instanceId],
   )
 
+  const toggleFullscreen = useCallback((event: MouseEvent) => {
+    event.stopPropagation()
+
+    if (document.fullscreenElement) {
+      void document.exitFullscreen()
+      return
+    }
+
+    // Fullscreening the wrapper, not the bare video, keeps this same control
+    // bar on screen once fullscreen — the video-only API on iOS Safari is the
+    // one exception, where the platform's own native player takes over.
+    const container = containerRef.current
+    if (container?.requestFullscreen) {
+      void container.requestFullscreen()
+      return
+    }
+
+    const el = videoRef.current as SafariVideoElement | null
+    el?.webkitEnterFullscreen?.()
+  }, [])
+
   return (
-    <div className={chrome === 'hover' ? 'group/video relative' : 'relative'}>
+    <div
+      ref={containerRef}
+      className={[
+        'relative',
+        // Fullscreen takes over the whole screen at the container's own
+        // aspect ratio; recentre the video and letterbox around it instead
+        // of leaving it pinned to a corner or stretched out of shape.
+        '[&:fullscreen]:flex [&:fullscreen]:h-full [&:fullscreen]:w-full',
+        '[&:fullscreen]:items-center [&:fullscreen]:justify-center [&:fullscreen]:bg-ink',
+        '[&:fullscreen_video]:h-auto [&:fullscreen_video]:w-auto',
+        '[&:fullscreen_video]:max-h-full [&:fullscreen_video]:max-w-full',
+        chrome === 'hover' ? 'group/video' : '',
+      ]
+        .filter(Boolean)
+        .join(' ')}
+    >
       <video
         ref={videoRef}
         className={className}
@@ -132,17 +196,13 @@ export function MediaVideo({
       <div
         className={
           chrome === 'hover'
-            ? 'pointer-events-none absolute inset-x-0 bottom-12 flex justify-center gap-16 opacity-0 transition duration-fast ease-reveal group-hover/video:opacity-100 group-focus-within/video:opacity-100'
+            ? 'pointer-events-none absolute inset-x-0 bottom-12 flex justify-center gap-16 opacity-100 transition duration-fast ease-reveal pointer-fine:opacity-0 pointer-fine:group-hover/video:opacity-100 pointer-fine:group-focus-within/video:opacity-100'
             : 'pointer-events-none absolute inset-x-0 bottom-16 flex justify-center gap-16 tablet:bottom-24'
         }
       >
         <GlassSurface
           variant="chrome"
-          className={
-            chrome === 'hover'
-              ? 'pointer-events-auto rounded-glass-sm border border-line/80 shadow-none'
-              : 'pointer-events-auto rounded-glass-sm border border-line/80 shadow-none'
-          }
+          className="pointer-events-auto rounded-glass-sm border border-line/80 shadow-none"
         >
           <button
             type="button"
@@ -157,11 +217,7 @@ export function MediaVideo({
 
         <GlassSurface
           variant="chrome"
-          className={
-            chrome === 'hover'
-              ? 'pointer-events-auto rounded-glass-sm border border-line/80 shadow-none'
-              : 'pointer-events-auto rounded-glass-sm border border-line/80 shadow-none'
-          }
+          className="pointer-events-auto rounded-glass-sm border border-line/80 shadow-none"
         >
           <button
             type="button"
@@ -171,6 +227,21 @@ export function MediaVideo({
             className="flex h-40 w-40 items-center justify-center rounded-glass-sm text-ink transition hover:text-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink focus-visible:ring-offset-2 focus-visible:ring-offset-transparent"
           >
             {muted ? <MuteIcon /> : <UnmuteIcon />}
+          </button>
+        </GlassSurface>
+
+        <GlassSurface
+          variant="chrome"
+          className="pointer-events-auto rounded-glass-sm border border-line/80 shadow-none"
+        >
+          <button
+            type="button"
+            onClick={toggleFullscreen}
+            aria-label={isFullscreen ? t('exitFullscreen') : t('fullscreen')}
+            aria-pressed={isFullscreen}
+            className="flex h-40 w-40 items-center justify-center rounded-glass-sm text-ink transition hover:text-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink focus-visible:ring-offset-2 focus-visible:ring-offset-transparent"
+          >
+            {isFullscreen ? <CollapseIcon /> : <ExpandIcon />}
           </button>
         </GlassSurface>
       </div>
