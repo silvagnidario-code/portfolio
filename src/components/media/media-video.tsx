@@ -5,6 +5,7 @@ import {
   type MouseEvent,
   useCallback,
   useEffect,
+  useId,
   useRef,
   useState,
 } from 'react'
@@ -12,6 +13,15 @@ import { useTranslations } from 'next-intl'
 
 import { GlassSurface } from '@/components/glass/glass-surface'
 import { MuteIcon, PauseIcon, PlayIcon, UnmuteIcon } from '@/components/icons'
+
+/**
+ * One video's audio at a time. Every `MediaVideo` on the page listens for
+ * this event; unmuting one broadcasts its id so every other instance mutes
+ * itself, instead of a viewer stacking three audio tracks by unmuting three
+ * thumbnails in a row. A plain DOM event is enough — these instances don't
+ * share a React tree, and there's nothing here worth a context provider.
+ */
+const UNMUTED_EVENT = 'media-video:unmuted'
 
 type MediaVideoProps = {
   src: string
@@ -38,6 +48,7 @@ export function MediaVideo({
   chrome = 'always',
 }: MediaVideoProps) {
   const t = useTranslations('MediaVideo')
+  const instanceId = useId()
   const videoRef = useRef<HTMLVideoElement>(null)
   const [playing, setPlaying] = useState(true)
   const [muted, setMuted] = useState(true)
@@ -61,6 +72,20 @@ export function MediaVideo({
     }
   }, [])
 
+  // Another video just unmuted itself: if this one is currently audible,
+  // mute it so the two tracks don't play over each other.
+  useEffect(() => {
+    const onOtherUnmuted = (event: Event) => {
+      const otherId = (event as CustomEvent<string>).detail
+      if (otherId === instanceId) return
+      const el = videoRef.current
+      if (el && !el.muted) el.muted = true
+    }
+
+    window.addEventListener(UNMUTED_EVENT, onOtherUnmuted)
+    return () => window.removeEventListener(UNMUTED_EVENT, onOtherUnmuted)
+  }, [instanceId])
+
   const togglePlay = useCallback((event: MouseEvent) => {
     event.stopPropagation()
     const el = videoRef.current
@@ -73,13 +98,19 @@ export function MediaVideo({
     }
   }, [])
 
-  const toggleMute = useCallback((event: MouseEvent) => {
-    event.stopPropagation()
-    const el = videoRef.current
-    if (!el) return
+  const toggleMute = useCallback(
+    (event: MouseEvent) => {
+      event.stopPropagation()
+      const el = videoRef.current
+      if (!el) return
 
-    el.muted = !el.muted
-  }, [])
+      el.muted = !el.muted
+      if (!el.muted) {
+        window.dispatchEvent(new CustomEvent(UNMUTED_EVENT, { detail: instanceId }))
+      }
+    },
+    [instanceId],
+  )
 
   return (
     <div className={chrome === 'hover' ? 'group/video relative' : 'relative'}>
@@ -101,8 +132,8 @@ export function MediaVideo({
       <div
         className={
           chrome === 'hover'
-            ? 'pointer-events-none absolute inset-x-0 bottom-12 flex justify-center gap-6 opacity-0 transition duration-fast ease-reveal group-hover/video:opacity-100 group-focus-within/video:opacity-100'
-            : 'pointer-events-none absolute inset-x-0 bottom-16 flex justify-center gap-6 tablet:bottom-24'
+            ? 'pointer-events-none absolute inset-x-0 bottom-12 flex justify-center gap-16 opacity-0 transition duration-fast ease-reveal group-hover/video:opacity-100 group-focus-within/video:opacity-100'
+            : 'pointer-events-none absolute inset-x-0 bottom-16 flex justify-center gap-16 tablet:bottom-24'
         }
       >
         <GlassSurface
