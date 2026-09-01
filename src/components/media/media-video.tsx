@@ -83,6 +83,8 @@ export function MediaVideo({
   // idle because it scrolled out of view — only the former should stay
   // paused once it scrolls back in.
   const userPausedRef = useRef(false)
+  // Debounces the *deactivate* edge only — see the observer effect below.
+  const deactivateTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null)
 
   useEffect(() => {
     const el = videoRef.current
@@ -128,9 +130,17 @@ export function MediaVideo({
   }, [])
 
   // Only decode video that's actually near the viewport. `rootMargin` starts
-  // it a little early so it's already playing by the time it's on screen,
-  // and drops it again once it's well past — freeing that decoder slot for
-  // whichever thumbnail the viewer has scrolled to next.
+  // it well before it's on screen — long enough, on a typical mobile
+  // connection, for the source to actually finish buffering before the
+  // viewer scrolls it into view, instead of them watching it load. Dropping
+  // it again once it's well past frees that decoder slot for whichever
+  // thumbnail the viewer has scrolled to next.
+  //
+  // The *deactivate* edge is debounced: a fast flick that carries a video
+  // out of the margin and back again shouldn't tear its source down and
+  // force a full reload from zero — that thrash was the other half of the
+  // scroll jank, on top of the buffering itself. Activation stays immediate;
+  // only losing the source is worth delaying.
   useEffect(() => {
     const container = containerRef.current
     if (!container || typeof IntersectionObserver === 'undefined') {
@@ -141,12 +151,31 @@ export function MediaVideo({
     const observer = new IntersectionObserver(
       (entries) => {
         const entry = entries[0]
-        if (entry) setActive(entry.isIntersecting)
+        if (!entry) return
+
+        if (entry.isIntersecting) {
+          if (deactivateTimeoutRef.current) {
+            clearTimeout(deactivateTimeoutRef.current)
+            deactivateTimeoutRef.current = null
+          }
+          setActive(true)
+        } else if (!deactivateTimeoutRef.current) {
+          deactivateTimeoutRef.current = setTimeout(() => {
+            deactivateTimeoutRef.current = null
+            setActive(false)
+          }, 1000)
+        }
       },
-      { rootMargin: '300px 0px' },
+      { rootMargin: '700px 0px' },
     )
     observer.observe(container)
-    return () => observer.disconnect()
+    return () => {
+      observer.disconnect()
+      if (deactivateTimeoutRef.current) {
+        clearTimeout(deactivateTimeoutRef.current)
+        deactivateTimeoutRef.current = null
+      }
+    }
   }, [])
 
   // Fires on every activation and deactivation: `load()` is what actually
