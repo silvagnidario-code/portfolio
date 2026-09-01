@@ -1,4 +1,5 @@
 import { MediaImage } from '@/components/media/media-image'
+import { MediaVideo } from '@/components/media/media-video'
 import { PhotoGallery } from '@/components/media/photo-gallery'
 import type { MediaBlockType } from '@/payload-types'
 import { BlockSection } from './block-section'
@@ -25,17 +26,12 @@ export function MediaBlock({ block }: { block: MediaBlockType }) {
         <figure className="page-margin">
           <div className="mx-auto max-w-full overflow-hidden" style={{ width: 'fit-content' }}>
             {typeof video === 'object' && video?.url ? (
-              <video
+              <MediaVideo
+                src={video.url}
+                mimeType={video.mimeType}
                 className="block h-auto max-h-[80vh] w-auto max-w-full"
-                autoPlay
-                playsInline
-                muted
-                loop
-                preload="auto"
                 poster={typeof poster === 'object' ? (poster?.url ?? undefined) : undefined}
-              >
-                <source src={video.url} type={video.mimeType ?? undefined} />
-              </video>
+              />
             ) : (
               <MediaImage
                 media={poster}
@@ -139,7 +135,7 @@ export function MediaBlock({ block }: { block: MediaBlockType }) {
   return (
     <BlockSection settings={settings}>
       <figure>
-        <MediaImage media={first?.media} sizes="100vw" className="w-full"  controls="hover"/>
+        <MediaImage media={first?.media} sizes="100vw" className="w-full" controls="hover" />
         <Caption>{first?.caption ?? caption}</Caption>
       </figure>
     </BlockSection>
