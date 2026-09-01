@@ -16,7 +16,9 @@ function Caption({ children }: { children?: string | null }) {
 /**
  * Media, four variants. The layout containers stay square-cornered — content
  * is paper — but the photo or video itself carries `rounded-glass-lg`, same
- * as the navbar: see `radius` in `tokens/brand.ts`.
+ * as the navbar: see `radius` in `tokens/brand.ts`. The one exception is the
+ * default variant below, which runs edge-to-edge like the hero rather than
+ * sitting in the grid — that one stays square too.
  */
 export function MediaBlock({ block }: { block: MediaBlockType }) {
   const { variant, items, video, poster, before, after, caption, settings } = block
@@ -140,12 +142,9 @@ export function MediaBlock({ block }: { block: MediaBlockType }) {
   return (
     <BlockSection settings={settings}>
       <figure>
-        <MediaImage
-          media={first?.media}
-          sizes="100vw"
-          className="w-full rounded-glass-lg"
-          controls="hover"
-        />
+        {/* Edge-to-edge, no page-margin — this reads as a full-bleed banner
+            like the hero, not a photo in the flow, so it stays square. */}
+        <MediaImage media={first?.media} sizes="100vw" className="w-full" controls="hover" />
         <Caption>{first?.caption ?? caption}</Caption>
       </figure>
     </BlockSection>

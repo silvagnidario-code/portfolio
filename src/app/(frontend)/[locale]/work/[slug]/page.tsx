@@ -104,13 +104,10 @@ export default async function CaseStudyPage({ params }: PageProps) {
       </header>
 
       {project.heroMedia ? (
+        // Edge-to-edge banner, same role as the hero — square-cornered like
+        // any other full-bleed visual, not rounded like content in the grid.
         <figure className="mb-96">
-          <MediaImage
-            media={project.heroMedia}
-            sizes="100vw"
-            priority
-            className="w-full rounded-glass-lg"
-          />
+          <MediaImage media={project.heroMedia} sizes="100vw" priority className="w-full" />
         </figure>
       ) : null}
 
