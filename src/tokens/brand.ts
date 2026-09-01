@@ -111,6 +111,9 @@ export const stagger = { min: 80, base: 100, max: 120 } as const
 /** Translation distance for reveal animations. Never scale, never rotation. */
 export const revealDistance = { min: 16, max: 24 } as const
 
+/** Blur radius, in px, for the `blur` reveal — photographic, not a loading spinner. */
+export const revealBlur = { max: 10 } as const
+
 /**
  * Radii. Layout containers stay square: content is paper. Photos and video
  * are the one exception — they carry the same wide continuous corner as the

@@ -23,6 +23,8 @@ export function TestimonialBlock({ block }: { block: TestimonialBlockType }) {
 
   if (testimonials.length === 0) return null
 
+  const reveal = (kind: 'rise' | 'blur' | 'lines') => (block.settings?.animate ? kind : undefined)
+
   if (block.variant === 'slider') {
     return (
       <BlockSection settings={block.settings}>
@@ -35,6 +37,7 @@ export function TestimonialBlock({ block }: { block: TestimonialBlockType }) {
             <blockquote
               key={testimonial.id}
               className="w-[85vw] shrink-0 snap-start border-t border-line pt-24 tablet:w-[45vw]"
+              data-reveal={reveal('rise')}
             >
               <p className="text-h3 text-balance">{testimonial.quote}</p>
               <Attribution testimonial={testimonial} />
@@ -51,11 +54,16 @@ export function TestimonialBlock({ block }: { block: TestimonialBlockType }) {
     return (
       <BlockSection settings={block.settings}>
         <div className="page-grid items-start">
-          <div className="col-span-4 tablet:col-span-2 desktop:col-span-3">
+          <div
+            className="col-span-4 tablet:col-span-2 desktop:col-span-3"
+            data-reveal={reveal('blur')}
+          >
             <MediaImage media={first.logo} sizes="200px" className="w-[160px]" />
           </div>
           <blockquote className="col-span-4 tablet:col-span-4 desktop:col-span-8 desktop:col-start-5">
-            <p className="text-h2 text-balance">{first.quote}</p>
+            <p className="text-h2 text-balance" data-reveal={reveal('lines')}>
+              {first.quote}
+            </p>
             <Attribution testimonial={first} />
           </blockquote>
         </div>
@@ -67,7 +75,9 @@ export function TestimonialBlock({ block }: { block: TestimonialBlockType }) {
     <BlockSection settings={block.settings}>
       <div className="page-grid">
         <blockquote className="col-span-4 tablet:col-span-6 desktop:col-span-9 desktop:col-start-3">
-          <p className="text-h1 text-balance">{first.quote}</p>
+          <p className="text-h1 text-balance" data-reveal={reveal('lines')}>
+            {first.quote}
+          </p>
           <Attribution testimonial={first} />
         </blockquote>
       </div>

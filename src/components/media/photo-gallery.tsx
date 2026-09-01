@@ -21,7 +21,15 @@ type GalleryItem = NonNullable<MediaBlockType['items']>[number]
  * unlike the rest of `MediaBlock` this branch pays the JS cost deliberately
  * instead of leaking it into the server-rendered variants.
  */
-export function PhotoGallery({ items }: { items: GalleryItem[] }) {
+export function PhotoGallery({
+  items,
+  reveal = false,
+}: {
+  items: GalleryItem[]
+  /** Blur each thumbnail in as the grid scrolls into view — off by default,
+   * set by the block's own `settings.animate` toggle. */
+  reveal?: boolean
+}) {
   const t = useTranslations('PhotoGallery')
   const [activeIndex, setActiveIndex] = useState<number | null>(null)
 
@@ -72,6 +80,7 @@ export function PhotoGallery({ items }: { items: GalleryItem[] }) {
             aria-haspopup="dialog"
             aria-label={t('open', { index: index + 1, total: items.length })}
             className="group relative block w-full break-inside-avoid overflow-hidden rounded-glass-lg text-left"
+            data-reveal={reveal ? 'blur' : undefined}
           >
             <MediaImage
               media={item.media}

@@ -21,6 +21,7 @@ export async function TeamBlock({ block, locale }: { block: TeamBlockType; local
   if (members.length === 0) return null
 
   const MemberHeading = block.heading ? 'h3' : 'h2'
+  const reveal = (kind: 'rise' | 'blur') => (block.settings?.animate ? kind : undefined)
 
   // A block with neither heading nor intro must not reserve the space for them.
   const intro =
@@ -46,6 +47,7 @@ export async function TeamBlock({ block, locale }: { block: TeamBlockType; local
             <li
               key={member.id}
               className="col-span-4 tablet:col-span-6 desktop:col-span-10 desktop:col-start-2 border-t border-line py-32"
+              data-reveal={reveal('rise')}
             >
               <div className="flex flex-col gap-8 tablet:flex-row tablet:items-baseline tablet:justify-between">
                 <MemberHeading className="text-h2">{member.name}</MemberHeading>
@@ -72,7 +74,10 @@ export async function TeamBlock({ block, locale }: { block: TeamBlockType; local
               index % 2 === 1 ? 'desktop:mt-96' : ''
             }`}
           >
-            <div className="aspect-[3/4] w-full overflow-hidden rounded-glass-lg">
+            <div
+              className="aspect-[3/4] w-full overflow-hidden rounded-glass-lg"
+              data-reveal={reveal('blur')}
+            >
               <MediaImage
                 media={member.photo}
                 sizes="(min-width: 1180px) 25vw, (min-width: 768px) 50vw, 50vw"

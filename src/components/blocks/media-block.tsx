@@ -19,15 +19,26 @@ function Caption({ children }: { children?: string | null }) {
  * as the navbar: see `radius` in `tokens/brand.ts`. The one exception is the
  * default variant below, which runs edge-to-edge like the hero rather than
  * sitting in the grid — that one stays square too.
+ *
+ * Each variant reveals as what it is rather than all reaching for the same
+ * `rise`: a single video unveils like a banner (`mask`), photos settle into
+ * focus (`blur`) — see `ScrollReveal` for what the four flavours mean. Still
+ * gated by the editor's own `settings.animate` toggle, same as `rise` always
+ * was.
  */
 export function MediaBlock({ block }: { block: MediaBlockType }) {
   const { variant, items, video, poster, before, after, caption, settings } = block
+  const reveal = (kind: 'blur' | 'mask') => (settings?.animate ? kind : undefined)
 
   if (variant === 'videoLoop') {
     return (
       <BlockSection settings={settings}>
         <figure className="page-margin">
-          <div className="mx-auto max-w-full overflow-hidden" style={{ width: 'fit-content' }}>
+          <div
+            className="mx-auto max-w-full overflow-hidden"
+            style={{ width: 'fit-content' }}
+            data-reveal={reveal('mask')}
+          >
             {typeof video === 'object' && video?.url ? (
               <MediaVideo
                 src={video.url}
@@ -54,14 +65,20 @@ export function MediaBlock({ block }: { block: MediaBlockType }) {
       <BlockSection settings={settings}>
         <figure>
           <div className="page-grid">
-            <div className="col-span-4 tablet:col-span-3 desktop:col-span-6">
+            <div
+              className="col-span-4 tablet:col-span-3 desktop:col-span-6"
+              data-reveal={reveal('blur')}
+            >
               <MediaImage
                 media={before}
                 sizes="(min-width: 768px) 50vw, 100vw"
                 className="w-full rounded-glass-lg"
               />
             </div>
-            <div className="col-span-4 tablet:col-span-3 desktop:col-span-6">
+            <div
+              className="col-span-4 tablet:col-span-3 desktop:col-span-6"
+              data-reveal={reveal('blur')}
+            >
               <MediaImage
                 media={after}
                 sizes="(min-width: 768px) 50vw, 100vw"
@@ -80,7 +97,7 @@ export function MediaBlock({ block }: { block: MediaBlockType }) {
       <BlockSection settings={settings}>
         <figure>
           <div className="page-margin">
-            <PhotoGallery items={items ?? []} />
+            <PhotoGallery items={items ?? []} reveal={Boolean(settings?.animate)} />
           </div>
           <Caption>{caption}</Caption>
         </figure>
@@ -113,6 +130,7 @@ export function MediaBlock({ block }: { block: MediaBlockType }) {
                       ? 'col-span-4 tablet:col-span-4 desktop:col-span-7'
                       : 'col-span-4 tablet:col-span-2 desktop:col-span-4 desktop:col-start-9'
                 }
+                data-reveal={reveal('blur')}
               >
                 <MediaImage
                   media={item.media}
@@ -141,7 +159,7 @@ export function MediaBlock({ block }: { block: MediaBlockType }) {
   const first = (items ?? [])[0]
   return (
     <BlockSection settings={settings}>
-      <figure>
+      <figure data-reveal={reveal('mask')}>
         {/* Edge-to-edge, no page-margin — this reads as a full-bleed banner
             like the hero, not a photo in the flow, so it stays square. */}
         <MediaImage media={first?.media} sizes="100vw" className="w-full" controls="hover" />

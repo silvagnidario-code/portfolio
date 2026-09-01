@@ -14,6 +14,7 @@ export function BioBlock({ block }: { block: BioBlockType }) {
   const { eyebrow, heading, body, links, photo, imagePosition, settings } = block
 
   const isLeft = imagePosition === 'left'
+  const reveal = (kind: 'lines' | 'blur') => (settings?.animate ? kind : undefined)
 
   return (
     <BlockSection settings={settings}>
@@ -24,31 +25,37 @@ export function BioBlock({ block }: { block: BioBlockType }) {
           }`}
         >
           {eyebrow ? <Eyebrow>{eyebrow}</Eyebrow> : null}
-          <h2 className="mt-16 text-h1 text-balance">{heading}</h2>
-          <RichText data={body} className="mt-32" />
+          <h2 className="mt-16 text-h1 text-balance" data-reveal={reveal('lines')}>
+            {heading}
+          </h2>
 
-          {links && links.length > 0 ? (
-            <ul className="mt-32 flex flex-wrap gap-24">
-              {links.map((link) => (
-                <li key={link.id ?? link.url}>
-                  <a
-                    href={link.url}
-                    rel="noreferrer"
-                    target="_blank"
-                    className="font-mono text-caption uppercase text-ink-2 underline underline-offset-4 transition ease-reveal duration-fast hover:text-ink"
-                  >
-                    {link.label}
-                  </a>
-                </li>
-              ))}
-            </ul>
-          ) : null}
+          <div data-reveal={settings?.animate ? 'rise' : undefined}>
+            <RichText data={body} className="mt-32" />
+
+            {links && links.length > 0 ? (
+              <ul className="mt-32 flex flex-wrap gap-24">
+                {links.map((link) => (
+                  <li key={link.id ?? link.url}>
+                    <a
+                      href={link.url}
+                      rel="noreferrer"
+                      target="_blank"
+                      className="font-mono text-caption uppercase text-ink-2 underline underline-offset-4 transition ease-reveal duration-fast hover:text-ink"
+                    >
+                      {link.label}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            ) : null}
+          </div>
         </div>
 
         <div
           className={`col-span-4 mt-32 tablet:col-span-3 tablet:mt-0 desktop:col-span-5 ${
             isLeft ? 'desktop:col-start-1' : 'desktop:col-start-8'
           }`}
+          data-reveal={reveal('blur')}
         >
           <MediaImage
             media={photo}

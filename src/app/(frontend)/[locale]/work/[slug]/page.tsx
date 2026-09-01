@@ -106,7 +106,7 @@ export default async function CaseStudyPage({ params }: PageProps) {
       {project.heroMedia ? (
         // Edge-to-edge banner, same role as the hero — square-cornered like
         // any other full-bleed visual, not rounded like content in the grid.
-        <figure className="mb-96">
+        <figure className="mb-96" data-reveal="mask">
           <MediaImage media={project.heroMedia} sizes="100vw" priority className="w-full" />
         </figure>
       ) : null}
@@ -135,10 +135,16 @@ export default async function CaseStudyPage({ params }: PageProps) {
         .map((section) => (
           <BlockSection key={section.label} settings={{ background: 'paper', spacing: 'compact' }}>
             <div className="page-grid">
-              <h2 className="col-span-4 tablet:col-span-2 desktop:col-span-3 font-mono text-caption uppercase text-ink-muted">
+              <h2
+                className="col-span-4 tablet:col-span-2 desktop:col-span-3 font-mono text-caption uppercase text-ink-muted"
+                data-reveal="rise"
+              >
                 {section.label}
               </h2>
-              <div className="col-span-4 tablet:col-span-4 desktop:col-span-8 desktop:col-start-5">
+              <div
+                className="col-span-4 tablet:col-span-4 desktop:col-span-8 desktop:col-start-5"
+                data-reveal="lines"
+              >
                 <RichText data={section.body} />
               </div>
             </div>
@@ -149,12 +155,15 @@ export default async function CaseStudyPage({ params }: PageProps) {
 
       {(project.results ?? []).length > 0 ? (
         <BlockSection settings={{ background: 'sumi', spacing: 'wide' }}>
-          <h2 className="page-margin mb-64 text-h2">{t('results')}</h2>
+          <h2 className="page-margin mb-64 text-h2" data-reveal="rise">
+            {t('results')}
+          </h2>
           <dl className="page-grid gap-y-48">
             {(project.results ?? []).map((result) => (
               <div
                 key={result.id ?? result.value}
                 className="col-span-4 tablet:col-span-2 desktop:col-span-4 border-t border-line pt-24"
+                data-reveal="rise"
               >
                 <dt className="text-display">{result.value}</dt>
                 {/* The delta lives inside the description: a `p` between the
@@ -177,7 +186,9 @@ export default async function CaseStudyPage({ params }: PageProps) {
         <BlockSection settings={{ background: 'paper', spacing: 'wide' }}>
           <blockquote className="page-grid">
             <div className="col-span-4 tablet:col-span-6 desktop:col-span-9 desktop:col-start-3">
-              <p className="text-h1 text-balance">{testimonial.quote}</p>
+              <p className="text-h1 text-balance" data-reveal="lines">
+                {testimonial.quote}
+              </p>
               <footer className="mt-32 font-mono text-caption uppercase text-ink-muted">
                 {[testimonial.author, testimonial.role, testimonial.company]
                   .filter(Boolean)
@@ -195,12 +206,15 @@ export default async function CaseStudyPage({ params }: PageProps) {
       (project.awards ?? []).length > 0 ||
       project.liveUrl ? (
         <BlockSection settings={{ background: 'paper', spacing: 'normal' }}>
-          <h2 className="page-margin mb-48 font-mono text-caption uppercase text-ink-muted">
+          <h2
+            className="page-margin mb-48 font-mono text-caption uppercase text-ink-muted"
+            data-reveal="rise"
+          >
             {t('credits')}
           </h2>
           <div className="page-grid gap-y-48">
             {team.length > 0 ? (
-              <div className="col-span-4 tablet:col-span-3 desktop:col-span-4">
+              <div className="col-span-4 tablet:col-span-3 desktop:col-span-4" data-reveal="rise">
                 <h3 className="font-mono text-caption uppercase text-ink-muted">{t('team')}</h3>
                 <ul className="mt-16 flex flex-col gap-8">
                   {team.map((member) => (
@@ -213,7 +227,7 @@ export default async function CaseStudyPage({ params }: PageProps) {
             ) : null}
 
             {(project.partners ?? []).length > 0 ? (
-              <div className="col-span-4 tablet:col-span-3 desktop:col-span-4">
+              <div className="col-span-4 tablet:col-span-3 desktop:col-span-4" data-reveal="rise">
                 <h3 className="font-mono text-caption uppercase text-ink-muted">{t('partners')}</h3>
                 <ul className="mt-16 flex flex-col gap-8">
                   {(project.partners ?? []).map((partner) => (
@@ -226,7 +240,7 @@ export default async function CaseStudyPage({ params }: PageProps) {
             ) : null}
 
             {(project.awards ?? []).length > 0 ? (
-              <div className="col-span-4 tablet:col-span-3 desktop:col-span-3">
+              <div className="col-span-4 tablet:col-span-3 desktop:col-span-3" data-reveal="rise">
                 <h3 className="font-mono text-caption uppercase text-ink-muted">{t('awards')}</h3>
                 <ul className="mt-16 flex flex-col gap-8">
                   {(project.awards ?? []).map((award) => (
@@ -260,7 +274,9 @@ export default async function CaseStudyPage({ params }: PageProps) {
 
       {related.length > 0 ? (
         <BlockSection settings={{ background: 'paper', spacing: 'wide' }}>
-          <h2 className="page-margin mb-64 text-h2">{t('related')}</h2>
+          <h2 className="page-margin mb-64 text-h2" data-reveal="rise">
+            {t('related')}
+          </h2>
           <div className="page-grid gap-y-64">
             {related.map((item) => (
               <div key={item.id} className="col-span-4 tablet:col-span-3 desktop:col-span-6">

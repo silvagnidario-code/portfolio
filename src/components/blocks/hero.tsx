@@ -100,7 +100,7 @@ export function Hero({ block }: { block: HeroBlock }) {
       <div className="page-grid">{text}</div>
       {/* Edge-to-edge like the videoFullscreen variant above — a hero banner,
           not content in the grid — so it stays square-cornered too. */}
-      <figure className="mt-96">
+      <figure className="mt-96" data-reveal="mask">
         <HoverDistortion
           src={typeof image === 'object' ? (image?.url ?? '') : ''}
           className="aspect-[16/9] w-full overflow-hidden"

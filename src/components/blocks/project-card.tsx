@@ -36,23 +36,28 @@ export function ProjectCard({
   return (
     <article>
       <Link href={`/work/${project.slug}`} className="group block">
-        <HoverDistortion
-          src={cover?.url ?? ''}
-          className={`w-full overflow-hidden rounded-glass-lg ${aspect}`}
-        >
-          <MediaImage
-            media={project.cover}
-            sizes={sizes}
-            className="h-full w-full object-cover transition ease-reveal duration-slow group-hover:opacity-90"
-          />
-        </HoverDistortion>
+        <div data-reveal="blur">
+          <HoverDistortion
+            src={cover?.url ?? ''}
+            className={`w-full overflow-hidden rounded-glass-lg ${aspect}`}
+          >
+            <MediaImage
+              media={project.cover}
+              sizes={sizes}
+              className="h-full w-full object-cover transition ease-reveal duration-slow group-hover:opacity-90"
+            />
+          </HoverDistortion>
+        </div>
 
-        <div className="mt-24 flex flex-wrap items-baseline justify-between gap-16">
+        <div
+          className="mt-24 flex flex-wrap items-baseline justify-between gap-16"
+          data-reveal="rise"
+        >
           <Heading className="text-h3 text-balance">{project.title}</Heading>
           <span className="font-mono text-caption uppercase text-ink-muted">{project.year}</span>
         </div>
 
-        <p className="mt-8 font-mono text-caption uppercase text-ink-muted">
+        <p className="mt-8 font-mono text-caption uppercase text-ink-muted" data-reveal="rise">
           {[project.client, ...services.map((service) => service.title)].join(' · ')}
         </p>
       </Link>

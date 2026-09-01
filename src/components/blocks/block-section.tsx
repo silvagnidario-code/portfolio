@@ -11,8 +11,10 @@ export type BlockSettings = {
  *
  * Background, vertical rhythm and the animation flag are resolved once here
  * rather than in eleven components — that is what makes them common properties
- * instead of a convention. `data-animate` is read by the scroll reveal in phase
- * 8; nothing moves yet.
+ * instead of a convention. `data-animate` is read by `ScrollReveal`: on by
+ * default it's the whole section rising as one piece; a block that marks its
+ * own text or media with a more specific `data-reveal` gets that treatment
+ * for those parts instead, still gated by this same editor toggle.
  */
 export function BlockSection({
   settings,
