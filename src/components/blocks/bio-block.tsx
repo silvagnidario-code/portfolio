@@ -53,7 +53,7 @@ export function BioBlock({ block }: { block: BioBlockType }) {
           <MediaImage
             media={photo}
             sizes="(min-width: 1180px) 40vw, (min-width: 768px) 50vw, 100vw"
-            className="w-full"
+            className="w-full rounded-glass-lg"
           />
         </div>
       </div>

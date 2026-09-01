@@ -161,7 +161,7 @@
     },
     "shape": {
       "title": "Shape and grid",
-      "description": "Zero radius on content blocks and media. Wide continuous corners only on glass elements: content is paper, the interface is a screen.",
+      "description": "Zero radius on content blocks. Photos and video share the same wide continuous corner as the header and the glass elements; everything else stays paper, the interface is a screen.",
       "radius": "Radii",
       "grid": "Grid",
       "columns": "Columns",

@@ -14,8 +14,9 @@ function Caption({ children }: { children?: string | null }) {
 }
 
 /**
- * Media, four variants. Containers are square-cornered and never rounded:
- * content is paper.
+ * Media, four variants. The layout containers stay square-cornered — content
+ * is paper — but the photo or video itself carries `rounded-glass-lg`, same
+ * as the navbar: see `radius` in `tokens/brand.ts`.
  */
 export function MediaBlock({ block }: { block: MediaBlockType }) {
   const { variant, items, video, poster, before, after, caption, settings } = block
@@ -29,14 +30,14 @@ export function MediaBlock({ block }: { block: MediaBlockType }) {
               <MediaVideo
                 src={video.url}
                 mimeType={video.mimeType}
-                className="block h-auto max-h-[80vh] w-auto max-w-full"
+                className="block h-auto max-h-[80vh] w-auto max-w-full rounded-glass-lg"
                 poster={typeof poster === 'object' ? (poster?.url ?? undefined) : undefined}
               />
             ) : (
               <MediaImage
                 media={poster}
                 sizes="100vw"
-                className="h-auto max-h-[80vh] w-auto max-w-full"
+                className="h-auto max-h-[80vh] w-auto max-w-full rounded-glass-lg"
               />
             )}
           </div>
@@ -55,11 +56,15 @@ export function MediaBlock({ block }: { block: MediaBlockType }) {
               <MediaImage
                 media={before}
                 sizes="(min-width: 768px) 50vw, 100vw"
-                className="w-full"
+                className="w-full rounded-glass-lg"
               />
             </div>
             <div className="col-span-4 tablet:col-span-3 desktop:col-span-6">
-              <MediaImage media={after} sizes="(min-width: 768px) 50vw, 100vw" className="w-full" />
+              <MediaImage
+                media={after}
+                sizes="(min-width: 768px) 50vw, 100vw"
+                className="w-full rounded-glass-lg"
+              />
             </div>
           </div>
           <Caption>{caption}</Caption>
@@ -114,7 +119,7 @@ export function MediaBlock({ block }: { block: MediaBlockType }) {
                       ? '(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw'
                       : '(min-width: 768px) 50vw, 100vw'
                   }
-                  className="w-full"
+                  className="w-full rounded-glass-lg"
                   controls="hover"
                 />
                 {item.caption ? (
@@ -135,7 +140,12 @@ export function MediaBlock({ block }: { block: MediaBlockType }) {
   return (
     <BlockSection settings={settings}>
       <figure>
-        <MediaImage media={first?.media} sizes="100vw" className="w-full" controls="hover" />
+        <MediaImage
+          media={first?.media}
+          sizes="100vw"
+          className="w-full rounded-glass-lg"
+          controls="hover"
+        />
         <Caption>{first?.caption ?? caption}</Caption>
       </figure>
     </BlockSection>

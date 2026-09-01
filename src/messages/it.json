@@ -161,7 +161,7 @@
     },
     "shape": {
       "title": "Forma e griglia",
-      "description": "Raggio 0 sui blocchi di contenuto e sui media. Angoli continui ampi solo sugli elementi in vetro: il contenuto è carta, l'interfaccia è schermo.",
+      "description": "Raggio 0 sui blocchi di contenuto. Foto e video condividono lo stesso angolo continuo ampio dell'header e degli elementi in vetro; il resto del contenuto resta carta, l'interfaccia è schermo.",
       "radius": "Raggi",
       "grid": "Griglia",
       "columns": "Colonne",

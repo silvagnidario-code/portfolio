@@ -105,7 +105,12 @@ export default async function CaseStudyPage({ params }: PageProps) {
 
       {project.heroMedia ? (
         <figure className="mb-96">
-          <MediaImage media={project.heroMedia} sizes="100vw" priority className="w-full" />
+          <MediaImage
+            media={project.heroMedia}
+            sizes="100vw"
+            priority
+            className="w-full rounded-glass-lg"
+          />
         </figure>
       ) : null}
 
@@ -212,9 +217,7 @@ export default async function CaseStudyPage({ params }: PageProps) {
 
             {(project.partners ?? []).length > 0 ? (
               <div className="col-span-4 tablet:col-span-3 desktop:col-span-4">
-                <h3 className="font-mono text-caption uppercase text-ink-muted">
-                  {t('partners')}
-                </h3>
+                <h3 className="font-mono text-caption uppercase text-ink-muted">{t('partners')}</h3>
                 <ul className="mt-16 flex flex-col gap-8">
                   {(project.partners ?? []).map((partner) => (
                     <li key={partner.id ?? partner.name} className="text-body">
@@ -235,9 +238,7 @@ export default async function CaseStudyPage({ params }: PageProps) {
                       {award.category ? (
                         <span className="text-ink-2"> — {award.category}</span>
                       ) : null}
-                      {award.year ? (
-                        <span className="text-ink-muted"> · {award.year}</span>
-                      ) : null}
+                      {award.year ? <span className="text-ink-muted"> · {award.year}</span> : null}
                     </li>
                   ))}
                 </ul>

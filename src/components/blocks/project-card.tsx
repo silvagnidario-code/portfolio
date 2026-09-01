@@ -36,7 +36,10 @@ export function ProjectCard({
   return (
     <article>
       <Link href={`/work/${project.slug}`} className="group block">
-        <HoverDistortion src={cover?.url ?? ''} className={`w-full overflow-hidden ${aspect}`}>
+        <HoverDistortion
+          src={cover?.url ?? ''}
+          className={`w-full overflow-hidden rounded-glass-lg ${aspect}`}
+        >
           <MediaImage
             media={project.cover}
             sizes={sizes}

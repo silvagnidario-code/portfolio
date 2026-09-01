@@ -60,6 +60,8 @@ export function Hero({ block }: { block: HeroBlock }) {
     )
   }
   if (variant === 'videoFullscreen') {
+    // Full-bleed background, not content on its own — stays square-cornered
+    // like every other layout container, unlike the media rounding below.
     return (
       <section className="relative -mt-128 flex min-h-dvh w-full items-center overflow-hidden">
         <div className="absolute inset-0 h-full w-full">
@@ -99,7 +101,7 @@ export function Hero({ block }: { block: HeroBlock }) {
       <figure className="mt-96">
         <HoverDistortion
           src={typeof image === 'object' ? (image?.url ?? '') : ''}
-          className="aspect-[16/9] w-full overflow-hidden"
+          className="aspect-[16/9] w-full overflow-hidden rounded-glass-lg"
         >
           <MediaImage media={image} sizes="100vw" priority className="h-full w-full object-cover" />
         </HoverDistortion>

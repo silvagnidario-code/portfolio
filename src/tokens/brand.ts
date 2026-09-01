@@ -112,8 +112,10 @@ export const stagger = { min: 80, base: 100, max: 120 } as const
 export const revealDistance = { min: 16, max: 24 } as const
 
 /**
- * Radii. Content and media containers are square: content is paper.
- * Wide continuous corners exist only on the glass interface layer (§7).
+ * Radii. Layout containers stay square: content is paper. Photos and video
+ * are the one exception — they carry the same wide continuous corner as the
+ * glass interface layer (§7) and the navbar, `glassLg`, except where a video
+ * or image is a full-bleed background rather than content being looked at.
  */
 export const radius = { none: 0, glassSm: 20, glassMd: 24, glassLg: 28 } as const
 

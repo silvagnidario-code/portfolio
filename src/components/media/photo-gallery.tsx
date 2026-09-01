@@ -71,7 +71,7 @@ export function PhotoGallery({ items }: { items: GalleryItem[] }) {
             onClick={() => setActiveIndex(index)}
             aria-haspopup="dialog"
             aria-label={t('open', { index: index + 1, total: items.length })}
-            className="group relative block w-full break-inside-avoid text-left"
+            className="group relative block w-full break-inside-avoid overflow-hidden rounded-glass-lg text-left"
           >
             <MediaImage
               media={item.media}
@@ -159,7 +159,7 @@ export function PhotoGallery({ items }: { items: GalleryItem[] }) {
             <MediaImage
               media={active.media}
               sizes="90vw"
-              className="max-h-[85vh] w-auto max-w-[90vw] object-contain"
+              className="max-h-[85vh] w-auto max-w-[90vw] rounded-glass-lg object-contain"
               priority
               controls
             />

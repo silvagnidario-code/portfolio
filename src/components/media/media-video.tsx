@@ -225,6 +225,10 @@ export function MediaVideo({
         '[&:fullscreen]:items-center [&:fullscreen]:justify-center [&:fullscreen]:bg-ink',
         '[&:fullscreen_video]:h-auto [&:fullscreen_video]:w-auto',
         '[&:fullscreen_video]:max-h-full [&:fullscreen_video]:max-w-full',
+        // A rounded corner reads as a border when the video fills the whole
+        // screen — square it off there regardless of what `className` asked
+        // for outside fullscreen.
+        '[&:fullscreen_video]:rounded-none',
         chrome === 'hover' ? 'group/video' : '',
       ]
         .filter(Boolean)

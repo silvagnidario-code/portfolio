@@ -72,7 +72,7 @@ export async function TeamBlock({ block, locale }: { block: TeamBlockType; local
               index % 2 === 1 ? 'desktop:mt-96' : ''
             }`}
           >
-            <div className="aspect-[3/4] w-full overflow-hidden">
+            <div className="aspect-[3/4] w-full overflow-hidden rounded-glass-lg">
               <MediaImage
                 media={member.photo}
                 sizes="(min-width: 1180px) 25vw, (min-width: 768px) 50vw, 50vw"
