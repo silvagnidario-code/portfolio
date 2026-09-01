@@ -1,6 +1,6 @@
 import { MediaImage } from '@/components/media/media-image'
 import type { Locale } from '@/i18n/routing'
-import { getPayloadClient } from '@/lib/payload'
+import { getTeamMembersList } from '@/lib/queries'
 import type { TeamBlockType, TeamMember } from '@/payload-types'
 
 import { BlockSection } from './block-section'
@@ -12,16 +12,7 @@ async function resolveMembers(block: TeamBlockType, locale: Locale): Promise<Tea
 
   if (selected.length > 0) return selected
 
-  const payload = await getPayloadClient()
-  const result = await payload.find({
-    collection: 'team-members',
-    locale,
-    depth: 1,
-    limit: 30,
-    sort: 'order',
-  })
-
-  return result.docs
+  return getTeamMembersList(locale)
 }
 
 export async function TeamBlock({ block, locale }: { block: TeamBlockType; locale: Locale }) {

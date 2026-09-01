@@ -1,0 +1,271 @@
+From 3fb1d2afbbab0e8b7624c6b4955dd6e335bde8d9 Mon Sep 17 00:00:00 2001
+From: Claude <noreply@anthropic.com>
+Date: Mon, 31 Aug 2026 13:44:15 +0000
+Subject: [PATCH] Add a fullscreen control and fix mobile/tablet visibility
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+The play/pause + mute bar only ever revealed on :hover, so it never
+appeared on touch devices — there's no hover there. It's now always
+visible on any pointer without a mouse (pointer-fine decides, not a
+screen-width breakpoint, since a touch laptop or a stylus doesn't
+split neatly along one), and still hover-reveals on an actual mouse.
+
+Adds a third button, fullscreen, next to play/pause and mute. It
+fullscreens the video's own wrapper rather than the bare video, so
+this same control bar stays on screen once fullscreen, with one
+exception: iOS Safari never implemented the standard Fullscreen API
+on anything but the video element, so it falls back to the native
+player there.
+---
+ src/components/icons/index.tsx       | 12 ++++
+ src/components/media/media-video.tsx | 99 ++++++++++++++++++++++++----
+ src/messages/en.json                 |  4 +-
+ src/messages/it.json                 |  4 +-
+ src/messages/zh.json                 |  4 +-
+ 5 files changed, 106 insertions(+), 17 deletions(-)
+
+diff --git a/src/components/icons/index.tsx b/src/components/icons/index.tsx
+index 545f20a..1954c37 100644
+--- a/src/components/icons/index.tsx
++++ b/src/components/icons/index.tsx
+@@ -114,6 +114,18 @@ export function ExpandIcon(props: IconProps) {
+   )
+ }
+ 
++/** Four corners folding inward: ExpandIcon reversed, for leaving fullscreen. */
++export function CollapseIcon(props: IconProps) {
++  return (
++    <Icon {...props}>
++      <path d="M9 4v4a1 1 0 0 1-1 1H4" />
++      <path d="M15 4v4a1 1 0 0 0 1 1h4" />
++      <path d="M9 20v-4a1 1 0 0 0-1-1H4" />
++      <path d="M15 20v-4a1 1 0 0 1 1-1h4" />
++    </Icon>
++  )
++}
++
+ /** Resumes a paused gallery video. Filled, unlike the rest of the set. */
+ export function PlayIcon(props: IconProps) {
+   return (
+diff --git a/src/components/media/media-video.tsx b/src/components/media/media-video.tsx
+index 4fd56f1..b284249 100644
+--- a/src/components/media/media-video.tsx
++++ b/src/components/media/media-video.tsx
+@@ -12,7 +12,14 @@ import {
+ import { useTranslations } from 'next-intl'
+ 
+ import { GlassSurface } from '@/components/glass/glass-surface'
+-import { MuteIcon, PauseIcon, PlayIcon, UnmuteIcon } from '@/components/icons'
++import {
++  CollapseIcon,
++  ExpandIcon,
++  MuteIcon,
++  PauseIcon,
++  PlayIcon,
++  UnmuteIcon,
++} from '@/components/icons'
+ 
+ /**
+  * One video's audio at a time. Every `MediaVideo` on the page listens for
+@@ -23,6 +30,10 @@ import { MuteIcon, PauseIcon, PlayIcon, UnmuteIcon } from '@/components/icons'
+  */
+ const UNMUTED_EVENT = 'media-video:unmuted'
+ 
++/** Safari on iOS never implemented the standard Fullscreen API on anything
++ * but the video element itself; it exposes its own method instead. */
++type SafariVideoElement = HTMLVideoElement & { webkitEnterFullscreen?: () => void }
++
+ type MediaVideoProps = {
+   src: string
+   mimeType?: string | null
+@@ -36,7 +47,12 @@ type MediaVideoProps = {
+ 
+ /**
+  * Gallery and showcase videos stay silent autoplay loops by default, but they
+- * gain a minimal glass control bar when the viewer needs to pause or unmute.
++ * gain a minimal glass control bar when the viewer needs to pause, unmute or
++ * go fullscreen. The bar is always visible on touch (there's no hover to
++ * reveal it there) and reveals on hover only where a mouse is actually
++ * present — `pointer-fine` distinguishes the two instead of guessing from
++ * screen width, since a touch laptop or a desktop with a stylus doesn't
++ * split neatly along a breakpoint.
+  */
+ export function MediaVideo({
+   src,
+@@ -49,9 +65,11 @@ export function MediaVideo({
+ }: MediaVideoProps) {
+   const t = useTranslations('MediaVideo')
+   const instanceId = useId()
++  const containerRef = useRef<HTMLDivElement>(null)
+   const videoRef = useRef<HTMLVideoElement>(null)
+   const [playing, setPlaying] = useState(true)
+   const [muted, setMuted] = useState(true)
++  const [isFullscreen, setIsFullscreen] = useState(false)
+ 
+   useEffect(() => {
+     const el = videoRef.current
+@@ -86,6 +104,16 @@ export function MediaVideo({
+     return () => window.removeEventListener(UNMUTED_EVENT, onOtherUnmuted)
+   }, [instanceId])
+ 
++  // Tracks fullscreen state for this instance specifically — `fullscreenchange`
++  // is a document-level event shared by every video on the page.
++  useEffect(() => {
++    const onFullscreenChange = () => {
++      setIsFullscreen(document.fullscreenElement === containerRef.current)
++    }
++    document.addEventListener('fullscreenchange', onFullscreenChange)
++    return () => document.removeEventListener('fullscreenchange', onFullscreenChange)
++  }, [])
++
+   const togglePlay = useCallback((event: MouseEvent) => {
+     event.stopPropagation()
+     const el = videoRef.current
+@@ -112,8 +140,44 @@ export function MediaVideo({
+     [instanceId],
+   )
+ 
++  const toggleFullscreen = useCallback((event: MouseEvent) => {
++    event.stopPropagation()
++
++    if (document.fullscreenElement) {
++      void document.exitFullscreen()
++      return
++    }
++
++    // Fullscreening the wrapper, not the bare video, keeps this same control
++    // bar on screen once fullscreen — the video-only API on iOS Safari is the
++    // one exception, where the platform's own native player takes over.
++    const container = containerRef.current
++    if (container?.requestFullscreen) {
++      void container.requestFullscreen()
++      return
++    }
++
++    const el = videoRef.current as SafariVideoElement | null
++    el?.webkitEnterFullscreen?.()
++  }, [])
++
+   return (
+-    <div className={chrome === 'hover' ? 'group/video relative' : 'relative'}>
++    <div
++      ref={containerRef}
++      className={[
++        'relative',
++        // Fullscreen takes over the whole screen at the container's own
++        // aspect ratio; recentre the video and letterbox around it instead
++        // of leaving it pinned to a corner or stretched out of shape.
++        '[&:fullscreen]:flex [&:fullscreen]:h-full [&:fullscreen]:w-full',
++        '[&:fullscreen]:items-center [&:fullscreen]:justify-center [&:fullscreen]:bg-ink',
++        '[&:fullscreen_video]:h-auto [&:fullscreen_video]:w-auto',
++        '[&:fullscreen_video]:max-h-full [&:fullscreen_video]:max-w-full',
++        chrome === 'hover' ? 'group/video' : '',
++      ]
++        .filter(Boolean)
++        .join(' ')}
++    >
+       <video
+         ref={videoRef}
+         className={className}
+@@ -132,17 +196,13 @@ export function MediaVideo({
+       <div
+         className={
+           chrome === 'hover'
+-            ? 'pointer-events-none absolute inset-x-0 bottom-12 flex justify-center gap-16 opacity-0 transition duration-fast ease-reveal group-hover/video:opacity-100 group-focus-within/video:opacity-100'
++            ? 'pointer-events-none absolute inset-x-0 bottom-12 flex justify-center gap-16 opacity-100 transition duration-fast ease-reveal pointer-fine:opacity-0 pointer-fine:group-hover/video:opacity-100 pointer-fine:group-focus-within/video:opacity-100'
+             : 'pointer-events-none absolute inset-x-0 bottom-16 flex justify-center gap-16 tablet:bottom-24'
+         }
+       >
+         <GlassSurface
+           variant="chrome"
+-          className={
+-            chrome === 'hover'
+-              ? 'pointer-events-auto rounded-glass-sm border border-line/80 shadow-none'
+-              : 'pointer-events-auto rounded-glass-sm border border-line/80 shadow-none'
+-          }
++          className="pointer-events-auto rounded-glass-sm border border-line/80 shadow-none"
+         >
+           <button
+             type="button"
+@@ -157,11 +217,7 @@ export function MediaVideo({
+ 
+         <GlassSurface
+           variant="chrome"
+-          className={
+-            chrome === 'hover'
+-              ? 'pointer-events-auto rounded-glass-sm border border-line/80 shadow-none'
+-              : 'pointer-events-auto rounded-glass-sm border border-line/80 shadow-none'
+-          }
++          className="pointer-events-auto rounded-glass-sm border border-line/80 shadow-none"
+         >
+           <button
+             type="button"
+@@ -173,6 +229,21 @@ export function MediaVideo({
+             {muted ? <MuteIcon /> : <UnmuteIcon />}
+           </button>
+         </GlassSurface>
++
++        <GlassSurface
++          variant="chrome"
++          className="pointer-events-auto rounded-glass-sm border border-line/80 shadow-none"
++        >
++          <button
++            type="button"
++            onClick={toggleFullscreen}
++            aria-label={isFullscreen ? t('exitFullscreen') : t('fullscreen')}
++            aria-pressed={isFullscreen}
++            className="flex h-40 w-40 items-center justify-center rounded-glass-sm text-ink transition hover:text-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink focus-visible:ring-offset-2 focus-visible:ring-offset-transparent"
++          >
++            {isFullscreen ? <CollapseIcon /> : <ExpandIcon />}
++          </button>
++        </GlassSurface>
+       </div>
+     </div>
+   )
+diff --git a/src/messages/en.json b/src/messages/en.json
+index a0fc57e..5b111dc 100644
+--- a/src/messages/en.json
++++ b/src/messages/en.json
+@@ -217,6 +217,8 @@
+     "play": "Play",
+     "pause": "Pause",
+     "mute": "Mute",
+-    "unmute": "Unmute"
++    "unmute": "Unmute",
++    "fullscreen": "Fullscreen",
++    "exitFullscreen": "Exit fullscreen"
+   }
+ }
+diff --git a/src/messages/it.json b/src/messages/it.json
+index a03fa6b..a88deee 100644
+--- a/src/messages/it.json
++++ b/src/messages/it.json
+@@ -217,6 +217,8 @@
+     "play": "Riproduci",
+     "pause": "Metti in pausa",
+     "mute": "Disattiva audio",
+-    "unmute": "Attiva audio"
++    "unmute": "Attiva audio",
++    "fullscreen": "Schermo intero",
++    "exitFullscreen": "Esci da schermo intero"
+   }
+ }
+diff --git a/src/messages/zh.json b/src/messages/zh.json
+index abc7509..917d1b7 100644
+--- a/src/messages/zh.json
++++ b/src/messages/zh.json
+@@ -217,6 +217,8 @@
+     "play": "播放",
+     "pause": "暂停",
+     "mute": "静音",
+-    "unmute": "取消静音"
++    "unmute": "取消静音",
++    "fullscreen": "全屏",
++    "exitFullscreen": "退出全屏"
+   }
+ }
+-- 
+2.43.0
+

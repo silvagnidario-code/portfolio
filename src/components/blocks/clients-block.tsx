@@ -1,6 +1,6 @@
 import { MediaImage } from '@/components/media/media-image'
 import type { Locale } from '@/i18n/routing'
-import { getPayloadClient } from '@/lib/payload'
+import { getClientsList } from '@/lib/queries'
 import type { Client, ClientsBlockType } from '@/payload-types'
 
 import { BlockSection } from './block-section'
@@ -12,16 +12,7 @@ async function resolveClients(block: ClientsBlockType, locale: Locale): Promise<
 
   if (selected.length > 0) return selected
 
-  const payload = await getPayloadClient()
-  const result = await payload.find({
-    collection: 'clients',
-    locale,
-    depth: 1,
-    limit: 30,
-    sort: 'order',
-  })
-
-  return result.docs
+  return getClientsList(locale)
 }
 
 export async function ClientsBlock({ block, locale }: { block: ClientsBlockType; locale: Locale }) {

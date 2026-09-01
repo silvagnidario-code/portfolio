@@ -4,6 +4,7 @@ import { admins, authenticated, authenticatedOrPublished } from '../access/roles
 import { layoutBlocks } from '../blocks'
 import { metaGroup } from '../fields/meta'
 import { slugField, slugFromTitle } from '../fields/slug'
+import { revalidateOnChange, revalidateOnDelete } from '../lib/revalidate'
 import { generatePreviewPath } from '../utilities/generate-preview-path'
 
 /**
@@ -44,7 +45,11 @@ export const Pages: CollectionConfig = {
     drafts: { autosave: { interval: 375 } },
     maxPerDoc: 25,
   },
-  hooks: { beforeValidate: [slugFromTitle('title')] },
+  hooks: {
+    beforeValidate: [slugFromTitle('title')],
+    afterChange: [revalidateOnChange('pages')],
+    afterDelete: [revalidateOnDelete('pages')],
+  },
   fields: [
     { name: 'title', type: 'text', required: true, localized: true },
     slugField('title'),

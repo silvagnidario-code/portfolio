@@ -3,6 +3,7 @@ import type { CollectionConfig } from 'payload'
 import { admins, anyone, authenticated } from '../access/roles'
 import { metaGroup } from '../fields/meta'
 import { slugField, slugFromTitle } from '../fields/slug'
+import { revalidateOnChange, revalidateOnDelete } from '../lib/revalidate'
 
 export const Services: CollectionConfig = {
   slug: 'services',
@@ -14,7 +15,13 @@ export const Services: CollectionConfig = {
   },
   access: { read: anyone, create: authenticated, update: authenticated, delete: admins },
   defaultSort: 'order',
-  hooks: { beforeValidate: [slugFromTitle('title')] },
+  // Referenziato dal blocco Servizi nelle pagine e dal campo "services" nei
+  // progetti (filtri dell'indice) — il salvataggio invalida entrambe le cache.
+  hooks: {
+    beforeValidate: [slugFromTitle('title')],
+    afterChange: [revalidateOnChange('services', 'pages', 'projects')],
+    afterDelete: [revalidateOnDelete('services', 'pages', 'projects')],
+  },
   fields: [
     { name: 'title', type: 'text', required: true, localized: true },
     slugField('title'),

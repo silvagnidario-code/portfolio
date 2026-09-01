@@ -1,7 +1,7 @@
 # Deploy su Vercel — stato e cose da finire
 
 Documento di lavoro. Riassume dove siamo, cosa è già pronto, cosa resta da
-fare e in che ordine. Aggiornato al commit `b5e6b76`.
+fare e in che ordine. Aggiornato al commit `e7a13a0` + branch `perf/cache-fase-9`.
 
 ---
 
@@ -122,20 +122,38 @@ record si invalidano a vicenda e la posta finisce in spam.
 
 In ordine di quanto conta.
 
-### 1. Caching e invalidazione alla pubblicazione — 2–3 ore
+### 1. Caching e invalidazione alla pubblicazione — FATTO (branch `perf/cache-fase-9`)
 
-**Il lavoro più importante che resta.** Oggi ogni pagina è renderizzata a ogni
-richiesta (`dynamic = 'force-dynamic'` nel layout), scelto in Fase 5 perché il
-menu arriva dal CMS e il container non ha un database in fase di build.
+Ogni lettura CMS pubblica (`getGlobal`, `getPageBySlug`, `getProjectBySlug`, le
+liste di `lib/queries.ts`) passa da `unstable_cache`, taggata per collection o
+global. Un hook `afterChange`/`afterDelete` su ogni collection e global
+(`lib/revalidate.ts`) invalida esattamente quel tag alla pubblicazione o
+cancellazione — niente timeout arbitrario, niente pagina stantia.
 
-Su Vercel significa una invocazione di funzione per ogni visita. Da fare:
+`force-dynamic` è stato tolto dal layout, ma va precisato cosa questo cambia
+davvero e cosa no: ogni pagina di contenuto chiama `draftMode()` per sapere se
+servire una bozza, ed è una dynamic API che tiene comunque la route dinamica
+lato Next — la funzione Vercel gira per ogni richiesta esattamente come prima.
+Il guadagno è che il lavoro dentro quella funzione passa da una query al
+database (~1.3s misurati sulla home) a una lettura dalla Data Cache di Next,
+quasi istantanea. Le pagine non diventano "statiche" in senso stretto — quello
+richiederebbe non chiamare `draftMode()` nel percorso pubblico, il che
+significherebbe un percorso di rendering separato per l'anteprima, fuori
+scope qui.
 
-- letture del CMS avvolte in cache con tag (`unstable_cache` o equivalente);
-- hook `afterChange` su collection e globals che invalidano i tag toccati;
-- rimozione di `force-dynamic` dal layout.
+**L'anteprima bozze resta intenzionalmente esclusa dalla cache**: quando
+`draftMode()` è attivo, `getPageBySlug`/`getProjectBySlug` bypassano
+`unstable_cache` e leggono sempre il dato fresco — stesso identico percorso di
+prima di questa modifica. Da verificare comunque manualmente in un deploy di
+prova prima del merge su `main`: pubblicare una modifica e controllare che
+compaia, e che l'anteprima di una bozza non pubblicata mostri sempre l'ultimo
+salvataggio.
 
-Risultato: pagine statiche, aggiornate quando un redattore pubblica invece che
-a ogni richiesta. Era il debito dichiarato in Fase 5 e ripreso in Fase 9.
+Non coperto da questo giro, deliberatamente fuori scope: un cambio a un
+`Media` (es. testo alternativo o focal point di un'immagine) non invalida le
+pagine/progetti che la incorporano per relazione — resta valido fino al
+prossimo cambiamento di quella pagina/progetto o al riavvio della cache. Da
+riprendere se in pratica risulta fastidioso.
 
 ### 2. Verifica del form contatti end-to-end — 1 ora
 

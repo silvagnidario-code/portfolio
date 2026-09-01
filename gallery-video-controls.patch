@@ -1,0 +1,33 @@
+From 73f687122c209c5f6101a80295880bd861144005 Mon Sep 17 00:00:00 2001
+From: silvagnidario-code <silvagni.dario@gmail.com>
+Date: Mon, 31 Aug 2026 14:51:59 +0200
+Subject: [PATCH] Add controls prop to MediaImage component
+
+---
+ src/components/blocks/media-block.tsx | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/src/components/blocks/media-block.tsx b/src/components/blocks/media-block.tsx
+index b2e3ce6..02f4b2f 100644
+--- a/src/components/blocks/media-block.tsx
++++ b/src/components/blocks/media-block.tsx
+@@ -119,6 +119,7 @@ export function MediaBlock({ block }: { block: MediaBlockType }) {
+                       : '(min-width: 768px) 50vw, 100vw'
+                   }
+                   className="w-full"
++                  controls="hover"
+                 />
+                 {item.caption ? (
+                   <p className="mt-16 font-mono text-caption uppercase text-ink-muted">
+@@ -138,7 +139,7 @@ export function MediaBlock({ block }: { block: MediaBlockType }) {
+   return (
+     <BlockSection settings={settings}>
+       <figure>
+-        <MediaImage media={first?.media} sizes="100vw" className="w-full" />
++        <MediaImage media={first?.media} sizes="100vw" className="w-full"  controls="hover"/>
+         <Caption>{first?.caption ?? caption}</Caption>
+       </figure>
+     </BlockSection>
+-- 
+2.43.0
+

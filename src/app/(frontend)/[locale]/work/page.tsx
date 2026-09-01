@@ -5,7 +5,7 @@ import { ProjectCard } from '@/components/blocks/project-card'
 import { WorkFilters, type WorkFilter } from '@/components/work/work-filters'
 import type { Locale } from '@/i18n/routing'
 import { alternatesFor } from '@/lib/metadata'
-import { getPayloadClient } from '@/lib/payload'
+import { getIndustriesList, getProjectsList, getServicesList } from '@/lib/queries'
 import type { Where } from 'payload'
 
 type PageProps = {
@@ -31,23 +31,15 @@ export default async function WorkIndexPage({ params, searchParams }: PageProps)
   const active: WorkFilter = { service: single(query.service), industry: single(query.industry) }
 
   const t = await getTranslations('WorkPage')
-  const payload = await getPayloadClient()
 
   const conditions: Where[] = [{ _status: { equals: 'published' } }]
   if (active.service) conditions.push({ 'services.slug': { equals: active.service } })
   if (active.industry) conditions.push({ 'industry.slug': { equals: active.industry } })
 
   const [projects, services, industries] = await Promise.all([
-    payload.find({
-      collection: 'projects',
-      locale,
-      depth: 1,
-      limit: 50,
-      sort: ['order', '-year'],
-      where: { and: conditions },
-    }),
-    payload.find({ collection: 'services', locale, depth: 0, limit: 20, sort: 'order' }),
-    payload.find({ collection: 'industries', locale, depth: 0, limit: 20, sort: 'title' }),
+    getProjectsList(locale, { limit: 50, sort: ['order', '-year'], where: { and: conditions } }),
+    getServicesList(locale),
+    getIndustriesList(locale),
   ])
 
   return (
@@ -60,7 +52,7 @@ export default async function WorkIndexPage({ params, searchParams }: PageProps)
       </header>
 
       <div className="page-margin pb-64">
-        <WorkFilters services={services.docs} industries={industries.docs} active={active} />
+        <WorkFilters services={services} industries={industries} active={active} />
       </div>
 
       <p className="page-margin pb-32 font-mono text-caption uppercase text-ink-muted">

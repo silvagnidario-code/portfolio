@@ -1,0 +1,948 @@
+diff --git a/DEPLOY.md b/DEPLOY.md
+index 4d0332a..68d45d2 100644
+--- a/DEPLOY.md
++++ b/DEPLOY.md
+@@ -1,7 +1,7 @@
+ # Deploy su Vercel — stato e cose da finire
+ 
+ Documento di lavoro. Riassume dove siamo, cosa è già pronto, cosa resta da
+-fare e in che ordine. Aggiornato al commit `b5e6b76`.
++fare e in che ordine. Aggiornato al commit `e7a13a0` + branch `perf/cache-fase-9`.
+ 
+ ---
+ 
+@@ -122,20 +122,38 @@ record si invalidano a vicenda e la posta finisce in spam.
+ 
+ In ordine di quanto conta.
+ 
+-### 1. Caching e invalidazione alla pubblicazione — 2–3 ore
+-
+-**Il lavoro più importante che resta.** Oggi ogni pagina è renderizzata a ogni
+-richiesta (`dynamic = 'force-dynamic'` nel layout), scelto in Fase 5 perché il
+-menu arriva dal CMS e il container non ha un database in fase di build.
+-
+-Su Vercel significa una invocazione di funzione per ogni visita. Da fare:
+-
+-- letture del CMS avvolte in cache con tag (`unstable_cache` o equivalente);
+-- hook `afterChange` su collection e globals che invalidano i tag toccati;
+-- rimozione di `force-dynamic` dal layout.
+-
+-Risultato: pagine statiche, aggiornate quando un redattore pubblica invece che
+-a ogni richiesta. Era il debito dichiarato in Fase 5 e ripreso in Fase 9.
++### 1. Caching e invalidazione alla pubblicazione — FATTO (branch `perf/cache-fase-9`)
++
++Ogni lettura CMS pubblica (`getGlobal`, `getPageBySlug`, `getProjectBySlug`, le
++liste di `lib/queries.ts`) passa da `unstable_cache`, taggata per collection o
++global. Un hook `afterChange`/`afterDelete` su ogni collection e global
++(`lib/revalidate.ts`) invalida esattamente quel tag alla pubblicazione o
++cancellazione — niente timeout arbitrario, niente pagina stantia.
++
++`force-dynamic` è stato tolto dal layout, ma va precisato cosa questo cambia
++davvero e cosa no: ogni pagina di contenuto chiama `draftMode()` per sapere se
++servire una bozza, ed è una dynamic API che tiene comunque la route dinamica
++lato Next — la funzione Vercel gira per ogni richiesta esattamente come prima.
++Il guadagno è che il lavoro dentro quella funzione passa da una query al
++database (~1.3s misurati sulla home) a una lettura dalla Data Cache di Next,
++quasi istantanea. Le pagine non diventano "statiche" in senso stretto — quello
++richiederebbe non chiamare `draftMode()` nel percorso pubblico, il che
++significherebbe un percorso di rendering separato per l'anteprima, fuori
++scope qui.
++
++**L'anteprima bozze resta intenzionalmente esclusa dalla cache**: quando
++`draftMode()` è attivo, `getPageBySlug`/`getProjectBySlug` bypassano
++`unstable_cache` e leggono sempre il dato fresco — stesso identico percorso di
++prima di questa modifica. Da verificare comunque manualmente in un deploy di
++prova prima del merge su `main`: pubblicare una modifica e controllare che
++compaia, e che l'anteprima di una bozza non pubblicata mostri sempre l'ultimo
++salvataggio.
++
++Non coperto da questo giro, deliberatamente fuori scope: un cambio a un
++`Media` (es. testo alternativo o focal point di un'immagine) non invalida le
++pagine/progetti che la incorporano per relazione — resta valido fino al
++prossimo cambiamento di quella pagina/progetto o al riavvio della cache. Da
++riprendere se in pratica risulta fastidioso.
+ 
+ ### 2. Verifica del form contatti end-to-end — 1 ora
+ 
+diff --git a/README.md b/README.md
+index 46a2980..54e946f 100644
+--- a/README.md
++++ b/README.md
+@@ -71,12 +71,19 @@ the `prefers-reduced-motion` rule. Only the incoming half is animated; the
+ outgoing half needs the router hook that arrives with the animation system in
+ phase 8.
+ 
+-**The frontend renders per request.** The layout reads its menu, footer and
+-settings from the CMS, so prerendering at build time would require a database
+-inside the build — the container image has none, and a menu that is editable
+-should not need a redeploy to change. Phase 9 adds cached reads with tag-based
+-revalidation on publish, which makes the pages static again, refreshed by an
+-edit rather than by a build.
++**The frontend still executes a function on every request** — the container
++image has no database at build time, so prerendering at build is not an
++option, and every content page checks `draftMode()` to know whether to serve a
++preview, which is itself a dynamic API that keeps the route dynamic regardless
++of any `dynamic` export. Phase 9 (done) does not remove that per-request
++execution; it removes the database round-trip from inside it. Every CMS read
++(`getGlobal`, `getPageBySlug`, `getProjectBySlug`, the content lists in
++`lib/queries.ts`) goes through `unstable_cache`, tagged per collection or
++global, and an `afterChange`/`afterDelete` hook on that collection invalidates
++exactly its tag on publish (`lib/revalidate.ts`). Outside of draft mode, that
++turns most requests into a Data Cache hit instead of a Postgres query — the
++menu is still editable without a redeploy, it just stops costing a database
++round trip on every visitor.
+ 
+ ## SEO and structured data
+ 
+diff --git a/src/app/(frontend)/[locale]/layout.tsx b/src/app/(frontend)/[locale]/layout.tsx
+index c08e77f..9a1f54c 100644
+--- a/src/app/(frontend)/[locale]/layout.tsx
++++ b/src/app/(frontend)/[locale]/layout.tsx
+@@ -29,18 +29,24 @@ type LayoutProps = {
+ }
+ 
+ /**
+- * Rendered per request.
++ * Fase 9.
+  *
+- * The layout reads the navigation, the footer and the settings from the CMS, so
+- * prerendering at build time would need a database inside the build — the
+- * container image has none, and a portfolio whose menu is editable should not
+- * need a redeploy to change it anyway.
++ * `force-dynamic` è stato tolto: le letture del CMS (`getGlobal`, `getPageBySlug`,
++ * `getProjectBySlug` e le liste in `lib/queries.ts`) passano ora da
++ * `unstable_cache`, taggate per collection/global e invalidate dall'hook
++ * `afterChange`/`afterDelete` di quella collection — vedi `src/lib/revalidate.ts`.
++ * Alla pubblicazione la pagina si aggiorna da sola, non a un timeout arbitrario.
+  *
+- * The cost is real and it is paid back in phase 9, which adds cached reads with
+- * tag-based revalidation on publish; the pages become static again, only
+- * refreshed by an edit instead of by a build.
++ * Una precisazione onesta su cosa NON cambia: ogni pagina di contenuto chiama
++ * `draftMode()` (in `isDraft()`, per sapere se servire una bozza) prima di
++ * decidere se leggere dalla cache — ed è una "dynamic API" di Next, che tiene
++ * la route dinamica lato rendering indipendentemente da questo flag. La
++ * funzione Vercel gira quindi ad ogni richiesta comunque; il guadagno reale è
++ * che il lavoro che fa dentro è passato da una query al database (quello che
++ * costava ~1.3s) a una lettura dalla Data Cache di Next (quasi istantanea). Il
++ * container Docker resta senza database in fase di build, quindi niente
++ * generazione statica lì — nessun cambiamento nemmeno su quel fronte.
+  */
+-export const dynamic = 'force-dynamic'
+ 
+ export function generateStaticParams() {
+   return routing.locales.map((locale) => ({ locale }))
+diff --git a/src/app/(frontend)/[locale]/work/page.tsx b/src/app/(frontend)/[locale]/work/page.tsx
+index d585307..c5862bf 100644
+--- a/src/app/(frontend)/[locale]/work/page.tsx
++++ b/src/app/(frontend)/[locale]/work/page.tsx
+@@ -5,7 +5,7 @@ import { ProjectCard } from '@/components/blocks/project-card'
+ import { WorkFilters, type WorkFilter } from '@/components/work/work-filters'
+ import type { Locale } from '@/i18n/routing'
+ import { alternatesFor } from '@/lib/metadata'
+-import { getPayloadClient } from '@/lib/payload'
++import { getIndustriesList, getProjectsList, getServicesList } from '@/lib/queries'
+ import type { Where } from 'payload'
+ 
+ type PageProps = {
+@@ -31,23 +31,15 @@ export default async function WorkIndexPage({ params, searchParams }: PageProps)
+   const active: WorkFilter = { service: single(query.service), industry: single(query.industry) }
+ 
+   const t = await getTranslations('WorkPage')
+-  const payload = await getPayloadClient()
+ 
+   const conditions: Where[] = [{ _status: { equals: 'published' } }]
+   if (active.service) conditions.push({ 'services.slug': { equals: active.service } })
+   if (active.industry) conditions.push({ 'industry.slug': { equals: active.industry } })
+ 
+   const [projects, services, industries] = await Promise.all([
+-    payload.find({
+-      collection: 'projects',
+-      locale,
+-      depth: 1,
+-      limit: 50,
+-      sort: ['order', '-year'],
+-      where: { and: conditions },
+-    }),
+-    payload.find({ collection: 'services', locale, depth: 0, limit: 20, sort: 'order' }),
+-    payload.find({ collection: 'industries', locale, depth: 0, limit: 20, sort: 'title' }),
++    getProjectsList(locale, { limit: 50, sort: ['order', '-year'], where: { and: conditions } }),
++    getServicesList(locale),
++    getIndustriesList(locale),
+   ])
+ 
+   return (
+@@ -60,7 +52,7 @@ export default async function WorkIndexPage({ params, searchParams }: PageProps)
+       </header>
+ 
+       <div className="page-margin pb-64">
+-        <WorkFilters services={services.docs} industries={industries.docs} active={active} />
++        <WorkFilters services={services} industries={industries} active={active} />
+       </div>
+ 
+       <p className="page-margin pb-32 font-mono text-caption uppercase text-ink-muted">
+diff --git a/src/collections/Clients.ts b/src/collections/Clients.ts
+index ee9222b..f4030b2 100644
+--- a/src/collections/Clients.ts
++++ b/src/collections/Clients.ts
+@@ -1,6 +1,7 @@
+ import type { CollectionConfig } from 'payload'
+ 
+ import { admins, anyone, authenticated } from '../access/roles'
++import { revalidateOnChange, revalidateOnDelete } from '../lib/revalidate'
+ 
+ export const Clients: CollectionConfig = {
+   slug: 'clients',
+@@ -8,6 +9,12 @@ export const Clients: CollectionConfig = {
+   admin: { useAsTitle: 'name', defaultColumns: ['name', 'order'], group: 'Contenuti' },
+   access: { read: anyone, create: authenticated, update: authenticated, delete: admins },
+   defaultSort: 'order',
++  // Il blocco Clienti può incorporare un cliente scelto a mano dentro una
++  // pagina, quindi il salvataggio invalida anche la cache delle pagine.
++  hooks: {
++    afterChange: [revalidateOnChange('clients', 'pages')],
++    afterDelete: [revalidateOnDelete('clients', 'pages')],
++  },
+   fields: [
+     { name: 'name', type: 'text', required: true },
+     {
+diff --git a/src/collections/Industries.ts b/src/collections/Industries.ts
+index 00207c1..54d14dd 100644
+--- a/src/collections/Industries.ts
++++ b/src/collections/Industries.ts
+@@ -2,6 +2,7 @@ import type { CollectionConfig } from 'payload'
+ 
+ import { admins, anyone, authenticated } from '../access/roles'
+ import { slugField, slugFromTitle } from '../fields/slug'
++import { revalidateOnChange, revalidateOnDelete } from '../lib/revalidate'
+ 
+ /** Sectors a project belongs to. Feeds the filters on the work index. */
+ export const Industries: CollectionConfig = {
+@@ -9,6 +10,12 @@ export const Industries: CollectionConfig = {
+   labels: { singular: 'Settore', plural: 'Settori' },
+   admin: { useAsTitle: 'title', defaultColumns: ['title', 'slug'], group: 'Tassonomie' },
+   access: { read: anyone, create: authenticated, update: authenticated, delete: admins },
+-  hooks: { beforeValidate: [slugFromTitle('title')] },
++  // Ogni progetto porta un settore obbligatorio ("industry") — il salvataggio
++  // invalida anche la cache dei progetti.
++  hooks: {
++    beforeValidate: [slugFromTitle('title')],
++    afterChange: [revalidateOnChange('industries', 'projects')],
++    afterDelete: [revalidateOnDelete('industries', 'projects')],
++  },
+   fields: [{ name: 'title', type: 'text', required: true, localized: true }, slugField('title')],
+ }
+diff --git a/src/collections/Pages.ts b/src/collections/Pages.ts
+index c4ece8f..4bbaa8c 100644
+--- a/src/collections/Pages.ts
++++ b/src/collections/Pages.ts
+@@ -4,6 +4,7 @@ import { admins, authenticated, authenticatedOrPublished } from '../access/roles
+ import { layoutBlocks } from '../blocks'
+ import { metaGroup } from '../fields/meta'
+ import { slugField, slugFromTitle } from '../fields/slug'
++import { revalidateOnChange, revalidateOnDelete } from '../lib/revalidate'
+ import { generatePreviewPath } from '../utilities/generate-preview-path'
+ 
+ /**
+@@ -44,7 +45,11 @@ export const Pages: CollectionConfig = {
+     drafts: { autosave: { interval: 375 } },
+     maxPerDoc: 25,
+   },
+-  hooks: { beforeValidate: [slugFromTitle('title')] },
++  hooks: {
++    beforeValidate: [slugFromTitle('title')],
++    afterChange: [revalidateOnChange('pages')],
++    afterDelete: [revalidateOnDelete('pages')],
++  },
+   fields: [
+     { name: 'title', type: 'text', required: true, localized: true },
+     slugField('title'),
+diff --git a/src/collections/Projects.ts b/src/collections/Projects.ts
+index 477ac42..286f4c6 100644
+--- a/src/collections/Projects.ts
++++ b/src/collections/Projects.ts
+@@ -5,6 +5,7 @@ import { MediaBlock } from '../blocks/media'
+ import { Prose } from '../blocks/prose'
+ import { metaGroup } from '../fields/meta'
+ import { slugField, slugFromTitle } from '../fields/slug'
++import { revalidateOnChange, revalidateOnDelete } from '../lib/revalidate'
+ import { generatePreviewPath } from '../utilities/generate-preview-path'
+ 
+ /**
+@@ -47,7 +48,11 @@ export const Projects: CollectionConfig = {
+     drafts: { autosave: { interval: 375 } },
+     maxPerDoc: 25,
+   },
+-  hooks: { beforeValidate: [slugFromTitle('title')] },
++  hooks: {
++    beforeValidate: [slugFromTitle('title')],
++    afterChange: [revalidateOnChange('projects')],
++    afterDelete: [revalidateOnDelete('projects')],
++  },
+   fields: [
+     { name: 'title', type: 'text', required: true, localized: true },
+     slugField('title'),
+diff --git a/src/collections/Services.ts b/src/collections/Services.ts
+index a27f557..5406953 100644
+--- a/src/collections/Services.ts
++++ b/src/collections/Services.ts
+@@ -3,6 +3,7 @@ import type { CollectionConfig } from 'payload'
+ import { admins, anyone, authenticated } from '../access/roles'
+ import { metaGroup } from '../fields/meta'
+ import { slugField, slugFromTitle } from '../fields/slug'
++import { revalidateOnChange, revalidateOnDelete } from '../lib/revalidate'
+ 
+ export const Services: CollectionConfig = {
+   slug: 'services',
+@@ -14,7 +15,13 @@ export const Services: CollectionConfig = {
+   },
+   access: { read: anyone, create: authenticated, update: authenticated, delete: admins },
+   defaultSort: 'order',
+-  hooks: { beforeValidate: [slugFromTitle('title')] },
++  // Referenziato dal blocco Servizi nelle pagine e dal campo "services" nei
++  // progetti (filtri dell'indice) — il salvataggio invalida entrambe le cache.
++  hooks: {
++    beforeValidate: [slugFromTitle('title')],
++    afterChange: [revalidateOnChange('services', 'pages', 'projects')],
++    afterDelete: [revalidateOnDelete('services', 'pages', 'projects')],
++  },
+   fields: [
+     { name: 'title', type: 'text', required: true, localized: true },
+     slugField('title'),
+diff --git a/src/collections/TeamMembers.ts b/src/collections/TeamMembers.ts
+index 59f5783..eab94e3 100644
+--- a/src/collections/TeamMembers.ts
++++ b/src/collections/TeamMembers.ts
+@@ -1,6 +1,7 @@
+ import type { CollectionConfig } from 'payload'
+ 
+ import { admins, anyone, authenticated } from '../access/roles'
++import { revalidateOnChange, revalidateOnDelete } from '../lib/revalidate'
+ 
+ export const TeamMembers: CollectionConfig = {
+   slug: 'team-members',
+@@ -8,6 +9,12 @@ export const TeamMembers: CollectionConfig = {
+   admin: { useAsTitle: 'name', defaultColumns: ['name', 'role', 'order'], group: 'Contenuti' },
+   access: { read: anyone, create: authenticated, update: authenticated, delete: admins },
+   defaultSort: 'order',
++  // Referenziato dal blocco Team nelle pagine e dal campo "team" nei crediti
++  // dei progetti.
++  hooks: {
++    afterChange: [revalidateOnChange('team-members', 'pages', 'projects')],
++    afterDelete: [revalidateOnDelete('team-members', 'pages', 'projects')],
++  },
+   fields: [
+     { name: 'name', type: 'text', required: true },
+     { name: 'role', type: 'text', required: true, localized: true },
+diff --git a/src/collections/Testimonials.ts b/src/collections/Testimonials.ts
+index 87423ce..202ffda 100644
+--- a/src/collections/Testimonials.ts
++++ b/src/collections/Testimonials.ts
+@@ -1,12 +1,18 @@
+ import type { CollectionConfig } from 'payload'
+ 
+ import { admins, anyone, authenticated } from '../access/roles'
++import { revalidateOnChange, revalidateOnDelete } from '../lib/revalidate'
+ 
+ export const Testimonials: CollectionConfig = {
+   slug: 'testimonials',
+   labels: { singular: 'Testimonianza', plural: 'Testimonianze' },
+   admin: { useAsTitle: 'author', defaultColumns: ['author', 'company'], group: 'Contenuti' },
+   access: { read: anyone, create: authenticated, update: authenticated, delete: admins },
++  // Raggiunta solo per relazione dal campo "testimonial" dei progetti.
++  hooks: {
++    afterChange: [revalidateOnChange('testimonials', 'projects')],
++    afterDelete: [revalidateOnDelete('testimonials', 'projects')],
++  },
+   fields: [
+     { name: 'quote', type: 'textarea', required: true, localized: true },
+     { name: 'author', type: 'text', required: true },
+diff --git a/src/components/blocks/clients-block.tsx b/src/components/blocks/clients-block.tsx
+index 3079e21..dd982e6 100644
+--- a/src/components/blocks/clients-block.tsx
++++ b/src/components/blocks/clients-block.tsx
+@@ -1,6 +1,6 @@
+ import { MediaImage } from '@/components/media/media-image'
+ import type { Locale } from '@/i18n/routing'
+-import { getPayloadClient } from '@/lib/payload'
++import { getClientsList } from '@/lib/queries'
+ import type { Client, ClientsBlockType } from '@/payload-types'
+ 
+ import { BlockSection } from './block-section'
+@@ -12,16 +12,7 @@ async function resolveClients(block: ClientsBlockType, locale: Locale): Promise<
+ 
+   if (selected.length > 0) return selected
+ 
+-  const payload = await getPayloadClient()
+-  const result = await payload.find({
+-    collection: 'clients',
+-    locale,
+-    depth: 1,
+-    limit: 30,
+-    sort: 'order',
+-  })
+-
+-  return result.docs
++  return getClientsList(locale)
+ }
+ 
+ export async function ClientsBlock({ block, locale }: { block: ClientsBlockType; locale: Locale }) {
+diff --git a/src/components/blocks/project-grid.tsx b/src/components/blocks/project-grid.tsx
+index f3b4cb3..dfd149b 100644
+--- a/src/components/blocks/project-grid.tsx
++++ b/src/components/blocks/project-grid.tsx
+@@ -1,5 +1,5 @@
+ import type { Locale } from '@/i18n/routing'
+-import { getPayloadClient } from '@/lib/payload'
++import { getProjectsList } from '@/lib/queries'
+ import type { Project, ProjectGridBlock } from '@/payload-types'
+ 
+ import { BlockSection } from './block-section'
+@@ -12,13 +12,9 @@ async function resolveProjects(block: ProjectGridBlock, locale: Locale): Promise
+     )
+   }
+ 
+-  const payload = await getPayloadClient()
+   const service = typeof block.service === 'object' ? block.service?.id : block.service
+ 
+-  const result = await payload.find({
+-    collection: 'projects',
+-    locale,
+-    depth: 1,
++  const result = await getProjectsList(locale, {
+     limit: block.limit ?? 6,
+     sort: ['order', '-year'],
+     where:
+diff --git a/src/components/blocks/services-block.tsx b/src/components/blocks/services-block.tsx
+index f08dbf4..a68f0ed 100644
+--- a/src/components/blocks/services-block.tsx
++++ b/src/components/blocks/services-block.tsx
+@@ -1,5 +1,5 @@
+ import type { Locale } from '@/i18n/routing'
+-import { getPayloadClient } from '@/lib/payload'
++import { getServicesList } from '@/lib/queries'
+ import type { Service, ServicesBlockType } from '@/payload-types'
+ 
+ import { BlockSection } from './block-section'
+@@ -12,16 +12,7 @@ async function resolveServices(block: ServicesBlockType, locale: Locale): Promis
+ 
+   if (selected.length > 0) return selected
+ 
+-  const payload = await getPayloadClient()
+-  const result = await payload.find({
+-    collection: 'services',
+-    locale,
+-    depth: 0,
+-    limit: 20,
+-    sort: 'order',
+-  })
+-
+-  return result.docs
++  return getServicesList(locale)
+ }
+ 
+ export async function ServicesBlock({
+diff --git a/src/components/blocks/team-block.tsx b/src/components/blocks/team-block.tsx
+index d375ebb..4c59d1c 100644
+--- a/src/components/blocks/team-block.tsx
++++ b/src/components/blocks/team-block.tsx
+@@ -1,6 +1,6 @@
+ import { MediaImage } from '@/components/media/media-image'
+ import type { Locale } from '@/i18n/routing'
+-import { getPayloadClient } from '@/lib/payload'
++import { getTeamMembersList } from '@/lib/queries'
+ import type { TeamBlockType, TeamMember } from '@/payload-types'
+ 
+ import { BlockSection } from './block-section'
+@@ -12,16 +12,7 @@ async function resolveMembers(block: TeamBlockType, locale: Locale): Promise<Tea
+ 
+   if (selected.length > 0) return selected
+ 
+-  const payload = await getPayloadClient()
+-  const result = await payload.find({
+-    collection: 'team-members',
+-    locale,
+-    depth: 1,
+-    limit: 30,
+-    sort: 'order',
+-  })
+-
+-  return result.docs
++  return getTeamMembersList(locale)
+ }
+ 
+ export async function TeamBlock({ block, locale }: { block: TeamBlockType; locale: Locale }) {
+diff --git a/src/globals/Footer.ts b/src/globals/Footer.ts
+index c297f7b..d304d11 100644
+--- a/src/globals/Footer.ts
++++ b/src/globals/Footer.ts
+@@ -1,12 +1,14 @@
+ import type { GlobalConfig } from 'payload'
+ 
+ import { anyone, authenticated } from '../access/roles'
++import { revalidateGlobalOnChange } from '../lib/revalidate'
+ 
+ export const Footer: GlobalConfig = {
+   slug: 'footer',
+   label: 'Footer',
+   admin: { group: 'Configurazione' },
+   access: { read: anyone, update: authenticated },
++  hooks: { afterChange: [revalidateGlobalOnChange('global:footer')] },
+   fields: [
+     {
+       name: 'columns',
+diff --git a/src/globals/Navigation.ts b/src/globals/Navigation.ts
+index 0794285..b50f5c4 100644
+--- a/src/globals/Navigation.ts
++++ b/src/globals/Navigation.ts
+@@ -1,6 +1,7 @@
+ import type { GlobalConfig } from 'payload'
+ 
+ import { anyone, authenticated } from '../access/roles'
++import { revalidateGlobalOnChange } from '../lib/revalidate'
+ 
+ /** Menu items, ordered by the editor, localized label by label. */
+ export const Navigation: GlobalConfig = {
+@@ -8,6 +9,7 @@ export const Navigation: GlobalConfig = {
+   label: 'Navigazione',
+   admin: { group: 'Configurazione' },
+   access: { read: anyone, update: authenticated },
++  hooks: { afterChange: [revalidateGlobalOnChange('global:navigation')] },
+   fields: [
+     {
+       name: 'items',
+diff --git a/src/globals/SeoDefaults.ts b/src/globals/SeoDefaults.ts
+index e96b77c..730e0e9 100644
+--- a/src/globals/SeoDefaults.ts
++++ b/src/globals/SeoDefaults.ts
+@@ -1,11 +1,13 @@
+ import type { GlobalConfig } from 'payload'
+ import { anyone, authenticated } from '../access/roles'
++import { revalidateGlobalOnChange } from '../lib/revalidate'
+ /** Fallback metadata: what a page says about itself when it says nothing. */
+ export const SeoDefaults: GlobalConfig = {
+   slug: 'seo-defaults',
+   label: 'SEO di default',
+   admin: { group: 'Configurazione' },
+   access: { read: anyone, update: authenticated },
++  hooks: { afterChange: [revalidateGlobalOnChange('global:seo-defaults')] },
+   fields: [
+     { name: 'siteName', type: 'text', required: true, localized: true },
+     {
+diff --git a/src/globals/Settings.ts b/src/globals/Settings.ts
+index 7554441..0065004 100644
+--- a/src/globals/Settings.ts
++++ b/src/globals/Settings.ts
+@@ -1,6 +1,7 @@
+ import type { GlobalConfig } from 'payload'
+ 
+ import { anyone, authenticated } from '../access/roles'
++import { revalidateGlobalOnChange } from '../lib/revalidate'
+ 
+ /** Identity and contact data, everything the site needs to say who it is. */
+ export const Settings: GlobalConfig = {
+@@ -8,6 +9,7 @@ export const Settings: GlobalConfig = {
+   label: 'Impostazioni',
+   admin: { group: 'Configurazione' },
+   access: { read: anyone, update: authenticated },
++  hooks: { afterChange: [revalidateGlobalOnChange('global:settings')] },
+   fields: [
+     {
+       type: 'row',
+diff --git a/src/lib/payload.ts b/src/lib/payload.ts
+index 6ac786d..9408e42 100644
+--- a/src/lib/payload.ts
++++ b/src/lib/payload.ts
+@@ -1,4 +1,5 @@
+ import config from '@payload-config'
++import { unstable_cache } from 'next/cache'
+ import { getPayload } from 'payload'
+ import { cache } from 'react'
+ 
+@@ -17,18 +18,36 @@ type GlobalSlug = keyof Config['globals']
+ 
+ export const getPayloadClient = cache(async () => getPayload({ config }))
+ 
++/**
++ * Fase 9 — globals non hanno bozze ("Globals carry no drafts" sotto), quindi
++ * possono passare da `unstable_cache` incondizionatamente: nessun ramo di
++ * anteprima da preservare qui, a differenza di `getPageBySlug`/
++ * `getProjectBySlug` in `queries.ts`.
++ *
++ * Il wrapper `unstable_cache` va creato dentro la funzione, non a livello di
++ * modulo: è quello che lega tag e chiave di cache allo `slug` effettivo di
++ * ogni chiamata invece che a un unico tag fisso condiviso da tutti i globals.
++ * Il tag corrispondente viene invalidato dall'hook `afterChange` di ogni
++ * global (vedi `src/globals/*.ts`).
++ */
+ export const getGlobal = cache(
+   async <T extends GlobalSlug>(slug: T, locale: Locale): Promise<Config['globals'][T]> => {
+-    const payload = await getPayloadClient()
++    const read = unstable_cache(
++      async () => {
++        const payload = await getPayloadClient()
+ 
+-    const result = await payload.findGlobal({
+-      slug,
+-      locale,
+-      depth: 1,
+-      // Globals carry no drafts; the fallback fills untranslated fields from `it`.
+-      fallbackLocale: 'it',
+-    })
++        return payload.findGlobal({
++          slug,
++          locale,
++          depth: 1,
++          // Globals carry no drafts; the fallback fills untranslated fields from `it`.
++          fallbackLocale: 'it',
++        })
++      },
++      ['global', slug, locale],
++      { tags: [`global:${slug}`] },
++    )
+ 
+-    return result as Config['globals'][T]
++    return (await read()) as Config['globals'][T]
+   },
+ )
+diff --git a/src/lib/queries.ts b/src/lib/queries.ts
+index 46706b5..c471610 100644
+--- a/src/lib/queries.ts
++++ b/src/lib/queries.ts
+@@ -1,8 +1,10 @@
++import { unstable_cache } from 'next/cache'
+ import { draftMode } from 'next/headers'
++import type { Where } from 'payload'
+ import { cache } from 'react'
+ 
+ import type { Locale } from '@/i18n/routing'
+-import type { Page, Project } from '@/payload-types'
++import type { Client, Industry, Project, Page, Service, TeamMember } from '@/payload-types'
+ 
+ import { getPayloadClient } from './payload'
+ 
+@@ -13,6 +15,17 @@ import { getPayloadClient } from './payload'
+  * here explicitly: forgetting it would serve drafts to everyone. Draft mode —
+  * which only an authenticated editor can turn on, see `/next/preview` — lifts
+  * the condition.
++ *
++ * Fase 9: la lettura pubblica (published, `draft: false`) passa da
++ * `unstable_cache`, taggata per collection e invalidata dall'hook
++ * `afterChange`/`afterDelete` di quella collection (vedi `src/lib/revalidate.ts`
++ * e `src/collections/Pages.ts` / `Projects.ts`).
++ *
++ * L'anteprima bozze resta intenzionalmente FUORI da `unstable_cache`: è una
++ * dynamic API di Next (chiama `draftMode()`), e una bozza deve sempre
++ * riflettere l'ultimo salvataggio per l'editor che la sta guardando, mai una
++ * versione cacheata. Il ramo bozza qui sotto è lo stesso codice, byte per
++ * byte, di prima di questa modifica.
+  */
+ 
+ async function isDraft(): Promise<boolean> {
+@@ -20,9 +33,8 @@ async function isDraft(): Promise<boolean> {
+   return isEnabled
+ }
+ 
+-export const getPageBySlug = cache(async (slug: string, locale: Locale): Promise<Page | null> => {
++async function fetchPageBySlug(slug: string, locale: Locale, draft: boolean): Promise<Page | null> {
+   const payload = await getPayloadClient()
+-  const draft = await isDraft()
+ 
+   const result = await payload.find({
+     collection: 'pages',
+@@ -37,26 +49,51 @@ export const getPageBySlug = cache(async (slug: string, locale: Locale): Promise
+   })
+ 
+   return result.docs[0] ?? null
++}
++
++export const getPageBySlug = cache(async (slug: string, locale: Locale): Promise<Page | null> => {
++  if (await isDraft()) return fetchPageBySlug(slug, locale, true)
++
++  const read = unstable_cache(() => fetchPageBySlug(slug, locale, false), ['page', slug, locale], {
++    tags: ['pages'],
++  })
++
++  return read()
+ })
+ 
++async function fetchProjectBySlug(
++  slug: string,
++  locale: Locale,
++  draft: boolean,
++): Promise<Project | null> {
++  const payload = await getPayloadClient()
++
++  const result = await payload.find({
++    collection: 'projects',
++    locale,
++    draft,
++    depth: 2,
++    limit: 1,
++    pagination: false,
++    where: draft
++      ? { slug: { equals: slug } }
++      : { and: [{ slug: { equals: slug } }, { _status: { equals: 'published' } }] },
++  })
++
++  return result.docs[0] ?? null
++}
++
+ export const getProjectBySlug = cache(
+   async (slug: string, locale: Locale): Promise<Project | null> => {
+-    const payload = await getPayloadClient()
+-    const draft = await isDraft()
+-
+-    const result = await payload.find({
+-      collection: 'projects',
+-      locale,
+-      draft,
+-      depth: 2,
+-      limit: 1,
+-      pagination: false,
+-      where: draft
+-        ? { slug: { equals: slug } }
+-        : { and: [{ slug: { equals: slug } }, { _status: { equals: 'published' } }] },
+-    })
+-
+-    return result.docs[0] ?? null
++    if (await isDraft()) return fetchProjectBySlug(slug, locale, true)
++
++    const read = unstable_cache(
++      () => fetchProjectBySlug(slug, locale, false),
++      ['project', slug, locale],
++      { tags: ['projects'] },
++    )
++
++    return read()
+   },
+ )
+ 
+@@ -65,26 +102,154 @@ export const getProjectBySlug = cache(
+  * at the translated slug instead of at a 404. Case-study slugs are localized:
+  * `/it/work/ferro-vivo` and `/en/work/living-iron` are one project.
+  */
++async function fetchProjectAlternates(
++  id: number,
++  locales: readonly Locale[],
++): Promise<Record<string, string>> {
++  const payload = await getPayloadClient()
++
++  const entries = await Promise.all(
++    locales.map(async (locale) => {
++      const doc = await payload.findByID({
++        collection: 'projects',
++        id,
++        locale,
++        depth: 0,
++        disableErrors: true,
++      })
++
++      return [locale, doc?.slug ? `/work/${doc.slug}` : null] as const
++    }),
++  )
++
++  return Object.fromEntries(
++    entries.filter((entry): entry is [Locale, string] => Boolean(entry[1])),
++  )
++}
++
+ export const getProjectAlternates = cache(
+   async (id: number, locales: readonly Locale[]): Promise<Record<string, string>> => {
+-    const payload = await getPayloadClient()
+-
+-    const entries = await Promise.all(
+-      locales.map(async (locale) => {
+-        const doc = await payload.findByID({
+-          collection: 'projects',
+-          id,
+-          locale,
+-          depth: 0,
+-          disableErrors: true,
+-        })
+-
+-        return [locale, doc?.slug ? `/work/${doc.slug}` : null] as const
+-      }),
++    const read = unstable_cache(
++      () => fetchProjectAlternates(id, locales),
++      ['project-alternates', String(id), locales.join(',')],
++      { tags: ['projects'] },
+     )
+ 
+-    return Object.fromEntries(
+-      entries.filter((entry): entry is [Locale, string] => Boolean(entry[1])),
++    return read()
++  },
++)
++
++/**
++ * Fase 9 — le stesse liste che `clients-block.tsx`, `services-block.tsx`,
++ * `team-block.tsx`, `project-grid.tsx` e la pagina `/work` interrogavano
++ * direttamente con `getPayloadClient()`, spostate qui perché la cache con tag
++ * ha senso in un solo posto. Nessuna di queste collection ha bozze (vedi
++ * `src/collections/*.ts`), quindi possono essere cacheate incondizionatamente.
++ */
++
++export const getClientsList = cache(async (locale: Locale): Promise<Client[]> => {
++  const read = unstable_cache(
++    async () => {
++      const payload = await getPayloadClient()
++      const result = await payload.find({
++        collection: 'clients',
++        locale,
++        depth: 1,
++        limit: 30,
++        sort: 'order',
++      })
++      return result.docs
++    },
++    ['clients-list', locale],
++    { tags: ['clients'] },
++  )
++
++  return read()
++})
++
++export const getServicesList = cache(async (locale: Locale): Promise<Service[]> => {
++  const read = unstable_cache(
++    async () => {
++      const payload = await getPayloadClient()
++      const result = await payload.find({
++        collection: 'services',
++        locale,
++        depth: 0,
++        limit: 20,
++        sort: 'order',
++      })
++      return result.docs
++    },
++    ['services-list', locale],
++    { tags: ['services'] },
++  )
++
++  return read()
++})
++
++export const getTeamMembersList = cache(async (locale: Locale): Promise<TeamMember[]> => {
++  const read = unstable_cache(
++    async () => {
++      const payload = await getPayloadClient()
++      const result = await payload.find({
++        collection: 'team-members',
++        locale,
++        depth: 1,
++        limit: 30,
++        sort: 'order',
++      })
++      return result.docs
++    },
++    ['team-members-list', locale],
++    { tags: ['team-members'] },
++  )
++
++  return read()
++})
++
++export const getIndustriesList = cache(async (locale: Locale): Promise<Industry[]> => {
++  const read = unstable_cache(
++    async () => {
++      const payload = await getPayloadClient()
++      const result = await payload.find({
++        collection: 'industries',
++        locale,
++        depth: 0,
++        limit: 20,
++        sort: 'title',
++      })
++      return result.docs
++    },
++    ['industries-list', locale],
++    { tags: ['industries'] },
++  )
++
++  return read()
++})
++
++/**
++ * Elenco progetti filtrato: usato sia dal blocco griglia progetti (`featured`
++ * o per servizio) sia dall'indice `/work` (filtri da query string). `where` e
++ * `sort` entrano nella chiave di cache così combinazioni di filtri diverse non
++ * si sovrascrivono a vicenda; non sono JSON-safe per natura ma qui i valori
++ * restano sempre id, slug e stringhe letterali, mai input libero dell'utente.
++ */
++export const getProjectsList = cache(
++  async (
++    locale: Locale,
++    options: { where: Where; limit: number; sort?: string | string[] },
++  ) => {
++    const { where, limit, sort = ['order', '-year'] } = options
++
++    const read = unstable_cache(
++      async () => {
++        const payload = await getPayloadClient()
++        return payload.find({ collection: 'projects', locale, depth: 1, limit, sort, where })
++      },
++      ['projects-list', locale, JSON.stringify(where), String(limit), JSON.stringify(sort)],
++      { tags: ['projects'] },
+     )
++
++    return read()
+   },
+ )
+diff --git a/src/lib/revalidate.ts b/src/lib/revalidate.ts
+new file mode 100644
+index 0000000..0a43c0e
+--- /dev/null
++++ b/src/lib/revalidate.ts
+@@ -0,0 +1,51 @@
++import { revalidateTag } from 'next/cache'
++import type {
++  CollectionAfterChangeHook,
++  CollectionAfterDeleteHook,
++  GlobalAfterChangeHook,
++} from 'payload'
++
++/**
++ * Fase 9 — invalidazione per tag.
++ *
++ * Ogni lettura pubblica passa da `unstable_cache` con un tag per collection/
++ * global (vedi `lib/payload.ts` e `lib/queries.ts`). Questi hook sono l'altra
++ * metà: alla pubblicazione (o cancellazione) di un documento, invalidano
++ * esattamente il tag di quella collection/global, cosa che rende la pagina
++ * fresca alla prossima richiesta invece che dopo un timeout arbitrario.
++ *
++ * Granularità volutamente per collection e non per singolo documento: un
++ * salvataggio in "projects" invalida tutta la cache "projects", non solo lo
++ * slug toccato. Costa qualche lettura in più nel caso raro di pubblicazioni
++ * simultanee, evita ogni possibilità di un tag scritto male che lascia una
++ * pagina non aggiornata — scambio giudicato corretto per un sito con questo
++ * volume di pubblicazioni.
++ *
++ * Ogni hook accetta più tag: "clients", "services", "team-members" e
++ * "industries" sono anche letti per relazione dentro "pages" e "projects"
++ * (un blocco Servizi può incorporare un servizio scelto a mano), quindi il
++ * loro salvataggio invalida anche quelle due cache — altrimenti un progetto
++ * già in cache continuerebbe a mostrare il vecchio titolo di un servizio
++ * modificato.
++ */
++
++export const revalidateOnChange =
++  (...tags: string[]): CollectionAfterChangeHook =>
++  ({ doc }) => {
++    for (const tag of tags) revalidateTag(tag)
++    return doc
++  }
++
++export const revalidateOnDelete =
++  (...tags: string[]): CollectionAfterDeleteHook =>
++  ({ doc }) => {
++    for (const tag of tags) revalidateTag(tag)
++    return doc
++  }
++
++export const revalidateGlobalOnChange =
++  (...tags: string[]): GlobalAfterChangeHook =>
++  ({ doc }) => {
++    for (const tag of tags) revalidateTag(tag)
++    return doc
++  }

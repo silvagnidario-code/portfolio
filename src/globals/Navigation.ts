@@ -1,6 +1,7 @@
 import type { GlobalConfig } from 'payload'
 
 import { anyone, authenticated } from '../access/roles'
+import { revalidateGlobalOnChange } from '../lib/revalidate'
 
 /** Menu items, ordered by the editor, localized label by label. */
 export const Navigation: GlobalConfig = {
@@ -8,6 +9,7 @@ export const Navigation: GlobalConfig = {
   label: 'Navigazione',
   admin: { group: 'Configurazione' },
   access: { read: anyone, update: authenticated },
+  hooks: { afterChange: [revalidateGlobalOnChange('global:navigation')] },
   fields: [
     {
       name: 'items',

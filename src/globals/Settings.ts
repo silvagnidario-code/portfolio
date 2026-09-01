@@ -1,6 +1,7 @@
 import type { GlobalConfig } from 'payload'
 
 import { anyone, authenticated } from '../access/roles'
+import { revalidateGlobalOnChange } from '../lib/revalidate'
 
 /** Identity and contact data, everything the site needs to say who it is. */
 export const Settings: GlobalConfig = {
@@ -8,6 +9,7 @@ export const Settings: GlobalConfig = {
   label: 'Impostazioni',
   admin: { group: 'Configurazione' },
   access: { read: anyone, update: authenticated },
+  hooks: { afterChange: [revalidateGlobalOnChange('global:settings')] },
   fields: [
     {
       type: 'row',

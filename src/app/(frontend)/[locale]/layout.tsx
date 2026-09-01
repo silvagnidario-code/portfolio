@@ -29,18 +29,24 @@ type LayoutProps = {
 }
 
 /**
- * Rendered per request.
+ * Fase 9.
  *
- * The layout reads the navigation, the footer and the settings from the CMS, so
- * prerendering at build time would need a database inside the build — the
- * container image has none, and a portfolio whose menu is editable should not
- * need a redeploy to change it anyway.
+ * `force-dynamic` è stato tolto: le letture del CMS (`getGlobal`, `getPageBySlug`,
+ * `getProjectBySlug` e le liste in `lib/queries.ts`) passano ora da
+ * `unstable_cache`, taggate per collection/global e invalidate dall'hook
+ * `afterChange`/`afterDelete` di quella collection — vedi `src/lib/revalidate.ts`.
+ * Alla pubblicazione la pagina si aggiorna da sola, non a un timeout arbitrario.
  *
- * The cost is real and it is paid back in phase 9, which adds cached reads with
- * tag-based revalidation on publish; the pages become static again, only
- * refreshed by an edit instead of by a build.
+ * Una precisazione onesta su cosa NON cambia: ogni pagina di contenuto chiama
+ * `draftMode()` (in `isDraft()`, per sapere se servire una bozza) prima di
+ * decidere se leggere dalla cache — ed è una "dynamic API" di Next, che tiene
+ * la route dinamica lato rendering indipendentemente da questo flag. La
+ * funzione Vercel gira quindi ad ogni richiesta comunque; il guadagno reale è
+ * che il lavoro che fa dentro è passato da una query al database (quello che
+ * costava ~1.3s) a una lettura dalla Data Cache di Next (quasi istantanea). Il
+ * container Docker resta senza database in fase di build, quindi niente
+ * generazione statica lì — nessun cambiamento nemmeno su quel fronte.
  */
-export const dynamic = 'force-dynamic'
 
 export function generateStaticParams() {
   return routing.locales.map((locale) => ({ locale }))

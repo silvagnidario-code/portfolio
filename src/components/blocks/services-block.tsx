@@ -1,5 +1,5 @@
 import type { Locale } from '@/i18n/routing'
-import { getPayloadClient } from '@/lib/payload'
+import { getServicesList } from '@/lib/queries'
 import type { Service, ServicesBlockType } from '@/payload-types'
 
 import { BlockSection } from './block-section'
@@ -12,16 +12,7 @@ async function resolveServices(block: ServicesBlockType, locale: Locale): Promis
 
   if (selected.length > 0) return selected
 
-  const payload = await getPayloadClient()
-  const result = await payload.find({
-    collection: 'services',
-    locale,
-    depth: 0,
-    limit: 20,
-    sort: 'order',
-  })
-
-  return result.docs
+  return getServicesList(locale)
 }
 
 export async function ServicesBlock({

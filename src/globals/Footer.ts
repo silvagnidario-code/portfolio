@@ -1,12 +1,14 @@
 import type { GlobalConfig } from 'payload'
 
 import { anyone, authenticated } from '../access/roles'
+import { revalidateGlobalOnChange } from '../lib/revalidate'
 
 export const Footer: GlobalConfig = {
   slug: 'footer',
   label: 'Footer',
   admin: { group: 'Configurazione' },
   access: { read: anyone, update: authenticated },
+  hooks: { afterChange: [revalidateGlobalOnChange('global:footer')] },
   fields: [
     {
       name: 'columns',

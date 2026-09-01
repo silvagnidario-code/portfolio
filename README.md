@@ -71,12 +71,19 @@ the `prefers-reduced-motion` rule. Only the incoming half is animated; the
 outgoing half needs the router hook that arrives with the animation system in
 phase 8.
 
-**The frontend renders per request.** The layout reads its menu, footer and
-settings from the CMS, so prerendering at build time would require a database
-inside the build — the container image has none, and a menu that is editable
-should not need a redeploy to change. Phase 9 adds cached reads with tag-based
-revalidation on publish, which makes the pages static again, refreshed by an
-edit rather than by a build.
+**The frontend still executes a function on every request** — the container
+image has no database at build time, so prerendering at build is not an
+option, and every content page checks `draftMode()` to know whether to serve a
+preview, which is itself a dynamic API that keeps the route dynamic regardless
+of any `dynamic` export. Phase 9 (done) does not remove that per-request
+execution; it removes the database round-trip from inside it. Every CMS read
+(`getGlobal`, `getPageBySlug`, `getProjectBySlug`, the content lists in
+`lib/queries.ts`) goes through `unstable_cache`, tagged per collection or
+global, and an `afterChange`/`afterDelete` hook on that collection invalidates
+exactly its tag on publish (`lib/revalidate.ts`). Outside of draft mode, that
+turns most requests into a Data Cache hit instead of a Postgres query — the
+menu is still editable without a redeploy, it just stops costing a database
+round trip on every visitor.
 
 ## SEO and structured data
 

@@ -5,6 +5,7 @@ import { MediaBlock } from '../blocks/media'
 import { Prose } from '../blocks/prose'
 import { metaGroup } from '../fields/meta'
 import { slugField, slugFromTitle } from '../fields/slug'
+import { revalidateOnChange, revalidateOnDelete } from '../lib/revalidate'
 import { generatePreviewPath } from '../utilities/generate-preview-path'
 
 /**
@@ -47,7 +48,11 @@ export const Projects: CollectionConfig = {
     drafts: { autosave: { interval: 375 } },
     maxPerDoc: 25,
   },
-  hooks: { beforeValidate: [slugFromTitle('title')] },
+  hooks: {
+    beforeValidate: [slugFromTitle('title')],
+    afterChange: [revalidateOnChange('projects')],
+    afterDelete: [revalidateOnDelete('projects')],
+  },
   fields: [
     { name: 'title', type: 'text', required: true, localized: true },
     slugField('title'),

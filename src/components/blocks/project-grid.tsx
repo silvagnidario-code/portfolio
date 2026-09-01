@@ -1,5 +1,5 @@
 import type { Locale } from '@/i18n/routing'
-import { getPayloadClient } from '@/lib/payload'
+import { getProjectsList } from '@/lib/queries'
 import type { Project, ProjectGridBlock } from '@/payload-types'
 
 import { BlockSection } from './block-section'
@@ -12,13 +12,9 @@ async function resolveProjects(block: ProjectGridBlock, locale: Locale): Promise
     )
   }
 
-  const payload = await getPayloadClient()
   const service = typeof block.service === 'object' ? block.service?.id : block.service
 
-  const result = await payload.find({
-    collection: 'projects',
-    locale,
-    depth: 1,
+  const result = await getProjectsList(locale, {
     limit: block.limit ?? 6,
     sort: ['order', '-year'],
     where:

@@ -1,11 +1,13 @@
 import type { GlobalConfig } from 'payload'
 import { anyone, authenticated } from '../access/roles'
+import { revalidateGlobalOnChange } from '../lib/revalidate'
 /** Fallback metadata: what a page says about itself when it says nothing. */
 export const SeoDefaults: GlobalConfig = {
   slug: 'seo-defaults',
   label: 'SEO di default',
   admin: { group: 'Configurazione' },
   access: { read: anyone, update: authenticated },
+  hooks: { afterChange: [revalidateGlobalOnChange('global:seo-defaults')] },
   fields: [
     { name: 'siteName', type: 'text', required: true, localized: true },
     {
