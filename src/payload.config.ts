@@ -1,6 +1,5 @@
 import path from 'path'
 import { fileURLToPath } from 'url'
-
 import { postgresAdapter } from '@payloadcms/db-postgres'
 import { lexicalEditor } from '@payloadcms/richtext-lexical'
 import { s3Storage } from '@payloadcms/storage-s3'
@@ -8,7 +7,6 @@ import { en } from '@payloadcms/translations/languages/en'
 import { it } from '@payloadcms/translations/languages/it'
 import { buildConfig } from 'payload'
 import sharp from 'sharp'
-
 import { Clients } from './collections/Clients'
 import { Industries } from './collections/Industries'
 import { Media } from './collections/Media'
@@ -23,9 +21,7 @@ import { Navigation } from './globals/Navigation'
 import { SeoDefaults } from './globals/SeoDefaults'
 import { Settings } from './globals/Settings'
 import { env } from './lib/env'
-
 const dirname = path.dirname(fileURLToPath(import.meta.url))
-
 export default buildConfig({
   serverURL: env.NEXT_PUBLIC_SERVER_URL,
   admin: {
@@ -93,6 +89,11 @@ export default buildConfig({
             [env.S3_PUBLIC_URL, prefix, filename].filter(Boolean).join('/'),
         },
       },
+      // Uploads go straight from the browser to the bucket via a signed URL,
+      // bypassing Vercel's serverless function body limit (4.5MB) entirely —
+      // required for anything bigger than that, like the portfolio videos.
+      // Needs a CORS rule on the bucket allowing PUT from the site's origin.
+      clientUploads: true,
       bucket: env.S3_BUCKET,
       config: {
         region: env.S3_REGION,
