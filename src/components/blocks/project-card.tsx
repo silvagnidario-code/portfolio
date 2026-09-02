@@ -1,6 +1,7 @@
 import { MediaImage } from '@/components/media/media-image'
 import { HoverDistortion } from '@/components/motion/hover-distortion'
 import { Link } from '@/i18n/navigation'
+import { formatYearRange } from '@/lib/format'
 import type { Media, Project } from '@/payload-types'
 
 /**
@@ -54,7 +55,9 @@ export function ProjectCard({
           data-reveal="rise"
         >
           <Heading className="text-h3 text-balance">{project.title}</Heading>
-          <span className="font-mono text-caption uppercase text-ink-muted">{project.year}</span>
+          <span className="font-mono text-caption uppercase text-ink-muted">
+            {formatYearRange(project.year, project.yearEnd)}
+          </span>
         </div>
 
         <p className="mt-8 font-mono text-caption uppercase text-ink-muted" data-reveal="rise">

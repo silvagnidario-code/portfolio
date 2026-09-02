@@ -13,6 +13,7 @@ import { routing, type Locale } from '@/i18n/routing'
 import { CreativeWorkJsonLd } from '@/components/seo/json-ld'
 import { resolveProjectAccent } from '@/lib/accent'
 import { env } from '@/lib/env'
+import { formatYearRange } from '@/lib/format'
 import { alternatesForPaths } from '@/lib/metadata'
 import { ogSize } from '@/lib/og'
 import { getProjectAlternates, getProjectBySlug } from '@/lib/queries'
@@ -114,7 +115,7 @@ export default async function CaseStudyPage({ params }: PageProps) {
       <dl className="page-grid pb-96">
         {[
           { label: t('client'), value: project.client },
-          { label: t('year'), value: String(project.year) },
+          { label: t('year'), value: formatYearRange(project.year, project.yearEnd) },
           { label: t('industry'), value: industry?.title ?? null },
           { label: t('services'), value: services.map((service) => service.title).join(', ') },
         ]

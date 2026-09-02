@@ -89,13 +89,33 @@ export const Projects: CollectionConfig = {
                   admin: { width: '50%' },
                 },
                 {
-                  name: 'industry',
-                  type: 'relationship',
-                  relationTo: 'industries',
-                  required: true,
-                  admin: { width: '50%' },
+                  name: 'yearEnd',
+                  type: 'number',
+                  min: 1990,
+                  max: 2100,
+                  admin: {
+                    width: '50%',
+                    description:
+                      'Solo per un progetto che copre più anni, es. 2020–2024. Vuoto per un anno solo.',
+                  },
+                  validate: (
+                    value: number | null | undefined,
+                    { siblingData }: { siblingData: { year?: number | null } },
+                  ) => {
+                    if (value == null) return true
+                    if (typeof siblingData?.year === 'number' && value < siblingData.year) {
+                      return "L'anno di fine non può precedere l'anno di inizio."
+                    }
+                    return true
+                  },
                 },
               ],
+            },
+            {
+              name: 'industry',
+              type: 'relationship',
+              relationTo: 'industries',
+              required: true,
             },
             {
               name: 'services',

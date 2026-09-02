@@ -173,6 +173,10 @@ export interface Project {
   };
   client: string;
   year: number;
+  /**
+   * Solo per un progetto che copre più anni, es. 2020–2024. Vuoto per un anno solo.
+   */
+  yearEnd?: number | null;
   industry: number | Industry;
   /**
    * Alimenta i filtri dell'indice progetti.
@@ -1079,6 +1083,7 @@ export interface ProjectsSelect<T extends boolean = true> {
       };
   client?: T;
   year?: T;
+  yearEnd?: T;
   industry?: T;
   services?: T;
   cover?: T;

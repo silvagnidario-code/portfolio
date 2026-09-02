@@ -1,6 +1,7 @@
 import { ImageResponse } from 'next/og'
 
 import type { Locale } from '@/i18n/routing'
+import { formatYearRange } from '@/lib/format'
 import { needsCjkFont, ogFont, ogPalette, ogSize } from '@/lib/og'
 import { getProjectBySlug } from '@/lib/queries'
 
@@ -68,7 +69,9 @@ export async function GET(
         <span style={{ color: ogPalette.muted, letterSpacing: 3, textTransform: 'uppercase' }}>
           {project.client}
         </span>
-        <span style={{ color: ogPalette.muted, letterSpacing: 3 }}>{project.year}</span>
+        <span style={{ color: ogPalette.muted, letterSpacing: 3 }}>
+          {formatYearRange(project.year, project.yearEnd)}
+        </span>
       </div>
 
       <div style={{ display: 'flex', flexDirection: 'column', maxWidth: 900 }}>
