@@ -56,6 +56,16 @@ type MediaVideoProps = {
  *
  * Only carries a `<source>` — and therefore only decodes — near the
  * viewport; see the `active` effect below for why.
+ *
+ * Sizing is deliberately not left to the video itself: an element with no
+ * known dimensions collapses to the browser's placeholder box (300×150) until
+ * its metadata arrives, and with no width or height set here — `h-auto
+ * w-auto` throughout, on purpose, since the media can be any shape — that
+ * collapse-then-snap is a layout jump the viewer feels as the page lurching
+ * while they scroll. `aspectRatio` is learned once, the first time the
+ * metadata for *this* source has ever loaded, and then held in state for
+ * good: unlike `preload` and the `<source>` itself, it does not get undone by
+ * scrolling the video back out of range and losing its buffer again.
  */
 export function MediaVideo({
   src,
@@ -79,6 +89,12 @@ export function MediaVideo({
   // <source> — only videos near the viewport carry one — so a grid of eleven
   // never asks the decoder for more than a handful at a time.
   const [active, setActive] = useState(false)
+  // Once a video has been near the viewport, its `<source>` stays mounted
+  // for good — see the sizing comment below for why that matters.
+  const [everActive, setEverActive] = useState(false)
+  // The video's own aspect ratio, learned the first time its metadata loads
+  // and then never forgotten — see the sizing comment below.
+  const [aspectRatio, setAspectRatio] = useState<number | null>(null)
   // Whether the viewer paused this one on purpose, as opposed to it going
   // idle because it scrolled out of view — only the former should stay
   // paused once it scrolls back in.
@@ -93,15 +109,23 @@ export function MediaVideo({
     const onPlay = () => setPlaying(true)
     const onPause = () => setPlaying(false)
     const onVolumeChange = () => setMuted(el.muted)
+    // Learned once and kept: see the sizing comment on the container below.
+    const onLoadedMetadata = () => {
+      if (el.videoWidth > 0 && el.videoHeight > 0) {
+        setAspectRatio(el.videoWidth / el.videoHeight)
+      }
+    }
 
     el.addEventListener('play', onPlay)
     el.addEventListener('pause', onPause)
     el.addEventListener('volumechange', onVolumeChange)
+    el.addEventListener('loadedmetadata', onLoadedMetadata)
 
     return () => {
       el.removeEventListener('play', onPlay)
       el.removeEventListener('pause', onPause)
       el.removeEventListener('volumechange', onVolumeChange)
+      el.removeEventListener('loadedmetadata', onLoadedMetadata)
     }
   }, [])
 
@@ -145,6 +169,7 @@ export function MediaVideo({
     const container = containerRef.current
     if (!container || typeof IntersectionObserver === 'undefined') {
       setActive(true)
+      setEverActive(true)
       return
     }
 
@@ -159,6 +184,7 @@ export function MediaVideo({
             deactivateTimeoutRef.current = null
           }
           setActive(true)
+          setEverActive(true)
         } else if (!deactivateTimeoutRef.current) {
           deactivateTimeoutRef.current = setTimeout(() => {
             deactivateTimeoutRef.current = null
@@ -179,8 +205,10 @@ export function MediaVideo({
   }, [])
 
   // Fires on every activation and deactivation: `load()` is what actually
-  // makes a browser let go of a dropped source instead of holding onto it,
-  // and resumes playback on the way back in unless the viewer paused it.
+  // makes the browser re-evaluate `preload` and either fetch the full source
+  // or fall back to metadata-only, and resumes playback on the way back in
+  // unless the viewer paused it. It does not cost the learned `aspectRatio`
+  // above — that stays in state regardless of what the source is doing.
   useEffect(() => {
     const el = videoRef.current
     if (!el) return
@@ -266,15 +294,19 @@ export function MediaVideo({
       <video
         ref={videoRef}
         className={className}
-        style={style}
+        style={aspectRatio ? { ...style, aspectRatio: String(aspectRatio) } : style}
         playsInline
         muted
         loop
-        preload={active ? 'auto' : 'none'}
+        // `metadata` once the source has ever been active, not `none`: a
+        // metadata-only fetch is a handful of bytes, not the video, and it's
+        // what lets `aspectRatio` above get learned (and re-learned, cheaply,
+        // from cache) without paying for a full decode.
+        preload={active ? 'auto' : everActive ? 'metadata' : 'none'}
         poster={poster}
         aria-label={ariaLabel}
       >
-        {active ? <source src={src} type={mimeType ?? undefined} /> : null}
+        {everActive ? <source src={src} type={mimeType ?? undefined} /> : null}
       </video>
 
       <div
