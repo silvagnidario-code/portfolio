@@ -121,3 +121,33 @@
 :root[data-theme='light'] .project-accent {
   --accent: var(--accent-light);
 }
+
+/**
+ * The `mask` scroll reveal: a solid curtain covering `[data-reveal="mask"]`
+ * that `ScrollReveal` slides away, rather than a `clip-path` animated on the
+ * element itself. `clip-path` was the original approach, and reads simpler,
+ * but animating it on an ancestor of a `<video>` forces Chromium to rebuild
+ * that video's compositor layer on every frame of the transition — which
+ * flashes the video black for a frame or two while it catches up. A curtain
+ * never touches the video's own layer: only this unrelated, solid pseudo-
+ * element moves, so the video's paint is never disturbed.
+ *
+ * `--mask-hidden` defaults to 0 (curtain collapsed, content fully visible)
+ * so a reader with no JavaScript, or a bot with none, meets the real content
+ * rather than a stuck curtain — `ScrollReveal` is what sets it to 1 before
+ * the reveal, then animates it back down to 0.
+ */
+[data-reveal='mask'] {
+  position: relative;
+}
+
+[data-reveal='mask']::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background-color: var(--bg-primary);
+  transform-origin: top;
+  transform: scaleY(var(--mask-hidden, 0));
+  pointer-events: none;
+}

@@ -143,24 +143,27 @@ export function ScrollReveal() {
         })
       }
 
-      // `mask`: an edge-to-edge banner unveiled rather than faded in. The
-      // clip rises off it the same way everything else here rises — just as
-      // a curtain instead of a translation, which is what a full-bleed
-      // video or cover image asks for.
+      // `mask`: an edge-to-edge banner unveiled rather than faded in, by a
+      // solid curtain sliding off it — see the `[data-reveal="mask"]::after`
+      // rule in blocks.css for the curtain itself and why it's a CSS
+      // variable driving a pseudo-element rather than a `clip-path`
+      // animated directly on the target: the target is very often a video,
+      // and clipping a video's own ancestor is what used to flash it black
+      // mid-transition.
       const maskTargets = Array.from(
         document.querySelectorAll<HTMLElement>('[data-reveal="mask"]:not([data-revealed])'),
       )
 
       if (maskTargets.length > 0) {
         for (const target of maskTargets) target.dataset.revealed = 'pending'
-        gsap.set(maskTargets, { clipPath: 'inset(100% 0% 0% 0%)' })
+        gsap.set(maskTargets, { '--mask-hidden': 1 })
 
         const triggers = ScrollTrigger.batch(maskTargets, {
           start: START,
           once: true,
           onEnter: (batch) => {
             gsap.to(batch, {
-              clipPath: 'inset(0% 0% 0% 0%)',
+              '--mask-hidden': 0,
               duration: duration.slow / 1000,
               ease,
               stagger: stagger.base / 1000,
@@ -171,7 +174,7 @@ export function ScrollReveal() {
 
         disposers.push(() => {
           for (const trigger of triggers) trigger.kill()
-          gsap.set(maskTargets, { clearProps: 'clipPath' })
+          gsap.set(maskTargets, { clearProps: '--mask-hidden' })
           for (const target of maskTargets) delete target.dataset.revealed
         })
       }
