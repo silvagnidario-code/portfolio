@@ -41,7 +41,12 @@ type MediaVideoProps = {
   className?: string
   style?: CSSProperties
   ariaLabel?: string
-  /** `always` for lightbox/full-size views, `hover` for gallery thumbnails. */
+  /**
+   * `hover` reveals the bar only on mouse-over (it falls back to
+   * always-visible on touch, where there is no hover gesture to reveal it
+   * with); `always` keeps it visible regardless of input. Every current
+   * placement — gallery thumbnails and the lightbox alike — uses `hover`.
+   */
   chrome?: 'always' | 'hover'
 }
 

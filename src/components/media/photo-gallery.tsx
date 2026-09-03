@@ -170,7 +170,7 @@ export function PhotoGallery({
               sizes="90vw"
               className="max-h-[85vh] w-auto max-w-[90vw] rounded-glass-lg object-contain"
               priority
-              controls
+              controls="hover"
             />
             {active.caption || items.length > 1 ? (
               <figcaption className="text-center font-mono text-caption uppercase text-ink-inverse">
