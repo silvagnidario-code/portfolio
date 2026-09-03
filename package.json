@@ -27,6 +27,7 @@
     "prebuild": "npm run tokens && npm run fonts",
     "fonts": "tsx scripts/fetch-fonts.ts",
     "seed": "cross-env NODE_OPTIONS=--no-deprecation payload run src/seed/index.ts",
+    "fix:narrative-paragraphs": "cross-env NODE_OPTIONS=--no-deprecation payload run scripts/merge-narrative-paragraphs.ts",
     "build:deploy": "npm run tokens && npm run fonts && npm run migrate && npm run build"
   },
   "dependencies": {
