@@ -1,7 +1,6 @@
 'use client'
 import { useEffect, useRef } from 'react'
 import { MediaImage } from '@/components/media/media-image'
-import { HoverDistortion } from '@/components/motion/hover-distortion'
 import { Link } from '@/i18n/navigation'
 import type { HeroBlock } from '@/payload-types'
 import { BlockSection, Eyebrow } from './block-section'
@@ -9,8 +8,9 @@ import { BlockSection, Eyebrow } from './block-section'
  * Hero, three variants.
  *
  * The typographic one is the default of this direction: the heading occupies
- * columns 1-9 and leaves the rest empty. `webglImage` renders the still image
- * here — the distortion is bolted on in phase 8 and degrades to exactly this.
+ * columns 1-9 and leaves the rest empty. `webglImage` renders a plain still
+ * image — the WebGL hover distortion that used to sit on top of it has been
+ * removed in favor of a minimal, no-JS treatment.
  * `videoFullscreen` always carries a poster and autoplays muted.
  */
 export function Hero({ block }: { block: HeroBlock }) {
@@ -100,13 +100,8 @@ export function Hero({ block }: { block: HeroBlock }) {
       <div className="page-grid">{text}</div>
       {/* Edge-to-edge like the videoFullscreen variant above — a hero banner,
           not content in the grid — so it stays square-cornered too. */}
-      <figure className="mt-96" data-reveal="mask">
-        <HoverDistortion
-          src={typeof image === 'object' ? (image?.url ?? '') : ''}
-          className="aspect-[16/9] w-full overflow-hidden"
-        >
-          <MediaImage media={image} sizes="100vw" priority className="h-full w-full object-cover" />
-        </HoverDistortion>
+      <figure className="mt-96 aspect-[16/9] w-full overflow-hidden" data-reveal="mask">
+        <MediaImage media={image} sizes="100vw" priority className="h-full w-full object-cover" />
       </figure>
     </BlockSection>
   )
