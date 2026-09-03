@@ -42,10 +42,11 @@ type MediaVideoProps = {
   style?: CSSProperties
   ariaLabel?: string
   /**
-   * `hover` reveals the bar only on mouse-over (it falls back to
-   * always-visible on touch, where there is no hover gesture to reveal it
-   * with); `always` keeps it visible regardless of input. Every current
-   * placement — gallery thumbnails and the lightbox alike — uses `hover`.
+   * `hover` reveals the bar on mouse-over where a mouse is present, and on
+   * tap where it isn't — see the tap-reveal comment above the `tapRevealed`
+   * state below for how the two coexist. `always` keeps it visible
+   * regardless of input. Every current placement — gallery thumbnails and
+   * the lightbox alike — uses `hover`.
    */
   chrome?: 'always' | 'hover'
 }
@@ -53,11 +54,12 @@ type MediaVideoProps = {
 /**
  * Gallery and showcase videos stay silent autoplay loops by default, but they
  * gain a minimal glass control bar when the viewer needs to pause, unmute or
- * go fullscreen. The bar is always visible on touch (there's no hover to
- * reveal it there) and reveals on hover only where a mouse is actually
- * present — `pointer-fine` distinguishes the two instead of guessing from
- * screen width, since a touch laptop or a desktop with a stylus doesn't
- * split neatly along a breakpoint.
+ * go fullscreen. The bar reveals on hover where a mouse is actually present
+ * — `pointer-fine` distinguishes that from a touch screen instead of
+ * guessing from screen width, since a touch laptop or a desktop with a
+ * stylus doesn't split neatly along a breakpoint — and on touch, where
+ * there's no hover gesture to reveal it with, a tap on the video does the
+ * same job instead: see `tapRevealed` below.
  *
  * Only carries a `<source>` — and therefore only decodes — near the
  * viewport; see the `active` effect below for why. The glass control bar is
@@ -101,6 +103,13 @@ export function MediaVideo({
   // The video's own aspect ratio, learned the first time its metadata loads
   // and then never forgotten — see the sizing comment below.
   const [aspectRatio, setAspectRatio] = useState<number | null>(null)
+  // Whether a tap on the video (rather than one of its buttons) has
+  // revealed the control bar. Only meaningful for `chrome === 'hover'` on a
+  // touch device: the bar's own classes gate this behind the `pointer-coarse`
+  // media query, so setting it has no visible effect wherever the CSS hover
+  // reveal already applies. A second tap on the video, or any tap outside
+  // it, closes it again — see the two effects below.
+  const [tapRevealed, setTapRevealed] = useState(false)
   // Whether the viewer paused this one on purpose, as opposed to it going
   // idle because it scrolled out of view — only the former should stay
   // paused once it scrolls back in.
@@ -227,6 +236,37 @@ export function MediaVideo({
     }
   }, [active])
 
+  // A video that scrolls out and back in later shouldn't remember being
+  // tapped open from the last time it was near the viewport.
+  useEffect(() => {
+    if (!active) setTapRevealed(false)
+  }, [active])
+
+  // A tap anywhere else on the page closes an open bar too, not just a
+  // second tap on the video itself — otherwise it would linger over
+  // whatever the viewer scrolls to next.
+  useEffect(() => {
+    if (!tapRevealed) return
+
+    const onDocumentPointerDown = (event: PointerEvent) => {
+      if (!containerRef.current?.contains(event.target as Node)) {
+        setTapRevealed(false)
+      }
+    }
+
+    document.addEventListener('pointerdown', onDocumentPointerDown)
+    return () => document.removeEventListener('pointerdown', onDocumentPointerDown)
+  }, [tapRevealed])
+
+  // Tapping the video itself — as opposed to one of the buttons in the bar,
+  // which stop this event from bubbling here — toggles the bar open or
+  // closed. Harmless to wire up even where `chrome` is `always` or a mouse
+  // is present: the classes below only act on it under `pointer-coarse`.
+  const handleContainerClick = useCallback(() => {
+    if (chrome !== 'hover') return
+    setTapRevealed((prev) => !prev)
+  }, [chrome])
+
   const togglePlay = useCallback((event: MouseEvent) => {
     event.stopPropagation()
     const el = videoRef.current
@@ -276,6 +316,14 @@ export function MediaVideo({
     el?.webkitEnterFullscreen?.()
   }, [])
 
+  // Each button's own hit target, not just the bar's opacity: a `pointer:
+  // coarse` device with the bar still closed must let a tap on the video
+  // fall through to `handleContainerClick` rather than a button underneath
+  // silently eating it. On `always` chrome, or wherever a mouse is
+  // present, the buttons stay clickable the way they always have.
+  const buttonPointerEvents =
+    chrome === 'hover' && !tapRevealed ? 'pointer-fine:pointer-events-auto' : 'pointer-events-auto'
+
   return (
     <div
       ref={containerRef}
@@ -296,6 +344,7 @@ export function MediaVideo({
       ]
         .filter(Boolean)
         .join(' ')}
+      onClick={handleContainerClick}
     >
       <video
         ref={videoRef}
@@ -333,13 +382,22 @@ export function MediaVideo({
         <div
           className={
             chrome === 'hover'
-              ? 'pointer-events-none absolute inset-x-0 bottom-12 flex justify-center gap-16 opacity-100 transition duration-fast ease-reveal pointer-fine:opacity-0 pointer-fine:group-hover/video:opacity-100 pointer-fine:group-focus-within/video:opacity-100'
+              ? [
+                  'pointer-events-none absolute inset-x-0 bottom-12 flex justify-center gap-16 opacity-100 transition duration-fast ease-reveal',
+                  // A mouse: reveal on hover, or on keyboard focus landing on
+                  // one of the buttons inside.
+                  'pointer-fine:opacity-0 pointer-fine:group-hover/video:opacity-100 pointer-fine:group-focus-within/video:opacity-100',
+                  // No mouse: there's no hover to reveal it with, so a tap on
+                  // the video toggles `tapRevealed` instead — see
+                  // `handleContainerClick`.
+                  tapRevealed ? 'pointer-coarse:opacity-100' : 'pointer-coarse:opacity-0',
+                ].join(' ')
               : 'pointer-events-none absolute inset-x-0 bottom-16 flex justify-center gap-16 tablet:bottom-24'
           }
         >
           <GlassSurface
             variant="chrome"
-            className="pointer-events-auto rounded-glass-sm border border-line/80 shadow-none"
+            className={`${buttonPointerEvents} rounded-glass-sm border border-line/80 shadow-none`}
           >
             <button
               type="button"
@@ -354,7 +412,7 @@ export function MediaVideo({
 
           <GlassSurface
             variant="chrome"
-            className="pointer-events-auto rounded-glass-sm border border-line/80 shadow-none"
+            className={`${buttonPointerEvents} rounded-glass-sm border border-line/80 shadow-none`}
           >
             <button
               type="button"
@@ -369,7 +427,7 @@ export function MediaVideo({
 
           <GlassSurface
             variant="chrome"
-            className="pointer-events-auto rounded-glass-sm border border-line/80 shadow-none"
+            className={`${buttonPointerEvents} rounded-glass-sm border border-line/80 shadow-none`}
           >
             <button
               type="button"
