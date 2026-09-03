@@ -1,0 +1,236 @@
+From 282b460c2e130a956f0f9be51377c7b4a72976ba Mon Sep 17 00:00:00 2001
+From: Claude <noreply@anthropic.com>
+Date: Wed, 2 Sep 2026 12:01:29 +0000
+Subject: [PATCH] =?UTF-8?q?Let=20a=20project's=20year=20span=20a=20range,?=
+ =?UTF-8?q?=20e.g.=202020=E2=80=932024?=
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+The project year was a single required number. Adds an optional
+yearEnd alongside it in the admin — left empty for a project that
+happened in one year, same as before — and a formatYearRange() helper
+that renders "2020" on its own or "2020–2024" once yearEnd is set and
+actually differs, used everywhere the year is shown: the grid card,
+the case-study "Anno" field, and the share-image.
+
+Includes the hand-written Postgres migration adding year_end /
+version_year_end (numeric, matching year / version_year), since this
+is a schema change and the project's db config only auto-pushes
+schema in development.
+
+Co-Authored-By: Claude Sonnet 5 <noreply@anthropic.com>
+Claude-Session: https://claude.ai/code/session_01HxB4PXbbyDtVBArjRyHo21
+---
+ .../[locale]/work/[slug]/og/route.tsx         |  5 +++-
+ .../(frontend)/[locale]/work/[slug]/page.tsx  |  3 +-
+ src/collections/Projects.ts                   | 30 +++++++++++++++----
+ src/components/blocks/project-card.tsx        |  5 +++-
+ src/lib/format.ts                             |  9 ++++++
+ .../20260902_120032_add_project_year_end.ts   | 20 +++++++++++++
+ src/migrations/index.ts                       |  6 ++++
+ src/payload-types.ts                          |  5 ++++
+ 8 files changed, 75 insertions(+), 8 deletions(-)
+ create mode 100644 src/lib/format.ts
+ create mode 100644 src/migrations/20260902_120032_add_project_year_end.ts
+
+diff --git a/src/app/(frontend)/[locale]/work/[slug]/og/route.tsx b/src/app/(frontend)/[locale]/work/[slug]/og/route.tsx
+index eab02c2..e455667 100644
+--- a/src/app/(frontend)/[locale]/work/[slug]/og/route.tsx
++++ b/src/app/(frontend)/[locale]/work/[slug]/og/route.tsx
+@@ -1,6 +1,7 @@
+ import { ImageResponse } from 'next/og'
+ 
+ import type { Locale } from '@/i18n/routing'
++import { formatYearRange } from '@/lib/format'
+ import { needsCjkFont, ogFont, ogPalette, ogSize } from '@/lib/og'
+ import { getProjectBySlug } from '@/lib/queries'
+ 
+@@ -68,7 +69,9 @@ export async function GET(
+         <span style={{ color: ogPalette.muted, letterSpacing: 3, textTransform: 'uppercase' }}>
+           {project.client}
+         </span>
+-        <span style={{ color: ogPalette.muted, letterSpacing: 3 }}>{project.year}</span>
++        <span style={{ color: ogPalette.muted, letterSpacing: 3 }}>
++          {formatYearRange(project.year, project.yearEnd)}
++        </span>
+       </div>
+ 
+       <div style={{ display: 'flex', flexDirection: 'column', maxWidth: 900 }}>
+diff --git a/src/app/(frontend)/[locale]/work/[slug]/page.tsx b/src/app/(frontend)/[locale]/work/[slug]/page.tsx
+index f006118..16c2eca 100644
+--- a/src/app/(frontend)/[locale]/work/[slug]/page.tsx
++++ b/src/app/(frontend)/[locale]/work/[slug]/page.tsx
+@@ -13,6 +13,7 @@ import { routing, type Locale } from '@/i18n/routing'
+ import { CreativeWorkJsonLd } from '@/components/seo/json-ld'
+ import { resolveProjectAccent } from '@/lib/accent'
+ import { env } from '@/lib/env'
++import { formatYearRange } from '@/lib/format'
+ import { alternatesForPaths } from '@/lib/metadata'
+ import { ogSize } from '@/lib/og'
+ import { getProjectAlternates, getProjectBySlug } from '@/lib/queries'
+@@ -114,7 +115,7 @@ export default async function CaseStudyPage({ params }: PageProps) {
+       <dl className="page-grid pb-96">
+         {[
+           { label: t('client'), value: project.client },
+-          { label: t('year'), value: String(project.year) },
++          { label: t('year'), value: formatYearRange(project.year, project.yearEnd) },
+           { label: t('industry'), value: industry?.title ?? null },
+           { label: t('services'), value: services.map((service) => service.title).join(', ') },
+         ]
+diff --git a/src/collections/Projects.ts b/src/collections/Projects.ts
+index 286f4c6..9c2fd66 100644
+--- a/src/collections/Projects.ts
++++ b/src/collections/Projects.ts
+@@ -89,14 +89,34 @@ export const Projects: CollectionConfig = {
+                   admin: { width: '50%' },
+                 },
+                 {
+-                  name: 'industry',
+-                  type: 'relationship',
+-                  relationTo: 'industries',
+-                  required: true,
+-                  admin: { width: '50%' },
++                  name: 'yearEnd',
++                  type: 'number',
++                  min: 1990,
++                  max: 2100,
++                  admin: {
++                    width: '50%',
++                    description:
++                      'Solo per un progetto che copre più anni, es. 2020–2024. Vuoto per un anno solo.',
++                  },
++                  validate: (
++                    value: number | null | undefined,
++                    { siblingData }: { siblingData: { year?: number | null } },
++                  ) => {
++                    if (value == null) return true
++                    if (typeof siblingData?.year === 'number' && value < siblingData.year) {
++                      return "L'anno di fine non può precedere l'anno di inizio."
++                    }
++                    return true
++                  },
+                 },
+               ],
+             },
++            {
++              name: 'industry',
++              type: 'relationship',
++              relationTo: 'industries',
++              required: true,
++            },
+             {
+               name: 'services',
+               type: 'relationship',
+diff --git a/src/components/blocks/project-card.tsx b/src/components/blocks/project-card.tsx
+index ad20950..dd597ca 100644
+--- a/src/components/blocks/project-card.tsx
++++ b/src/components/blocks/project-card.tsx
+@@ -1,6 +1,7 @@
+ import { MediaImage } from '@/components/media/media-image'
+ import { HoverDistortion } from '@/components/motion/hover-distortion'
+ import { Link } from '@/i18n/navigation'
++import { formatYearRange } from '@/lib/format'
+ import type { Media, Project } from '@/payload-types'
+ 
+ /**
+@@ -54,7 +55,9 @@ export function ProjectCard({
+           data-reveal="rise"
+         >
+           <Heading className="text-h3 text-balance">{project.title}</Heading>
+-          <span className="font-mono text-caption uppercase text-ink-muted">{project.year}</span>
++          <span className="font-mono text-caption uppercase text-ink-muted">
++            {formatYearRange(project.year, project.yearEnd)}
++          </span>
+         </div>
+ 
+         <p className="mt-8 font-mono text-caption uppercase text-ink-muted" data-reveal="rise">
+diff --git a/src/lib/format.ts b/src/lib/format.ts
+new file mode 100644
+index 0000000..604e910
+--- /dev/null
++++ b/src/lib/format.ts
+@@ -0,0 +1,9 @@
++/**
++ * A project's year, optionally spanning several — "2020" on its own, or
++ * "2020–2024" when `yearEnd` is set and actually differs. An en dash, not a
++ * hyphen: the same mark the rest of the site's running text uses for a range.
++ */
++export function formatYearRange(year: number, yearEnd?: number | null): string {
++  if (!yearEnd || yearEnd === year) return String(year)
++  return `${year}–${yearEnd}`
++}
+diff --git a/src/migrations/20260902_120032_add_project_year_end.ts b/src/migrations/20260902_120032_add_project_year_end.ts
+new file mode 100644
+index 0000000..e24fa27
+--- /dev/null
++++ b/src/migrations/20260902_120032_add_project_year_end.ts
+@@ -0,0 +1,20 @@
++import { MigrateUpArgs, MigrateDownArgs, sql } from '@payloadcms/db-postgres'
++
++/**
++ * Adds the optional `yearEnd` field to `projects`, on both the live table and
++ * its draft-version counterpart — `year_end` / `version_year_end`, `numeric`
++ * to match `year` / `version_year` right next to it. Hand-written rather than
++ * generated by `payload migrate:create`: a plain column addition, same as
++ * `20260824_170500_add_gallery_variant`.
++ */
++export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
++  await db.execute(sql`
++   ALTER TABLE "projects" ADD COLUMN IF NOT EXISTS "year_end" numeric;
++  ALTER TABLE "_projects_v" ADD COLUMN IF NOT EXISTS "version_year_end" numeric;`)
++}
++
++export async function down({ db, payload, req }: MigrateDownArgs): Promise<void> {
++  await db.execute(sql`
++   ALTER TABLE "projects" DROP COLUMN IF EXISTS "year_end";
++  ALTER TABLE "_projects_v" DROP COLUMN IF EXISTS "version_year_end";`)
++}
+diff --git a/src/migrations/index.ts b/src/migrations/index.ts
+index c29092b..c2f99f7 100644
+--- a/src/migrations/index.ts
++++ b/src/migrations/index.ts
+@@ -4,6 +4,7 @@ import * as migration_20260816_220811 from './20260816_220811';
+ import * as migration_20260819_171003 from './20260819_171003';
+ import * as migration_20260824_170500_add_gallery_variant from './20260824_170500_add_gallery_variant';
+ import * as migration_20260824_170600_add_bio_block from './20260824_170600_add_bio_block';
++import * as migration_20260902_120032_add_project_year_end from './20260902_120032_add_project_year_end';
+ 
+ export const migrations = [
+   {
+@@ -36,4 +37,9 @@ export const migrations = [
+     down: migration_20260824_170600_add_bio_block.down,
+     name: '20260824_170600_add_bio_block',
+   },
++  {
++    up: migration_20260902_120032_add_project_year_end.up,
++    down: migration_20260902_120032_add_project_year_end.down,
++    name: '20260902_120032_add_project_year_end',
++  },
+ ];
+diff --git a/src/payload-types.ts b/src/payload-types.ts
+index 65be5ae..aad02e9 100644
+--- a/src/payload-types.ts
++++ b/src/payload-types.ts
+@@ -173,6 +173,10 @@ export interface Project {
+   };
+   client: string;
+   year: number;
++  /**
++   * Solo per un progetto che copre più anni, es. 2020–2024. Vuoto per un anno solo.
++   */
++  yearEnd?: number | null;
+   industry: number | Industry;
+   /**
+    * Alimenta i filtri dell'indice progetti.
+@@ -1079,6 +1083,7 @@ export interface ProjectsSelect<T extends boolean = true> {
+       };
+   client?: T;
+   year?: T;
++  yearEnd?: T;
+   industry?: T;
+   services?: T;
+   cover?: T;
+-- 
+2.43.0
+

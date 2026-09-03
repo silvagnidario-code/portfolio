@@ -1,0 +1,773 @@
+From eea4028e25ea995baf0ff9f69b3094914efd4140 Mon Sep 17 00:00:00 2001
+From: Claude <noreply@anthropic.com>
+Date: Tue, 1 Sep 2026 18:26:23 +0000
+Subject: [PATCH] Add four scroll reveal variants: rise, blur, mask, lines
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Extends the single fade-up ScrollReveal into a small system with four
+flavours, so text, photos and video each animate as what they are
+instead of all reaching for the same treatment:
+
+- rise: the original — opacity + a lift. Stays the fallback for any
+  data-animate="true" section that carries no more specific marker,
+  exactly as before, and is used explicitly for cards, stats, list
+  rows and small labels.
+- blur: a photograph settling into focus (a shorter lift, filter
+  blur to sharp) — gallery thumbnails, project covers, team and bio
+  photos, before/after pairs.
+- mask: an edge-to-edge banner unveiled with a rising clip-path
+  rather than faded — the single video-loop block, the media block's
+  own full-bleed default variant, the case-study hero image, and the
+  default hero's cover.
+- lines: a heading split into its own lines (GSAP SplitText) and
+  lifted in one at a time — case-study narrative copy and pull
+  quotes/testimonials.
+
+All four share the site's one easing and pull their distances and
+timings from the existing duration/stagger/revealDistance tokens
+(plus one new one, revealBlur, for the blur radius) — no scale, no
+rotation, same restraint the tokens already documented. CMS-authored
+blocks (MediaBlock, TeamBlock, BioBlock, TestimonialBlock) still gate
+on the editor's own settings.animate toggle; only elements that opt
+in with an explicit data-reveal, or the section-level fallback, ever
+move.
+
+Co-Authored-By: Claude Sonnet 5 <noreply@anthropic.com>
+Claude-Session: https://claude.ai/code/session_01HxB4PXbbyDtVBArjRyHo21
+---
+ .../(frontend)/[locale]/work/[slug]/page.tsx  |  36 ++-
+ src/components/blocks/bio-block.tsx           |  43 ++--
+ src/components/blocks/block-section.tsx       |   6 +-
+ src/components/blocks/hero.tsx                |   2 +-
+ src/components/blocks/media-block.tsx         |  28 ++-
+ src/components/blocks/project-card.tsx        |  29 ++-
+ src/components/blocks/team-block.tsx          |   7 +-
+ src/components/blocks/testimonial-block.tsx   |  16 +-
+ src/components/media/photo-gallery.tsx        |  11 +-
+ src/components/motion/scroll-reveal.tsx       | 217 ++++++++++++++----
+ src/tokens/brand.ts                           |   3 +
+ 11 files changed, 306 insertions(+), 92 deletions(-)
+
+diff --git a/src/app/(frontend)/[locale]/work/[slug]/page.tsx b/src/app/(frontend)/[locale]/work/[slug]/page.tsx
+index c494eb8..f006118 100644
+--- a/src/app/(frontend)/[locale]/work/[slug]/page.tsx
++++ b/src/app/(frontend)/[locale]/work/[slug]/page.tsx
+@@ -106,7 +106,7 @@ export default async function CaseStudyPage({ params }: PageProps) {
+       {project.heroMedia ? (
+         // Edge-to-edge banner, same role as the hero — square-cornered like
+         // any other full-bleed visual, not rounded like content in the grid.
+-        <figure className="mb-96">
++        <figure className="mb-96" data-reveal="mask">
+           <MediaImage media={project.heroMedia} sizes="100vw" priority className="w-full" />
+         </figure>
+       ) : null}
+@@ -135,10 +135,16 @@ export default async function CaseStudyPage({ params }: PageProps) {
+         .map((section) => (
+           <BlockSection key={section.label} settings={{ background: 'paper', spacing: 'compact' }}>
+             <div className="page-grid">
+-              <h2 className="col-span-4 tablet:col-span-2 desktop:col-span-3 font-mono text-caption uppercase text-ink-muted">
++              <h2
++                className="col-span-4 tablet:col-span-2 desktop:col-span-3 font-mono text-caption uppercase text-ink-muted"
++                data-reveal="rise"
++              >
+                 {section.label}
+               </h2>
+-              <div className="col-span-4 tablet:col-span-4 desktop:col-span-8 desktop:col-start-5">
++              <div
++                className="col-span-4 tablet:col-span-4 desktop:col-span-8 desktop:col-start-5"
++                data-reveal="lines"
++              >
+                 <RichText data={section.body} />
+               </div>
+             </div>
+@@ -149,12 +155,15 @@ export default async function CaseStudyPage({ params }: PageProps) {
+ 
+       {(project.results ?? []).length > 0 ? (
+         <BlockSection settings={{ background: 'sumi', spacing: 'wide' }}>
+-          <h2 className="page-margin mb-64 text-h2">{t('results')}</h2>
++          <h2 className="page-margin mb-64 text-h2" data-reveal="rise">
++            {t('results')}
++          </h2>
+           <dl className="page-grid gap-y-48">
+             {(project.results ?? []).map((result) => (
+               <div
+                 key={result.id ?? result.value}
+                 className="col-span-4 tablet:col-span-2 desktop:col-span-4 border-t border-line pt-24"
++                data-reveal="rise"
+               >
+                 <dt className="text-display">{result.value}</dt>
+                 {/* The delta lives inside the description: a `p` between the
+@@ -177,7 +186,9 @@ export default async function CaseStudyPage({ params }: PageProps) {
+         <BlockSection settings={{ background: 'paper', spacing: 'wide' }}>
+           <blockquote className="page-grid">
+             <div className="col-span-4 tablet:col-span-6 desktop:col-span-9 desktop:col-start-3">
+-              <p className="text-h1 text-balance">{testimonial.quote}</p>
++              <p className="text-h1 text-balance" data-reveal="lines">
++                {testimonial.quote}
++              </p>
+               <footer className="mt-32 font-mono text-caption uppercase text-ink-muted">
+                 {[testimonial.author, testimonial.role, testimonial.company]
+                   .filter(Boolean)
+@@ -195,12 +206,15 @@ export default async function CaseStudyPage({ params }: PageProps) {
+       (project.awards ?? []).length > 0 ||
+       project.liveUrl ? (
+         <BlockSection settings={{ background: 'paper', spacing: 'normal' }}>
+-          <h2 className="page-margin mb-48 font-mono text-caption uppercase text-ink-muted">
++          <h2
++            className="page-margin mb-48 font-mono text-caption uppercase text-ink-muted"
++            data-reveal="rise"
++          >
+             {t('credits')}
+           </h2>
+           <div className="page-grid gap-y-48">
+             {team.length > 0 ? (
+-              <div className="col-span-4 tablet:col-span-3 desktop:col-span-4">
++              <div className="col-span-4 tablet:col-span-3 desktop:col-span-4" data-reveal="rise">
+                 <h3 className="font-mono text-caption uppercase text-ink-muted">{t('team')}</h3>
+                 <ul className="mt-16 flex flex-col gap-8">
+                   {team.map((member) => (
+@@ -213,7 +227,7 @@ export default async function CaseStudyPage({ params }: PageProps) {
+             ) : null}
+ 
+             {(project.partners ?? []).length > 0 ? (
+-              <div className="col-span-4 tablet:col-span-3 desktop:col-span-4">
++              <div className="col-span-4 tablet:col-span-3 desktop:col-span-4" data-reveal="rise">
+                 <h3 className="font-mono text-caption uppercase text-ink-muted">{t('partners')}</h3>
+                 <ul className="mt-16 flex flex-col gap-8">
+                   {(project.partners ?? []).map((partner) => (
+@@ -226,7 +240,7 @@ export default async function CaseStudyPage({ params }: PageProps) {
+             ) : null}
+ 
+             {(project.awards ?? []).length > 0 ? (
+-              <div className="col-span-4 tablet:col-span-3 desktop:col-span-3">
++              <div className="col-span-4 tablet:col-span-3 desktop:col-span-3" data-reveal="rise">
+                 <h3 className="font-mono text-caption uppercase text-ink-muted">{t('awards')}</h3>
+                 <ul className="mt-16 flex flex-col gap-8">
+                   {(project.awards ?? []).map((award) => (
+@@ -260,7 +274,9 @@ export default async function CaseStudyPage({ params }: PageProps) {
+ 
+       {related.length > 0 ? (
+         <BlockSection settings={{ background: 'paper', spacing: 'wide' }}>
+-          <h2 className="page-margin mb-64 text-h2">{t('related')}</h2>
++          <h2 className="page-margin mb-64 text-h2" data-reveal="rise">
++            {t('related')}
++          </h2>
+           <div className="page-grid gap-y-64">
+             {related.map((item) => (
+               <div key={item.id} className="col-span-4 tablet:col-span-3 desktop:col-span-6">
+diff --git a/src/components/blocks/bio-block.tsx b/src/components/blocks/bio-block.tsx
+index bd356f6..9262332 100644
+--- a/src/components/blocks/bio-block.tsx
++++ b/src/components/blocks/bio-block.tsx
+@@ -14,6 +14,7 @@ export function BioBlock({ block }: { block: BioBlockType }) {
+   const { eyebrow, heading, body, links, photo, imagePosition, settings } = block
+ 
+   const isLeft = imagePosition === 'left'
++  const reveal = (kind: 'lines' | 'blur') => (settings?.animate ? kind : undefined)
+ 
+   return (
+     <BlockSection settings={settings}>
+@@ -24,31 +25,37 @@ export function BioBlock({ block }: { block: BioBlockType }) {
+           }`}
+         >
+           {eyebrow ? <Eyebrow>{eyebrow}</Eyebrow> : null}
+-          <h2 className="mt-16 text-h1 text-balance">{heading}</h2>
+-          <RichText data={body} className="mt-32" />
++          <h2 className="mt-16 text-h1 text-balance" data-reveal={reveal('lines')}>
++            {heading}
++          </h2>
+ 
+-          {links && links.length > 0 ? (
+-            <ul className="mt-32 flex flex-wrap gap-24">
+-              {links.map((link) => (
+-                <li key={link.id ?? link.url}>
+-                  <a
+-                    href={link.url}
+-                    rel="noreferrer"
+-                    target="_blank"
+-                    className="font-mono text-caption uppercase text-ink-2 underline underline-offset-4 transition ease-reveal duration-fast hover:text-ink"
+-                  >
+-                    {link.label}
+-                  </a>
+-                </li>
+-              ))}
+-            </ul>
+-          ) : null}
++          <div data-reveal={settings?.animate ? 'rise' : undefined}>
++            <RichText data={body} className="mt-32" />
++
++            {links && links.length > 0 ? (
++              <ul className="mt-32 flex flex-wrap gap-24">
++                {links.map((link) => (
++                  <li key={link.id ?? link.url}>
++                    <a
++                      href={link.url}
++                      rel="noreferrer"
++                      target="_blank"
++                      className="font-mono text-caption uppercase text-ink-2 underline underline-offset-4 transition ease-reveal duration-fast hover:text-ink"
++                    >
++                      {link.label}
++                    </a>
++                  </li>
++                ))}
++              </ul>
++            ) : null}
++          </div>
+         </div>
+ 
+         <div
+           className={`col-span-4 mt-32 tablet:col-span-3 tablet:mt-0 desktop:col-span-5 ${
+             isLeft ? 'desktop:col-start-1' : 'desktop:col-start-8'
+           }`}
++          data-reveal={reveal('blur')}
+         >
+           <MediaImage
+             media={photo}
+diff --git a/src/components/blocks/block-section.tsx b/src/components/blocks/block-section.tsx
+index b8d967a..b76b6d0 100644
+--- a/src/components/blocks/block-section.tsx
++++ b/src/components/blocks/block-section.tsx
+@@ -11,8 +11,10 @@ export type BlockSettings = {
+  *
+  * Background, vertical rhythm and the animation flag are resolved once here
+  * rather than in eleven components — that is what makes them common properties
+- * instead of a convention. `data-animate` is read by the scroll reveal in phase
+- * 8; nothing moves yet.
++ * instead of a convention. `data-animate` is read by `ScrollReveal`: on by
++ * default it's the whole section rising as one piece; a block that marks its
++ * own text or media with a more specific `data-reveal` gets that treatment
++ * for those parts instead, still gated by this same editor toggle.
+  */
+ export function BlockSection({
+   settings,
+diff --git a/src/components/blocks/hero.tsx b/src/components/blocks/hero.tsx
+index 91da49d..a4e02a7 100644
+--- a/src/components/blocks/hero.tsx
++++ b/src/components/blocks/hero.tsx
+@@ -100,7 +100,7 @@ export function Hero({ block }: { block: HeroBlock }) {
+       <div className="page-grid">{text}</div>
+       {/* Edge-to-edge like the videoFullscreen variant above — a hero banner,
+           not content in the grid — so it stays square-cornered too. */}
+-      <figure className="mt-96">
++      <figure className="mt-96" data-reveal="mask">
+         <HoverDistortion
+           src={typeof image === 'object' ? (image?.url ?? '') : ''}
+           className="aspect-[16/9] w-full overflow-hidden"
+diff --git a/src/components/blocks/media-block.tsx b/src/components/blocks/media-block.tsx
+index 9da0c30..45ab9f7 100644
+--- a/src/components/blocks/media-block.tsx
++++ b/src/components/blocks/media-block.tsx
+@@ -19,15 +19,26 @@ function Caption({ children }: { children?: string | null }) {
+  * as the navbar: see `radius` in `tokens/brand.ts`. The one exception is the
+  * default variant below, which runs edge-to-edge like the hero rather than
+  * sitting in the grid — that one stays square too.
++ *
++ * Each variant reveals as what it is rather than all reaching for the same
++ * `rise`: a single video unveils like a banner (`mask`), photos settle into
++ * focus (`blur`) — see `ScrollReveal` for what the four flavours mean. Still
++ * gated by the editor's own `settings.animate` toggle, same as `rise` always
++ * was.
+  */
+ export function MediaBlock({ block }: { block: MediaBlockType }) {
+   const { variant, items, video, poster, before, after, caption, settings } = block
++  const reveal = (kind: 'blur' | 'mask') => (settings?.animate ? kind : undefined)
+ 
+   if (variant === 'videoLoop') {
+     return (
+       <BlockSection settings={settings}>
+         <figure className="page-margin">
+-          <div className="mx-auto max-w-full overflow-hidden" style={{ width: 'fit-content' }}>
++          <div
++            className="mx-auto max-w-full overflow-hidden"
++            style={{ width: 'fit-content' }}
++            data-reveal={reveal('mask')}
++          >
+             {typeof video === 'object' && video?.url ? (
+               <MediaVideo
+                 src={video.url}
+@@ -54,14 +65,20 @@ export function MediaBlock({ block }: { block: MediaBlockType }) {
+       <BlockSection settings={settings}>
+         <figure>
+           <div className="page-grid">
+-            <div className="col-span-4 tablet:col-span-3 desktop:col-span-6">
++            <div
++              className="col-span-4 tablet:col-span-3 desktop:col-span-6"
++              data-reveal={reveal('blur')}
++            >
+               <MediaImage
+                 media={before}
+                 sizes="(min-width: 768px) 50vw, 100vw"
+                 className="w-full rounded-glass-lg"
+               />
+             </div>
+-            <div className="col-span-4 tablet:col-span-3 desktop:col-span-6">
++            <div
++              className="col-span-4 tablet:col-span-3 desktop:col-span-6"
++              data-reveal={reveal('blur')}
++            >
+               <MediaImage
+                 media={after}
+                 sizes="(min-width: 768px) 50vw, 100vw"
+@@ -80,7 +97,7 @@ export function MediaBlock({ block }: { block: MediaBlockType }) {
+       <BlockSection settings={settings}>
+         <figure>
+           <div className="page-margin">
+-            <PhotoGallery items={items ?? []} />
++            <PhotoGallery items={items ?? []} reveal={Boolean(settings?.animate)} />
+           </div>
+           <Caption>{caption}</Caption>
+         </figure>
+@@ -113,6 +130,7 @@ export function MediaBlock({ block }: { block: MediaBlockType }) {
+                       ? 'col-span-4 tablet:col-span-4 desktop:col-span-7'
+                       : 'col-span-4 tablet:col-span-2 desktop:col-span-4 desktop:col-start-9'
+                 }
++                data-reveal={reveal('blur')}
+               >
+                 <MediaImage
+                   media={item.media}
+@@ -141,7 +159,7 @@ export function MediaBlock({ block }: { block: MediaBlockType }) {
+   const first = (items ?? [])[0]
+   return (
+     <BlockSection settings={settings}>
+-      <figure>
++      <figure data-reveal={reveal('mask')}>
+         {/* Edge-to-edge, no page-margin — this reads as a full-bleed banner
+             like the hero, not a photo in the flow, so it stays square. */}
+         <MediaImage media={first?.media} sizes="100vw" className="w-full" controls="hover" />
+diff --git a/src/components/blocks/project-card.tsx b/src/components/blocks/project-card.tsx
+index 3b882dd..ad20950 100644
+--- a/src/components/blocks/project-card.tsx
++++ b/src/components/blocks/project-card.tsx
+@@ -36,23 +36,28 @@ export function ProjectCard({
+   return (
+     <article>
+       <Link href={`/work/${project.slug}`} className="group block">
+-        <HoverDistortion
+-          src={cover?.url ?? ''}
+-          className={`w-full overflow-hidden rounded-glass-lg ${aspect}`}
+-        >
+-          <MediaImage
+-            media={project.cover}
+-            sizes={sizes}
+-            className="h-full w-full object-cover transition ease-reveal duration-slow group-hover:opacity-90"
+-          />
+-        </HoverDistortion>
++        <div data-reveal="blur">
++          <HoverDistortion
++            src={cover?.url ?? ''}
++            className={`w-full overflow-hidden rounded-glass-lg ${aspect}`}
++          >
++            <MediaImage
++              media={project.cover}
++              sizes={sizes}
++              className="h-full w-full object-cover transition ease-reveal duration-slow group-hover:opacity-90"
++            />
++          </HoverDistortion>
++        </div>
+ 
+-        <div className="mt-24 flex flex-wrap items-baseline justify-between gap-16">
++        <div
++          className="mt-24 flex flex-wrap items-baseline justify-between gap-16"
++          data-reveal="rise"
++        >
+           <Heading className="text-h3 text-balance">{project.title}</Heading>
+           <span className="font-mono text-caption uppercase text-ink-muted">{project.year}</span>
+         </div>
+ 
+-        <p className="mt-8 font-mono text-caption uppercase text-ink-muted">
++        <p className="mt-8 font-mono text-caption uppercase text-ink-muted" data-reveal="rise">
+           {[project.client, ...services.map((service) => service.title)].join(' · ')}
+         </p>
+       </Link>
+diff --git a/src/components/blocks/team-block.tsx b/src/components/blocks/team-block.tsx
+index 9a2f57a..a0fd267 100644
+--- a/src/components/blocks/team-block.tsx
++++ b/src/components/blocks/team-block.tsx
+@@ -21,6 +21,7 @@ export async function TeamBlock({ block, locale }: { block: TeamBlockType; local
+   if (members.length === 0) return null
+ 
+   const MemberHeading = block.heading ? 'h3' : 'h2'
++  const reveal = (kind: 'rise' | 'blur') => (block.settings?.animate ? kind : undefined)
+ 
+   // A block with neither heading nor intro must not reserve the space for them.
+   const intro =
+@@ -46,6 +47,7 @@ export async function TeamBlock({ block, locale }: { block: TeamBlockType; local
+             <li
+               key={member.id}
+               className="col-span-4 tablet:col-span-6 desktop:col-span-10 desktop:col-start-2 border-t border-line py-32"
++              data-reveal={reveal('rise')}
+             >
+               <div className="flex flex-col gap-8 tablet:flex-row tablet:items-baseline tablet:justify-between">
+                 <MemberHeading className="text-h2">{member.name}</MemberHeading>
+@@ -72,7 +74,10 @@ export async function TeamBlock({ block, locale }: { block: TeamBlockType; local
+               index % 2 === 1 ? 'desktop:mt-96' : ''
+             }`}
+           >
+-            <div className="aspect-[3/4] w-full overflow-hidden rounded-glass-lg">
++            <div
++              className="aspect-[3/4] w-full overflow-hidden rounded-glass-lg"
++              data-reveal={reveal('blur')}
++            >
+               <MediaImage
+                 media={member.photo}
+                 sizes="(min-width: 1180px) 25vw, (min-width: 768px) 50vw, 50vw"
+diff --git a/src/components/blocks/testimonial-block.tsx b/src/components/blocks/testimonial-block.tsx
+index cf27a6f..efa4a0b 100644
+--- a/src/components/blocks/testimonial-block.tsx
++++ b/src/components/blocks/testimonial-block.tsx
+@@ -23,6 +23,8 @@ export function TestimonialBlock({ block }: { block: TestimonialBlockType }) {
+ 
+   if (testimonials.length === 0) return null
+ 
++  const reveal = (kind: 'rise' | 'blur' | 'lines') => (block.settings?.animate ? kind : undefined)
++
+   if (block.variant === 'slider') {
+     return (
+       <BlockSection settings={block.settings}>
+@@ -35,6 +37,7 @@ export function TestimonialBlock({ block }: { block: TestimonialBlockType }) {
+             <blockquote
+               key={testimonial.id}
+               className="w-[85vw] shrink-0 snap-start border-t border-line pt-24 tablet:w-[45vw]"
++              data-reveal={reveal('rise')}
+             >
+               <p className="text-h3 text-balance">{testimonial.quote}</p>
+               <Attribution testimonial={testimonial} />
+@@ -51,11 +54,16 @@ export function TestimonialBlock({ block }: { block: TestimonialBlockType }) {
+     return (
+       <BlockSection settings={block.settings}>
+         <div className="page-grid items-start">
+-          <div className="col-span-4 tablet:col-span-2 desktop:col-span-3">
++          <div
++            className="col-span-4 tablet:col-span-2 desktop:col-span-3"
++            data-reveal={reveal('blur')}
++          >
+             <MediaImage media={first.logo} sizes="200px" className="w-[160px]" />
+           </div>
+           <blockquote className="col-span-4 tablet:col-span-4 desktop:col-span-8 desktop:col-start-5">
+-            <p className="text-h2 text-balance">{first.quote}</p>
++            <p className="text-h2 text-balance" data-reveal={reveal('lines')}>
++              {first.quote}
++            </p>
+             <Attribution testimonial={first} />
+           </blockquote>
+         </div>
+@@ -67,7 +75,9 @@ export function TestimonialBlock({ block }: { block: TestimonialBlockType }) {
+     <BlockSection settings={block.settings}>
+       <div className="page-grid">
+         <blockquote className="col-span-4 tablet:col-span-6 desktop:col-span-9 desktop:col-start-3">
+-          <p className="text-h1 text-balance">{first.quote}</p>
++          <p className="text-h1 text-balance" data-reveal={reveal('lines')}>
++            {first.quote}
++          </p>
+           <Attribution testimonial={first} />
+         </blockquote>
+       </div>
+diff --git a/src/components/media/photo-gallery.tsx b/src/components/media/photo-gallery.tsx
+index c373e60..0122301 100644
+--- a/src/components/media/photo-gallery.tsx
++++ b/src/components/media/photo-gallery.tsx
+@@ -21,7 +21,15 @@ type GalleryItem = NonNullable<MediaBlockType['items']>[number]
+  * unlike the rest of `MediaBlock` this branch pays the JS cost deliberately
+  * instead of leaking it into the server-rendered variants.
+  */
+-export function PhotoGallery({ items }: { items: GalleryItem[] }) {
++export function PhotoGallery({
++  items,
++  reveal = false,
++}: {
++  items: GalleryItem[]
++  /** Blur each thumbnail in as the grid scrolls into view — off by default,
++   * set by the block's own `settings.animate` toggle. */
++  reveal?: boolean
++}) {
+   const t = useTranslations('PhotoGallery')
+   const [activeIndex, setActiveIndex] = useState<number | null>(null)
+ 
+@@ -72,6 +80,7 @@ export function PhotoGallery({ items }: { items: GalleryItem[] }) {
+             aria-haspopup="dialog"
+             aria-label={t('open', { index: index + 1, total: items.length })}
+             className="group relative block w-full break-inside-avoid overflow-hidden rounded-glass-lg text-left"
++            data-reveal={reveal ? 'blur' : undefined}
+           >
+             <MediaImage
+               media={item.media}
+diff --git a/src/components/motion/scroll-reveal.tsx b/src/components/motion/scroll-reveal.tsx
+index cfe0da9..9cfed91 100644
+--- a/src/components/motion/scroll-reveal.tsx
++++ b/src/components/motion/scroll-reveal.tsx
+@@ -3,24 +3,35 @@
+ import { usePathname } from 'next/navigation'
+ import { useEffect } from 'react'
+ 
+-import { duration, revealDistance, stagger } from '@/tokens/brand'
++import { duration, revealBlur, revealDistance, stagger } from '@/tokens/brand'
+ 
+ import { registerRevealEase } from './gsap-ease'
+ import { useMayAnimate } from './motion-preferences'
+ 
+ /**
+- * The one scroll reveal on the site.
++ * The scroll reveals — four flavours sharing one clock.
+  *
+- * It is declarative and central: blocks mark themselves with `data-animate`
+- * (BlockSection already emits it) and this component finds them. No component
+- * animates itself, so there is exactly one place where the timing, the
+- * distance and the easing live — and exactly one place to switch off.
++ * It is declarative and central: elements mark themselves in the markup and
++ * this component finds them. No component animates itself, so there is
++ * exactly one place where the timing, the distances and the easing live —
++ * and exactly one place to switch off.
++ *
++ * `rise` (opacity + a lift) is the original and still the fallback: a
++ * `data-animate="true"` section — BlockSection already emits it, gated by
++ * the editor's own toggle — that carries no more specific marker inside it
++ * reveals as one `rise` unit, exactly as before. An element can instead opt
++ * into a treatment that suits what it actually is, with its own
++ * `data-reveal`: `rise` on its own (a card, a stat, a list row), `blur` for a
++ * photograph settling into focus, `mask` for a banner unveiled edge to edge
++ * rather than faded, or `lines` for a heading that rises in one line at a
++ * time. All four share the site's one easing, and pull their distances and
++ * timings from the same tokens `rise` always used.
+  *
+  * Elements are *not* hidden in the markup: the hidden state is set from
+  * JavaScript, a frame before the trigger is built. Without that, a reader with
+  * JavaScript disabled or a bot with no scripting would meet a blank page.
+  */
+-const SELECTOR = '[data-animate="true"]:not([data-revealed])'
++const START = 'top 85%'
+ 
+ export function ScrollReveal() {
+   const mayAnimate = useMayAnimate()
+@@ -33,53 +44,181 @@ export function ScrollReveal() {
+     let cancelled = false
+ 
+     const start = async () => {
+-      const [gsapModule, { ScrollTrigger }, customEase] = await Promise.all([
++      const [gsapModule, { ScrollTrigger }, customEase, splitTextModule] = await Promise.all([
+         import('gsap'),
+         import('gsap/ScrollTrigger'),
+         import('gsap/CustomEase'),
++        import('gsap/SplitText'),
+       ])
+ 
+       if (cancelled) return
+ 
+       const { gsap } = gsapModule
+-      gsap.registerPlugin(ScrollTrigger)
++      const { SplitText } = splitTextModule
++      gsap.registerPlugin(ScrollTrigger, SplitText)
+       const ease = registerRevealEase(gsapModule, customEase)
+ 
+-      const targets = Array.from(document.querySelectorAll<HTMLElement>(SELECTOR))
+-      if (targets.length === 0) return
+-
+-      for (const target of targets) target.dataset.revealed = 'pending'
+-
+-      gsap.set(targets, { opacity: 0, y: revealDistance.max })
+-
+-      const triggers = ScrollTrigger.batch(targets, {
+-        // Enough of the section visible to be worth announcing, not so much
+-        // that the reveal happens after the reader has already read it.
+-        start: 'top 85%',
+-        once: true,
+-        onEnter: (batch) => {
+-          gsap.to(batch, {
+-            opacity: 1,
+-            y: 0,
+-            duration: duration.slow / 1000,
+-            ease,
+-            stagger: stagger.base / 1000,
+-            onComplete: () => {
+-              for (const element of batch) {
+-                if (element instanceof HTMLElement) element.dataset.revealed = 'true'
+-              }
+-            },
+-          })
+-        },
+-      })
++      const disposers: Array<() => void> = []
++
++      const markRevealed = (batch: Element[]) => {
++        for (const element of batch) {
++          if (element instanceof HTMLElement) element.dataset.revealed = 'true'
++        }
++      }
++
++      // `rise`: an explicit `data-reveal="rise"` element, or — the original
++      // behaviour — a `data-animate="true"` section with no more specific
++      // marker inside it, revealed as one piece.
++      const explicitRise = Array.from(
++        document.querySelectorAll<HTMLElement>('[data-reveal="rise"]:not([data-revealed])'),
++      )
++      const implicitSections = Array.from(
++        document.querySelectorAll<HTMLElement>('[data-animate="true"]:not([data-revealed])'),
++      ).filter((section) => !section.querySelector('[data-reveal]'))
++      const riseTargets = [...explicitRise, ...implicitSections]
++
++      if (riseTargets.length > 0) {
++        for (const target of riseTargets) target.dataset.revealed = 'pending'
++        gsap.set(riseTargets, { opacity: 0, y: revealDistance.max })
++
++        const triggers = ScrollTrigger.batch(riseTargets, {
++          // Enough of the section visible to be worth announcing, not so much
++          // that the reveal happens after the reader has already read it.
++          start: START,
++          once: true,
++          onEnter: (batch) => {
++            gsap.to(batch, {
++              opacity: 1,
++              y: 0,
++              duration: duration.slow / 1000,
++              ease,
++              stagger: stagger.base / 1000,
++              onComplete: () => markRevealed(batch),
++            })
++          },
++        })
++
++        disposers.push(() => {
++          for (const trigger of triggers) trigger.kill()
++          gsap.set(riseTargets, { clearProps: 'opacity,transform' })
++          for (const target of riseTargets) delete target.dataset.revealed
++        })
++      }
++
++      // `blur`: a photograph settling into focus. A shorter lift than
++      // `rise` and a tighter stagger — it's meant to read as one grid
++      // filling in, not as separate arrivals.
++      const blurTargets = Array.from(
++        document.querySelectorAll<HTMLElement>('[data-reveal="blur"]:not([data-revealed])'),
++      )
++
++      if (blurTargets.length > 0) {
++        for (const target of blurTargets) target.dataset.revealed = 'pending'
++        gsap.set(blurTargets, {
++          opacity: 0,
++          y: revealDistance.min,
++          filter: `blur(${revealBlur.max}px)`,
++        })
++
++        const triggers = ScrollTrigger.batch(blurTargets, {
++          start: START,
++          once: true,
++          onEnter: (batch) => {
++            gsap.to(batch, {
++              opacity: 1,
++              y: 0,
++              filter: 'blur(0px)',
++              duration: duration.slow / 1000,
++              ease,
++              stagger: stagger.min / 1000,
++              onComplete: () => markRevealed(batch),
++            })
++          },
++        })
++
++        disposers.push(() => {
++          for (const trigger of triggers) trigger.kill()
++          gsap.set(blurTargets, { clearProps: 'opacity,transform,filter' })
++          for (const target of blurTargets) delete target.dataset.revealed
++        })
++      }
++
++      // `mask`: an edge-to-edge banner unveiled rather than faded in. The
++      // clip rises off it the same way everything else here rises — just as
++      // a curtain instead of a translation, which is what a full-bleed
++      // video or cover image asks for.
++      const maskTargets = Array.from(
++        document.querySelectorAll<HTMLElement>('[data-reveal="mask"]:not([data-revealed])'),
++      )
++
++      if (maskTargets.length > 0) {
++        for (const target of maskTargets) target.dataset.revealed = 'pending'
++        gsap.set(maskTargets, { clipPath: 'inset(100% 0% 0% 0%)' })
++
++        const triggers = ScrollTrigger.batch(maskTargets, {
++          start: START,
++          once: true,
++          onEnter: (batch) => {
++            gsap.to(batch, {
++              clipPath: 'inset(0% 0% 0% 0%)',
++              duration: duration.slow / 1000,
++              ease,
++              stagger: stagger.base / 1000,
++              onComplete: () => markRevealed(batch),
++            })
++          },
++        })
++
++        disposers.push(() => {
++          for (const trigger of triggers) trigger.kill()
++          gsap.set(maskTargets, { clearProps: 'clipPath' })
++          for (const target of maskTargets) delete target.dataset.revealed
++        })
++      }
++
++      // `lines`: text split into its own lines and lifted in one at a time.
++      // Each heading is its own sequence, triggered independently when it
++      // individually crosses the threshold, rather than a batch of separate
++      // elements arriving together.
++      const lineTargets = Array.from(
++        document.querySelectorAll<HTMLElement>('[data-reveal="lines"]:not([data-revealed])'),
++      )
++
++      for (const target of lineTargets) {
++        target.dataset.revealed = 'pending'
++        const split = SplitText.create(target, { type: 'lines', mask: 'lines' })
++        gsap.set(split.lines, { opacity: 0, y: revealDistance.max })
++
++        const trigger = ScrollTrigger.create({
++          trigger: target,
++          start: START,
++          once: true,
++          onEnter: () => {
++            gsap.to(split.lines, {
++              opacity: 1,
++              y: 0,
++              duration: duration.slow / 1000,
++              ease,
++              stagger: stagger.min / 1000,
++              onComplete: () => {
++                target.dataset.revealed = 'true'
++              },
++            })
++          },
++        })
++
++        disposers.push(() => {
++          trigger.kill()
++          split.revert()
++          delete target.dataset.revealed
++        })
++      }
+ 
+       // Anything already on screen at load must not wait for a scroll event.
+       ScrollTrigger.refresh()
+ 
+       dispose = () => {
+-        for (const trigger of triggers) trigger.kill()
+-        gsap.set(targets, { clearProps: 'opacity,transform' })
+-        for (const target of targets) delete target.dataset.revealed
++        for (const teardown of disposers) teardown()
+       }
+     }
+ 
+diff --git a/src/tokens/brand.ts b/src/tokens/brand.ts
+index 853f8d9..e869b07 100644
+--- a/src/tokens/brand.ts
++++ b/src/tokens/brand.ts
+@@ -111,6 +111,9 @@ export const stagger = { min: 80, base: 100, max: 120 } as const
+ /** Translation distance for reveal animations. Never scale, never rotation. */
+ export const revealDistance = { min: 16, max: 24 } as const
+ 
++/** Blur radius, in px, for the `blur` reveal — photographic, not a loading spinner. */
++export const revealBlur = { max: 10 } as const
++
+ /**
+  * Radii. Layout containers stay square: content is paper. Photos and video
+  * are the one exception — they carry the same wide continuous corner as the
+-- 
+2.43.0
+

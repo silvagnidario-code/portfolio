@@ -1,0 +1,33 @@
+diff --git a/src/styles/tokens.generated.css b/src/styles/tokens.generated.css
+index 8c7fd7c..49c31d2 100644
+--- a/src/styles/tokens.generated.css
++++ b/src/styles/tokens.generated.css
+@@ -78,11 +78,11 @@
+   --ls-h3: 0em;
+   --fw-h3: 400;
+   --fs-body-lg: clamp(1.125rem, 1.0417rem + 0.3704vw, 1.375rem);
+-  --lh-body-lg: 1.8;
++  --lh-body-lg: 1.5;
+   --ls-body-lg: 0.01em;
+   --fw-body-lg: 400;
+   --fs-body: clamp(1rem, 0.9583rem + 0.1852vw, 1.125rem);
+-  --lh-body: 1.8;
++  --lh-body: 1.5;
+   --ls-body: 0em;
+   --fw-body: 400;
+   --fs-caption: clamp(0.75rem, 0.7292rem + 0.0926vw, 0.8125rem);
+diff --git a/src/tokens/brand.ts b/src/tokens/brand.ts
+index e869b07..535d4a3 100644
+--- a/src/tokens/brand.ts
++++ b/src/tokens/brand.ts
+@@ -82,8 +82,8 @@ export const typeScale = {
+   h1: { min: 34, max: 72, lineHeight: 1.15, tracking: 0, weight: 300 },
+   h2: { min: 27, max: 48, lineHeight: 1.2, tracking: 0, weight: 400 },
+   h3: { min: 22, max: 32, lineHeight: 1.25, tracking: 0, weight: 400 },
+-  bodyLg: { min: 18, max: 22, lineHeight: 1.8, tracking: 0.01, weight: 400 },
+-  body: { min: 16, max: 18, lineHeight: 1.8, tracking: 0, weight: 400 },
++  bodyLg: { min: 18, max: 22, lineHeight: 1.5, tracking: 0.01, weight: 400 },
++  body: { min: 16, max: 18, lineHeight: 1.5, tracking: 0, weight: 400 },
+   caption: { min: 12, max: 13, lineHeight: 1.4, tracking: 0.12, weight: 500, uppercase: true },
+ } as const satisfies Record<string, TypeGrade>
+ 

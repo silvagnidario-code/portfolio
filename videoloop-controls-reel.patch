@@ -1,0 +1,61 @@
+From 3af6ffe3702bf0b42acc27c0a13440c757009691 Mon Sep 17 00:00:00 2001
+From: Claude <noreply@anthropic.com>
+Date: Tue, 1 Sep 2026 13:48:33 +0000
+Subject: [PATCH] Add controls to the videoLoop media block variant
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Used for standalone showcase videos (e.g. the /work/reel page, seven
+of these back to back) — was still a plain, uncontrolled <video>.
+Swaps it for MediaVideo, same as the gallery and pair variants, so it
+gets play/pause, mute, fullscreen, mobile visibility and the
+near-viewport lazy loading all the others already have.
+---
+ src/components/blocks/media-block.tsx | 16 ++++++----------
+ 1 file changed, 6 insertions(+), 10 deletions(-)
+
+diff --git a/src/components/blocks/media-block.tsx b/src/components/blocks/media-block.tsx
+index 02f4b2f..d3c814d 100644
+--- a/src/components/blocks/media-block.tsx
++++ b/src/components/blocks/media-block.tsx
+@@ -1,4 +1,5 @@
+ import { MediaImage } from '@/components/media/media-image'
++import { MediaVideo } from '@/components/media/media-video'
+ import { PhotoGallery } from '@/components/media/photo-gallery'
+ import type { MediaBlockType } from '@/payload-types'
+ import { BlockSection } from './block-section'
+@@ -25,17 +26,12 @@ export function MediaBlock({ block }: { block: MediaBlockType }) {
+         <figure className="page-margin">
+           <div className="mx-auto max-w-full overflow-hidden" style={{ width: 'fit-content' }}>
+             {typeof video === 'object' && video?.url ? (
+-              <video
++              <MediaVideo
++                src={video.url}
++                mimeType={video.mimeType}
+                 className="block h-auto max-h-[80vh] w-auto max-w-full"
+-                autoPlay
+-                playsInline
+-                muted
+-                loop
+-                preload="auto"
+                 poster={typeof poster === 'object' ? (poster?.url ?? undefined) : undefined}
+-              >
+-                <source src={video.url} type={video.mimeType ?? undefined} />
+-              </video>
++              />
+             ) : (
+               <MediaImage
+                 media={poster}
+@@ -139,7 +135,7 @@ export function MediaBlock({ block }: { block: MediaBlockType }) {
+   return (
+     <BlockSection settings={settings}>
+       <figure>
+-        <MediaImage media={first?.media} sizes="100vw" className="w-full"  controls="hover"/>
++        <MediaImage media={first?.media} sizes="100vw" className="w-full" controls="hover" />
+         <Caption>{first?.caption ?? caption}</Caption>
+       </figure>
+     </BlockSection>
+-- 
+2.43.0
+

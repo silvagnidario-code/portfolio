@@ -1,0 +1,105 @@
+From 7057a69a9f4e2e90379f429fbc249c4d9517b64b Mon Sep 17 00:00:00 2001
+From: Claude <noreply@anthropic.com>
+Date: Wed, 2 Sep 2026 12:04:29 +0000
+Subject: [PATCH] =?UTF-8?q?Rendi=20pi=C3=B9=20minimali=20i=20filtri=20nell?=
+ =?UTF-8?q?a=20pagina=20/work?=
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Il riquadro "vetro" (blur, bordo, ombra) e le pillole a sfondo pieno
+sull'opzione attiva risultavano troppo pesanti rispetto al resto della
+pagina. Ora i filtri sono testo semplice appoggiato sulla pagina, con
+una sottile linea orizzontale sotto al gruppo e un trattino/underline
+per segnalare la voce attiva, coerente con le altre divisorie sottili
+già usate nel sito (es. FAQ).
+
+La variante "pill" del materiale glass non è usata altrove, quindi
+questa modifica non tocca navbar, cursore o altre superfici glass.
+
+Co-Authored-By: Claude Sonnet 5 <noreply@anthropic.com>
+Claude-Session: https://claude.ai/code/session_01DPPv9qSguLEf5aSKNJUWkv
+---
+ src/components/work/work-filters.tsx | 31 ++++++++++++++--------------
+ 1 file changed, 15 insertions(+), 16 deletions(-)
+
+diff --git a/src/components/work/work-filters.tsx b/src/components/work/work-filters.tsx
+index 84e7a47..d884984 100644
+--- a/src/components/work/work-filters.tsx
++++ b/src/components/work/work-filters.tsx
+@@ -1,6 +1,5 @@
+ import { getTranslations } from 'next-intl/server'
+ 
+-import { GlassSurface } from '@/components/glass/glass-surface'
+ import { Link } from '@/i18n/navigation'
+ import type { Industry, Service } from '@/payload-types'
+ 
+@@ -13,10 +12,10 @@ export type WorkFilter = { service?: string; industry?: string }
+  * query string, so the index works without JavaScript, every state has its own
+  * URL, and a reader can go back out of a filter.
+  *
+- * The specification calls the pills glass. One tray of glass holds all of them
+- * instead of one surface per pill: eight glass surfaces would blow the budget
+- * of four on their own, and a pane inside a pane blurs an already blurred
+- * backdrop.
++ * Deliberately quiet: plain text set directly on the page, no glass tray, no
++ * filled pills. An active filter is marked by an underline and nothing
++ * louder — the work below is what's meant to carry visual weight, not the
++ * controls above it.
+  */
+ export async function WorkFilters({
+   services,
+@@ -43,8 +42,10 @@ export async function WorkFilters({
+       key={`${label}-${target}`}
+       href={target}
+       aria-current={isActive ? 'true' : undefined}
+-      className={`rounded-glass-sm px-16 py-8 font-mono text-caption uppercase transition ease-reveal duration-fast ${
+-        isActive ? 'bg-ink text-ink-inverse' : 'text-ink-2 hover:text-ink'
++      className={`border-b py-8 font-mono text-caption uppercase transition ease-reveal duration-fast ${
++        isActive
++          ? 'border-ink text-ink'
++          : 'border-transparent text-ink-muted hover:border-line-strong hover:text-ink'
+       }`}
+     >
+       {label}
+@@ -54,14 +55,12 @@ export async function WorkFilters({
+   const hasFilter = Boolean(active.service ?? active.industry)
+ 
+   return (
+-    <GlassSurface
+-      as="section"
+-      variant="pill"
++    <section
+       aria-label={t('filters')}
+-      className="flex flex-col gap-16 px-24 py-16 tablet:flex-row tablet:items-center tablet:gap-32"
++      className="flex flex-col gap-16 border-b border-line pb-24 tablet:flex-row tablet:items-center tablet:gap-32"
+     >
+-      <div className="flex flex-wrap items-center gap-8">
+-        <span className="pr-8 font-mono text-caption uppercase text-ink-muted">
++      <div className="flex flex-wrap items-center gap-16">
++        <span className="font-mono text-caption uppercase text-ink-muted">
+           {t('byService')}
+         </span>
+         {pill(t('allProjects'), href({ industry: active.industry }), !active.service)}
+@@ -74,8 +73,8 @@ export async function WorkFilters({
+         )}
+       </div>
+ 
+-      <div className="flex flex-wrap items-center gap-8">
+-        <span className="pr-8 font-mono text-caption uppercase text-ink-muted">
++      <div className="flex flex-wrap items-center gap-16">
++        <span className="font-mono text-caption uppercase text-ink-muted">
+           {t('byIndustry')}
+         </span>
+         {pill(t('allProjects'), href({ service: active.service }), !active.industry)}
+@@ -96,6 +95,6 @@ export async function WorkFilters({
+           {t('clear')}
+         </Link>
+       ) : null}
+-    </GlassSurface>
++    </section>
+   )
+ }
+-- 
+2.43.0
+

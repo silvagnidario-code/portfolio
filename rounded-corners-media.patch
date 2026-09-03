@@ -1,0 +1,339 @@
+From 68971439be637a49c2a68c071efd4e07f2261fa2 Mon Sep 17 00:00:00 2001
+From: Claude <noreply@anthropic.com>
+Date: Tue, 1 Sep 2026 17:22:48 +0000
+Subject: [PATCH] Round the corners on photos and video, matching the navbar
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Every content photo and video now carries rounded-glass-lg — the same
+28px continuous corner as the header pill — instead of the site's
+previous square-cornered rule for media. The one deliberate exception
+is a full-bleed background: the videoFullscreen hero variant stays
+square, since it's the page's backdrop rather than content on its
+own. A video keeps its rounding right up until it goes fullscreen,
+where it squares off automatically (a rounded corner on a
+screen-filling video reads as a border, not a shape choice).
+
+Touches: the gallery grid and lightbox, the pair/beforeAfter/videoLoop
+and default media-block variants, project and team member photos, the
+project case-study cover, and the project-card hover-distortion cover
+(rounds the WebGL canvas overlay along with the image underneath it,
+since they share one clipped container). Client and testimonial logos
+are left alone — they're marks, not photography.
+
+Updates the design-token comment and the styleguide's shape/radius
+copy (it/en/zh) to describe the new rule instead of the old
+"zero radius on media" one, so the documentation stays honest.
+---
+ package-lock.json                             | 11 ++++++++
+ .../(frontend)/[locale]/work/[slug]/page.tsx  | 15 ++++++-----
+ src/components/blocks/bio-block.tsx           |  2 +-
+ src/components/blocks/hero.tsx                |  4 ++-
+ src/components/blocks/media-block.tsx         | 26 +++++++++++++------
+ src/components/blocks/project-card.tsx        |  5 +++-
+ src/components/blocks/team-block.tsx          |  2 +-
+ src/components/media/media-video.tsx          |  4 +++
+ src/components/media/photo-gallery.tsx        |  4 +--
+ src/messages/en.json                          |  2 +-
+ src/messages/it.json                          |  2 +-
+ src/messages/zh.json                          |  2 +-
+ src/tokens/brand.ts                           |  6 +++--
+ 13 files changed, 59 insertions(+), 26 deletions(-)
+
+diff --git a/package-lock.json b/package-lock.json
+index a3c64aa..8495341 100644
+--- a/package-lock.json
++++ b/package-lock.json
+@@ -10259,6 +10259,17 @@
+         }
+       }
+     },
++    "node_modules/next-intl/node_modules/@swc/helpers": {
++      "version": "0.5.23",
++      "resolved": "https://registry.npmjs.org/@swc/helpers/-/helpers-0.5.23.tgz",
++      "integrity": "sha512-5lSsMOTXURePglDfvuAQUqkGek9Hg2kksOYay2m0+XR++b2NWYL/4sWyuvVBIs8oKnJaxkdi9whaL/sqN13afw==",
++      "license": "Apache-2.0",
++      "optional": true,
++      "peer": true,
++      "dependencies": {
++        "tslib": "^2.8.0"
++      }
++    },
+     "node_modules/node-addon-api": {
+       "version": "7.1.1",
+       "resolved": "https://registry.npmjs.org/node-addon-api/-/node-addon-api-7.1.1.tgz",
+diff --git a/src/app/(frontend)/[locale]/work/[slug]/page.tsx b/src/app/(frontend)/[locale]/work/[slug]/page.tsx
+index 689f061..e88d2f7 100644
+--- a/src/app/(frontend)/[locale]/work/[slug]/page.tsx
++++ b/src/app/(frontend)/[locale]/work/[slug]/page.tsx
+@@ -105,7 +105,12 @@ export default async function CaseStudyPage({ params }: PageProps) {
+ 
+       {project.heroMedia ? (
+         <figure className="mb-96">
+-          <MediaImage media={project.heroMedia} sizes="100vw" priority className="w-full" />
++          <MediaImage
++            media={project.heroMedia}
++            sizes="100vw"
++            priority
++            className="w-full rounded-glass-lg"
++          />
+         </figure>
+       ) : null}
+ 
+@@ -212,9 +217,7 @@ export default async function CaseStudyPage({ params }: PageProps) {
+ 
+             {(project.partners ?? []).length > 0 ? (
+               <div className="col-span-4 tablet:col-span-3 desktop:col-span-4">
+-                <h3 className="font-mono text-caption uppercase text-ink-muted">
+-                  {t('partners')}
+-                </h3>
++                <h3 className="font-mono text-caption uppercase text-ink-muted">{t('partners')}</h3>
+                 <ul className="mt-16 flex flex-col gap-8">
+                   {(project.partners ?? []).map((partner) => (
+                     <li key={partner.id ?? partner.name} className="text-body">
+@@ -235,9 +238,7 @@ export default async function CaseStudyPage({ params }: PageProps) {
+                       {award.category ? (
+                         <span className="text-ink-2"> — {award.category}</span>
+                       ) : null}
+-                      {award.year ? (
+-                        <span className="text-ink-muted"> · {award.year}</span>
+-                      ) : null}
++                      {award.year ? <span className="text-ink-muted"> · {award.year}</span> : null}
+                     </li>
+                   ))}
+                 </ul>
+diff --git a/src/components/blocks/bio-block.tsx b/src/components/blocks/bio-block.tsx
+index 5eaa1f5..bd356f6 100644
+--- a/src/components/blocks/bio-block.tsx
++++ b/src/components/blocks/bio-block.tsx
+@@ -53,7 +53,7 @@ export function BioBlock({ block }: { block: BioBlockType }) {
+           <MediaImage
+             media={photo}
+             sizes="(min-width: 1180px) 40vw, (min-width: 768px) 50vw, 100vw"
+-            className="w-full"
++            className="w-full rounded-glass-lg"
+           />
+         </div>
+       </div>
+diff --git a/src/components/blocks/hero.tsx b/src/components/blocks/hero.tsx
+index 0593847..e1ca86e 100644
+--- a/src/components/blocks/hero.tsx
++++ b/src/components/blocks/hero.tsx
+@@ -60,6 +60,8 @@ export function Hero({ block }: { block: HeroBlock }) {
+     )
+   }
+   if (variant === 'videoFullscreen') {
++    // Full-bleed background, not content on its own — stays square-cornered
++    // like every other layout container, unlike the media rounding below.
+     return (
+       <section className="relative -mt-128 flex min-h-dvh w-full items-center overflow-hidden">
+         <div className="absolute inset-0 h-full w-full">
+@@ -99,7 +101,7 @@ export function Hero({ block }: { block: HeroBlock }) {
+       <figure className="mt-96">
+         <HoverDistortion
+           src={typeof image === 'object' ? (image?.url ?? '') : ''}
+-          className="aspect-[16/9] w-full overflow-hidden"
++          className="aspect-[16/9] w-full overflow-hidden rounded-glass-lg"
+         >
+           <MediaImage media={image} sizes="100vw" priority className="h-full w-full object-cover" />
+         </HoverDistortion>
+diff --git a/src/components/blocks/media-block.tsx b/src/components/blocks/media-block.tsx
+index d3c814d..ddf0969 100644
+--- a/src/components/blocks/media-block.tsx
++++ b/src/components/blocks/media-block.tsx
+@@ -14,8 +14,9 @@ function Caption({ children }: { children?: string | null }) {
+ }
+ 
+ /**
+- * Media, four variants. Containers are square-cornered and never rounded:
+- * content is paper.
++ * Media, four variants. The layout containers stay square-cornered — content
++ * is paper — but the photo or video itself carries `rounded-glass-lg`, same
++ * as the navbar: see `radius` in `tokens/brand.ts`.
+  */
+ export function MediaBlock({ block }: { block: MediaBlockType }) {
+   const { variant, items, video, poster, before, after, caption, settings } = block
+@@ -29,14 +30,14 @@ export function MediaBlock({ block }: { block: MediaBlockType }) {
+               <MediaVideo
+                 src={video.url}
+                 mimeType={video.mimeType}
+-                className="block h-auto max-h-[80vh] w-auto max-w-full"
++                className="block h-auto max-h-[80vh] w-auto max-w-full rounded-glass-lg"
+                 poster={typeof poster === 'object' ? (poster?.url ?? undefined) : undefined}
+               />
+             ) : (
+               <MediaImage
+                 media={poster}
+                 sizes="100vw"
+-                className="h-auto max-h-[80vh] w-auto max-w-full"
++                className="h-auto max-h-[80vh] w-auto max-w-full rounded-glass-lg"
+               />
+             )}
+           </div>
+@@ -55,11 +56,15 @@ export function MediaBlock({ block }: { block: MediaBlockType }) {
+               <MediaImage
+                 media={before}
+                 sizes="(min-width: 768px) 50vw, 100vw"
+-                className="w-full"
++                className="w-full rounded-glass-lg"
+               />
+             </div>
+             <div className="col-span-4 tablet:col-span-3 desktop:col-span-6">
+-              <MediaImage media={after} sizes="(min-width: 768px) 50vw, 100vw" className="w-full" />
++              <MediaImage
++                media={after}
++                sizes="(min-width: 768px) 50vw, 100vw"
++                className="w-full rounded-glass-lg"
++              />
+             </div>
+           </div>
+           <Caption>{caption}</Caption>
+@@ -114,7 +119,7 @@ export function MediaBlock({ block }: { block: MediaBlockType }) {
+                       ? '(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw'
+                       : '(min-width: 768px) 50vw, 100vw'
+                   }
+-                  className="w-full"
++                  className="w-full rounded-glass-lg"
+                   controls="hover"
+                 />
+                 {item.caption ? (
+@@ -135,7 +140,12 @@ export function MediaBlock({ block }: { block: MediaBlockType }) {
+   return (
+     <BlockSection settings={settings}>
+       <figure>
+-        <MediaImage media={first?.media} sizes="100vw" className="w-full" controls="hover" />
++        <MediaImage
++          media={first?.media}
++          sizes="100vw"
++          className="w-full rounded-glass-lg"
++          controls="hover"
++        />
+         <Caption>{first?.caption ?? caption}</Caption>
+       </figure>
+     </BlockSection>
+diff --git a/src/components/blocks/project-card.tsx b/src/components/blocks/project-card.tsx
+index 5e52b24..3b882dd 100644
+--- a/src/components/blocks/project-card.tsx
++++ b/src/components/blocks/project-card.tsx
+@@ -36,7 +36,10 @@ export function ProjectCard({
+   return (
+     <article>
+       <Link href={`/work/${project.slug}`} className="group block">
+-        <HoverDistortion src={cover?.url ?? ''} className={`w-full overflow-hidden ${aspect}`}>
++        <HoverDistortion
++          src={cover?.url ?? ''}
++          className={`w-full overflow-hidden rounded-glass-lg ${aspect}`}
++        >
+           <MediaImage
+             media={project.cover}
+             sizes={sizes}
+diff --git a/src/components/blocks/team-block.tsx b/src/components/blocks/team-block.tsx
+index 4c59d1c..9a2f57a 100644
+--- a/src/components/blocks/team-block.tsx
++++ b/src/components/blocks/team-block.tsx
+@@ -72,7 +72,7 @@ export async function TeamBlock({ block, locale }: { block: TeamBlockType; local
+               index % 2 === 1 ? 'desktop:mt-96' : ''
+             }`}
+           >
+-            <div className="aspect-[3/4] w-full overflow-hidden">
++            <div className="aspect-[3/4] w-full overflow-hidden rounded-glass-lg">
+               <MediaImage
+                 media={member.photo}
+                 sizes="(min-width: 1180px) 25vw, (min-width: 768px) 50vw, 50vw"
+diff --git a/src/components/media/media-video.tsx b/src/components/media/media-video.tsx
+index 8fd9dd2..a2aeb34 100644
+--- a/src/components/media/media-video.tsx
++++ b/src/components/media/media-video.tsx
+@@ -225,6 +225,10 @@ export function MediaVideo({
+         '[&:fullscreen]:items-center [&:fullscreen]:justify-center [&:fullscreen]:bg-ink',
+         '[&:fullscreen_video]:h-auto [&:fullscreen_video]:w-auto',
+         '[&:fullscreen_video]:max-h-full [&:fullscreen_video]:max-w-full',
++        // A rounded corner reads as a border when the video fills the whole
++        // screen — square it off there regardless of what `className` asked
++        // for outside fullscreen.
++        '[&:fullscreen_video]:rounded-none',
+         chrome === 'hover' ? 'group/video' : '',
+       ]
+         .filter(Boolean)
+diff --git a/src/components/media/photo-gallery.tsx b/src/components/media/photo-gallery.tsx
+index 6953762..c373e60 100644
+--- a/src/components/media/photo-gallery.tsx
++++ b/src/components/media/photo-gallery.tsx
+@@ -71,7 +71,7 @@ export function PhotoGallery({ items }: { items: GalleryItem[] }) {
+             onClick={() => setActiveIndex(index)}
+             aria-haspopup="dialog"
+             aria-label={t('open', { index: index + 1, total: items.length })}
+-            className="group relative block w-full break-inside-avoid text-left"
++            className="group relative block w-full break-inside-avoid overflow-hidden rounded-glass-lg text-left"
+           >
+             <MediaImage
+               media={item.media}
+@@ -159,7 +159,7 @@ export function PhotoGallery({ items }: { items: GalleryItem[] }) {
+             <MediaImage
+               media={active.media}
+               sizes="90vw"
+-              className="max-h-[85vh] w-auto max-w-[90vw] object-contain"
++              className="max-h-[85vh] w-auto max-w-[90vw] rounded-glass-lg object-contain"
+               priority
+               controls
+             />
+diff --git a/src/messages/en.json b/src/messages/en.json
+index 5b111dc..4cc42df 100644
+--- a/src/messages/en.json
++++ b/src/messages/en.json
+@@ -161,7 +161,7 @@
+     },
+     "shape": {
+       "title": "Shape and grid",
+-      "description": "Zero radius on content blocks and media. Wide continuous corners only on glass elements: content is paper, the interface is a screen.",
++      "description": "Zero radius on content blocks. Photos and video share the same wide continuous corner as the header and the glass elements; everything else stays paper, the interface is a screen.",
+       "radius": "Radii",
+       "grid": "Grid",
+       "columns": "Columns",
+diff --git a/src/messages/it.json b/src/messages/it.json
+index a88deee..60e088e 100644
+--- a/src/messages/it.json
++++ b/src/messages/it.json
+@@ -161,7 +161,7 @@
+     },
+     "shape": {
+       "title": "Forma e griglia",
+-      "description": "Raggio 0 sui blocchi di contenuto e sui media. Angoli continui ampi solo sugli elementi in vetro: il contenuto è carta, l'interfaccia è schermo.",
++      "description": "Raggio 0 sui blocchi di contenuto. Foto e video condividono lo stesso angolo continuo ampio dell'header e degli elementi in vetro; il resto del contenuto resta carta, l'interfaccia è schermo.",
+       "radius": "Raggi",
+       "grid": "Griglia",
+       "columns": "Colonne",
+diff --git a/src/messages/zh.json b/src/messages/zh.json
+index 917d1b7..3cbcd1d 100644
+--- a/src/messages/zh.json
++++ b/src/messages/zh.json
+@@ -161,7 +161,7 @@
+     },
+     "shape": {
+       "title": "形状与栅格",
+-      "description": "内容区块与媒体容器圆角为 0。宽大的连续圆角仅用于玻璃元素：内容是纸，界面是屏。",
++      "description": "内容区块圆角为 0。照片与视频与页头及玻璃元素共用同样宽大的连续圆角；其余内容仍是纸，界面是屏。",
+       "radius": "圆角",
+       "grid": "栅格",
+       "columns": "列数",
+diff --git a/src/tokens/brand.ts b/src/tokens/brand.ts
+index 84af030..853f8d9 100644
+--- a/src/tokens/brand.ts
++++ b/src/tokens/brand.ts
+@@ -112,8 +112,10 @@ export const stagger = { min: 80, base: 100, max: 120 } as const
+ export const revealDistance = { min: 16, max: 24 } as const
+ 
+ /**
+- * Radii. Content and media containers are square: content is paper.
+- * Wide continuous corners exist only on the glass interface layer (§7).
++ * Radii. Layout containers stay square: content is paper. Photos and video
++ * are the one exception — they carry the same wide continuous corner as the
++ * glass interface layer (§7) and the navbar, `glassLg`, except where a video
++ * or image is a full-bleed background rather than content being looked at.
+  */
+ export const radius = { none: 0, glassSm: 20, glassMd: 24, glassLg: 28 } as const
+ 
+-- 
+2.43.0
+

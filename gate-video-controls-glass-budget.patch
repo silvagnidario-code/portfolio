@@ -1,0 +1,164 @@
+From f3d7f4883fbe7a4e1b850c076491010abdd907df Mon Sep 17 00:00:00 2001
+From: Claude <noreply@anthropic.com>
+Date: Thu, 3 Sep 2026 08:26:51 +0000
+Subject: [PATCH] Only mount a video's glass controls while it's near the
+ viewport
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Each video's play/mute/fullscreen bar is three GlassSurface
+(backdrop-filter) elements, and the site caps simultaneous glass
+surfaces at four because backdrop-filter is expensive to composite.
+The bar was mounting as soon as a video had ever been near the
+viewport and staying mounted for good, so a page with eight videos
+(e.g. /work/reel) could hold 20+ glass surfaces at once, blowing
+through that budget on every scroll frame — the dominant remaining
+cause of the scroll jank on video-heavy pages. Gate it behind
+`active` instead, the same flag that already governs decoding, so
+only videos actually near the viewport claim a glass slot.
+
+Co-Authored-By: Claude Sonnet 5 <noreply@anthropic.com>
+Claude-Session: https://claude.ai/code/session_01HxB4PXbbyDtVBArjRyHo21
+---
+ src/components/media/media-video.tsx | 111 +++++++++++++++------------
+ 1 file changed, 64 insertions(+), 47 deletions(-)
+
+diff --git a/src/components/media/media-video.tsx b/src/components/media/media-video.tsx
+index 29e7dca..3c9a4a2 100644
+--- a/src/components/media/media-video.tsx
++++ b/src/components/media/media-video.tsx
+@@ -55,7 +55,8 @@ type MediaVideoProps = {
+  * split neatly along a breakpoint.
+  *
+  * Only carries a `<source>` — and therefore only decodes — near the
+- * viewport; see the `active` effect below for why.
++ * viewport; see the `active` effect below for why. The glass control bar is
++ * gated the same way, for the same reason: see the comment above it.
+  *
+  * Sizing is deliberately not left to the video itself: an element with no
+  * known dimensions collapses to the browser's placeholder box (300×150) until
+@@ -309,58 +310,74 @@ export function MediaVideo({
+         {everActive ? <source src={src} type={mimeType ?? undefined} /> : null}
+       </video>
+ 
+-      <div
+-        className={
+-          chrome === 'hover'
+-            ? 'pointer-events-none absolute inset-x-0 bottom-12 flex justify-center gap-16 opacity-100 transition duration-fast ease-reveal pointer-fine:opacity-0 pointer-fine:group-hover/video:opacity-100 pointer-fine:group-focus-within/video:opacity-100'
+-            : 'pointer-events-none absolute inset-x-0 bottom-16 flex justify-center gap-16 tablet:bottom-24'
+-        }
+-      >
+-        <GlassSurface
+-          variant="chrome"
+-          className="pointer-events-auto rounded-glass-sm border border-line/80 shadow-none"
++      {/*
++       * Mounted only while `active`, not `everActive`: each button below is
++       * a `GlassSurface`, and `backdrop-filter` is expensive enough that the
++       * site caps how many can be alive at once (see glass-budget.tsx). A
++       * page like a case study can carry eight or more of these videos: if
++       * every one of them kept its three-button bar mounted for good the
++       * first time it neared the viewport, a single scroll down the page
++       * would blow through that budget many times over and the resulting
++       * compositing cost was itself a source of the scroll jank this
++       * component exists to avoid. Tying it to `active` instead means only
++       * the videos actually near the viewport hold a glass slot, and the
++       * bar remounts — cheaply, it's just buttons — the next time the video
++       * comes back into range.
++       */}
++      {active ? (
++        <div
++          className={
++            chrome === 'hover'
++              ? 'pointer-events-none absolute inset-x-0 bottom-12 flex justify-center gap-16 opacity-100 transition duration-fast ease-reveal pointer-fine:opacity-0 pointer-fine:group-hover/video:opacity-100 pointer-fine:group-focus-within/video:opacity-100'
++              : 'pointer-events-none absolute inset-x-0 bottom-16 flex justify-center gap-16 tablet:bottom-24'
++          }
+         >
+-          <button
+-            type="button"
+-            onClick={togglePlay}
+-            aria-label={playing ? t('pause') : t('play')}
+-            aria-pressed={playing}
+-            className="flex h-40 w-40 items-center justify-center rounded-glass-sm text-ink transition hover:text-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink focus-visible:ring-offset-2 focus-visible:ring-offset-transparent"
++          <GlassSurface
++            variant="chrome"
++            className="pointer-events-auto rounded-glass-sm border border-line/80 shadow-none"
+           >
+-            {playing ? <PauseIcon /> : <PlayIcon />}
+-          </button>
+-        </GlassSurface>
++            <button
++              type="button"
++              onClick={togglePlay}
++              aria-label={playing ? t('pause') : t('play')}
++              aria-pressed={playing}
++              className="flex h-40 w-40 items-center justify-center rounded-glass-sm text-ink transition hover:text-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink focus-visible:ring-offset-2 focus-visible:ring-offset-transparent"
++            >
++              {playing ? <PauseIcon /> : <PlayIcon />}
++            </button>
++          </GlassSurface>
+ 
+-        <GlassSurface
+-          variant="chrome"
+-          className="pointer-events-auto rounded-glass-sm border border-line/80 shadow-none"
+-        >
+-          <button
+-            type="button"
+-            onClick={toggleMute}
+-            aria-label={muted ? t('unmute') : t('mute')}
+-            aria-pressed={muted}
+-            className="flex h-40 w-40 items-center justify-center rounded-glass-sm text-ink transition hover:text-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink focus-visible:ring-offset-2 focus-visible:ring-offset-transparent"
++          <GlassSurface
++            variant="chrome"
++            className="pointer-events-auto rounded-glass-sm border border-line/80 shadow-none"
+           >
+-            {muted ? <MuteIcon /> : <UnmuteIcon />}
+-          </button>
+-        </GlassSurface>
++            <button
++              type="button"
++              onClick={toggleMute}
++              aria-label={muted ? t('unmute') : t('mute')}
++              aria-pressed={muted}
++              className="flex h-40 w-40 items-center justify-center rounded-glass-sm text-ink transition hover:text-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink focus-visible:ring-offset-2 focus-visible:ring-offset-transparent"
++            >
++              {muted ? <MuteIcon /> : <UnmuteIcon />}
++            </button>
++          </GlassSurface>
+ 
+-        <GlassSurface
+-          variant="chrome"
+-          className="pointer-events-auto rounded-glass-sm border border-line/80 shadow-none"
+-        >
+-          <button
+-            type="button"
+-            onClick={toggleFullscreen}
+-            aria-label={isFullscreen ? t('exitFullscreen') : t('fullscreen')}
+-            aria-pressed={isFullscreen}
+-            className="flex h-40 w-40 items-center justify-center rounded-glass-sm text-ink transition hover:text-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink focus-visible:ring-offset-2 focus-visible:ring-offset-transparent"
++          <GlassSurface
++            variant="chrome"
++            className="pointer-events-auto rounded-glass-sm border border-line/80 shadow-none"
+           >
+-            {isFullscreen ? <CollapseIcon /> : <ExpandIcon />}
+-          </button>
+-        </GlassSurface>
+-      </div>
++            <button
++              type="button"
++              onClick={toggleFullscreen}
++              aria-label={isFullscreen ? t('exitFullscreen') : t('fullscreen')}
++              aria-pressed={isFullscreen}
++              className="flex h-40 w-40 items-center justify-center rounded-glass-sm text-ink transition hover:text-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink focus-visible:ring-offset-2 focus-visible:ring-offset-transparent"
++            >
++              {isFullscreen ? <CollapseIcon /> : <ExpandIcon />}
++            </button>
++          </GlassSurface>
++        </div>
++      ) : null}
+     </div>
+   )
+ }
+-- 
+2.43.0
+

@@ -1,0 +1,53 @@
+From 04ce20b2473b2e723f65ee72b9f2c79fd4ca2da7 Mon Sep 17 00:00:00 2001
+From: Claude <noreply@anthropic.com>
+Date: Thu, 3 Sep 2026 08:31:28 +0000
+Subject: [PATCH] Reveal the lightbox video controls on hover instead of always
+
+The gallery lightbox showed its play/mute/fullscreen bar permanently.
+Switch it to the same reveal-on-hover behaviour already used for
+gallery thumbnails (`chrome="hover"`, unchanged since it already
+falls back to always-visible on touch, where there's no hover
+gesture to reveal it with) so the bar only appears when the viewer's
+mouse is actually over the video.
+
+Co-Authored-By: Claude Sonnet 5 <noreply@anthropic.com>
+Claude-Session: https://claude.ai/code/session_01HxB4PXbbyDtVBArjRyHo21
+---
+ src/components/media/media-video.tsx   | 7 ++++++-
+ src/components/media/photo-gallery.tsx | 2 +-
+ 2 files changed, 7 insertions(+), 2 deletions(-)
+
+diff --git a/src/components/media/media-video.tsx b/src/components/media/media-video.tsx
+index 3c9a4a2..305b7c5 100644
+--- a/src/components/media/media-video.tsx
++++ b/src/components/media/media-video.tsx
+@@ -41,7 +41,12 @@ type MediaVideoProps = {
+   className?: string
+   style?: CSSProperties
+   ariaLabel?: string
+-  /** `always` for lightbox/full-size views, `hover` for gallery thumbnails. */
++  /**
++   * `hover` reveals the bar only on mouse-over (it falls back to
++   * always-visible on touch, where there is no hover gesture to reveal it
++   * with); `always` keeps it visible regardless of input. Every current
++   * placement — gallery thumbnails and the lightbox alike — uses `hover`.
++   */
+   chrome?: 'always' | 'hover'
+ }
+ 
+diff --git a/src/components/media/photo-gallery.tsx b/src/components/media/photo-gallery.tsx
+index 0122301..f6b0376 100644
+--- a/src/components/media/photo-gallery.tsx
++++ b/src/components/media/photo-gallery.tsx
+@@ -170,7 +170,7 @@ export function PhotoGallery({
+               sizes="90vw"
+               className="max-h-[85vh] w-auto max-w-[90vw] rounded-glass-lg object-contain"
+               priority
+-              controls
++              controls="hover"
+             />
+             {active.caption || items.length > 1 ? (
+               <figcaption className="text-center font-mono text-caption uppercase text-ink-inverse">
+-- 
+2.43.0
+

@@ -78,11 +78,11 @@
   --ls-h3: 0em;
   --fw-h3: 400;
   --fs-body-lg: clamp(1.125rem, 1.0417rem + 0.3704vw, 1.375rem);
-  --lh-body-lg: 1.8;
+  --lh-body-lg: 1.5;
   --ls-body-lg: 0.01em;
   --fw-body-lg: 400;
   --fs-body: clamp(1rem, 0.9583rem + 0.1852vw, 1.125rem);
-  --lh-body: 1.8;
+  --lh-body: 1.5;
   --ls-body: 0em;
   --fw-body: 400;
   --fs-caption: clamp(0.75rem, 0.7292rem + 0.0926vw, 0.8125rem);

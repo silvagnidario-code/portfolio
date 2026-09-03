@@ -1,0 +1,97 @@
+From 068f8afc07fefdfaf1ce3f1b1fa0694f4a6fef42 Mon Sep 17 00:00:00 2001
+From: Claude <noreply@anthropic.com>
+Date: Tue, 1 Sep 2026 17:46:07 +0000
+Subject: [PATCH] Load videos further ahead and stop tearing them down on a
+ quick scroll-past
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Two things were compounding into visible jank while scrolling through a
+page of videos: the 300px activation margin didn't leave enough runway
+on a typical mobile connection for a video to actually finish buffering
+before it scrolled into view, so viewers watched it load; and a fast
+flick that carried a video briefly out of the margin and back tore its
+source down immediately, forcing a full reload from zero on the way
+back in.
+
+Widen the activation margin to 700px so buffering has more of a head
+start, and debounce the deactivate edge by a second so a quick pass
+doesn't discard an already-loading (or already-loaded) source. Entering
+the margin still activates immediately — only losing it is delayed.
+---
+ src/components/media/media-video.tsx | 41 ++++++++++++++++++++++++----
+ 1 file changed, 35 insertions(+), 6 deletions(-)
+
+diff --git a/src/components/media/media-video.tsx b/src/components/media/media-video.tsx
+index a2aeb34..361a61d 100644
+--- a/src/components/media/media-video.tsx
++++ b/src/components/media/media-video.tsx
+@@ -83,6 +83,8 @@ export function MediaVideo({
+   // idle because it scrolled out of view — only the former should stay
+   // paused once it scrolls back in.
+   const userPausedRef = useRef(false)
++  // Debounces the *deactivate* edge only — see the observer effect below.
++  const deactivateTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+ 
+   useEffect(() => {
+     const el = videoRef.current
+@@ -128,9 +130,17 @@ export function MediaVideo({
+   }, [])
+ 
+   // Only decode video that's actually near the viewport. `rootMargin` starts
+-  // it a little early so it's already playing by the time it's on screen,
+-  // and drops it again once it's well past — freeing that decoder slot for
+-  // whichever thumbnail the viewer has scrolled to next.
++  // it well before it's on screen — long enough, on a typical mobile
++  // connection, for the source to actually finish buffering before the
++  // viewer scrolls it into view, instead of them watching it load. Dropping
++  // it again once it's well past frees that decoder slot for whichever
++  // thumbnail the viewer has scrolled to next.
++  //
++  // The *deactivate* edge is debounced: a fast flick that carries a video
++  // out of the margin and back again shouldn't tear its source down and
++  // force a full reload from zero — that thrash was the other half of the
++  // scroll jank, on top of the buffering itself. Activation stays immediate;
++  // only losing the source is worth delaying.
+   useEffect(() => {
+     const container = containerRef.current
+     if (!container || typeof IntersectionObserver === 'undefined') {
+@@ -141,12 +151,31 @@ export function MediaVideo({
+     const observer = new IntersectionObserver(
+       (entries) => {
+         const entry = entries[0]
+-        if (entry) setActive(entry.isIntersecting)
++        if (!entry) return
++
++        if (entry.isIntersecting) {
++          if (deactivateTimeoutRef.current) {
++            clearTimeout(deactivateTimeoutRef.current)
++            deactivateTimeoutRef.current = null
++          }
++          setActive(true)
++        } else if (!deactivateTimeoutRef.current) {
++          deactivateTimeoutRef.current = setTimeout(() => {
++            deactivateTimeoutRef.current = null
++            setActive(false)
++          }, 1000)
++        }
+       },
+-      { rootMargin: '300px 0px' },
++      { rootMargin: '700px 0px' },
+     )
+     observer.observe(container)
+-    return () => observer.disconnect()
++    return () => {
++      observer.disconnect()
++      if (deactivateTimeoutRef.current) {
++        clearTimeout(deactivateTimeoutRef.current)
++        deactivateTimeoutRef.current = null
++      }
++    }
+   }, [])
+ 
+   // Fires on every activation and deactivation: `load()` is what actually
+-- 
+2.43.0
+
