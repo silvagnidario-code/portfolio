@@ -78,13 +78,13 @@ export type TypeGrade = {
  * only 300, 400 and 500 exist.
  */
 export const typeScale = {
-  display: { min: 44, max: 124, lineHeight: 1.15, tracking: 0, weight: 300 },
-  h1: { min: 34, max: 72, lineHeight: 1.15, tracking: 0, weight: 300 },
-  h2: { min: 27, max: 48, lineHeight: 1.2, tracking: 0, weight: 400 },
-  h3: { min: 22, max: 32, lineHeight: 1.25, tracking: 0, weight: 400 },
+  display: { min: 44, max: 124, lineHeight: 1.3, tracking: 0, weight: 300 },
+  h1: { min: 34, max: 72, lineHeight: 1.3, tracking: 0, weight: 300 },
+  h2: { min: 27, max: 48, lineHeight: 1.3, tracking: 0, weight: 400 },
+  h3: { min: 22, max: 32, lineHeight: 1.3, tracking: 0, weight: 400 },
   bodyLg: { min: 18, max: 22, lineHeight: 1.3, tracking: 0.01, weight: 400 },
   body: { min: 16, max: 18, lineHeight: 1.3, tracking: 0, weight: 400 },
-  caption: { min: 12, max: 13, lineHeight: 1.4, tracking: 0.12, weight: 500, uppercase: true },
+  caption: { min: 12, max: 13, lineHeight: 1.3, tracking: 0.12, weight: 500, uppercase: true },
 } as const satisfies Record<string, TypeGrade>
 
 export type TypeGradeName = keyof typeof typeScale
