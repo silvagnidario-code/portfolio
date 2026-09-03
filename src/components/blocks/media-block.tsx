@@ -45,6 +45,7 @@ export function MediaBlock({ block }: { block: MediaBlockType }) {
                 mimeType={video.mimeType}
                 className="block h-auto max-h-[80vh] w-auto max-w-full rounded-glass-lg"
                 poster={typeof poster === 'object' ? (poster?.url ?? undefined) : undefined}
+                chrome="hover"
               />
             ) : (
               <MediaImage
