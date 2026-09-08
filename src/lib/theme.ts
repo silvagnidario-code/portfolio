@@ -1,8 +1,11 @@
 /**
  * Theme contract, shared by the no-flash script, the provider and the switcher.
  *
- * Three states, not two: `system` follows `prefers-color-scheme`, `light` and
- * `dark` are explicit choices that override it in both directions.
+ * Three states, not two: `system` is "no explicit choice yet", `light` and
+ * `dark` are explicit choices the reader made. `system` no longer means
+ * "follow prefers-color-scheme" — a first-time visitor lands on
+ * `DEFAULT_RESOLVED_THEME` regardless of their OS setting, and stays there
+ * until they pick a mode themselves via the switcher.
  */
 
 export const THEME_STORAGE_KEY = 'theme'
@@ -15,6 +18,9 @@ export const themeModes = ['system', 'light', 'dark'] as const
 export type ThemeMode = (typeof themeModes)[number]
 
 export const defaultThemeMode: ThemeMode = 'system'
+
+/** What a reader with no stored preference sees on their first visit. */
+export const DEFAULT_RESOLVED_THEME: 'light' | 'dark' = 'dark'
 
 export function isThemeMode(value: unknown): value is ThemeMode {
   return typeof value === 'string' && (themeModes as readonly string[]).includes(value)

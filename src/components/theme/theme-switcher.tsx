@@ -13,9 +13,8 @@ import { useTheme } from './theme-provider'
  *
  * `system` is still the starting state — nothing is stored until the reader
  * picks — but it is not offered as a third button. What the control shows is
- * the theme the reader is *looking at*: with no choice made, that is whatever
- * the operating system resolved to, and picking either icon simply makes it
- * explicit.
+ * the theme the reader is *looking at*: with no choice made, that is the site
+ * default (dark), and picking either icon simply makes it explicit.
  *
  * The icons carry the meaning to the eye; the inputs carry it to everything
  * else, and each label keeps its word in a visually hidden span so the control

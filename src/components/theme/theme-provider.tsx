@@ -4,6 +4,7 @@ import { createContext, useCallback, useContext, useEffect, useState, type React
 
 import {
   applyResolvedTheme,
+  DEFAULT_RESOLVED_THEME,
   defaultThemeMode,
   isThemeMode,
   THEME_STORAGE_KEY,
@@ -27,7 +28,6 @@ const ThemeContext = createContext<ThemeContextValue | null>(null)
 
 export function ThemeProvider({ children }: { children: ReactNode }) {
   const [mode, setModeState] = useState<ThemeMode>(defaultThemeMode)
-  const [systemDark, setSystemDark] = useState(false)
   const [ready, setReady] = useState(false)
 
   // The document attribute is already correct at this point: the inline script
@@ -39,28 +39,18 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
         setModeState(stored)
       }
     } catch {
-      // Storage unavailable (private mode, blocked cookies): stay on system.
+      // Storage unavailable (private mode, blocked cookies): stay on the default.
     }
     setReady(true)
   }, [])
 
-  // The system preference can change while the page is open.
-  useEffect(() => {
-    const query = window.matchMedia('(prefers-color-scheme: dark)')
-    const read = () => setSystemDark(query.matches)
-
-    read()
-    query.addEventListener('change', read)
-    return () => query.removeEventListener('change', read)
-  }, [])
-
-  const resolved: 'light' | 'dark' = mode === 'system' ? (systemDark ? 'dark' : 'light') : mode
+  // `system` means "no explicit choice yet", which resolves to the site
+  // default rather than the reader's OS preference — see DEFAULT_RESOLVED_THEME.
+  const resolved: 'light' | 'dark' = mode === 'system' ? DEFAULT_RESOLVED_THEME : mode
 
   // The single source of truth for what is painted. Re-applied on every
-  // render of `resolved` — mount, a route change, a system-preference flip,
-  // or an explicit choice — so the attribute can never drift from what React
-  // believes is showing, the way relying on a bare CSS media-query fallback
-  // for `system` could.
+  // render of `resolved` — mount, a route change, or an explicit choice — so
+  // the attribute can never drift from what React believes is showing.
   useEffect(() => {
     applyResolvedTheme(resolved)
   }, [resolved])
