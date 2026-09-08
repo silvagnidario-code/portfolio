@@ -67,16 +67,16 @@ export default async function WorkIndexPage({ params, searchParams }: PageProps)
             <div
               key={project.id}
               className={
-                index % 3 === 0
+                index % 2 === 0
                   ? 'col-span-4 tablet:col-span-4 desktop:col-span-7'
-                  : 'col-span-4 tablet:col-span-3 desktop:col-span-5 desktop:mt-64'
+                  : 'col-span-4 tablet:col-span-4 tablet:col-start-3 desktop:col-span-5 desktop:col-start-8 desktop:mt-128'
               }
             >
               <ProjectCard
                 project={project}
                 headingLevel="h2"
-                sizes="(min-width: 1180px) 55vw, (min-width: 768px) 60vw, 100vw"
-                aspect={index % 3 === 0 ? 'aspect-[4/3]' : 'aspect-[3/4]'}
+                sizes="(min-width: 1180px) 55vw, (min-width: 768px) 65vw, 100vw"
+                aspect={index % 2 === 0 ? 'aspect-[4/3]' : 'aspect-[3/4]'}
               />
             </div>
           ))}
