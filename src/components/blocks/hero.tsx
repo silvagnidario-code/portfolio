@@ -89,7 +89,19 @@ export function Hero({ block }: { block: HeroBlock }) {
           {/* Overlay scuro per garantire contrasto al testo sopra il video */}
           <div className="absolute inset-0 bg-surface-inverse/40" />
         </div>
-        <div className="page-grid relative z-10 w-full text-ink-inverse [&_.text-ink-2]:text-ink-inverse/80 [&_.text-ink-muted]:text-ink-inverse/70">
+        {/*
+         * `items-center` on the section balances this block around the
+         * viewport's own centre, so how much air sits above the eyebrow
+         * depends on how tall the heading happens to be — on a three-line
+         * heading at a typical desktop viewport height it measured out
+         * negative: the eyebrow sat ~20px *behind* the fixed glass header,
+         * not below it. `pt-128` here nudges the whole centred block down
+         * (centering only gives back half of what padding-top adds, so this
+         * reads as roughly +64px of clearance) without pinning it to the
+         * top the way the typographic variant's section padding does — this
+         * variant is meant to stay visually centred over its background.
+         */}
+        <div className="page-grid relative z-10 w-full pt-128 text-ink-inverse [&_.text-ink-2]:text-ink-inverse/80 [&_.text-ink-muted]:text-ink-inverse/70">
           {text}
         </div>
       </section>
