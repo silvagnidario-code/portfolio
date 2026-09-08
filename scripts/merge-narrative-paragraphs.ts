@@ -87,7 +87,7 @@ async function main(): Promise<void> {
       let docChanged = false
 
       for (const field of NARRATIVE_FIELDS) {
-        const byLocale = (doc as Record<string, unknown>)[field] as
+        const byLocale = (doc as unknown as Record<string, unknown>)[field] as
           | Partial<Record<Locale, LexicalState>>
           | undefined
         if (!byLocale || typeof byLocale !== 'object') continue
