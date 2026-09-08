@@ -12,8 +12,8 @@ type MediaImageProps = {
   priority?: boolean
   /** Poster shown while a video loads and before the first frame paints. */
   poster?: number | Media | null
-  /** Adds a play/pause + mute overlay when a video is intentionally being viewed. */
-  controls?: boolean | 'hover'
+  /** Adds the browser's native `<video controls>` bar when a video is intentionally being viewed. */
+  controls?: boolean
 }
 
 /**
@@ -26,10 +26,10 @@ type MediaImageProps = {
  * hero or a gallery item. `next/image` cannot decode a video stream, so those
  * used to render as a broken-image icon showing only the alt text. Here the
  * mime type decides: a video becomes a muted, looping `<video>` — silent by
- * default, since that is what most placements want. Passing `controls` (or
- * `'hover'` for a reveal-on-hover bar) adds a minimal play/pause + mute
- * overlay for the placements — the gallery lightbox — where the viewer is
- * meant to be able to stop or unmute the clip.
+ * default, since that is what most placements want. Passing `controls` adds
+ * the browser's native control bar for the placements — the gallery
+ * lightbox — where the viewer is meant to be able to stop, unmute or seek
+ * the clip.
  */
 export function MediaImage({
   media,
@@ -57,7 +57,6 @@ export function MediaImage({
           style={{ objectPosition }}
           ariaLabel={alt ?? undefined}
           poster={posterUrl}
-          chrome={controls === 'hover' ? 'hover' : 'always'}
         />
       )
     }

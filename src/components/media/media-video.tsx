@@ -1,25 +1,6 @@
 'use client'
 
-import {
-  type CSSProperties,
-  type MouseEvent,
-  useCallback,
-  useEffect,
-  useId,
-  useRef,
-  useState,
-} from 'react'
-import { useTranslations } from 'next-intl'
-
-import { GlassSurface } from '@/components/glass/glass-surface'
-import {
-  CollapseIcon,
-  ExpandIcon,
-  MuteIcon,
-  PauseIcon,
-  PlayIcon,
-  UnmuteIcon,
-} from '@/components/icons'
+import { type CSSProperties, useEffect, useId, useRef, useState } from 'react'
 
 /**
  * One video's audio at a time. Every `MediaVideo` on the page listens for
@@ -27,12 +8,11 @@ import {
  * itself, instead of a viewer stacking three audio tracks by unmuting three
  * thumbnails in a row. A plain DOM event is enough — these instances don't
  * share a React tree, and there's nothing here worth a context provider.
+ * Firing it from the `volumechange` listener rather than a dedicated toggle
+ * handler means it fires the same way whether the viewer unmutes through the
+ * browser's own controls or the video is unmuted some other way.
  */
 const UNMUTED_EVENT = 'media-video:unmuted'
-
-/** Safari on iOS never implemented the standard Fullscreen API on anything
- * but the video element itself; it exposes its own method instead. */
-type SafariVideoElement = HTMLVideoElement & { webkitEnterFullscreen?: () => void }
 
 type MediaVideoProps = {
   src: string
@@ -41,29 +21,14 @@ type MediaVideoProps = {
   className?: string
   style?: CSSProperties
   ariaLabel?: string
-  /**
-   * `hover` reveals the bar on mouse-over where a mouse is present, and on
-   * tap where it isn't — see the tap-reveal comment above the `tapRevealed`
-   * state below for how the two coexist. `always` keeps it visible
-   * regardless of input. Every current placement — gallery thumbnails and
-   * the lightbox alike — uses `hover`.
-   */
-  chrome?: 'always' | 'hover'
 }
 
 /**
- * Gallery and showcase videos stay silent autoplay loops by default, but they
- * gain a minimal glass control bar when the viewer needs to pause, unmute or
- * go fullscreen. The bar reveals on hover where a mouse is actually present
- * — `pointer-fine` distinguishes that from a touch screen instead of
- * guessing from screen width, since a touch laptop or a desktop with a
- * stylus doesn't split neatly along a breakpoint — and on touch, where
- * there's no hover gesture to reveal it with, a tap on the video does the
- * same job instead: see `tapRevealed` below.
- *
- * Only carries a `<source>` — and therefore only decodes — near the
- * viewport; see the `active` effect below for why. The glass control bar is
- * gated the same way, for the same reason: see the comment above it.
+ * Gallery and showcase videos stay silent autoplay loops by default, and use
+ * the browser's own native `<video controls>` bar for anything beyond that —
+ * pausing, unmuting, seeking, going fullscreen. Only carries a `<source>` —
+ * and therefore only decodes — near the viewport; see the `active` effect
+ * below for why.
  *
  * Sizing is deliberately not left to the video itself: an element with no
  * known dimensions collapses to the browser's placeholder box (300×150) until
@@ -75,22 +40,9 @@ type MediaVideoProps = {
  * good: unlike `preload` and the `<source>` itself, it does not get undone by
  * scrolling the video back out of range and losing its buffer again.
  */
-export function MediaVideo({
-  src,
-  mimeType,
-  poster,
-  className,
-  style,
-  ariaLabel,
-  chrome = 'always',
-}: MediaVideoProps) {
-  const t = useTranslations('MediaVideo')
+export function MediaVideo({ src, mimeType, poster, className, style, ariaLabel }: MediaVideoProps) {
   const instanceId = useId()
-  const containerRef = useRef<HTMLDivElement>(null)
   const videoRef = useRef<HTMLVideoElement>(null)
-  const [playing, setPlaying] = useState(true)
-  const [muted, setMuted] = useState(true)
-  const [isFullscreen, setIsFullscreen] = useState(false)
   // A page can carry a dozen of these; mobile browsers cap how many videos
   // can decode at once (iOS Safari's hardware decoder tops out around 4-6),
   // and the ones over that limit just never play. `active` gates the actual
@@ -98,22 +50,20 @@ export function MediaVideo({
   // never asks the decoder for more than a handful at a time.
   const [active, setActive] = useState(false)
   // Once a video has been near the viewport, its `<source>` stays mounted
-  // for good — see the sizing comment below for why that matters.
+  // for good — see the sizing comment above for why that matters.
   const [everActive, setEverActive] = useState(false)
   // The video's own aspect ratio, learned the first time its metadata loads
-  // and then never forgotten — see the sizing comment below.
+  // and then never forgotten — see the sizing comment above.
   const [aspectRatio, setAspectRatio] = useState<number | null>(null)
-  // Whether a tap on the video (rather than one of its buttons) has
-  // revealed the control bar. Only meaningful for `chrome === 'hover'` on a
-  // touch device: the bar's own classes gate this behind the `pointer-coarse`
-  // media query, so setting it has no visible effect wherever the CSS hover
-  // reveal already applies. A second tap on the video, or any tap outside
-  // it, closes it again — see the two effects below.
-  const [tapRevealed, setTapRevealed] = useState(false)
   // Whether the viewer paused this one on purpose, as opposed to it going
   // idle because it scrolled out of view — only the former should stay
   // paused once it scrolls back in.
   const userPausedRef = useRef(false)
+  // Set right before the deactivation effect below stops the video itself so
+  // the resulting `pause` event isn't mistaken for the viewer reaching for
+  // the native pause button — see that effect for why only that edge needs
+  // it.
+  const autoPausingRef = useRef(false)
   // Debounces the *deactivate* edge only — see the observer effect below.
   const deactivateTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null)
 
@@ -121,28 +71,38 @@ export function MediaVideo({
     const el = videoRef.current
     if (!el) return
 
-    const onPlay = () => setPlaying(true)
-    const onPause = () => setPlaying(false)
-    const onVolumeChange = () => setMuted(el.muted)
-    // Learned once and kept: see the sizing comment on the container below.
+    const onPause = () => {
+      if (autoPausingRef.current) {
+        autoPausingRef.current = false
+        return
+      }
+      userPausedRef.current = true
+    }
+    const onPlay = () => {
+      userPausedRef.current = false
+    }
+    const onVolumeChange = () => {
+      if (!el.muted) window.dispatchEvent(new CustomEvent(UNMUTED_EVENT, { detail: instanceId }))
+    }
+    // Learned once and kept: see the sizing comment above.
     const onLoadedMetadata = () => {
       if (el.videoWidth > 0 && el.videoHeight > 0) {
         setAspectRatio(el.videoWidth / el.videoHeight)
       }
     }
 
-    el.addEventListener('play', onPlay)
     el.addEventListener('pause', onPause)
+    el.addEventListener('play', onPlay)
     el.addEventListener('volumechange', onVolumeChange)
     el.addEventListener('loadedmetadata', onLoadedMetadata)
 
     return () => {
-      el.removeEventListener('play', onPlay)
       el.removeEventListener('pause', onPause)
+      el.removeEventListener('play', onPlay)
       el.removeEventListener('volumechange', onVolumeChange)
       el.removeEventListener('loadedmetadata', onLoadedMetadata)
     }
-  }, [])
+  }, [instanceId])
 
   // Another video just unmuted itself: if this one is currently audible,
   // mute it so the two tracks don't play over each other.
@@ -158,16 +118,6 @@ export function MediaVideo({
     return () => window.removeEventListener(UNMUTED_EVENT, onOtherUnmuted)
   }, [instanceId])
 
-  // Tracks fullscreen state for this instance specifically — `fullscreenchange`
-  // is a document-level event shared by every video on the page.
-  useEffect(() => {
-    const onFullscreenChange = () => {
-      setIsFullscreen(document.fullscreenElement === containerRef.current)
-    }
-    document.addEventListener('fullscreenchange', onFullscreenChange)
-    return () => document.removeEventListener('fullscreenchange', onFullscreenChange)
-  }, [])
-
   // Only decode video that's actually near the viewport. `rootMargin` starts
   // it well before it's on screen — long enough, on a typical mobile
   // connection, for the source to actually finish buffering before the
@@ -181,8 +131,8 @@ export function MediaVideo({
   // scroll jank, on top of the buffering itself. Activation stays immediate;
   // only losing the source is worth delaying.
   useEffect(() => {
-    const container = containerRef.current
-    if (!container || typeof IntersectionObserver === 'undefined') {
+    const el = videoRef.current
+    if (!el || typeof IntersectionObserver === 'undefined') {
       setActive(true)
       setEverActive(true)
       return
@@ -209,7 +159,7 @@ export function MediaVideo({
       },
       { rootMargin: '700px 0px' },
     )
-    observer.observe(container)
+    observer.observe(el)
     return () => {
       observer.disconnect()
       if (deactivateTimeoutRef.current) {
@@ -228,219 +178,38 @@ export function MediaVideo({
     const el = videoRef.current
     if (!el) return
 
-    el.load()
-    if (active && !userPausedRef.current) {
-      void el.play()
-    } else if (!active) {
-      setPlaying(false)
-    }
-  }, [active])
-
-  // A video that scrolls out and back in later shouldn't remember being
-  // tapped open from the last time it was near the viewport.
-  useEffect(() => {
-    if (!active) setTapRevealed(false)
-  }, [active])
-
-  // A tap anywhere else on the page closes an open bar too, not just a
-  // second tap on the video itself — otherwise it would linger over
-  // whatever the viewer scrolls to next.
-  useEffect(() => {
-    if (!tapRevealed) return
-
-    const onDocumentPointerDown = (event: PointerEvent) => {
-      if (!containerRef.current?.contains(event.target as Node)) {
-        setTapRevealed(false)
-      }
-    }
-
-    document.addEventListener('pointerdown', onDocumentPointerDown)
-    return () => document.removeEventListener('pointerdown', onDocumentPointerDown)
-  }, [tapRevealed])
-
-  // Tapping the video itself — as opposed to one of the buttons in the bar,
-  // which stop this event from bubbling here — toggles the bar open or
-  // closed. Harmless to wire up even where `chrome` is `always` or a mouse
-  // is present: the classes below only act on it under `pointer-coarse`.
-  const handleContainerClick = useCallback(() => {
-    if (chrome !== 'hover') return
-    setTapRevealed((prev) => !prev)
-  }, [chrome])
-
-  const togglePlay = useCallback((event: MouseEvent) => {
-    event.stopPropagation()
-    const el = videoRef.current
-    if (!el) return
-
-    if (el.paused) {
-      userPausedRef.current = false
-      void el.play()
+    if (active) {
+      el.load()
+      if (!userPausedRef.current) void el.play()
     } else {
-      userPausedRef.current = true
-      el.pause()
+      // `load()` itself stops playback (by dropping the buffered source), so
+      // mark that pause as ours before triggering it — otherwise `onPause`
+      // above would read it as the viewer reaching for the native pause
+      // button and refuse to auto-resume next time this scrolls back into
+      // view.
+      if (!el.paused) autoPausingRef.current = true
+      el.load()
     }
-  }, [])
-
-  const toggleMute = useCallback(
-    (event: MouseEvent) => {
-      event.stopPropagation()
-      const el = videoRef.current
-      if (!el) return
-
-      el.muted = !el.muted
-      if (!el.muted) {
-        window.dispatchEvent(new CustomEvent(UNMUTED_EVENT, { detail: instanceId }))
-      }
-    },
-    [instanceId],
-  )
-
-  const toggleFullscreen = useCallback((event: MouseEvent) => {
-    event.stopPropagation()
-
-    if (document.fullscreenElement) {
-      void document.exitFullscreen()
-      return
-    }
-
-    // Fullscreening the wrapper, not the bare video, keeps this same control
-    // bar on screen once fullscreen — the video-only API on iOS Safari is the
-    // one exception, where the platform's own native player takes over.
-    const container = containerRef.current
-    if (container?.requestFullscreen) {
-      void container.requestFullscreen()
-      return
-    }
-
-    const el = videoRef.current as SafariVideoElement | null
-    el?.webkitEnterFullscreen?.()
-  }, [])
-
-  // Each button's own hit target, not just the bar's opacity: a `pointer:
-  // coarse` device with the bar still closed must let a tap on the video
-  // fall through to `handleContainerClick` rather than a button underneath
-  // silently eating it. On `always` chrome, or wherever a mouse is
-  // present, the buttons stay clickable the way they always have.
-  const buttonPointerEvents =
-    chrome === 'hover' && !tapRevealed ? 'pointer-fine:pointer-events-auto' : 'pointer-events-auto'
+  }, [active])
 
   return (
-    <div
-      ref={containerRef}
-      className={[
-        'relative',
-        // Fullscreen takes over the whole screen at the container's own
-        // aspect ratio; recentre the video and letterbox around it instead
-        // of leaving it pinned to a corner or stretched out of shape.
-        '[&:fullscreen]:flex [&:fullscreen]:h-full [&:fullscreen]:w-full',
-        '[&:fullscreen]:items-center [&:fullscreen]:justify-center [&:fullscreen]:bg-ink',
-        '[&:fullscreen_video]:h-auto [&:fullscreen_video]:w-auto',
-        '[&:fullscreen_video]:max-h-full [&:fullscreen_video]:max-w-full',
-        // A rounded corner reads as a border when the video fills the whole
-        // screen — square it off there regardless of what `className` asked
-        // for outside fullscreen.
-        '[&:fullscreen_video]:rounded-none',
-        chrome === 'hover' ? 'group/video' : '',
-      ]
-        .filter(Boolean)
-        .join(' ')}
-      onClick={handleContainerClick}
+    <video
+      ref={videoRef}
+      className={className}
+      style={aspectRatio ? { ...style, aspectRatio: String(aspectRatio) } : style}
+      controls
+      playsInline
+      muted
+      loop
+      // `metadata` once the source has ever been active, not `none`: a
+      // metadata-only fetch is a handful of bytes, not the video, and it's
+      // what lets `aspectRatio` above get learned (and re-learned, cheaply,
+      // from cache) without paying for a full decode.
+      preload={active ? 'auto' : everActive ? 'metadata' : 'none'}
+      poster={poster}
+      aria-label={ariaLabel}
     >
-      <video
-        ref={videoRef}
-        className={className}
-        style={aspectRatio ? { ...style, aspectRatio: String(aspectRatio) } : style}
-        playsInline
-        muted
-        loop
-        // `metadata` once the source has ever been active, not `none`: a
-        // metadata-only fetch is a handful of bytes, not the video, and it's
-        // what lets `aspectRatio` above get learned (and re-learned, cheaply,
-        // from cache) without paying for a full decode.
-        preload={active ? 'auto' : everActive ? 'metadata' : 'none'}
-        poster={poster}
-        aria-label={ariaLabel}
-      >
-        {everActive ? <source src={src} type={mimeType ?? undefined} /> : null}
-      </video>
-
-      {/*
-       * Mounted only while `active`, not `everActive`: each button below is
-       * a `GlassSurface`, and `backdrop-filter` is expensive enough that the
-       * site caps how many can be alive at once (see glass-budget.tsx). A
-       * page like a case study can carry eight or more of these videos: if
-       * every one of them kept its three-button bar mounted for good the
-       * first time it neared the viewport, a single scroll down the page
-       * would blow through that budget many times over and the resulting
-       * compositing cost was itself a source of the scroll jank this
-       * component exists to avoid. Tying it to `active` instead means only
-       * the videos actually near the viewport hold a glass slot, and the
-       * bar remounts — cheaply, it's just buttons — the next time the video
-       * comes back into range.
-       */}
-      {active ? (
-        <div
-          className={
-            chrome === 'hover'
-              ? [
-                  'pointer-events-none absolute inset-x-0 bottom-12 flex justify-center gap-16 opacity-100 transition duration-fast ease-reveal',
-                  // A mouse: reveal on hover, or on keyboard focus landing on
-                  // one of the buttons inside.
-                  'pointer-fine:opacity-0 pointer-fine:group-hover/video:opacity-100 pointer-fine:group-focus-within/video:opacity-100',
-                  // No mouse: there's no hover to reveal it with, so a tap on
-                  // the video toggles `tapRevealed` instead — see
-                  // `handleContainerClick`.
-                  tapRevealed ? 'pointer-coarse:opacity-100' : 'pointer-coarse:opacity-0',
-                ].join(' ')
-              : 'pointer-events-none absolute inset-x-0 bottom-16 flex justify-center gap-16 tablet:bottom-24'
-          }
-        >
-          <GlassSurface
-            variant="chrome"
-            className={`${buttonPointerEvents} rounded-glass-sm border border-line/80 shadow-none`}
-          >
-            <button
-              type="button"
-              onClick={togglePlay}
-              aria-label={playing ? t('pause') : t('play')}
-              aria-pressed={playing}
-              className="flex h-40 w-40 items-center justify-center rounded-glass-sm text-ink transition hover:text-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink focus-visible:ring-offset-2 focus-visible:ring-offset-transparent"
-            >
-              {playing ? <PauseIcon /> : <PlayIcon />}
-            </button>
-          </GlassSurface>
-
-          <GlassSurface
-            variant="chrome"
-            className={`${buttonPointerEvents} rounded-glass-sm border border-line/80 shadow-none`}
-          >
-            <button
-              type="button"
-              onClick={toggleMute}
-              aria-label={muted ? t('unmute') : t('mute')}
-              aria-pressed={muted}
-              className="flex h-40 w-40 items-center justify-center rounded-glass-sm text-ink transition hover:text-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink focus-visible:ring-offset-2 focus-visible:ring-offset-transparent"
-            >
-              {muted ? <MuteIcon /> : <UnmuteIcon />}
-            </button>
-          </GlassSurface>
-
-          <GlassSurface
-            variant="chrome"
-            className={`${buttonPointerEvents} rounded-glass-sm border border-line/80 shadow-none`}
-          >
-            <button
-              type="button"
-              onClick={toggleFullscreen}
-              aria-label={isFullscreen ? t('exitFullscreen') : t('fullscreen')}
-              aria-pressed={isFullscreen}
-              className="flex h-40 w-40 items-center justify-center rounded-glass-sm text-ink transition hover:text-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink focus-visible:ring-offset-2 focus-visible:ring-offset-transparent"
-            >
-              {isFullscreen ? <CollapseIcon /> : <ExpandIcon />}
-            </button>
-          </GlassSurface>
-        </div>
-      ) : null}
-    </div>
+      {everActive ? <source src={src} type={mimeType ?? undefined} /> : null}
+    </video>
   )
 }

@@ -45,7 +45,6 @@ export function MediaBlock({ block }: { block: MediaBlockType }) {
                 mimeType={video.mimeType}
                 className="block h-auto max-h-[80vh] w-auto max-w-full rounded-glass-lg"
                 poster={typeof poster === 'object' ? (poster?.url ?? undefined) : undefined}
-                chrome="hover"
               />
             ) : (
               <MediaImage
@@ -141,7 +140,7 @@ export function MediaBlock({ block }: { block: MediaBlockType }) {
                       : '(min-width: 768px) 50vw, 100vw'
                   }
                   className="w-full rounded-glass-lg"
-                  controls="hover"
+                  controls
                 />
                 {item.caption ? (
                   <p className="mt-16 font-mono text-caption uppercase text-ink-muted">
@@ -163,7 +162,7 @@ export function MediaBlock({ block }: { block: MediaBlockType }) {
       <figure data-reveal={reveal('mask')}>
         {/* Edge-to-edge, no page-margin — this reads as a full-bleed banner
             like the hero, not a photo in the flow, so it stays square. */}
-        <MediaImage media={first?.media} sizes="100vw" className="w-full" controls="hover" />
+        <MediaImage media={first?.media} sizes="100vw" className="w-full" controls />
         <Caption>{first?.caption ?? caption}</Caption>
       </figure>
     </BlockSection>
