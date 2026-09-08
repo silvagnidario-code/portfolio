@@ -21,6 +21,13 @@ type MediaVideoProps = {
   className?: string
   style?: CSSProperties
   ariaLabel?: string
+  /**
+   * The browser's native control bar, for placements where the viewer is
+   * meant to be able to stop, unmute or seek the clip (the gallery
+   * lightbox). Off by default: a silent autoplay loop — a thumbnail, a
+   * grid cover — has nothing for a bar to control.
+   */
+  controls?: boolean
 }
 
 /**
@@ -40,7 +47,15 @@ type MediaVideoProps = {
  * good: unlike `preload` and the `<source>` itself, it does not get undone by
  * scrolling the video back out of range and losing its buffer again.
  */
-export function MediaVideo({ src, mimeType, poster, className, style, ariaLabel }: MediaVideoProps) {
+export function MediaVideo({
+  src,
+  mimeType,
+  poster,
+  className,
+  style,
+  ariaLabel,
+  controls = true,
+}: MediaVideoProps) {
   const instanceId = useId()
   const videoRef = useRef<HTMLVideoElement>(null)
   // A page can carry a dozen of these; mobile browsers cap how many videos
@@ -197,7 +212,7 @@ export function MediaVideo({ src, mimeType, poster, className, style, ariaLabel 
       ref={videoRef}
       className={className}
       style={aspectRatio ? { ...style, aspectRatio: String(aspectRatio) } : style}
-      controls
+      controls={controls}
       playsInline
       muted
       loop

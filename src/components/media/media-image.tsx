@@ -25,8 +25,10 @@ type MediaImageProps = {
  * a generic upload, so nothing stops an editor picking an mp4 for a cover, a
  * hero or a gallery item. `next/image` cannot decode a video stream, so those
  * used to render as a broken-image icon showing only the alt text. Here the
- * mime type decides: a video becomes a muted, looping `<video>` — silent by
- * default, since that is what most placements want. Passing `controls` adds
+ * mime type decides: a video renders through `MediaVideo`, which is what
+ * keeps a page of many clips — a gallery grid, a reel — from decoding all of
+ * them at once regardless of `controls`. Silent, muted, looping is the
+ * default, since that's what most placements want; passing `controls` adds
  * the browser's native control bar for the placements — the gallery
  * lightbox — where the viewer is meant to be able to stop, unmute or seek
  * the clip.
@@ -48,33 +50,16 @@ export function MediaImage({
   if (mimeType?.startsWith('video/')) {
     const posterUrl = poster && typeof poster === 'object' ? (poster.url ?? undefined) : undefined
 
-    if (controls) {
-      return (
-        <MediaVideo
-          src={url}
-          mimeType={mimeType}
-          className={className}
-          style={{ objectPosition }}
-          ariaLabel={alt ?? undefined}
-          poster={posterUrl}
-        />
-      )
-    }
-
     return (
-      <video
+      <MediaVideo
+        src={url}
+        mimeType={mimeType}
         className={className}
         style={{ objectPosition }}
-        autoPlay
-        playsInline
-        muted
-        loop
-        preload="auto"
+        ariaLabel={alt ?? undefined}
         poster={posterUrl}
-        aria-label={alt ?? undefined}
-      >
-        <source src={url} type={mimeType} />
-      </video>
+        controls={controls}
+      />
     )
   }
 
