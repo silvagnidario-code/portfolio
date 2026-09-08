@@ -84,8 +84,24 @@
   }
 }
 
+/**
+ * `backwards`, not `both`: a running or filling animation on `transform`
+ * makes the element a containing block for its `position: fixed`
+ * descendants for as long as the animation is in effect — `both` never lets
+ * go of that, since it keeps applying the `to` keyframe forever after the
+ * animation ends. Confirmed live on /it/work/still-life: the photo
+ * lightbox's `fixed inset-0` was resolving against this wrapper's full
+ * (multi-thousand-pixel) document height instead of the viewport, so the
+ * backdrop centred the photo on the *page*, not the screen — miles off
+ * whatever the viewer had scrolled to, with only the oversized pale
+ * backdrop actually on screen. `backwards` only reaches back before the
+ * animation starts (so there's no flash of the un-animated state on
+ * arrival) and lets go the moment it finishes; nothing else styles this
+ * element, so what's left afterwards is the same opacity 1 / transform
+ * none the `to` keyframe asked for anyway.
+ */
 .page-enter {
-  animation: page-enter var(--duration-slow) var(--easing-reveal) both;
+  animation: page-enter var(--duration-slow) var(--easing-reveal) backwards;
 }
 
 /* Cross-document navigations get the same dissolve for free. */
