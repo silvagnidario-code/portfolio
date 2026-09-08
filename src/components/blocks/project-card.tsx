@@ -1,7 +1,8 @@
-import { MediaImage } from '@/components/media/media-image'
 import { Link } from '@/i18n/navigation'
 import { formatYearRange } from '@/lib/format'
 import type { Project } from '@/payload-types'
+
+import { ProjectCover } from './project-cover'
 
 /**
  * One project in a grid. The cover video, when there is one, is the hover loop
@@ -33,12 +34,10 @@ export function ProjectCard({
   return (
     <article>
       <Link href={`/work/${project.slug}`} className="group block">
-        <div
-          data-reveal="blur"
-          className={`w-full overflow-hidden rounded-glass-lg ${aspect}`}
-        >
-          <MediaImage
-            media={project.cover}
+        <div data-reveal="blur" className={`w-full overflow-hidden rounded-glass-lg ${aspect}`}>
+          <ProjectCover
+            cover={project.cover}
+            coverVideo={project.coverVideo}
             sizes={sizes}
             className="h-full w-full object-cover transition ease-reveal duration-slow group-hover:scale-[1.02] group-hover:opacity-90"
           />
