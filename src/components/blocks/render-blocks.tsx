@@ -15,7 +15,6 @@ import { ServicesBlock } from './services-block'
 import { Statement } from './statement'
 import { TeamBlock } from './team-block'
 import { TestimonialBlock } from './testimonial-block'
-import { TextImageBlock } from './text-image-block'
 
 type LayoutBlock = NonNullable<Page['layout']>[number]
 type NarrativeBlock = NonNullable<Project['execution']>[number]
@@ -58,8 +57,7 @@ function renderBlock(block: LayoutBlock | NarrativeBlock, locale: Locale) {
     case 'contactForm':
       return <ContactFormBlock block={block} locale={locale} />
     default:
-                  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      return (block as any)?.blockType === 'textImage' ? <TextImageBlock block={block as any} /> : null
+      return null
   }
 }
 

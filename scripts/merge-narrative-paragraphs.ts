@@ -43,7 +43,11 @@ function plainText(node: LexicalNode): string {
   return (node.children ?? []).map(plainText).join('')
 }
 
-function mergeParagraphs(state: LexicalState): { changed: boolean; state: LexicalState; preview?: string } {
+function mergeParagraphs(state: LexicalState): {
+  changed: boolean
+  state: LexicalState
+  preview?: string
+} {
   const children = state?.root?.children
   if (!Array.isArray(children) || children.length < 2) return { changed: false, state }
 
@@ -57,7 +61,9 @@ function mergeParagraphs(state: LexicalState): { changed: boolean; state: Lexica
   })
 
   const merged: LexicalNode = { ...children[0], children: mergedChildren }
-  const nextState = { root: { ...(state as { root: LexicalNode }).root, children: [merged] } } as LexicalState
+  const nextState = {
+    root: { ...(state as { root: LexicalNode }).root, children: [merged] },
+  } as LexicalState
 
   return { changed: true, state: nextState, preview: plainText(merged) }
 }
@@ -70,7 +76,9 @@ async function main(): Promise<void> {
   let page = 1
   let hasNextPage = true
 
-  console.log(WRITE ? 'Writing changes.\n' : 'Dry run — nothing will be saved. Pass --write to apply.\n')
+  console.log(
+    WRITE ? 'Writing changes.\n' : 'Dry run — nothing will be saved. Pass --write to apply.\n',
+  )
 
   while (hasNextPage) {
     const result = await payload.find({
@@ -88,8 +96,7 @@ async function main(): Promise<void> {
 
       for (const field of NARRATIVE_FIELDS) {
         const byLocale = (doc as unknown as Record<string, unknown>)[field] as
-          | Partial<Record<Locale, LexicalState>>
-          | undefined
+          Partial<Record<Locale, LexicalState>> | undefined
         if (!byLocale || typeof byLocale !== 'object') continue
 
         for (const locale of locales) {

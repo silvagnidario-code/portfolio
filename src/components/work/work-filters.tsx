@@ -60,9 +60,7 @@ export async function WorkFilters({
       className="flex flex-col gap-16 border-b border-line pb-24 tablet:flex-row tablet:items-center tablet:gap-32"
     >
       <div className="flex flex-wrap items-center gap-16">
-        <span className="font-mono text-caption uppercase text-ink-muted">
-          {t('byService')}
-        </span>
+        <span className="font-mono text-caption uppercase text-ink-muted">{t('byService')}</span>
         {pill(t('allProjects'), href({ industry: active.industry }), !active.service)}
         {services.map((service) =>
           pill(
@@ -74,9 +72,7 @@ export async function WorkFilters({
       </div>
 
       <div className="flex flex-wrap items-center gap-16">
-        <span className="font-mono text-caption uppercase text-ink-muted">
-          {t('byIndustry')}
-        </span>
+        <span className="font-mono text-caption uppercase text-ink-muted">{t('byIndustry')}</span>
         {pill(t('allProjects'), href({ service: active.service }), !active.industry)}
         {industries.map((industry) =>
           pill(

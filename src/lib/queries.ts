@@ -122,9 +122,7 @@ async function fetchProjectAlternates(
     }),
   )
 
-  return Object.fromEntries(
-    entries.filter((entry): entry is [Locale, string] => Boolean(entry[1])),
-  )
+  return Object.fromEntries(entries.filter((entry): entry is [Locale, string] => Boolean(entry[1])))
 }
 
 export const getProjectAlternates = cache(
@@ -235,10 +233,7 @@ export const getIndustriesList = cache(async (locale: Locale): Promise<Industry[
  * restano sempre id, slug e stringhe letterali, mai input libero dell'utente.
  */
 export const getProjectsList = cache(
-  async (
-    locale: Locale,
-    options: { where: Where; limit: number; sort?: string | string[] },
-  ) => {
+  async (locale: Locale, options: { where: Where; limit: number; sort?: string | string[] }) => {
     const { where, limit, sort = ['order', '-year'] } = options
 
     const read = unstable_cache(
