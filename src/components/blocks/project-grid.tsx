@@ -73,7 +73,7 @@ export async function ProjectGrid({ block, locale }: { block: ProjectGridBlock; 
         {heading}
         <div
           data-reveal-group
-          className="page-margin grid grid-cols-4 gap-16 tablet:grid-cols-6 tablet:gap-24 desktop:grid-cols-8 desktop:gap-32"
+          className="page-margin grid grid-cols-2 gap-16 tablet:grid-cols-3 tablet:gap-24 desktop:grid-cols-3 desktop:gap-32"
         >
           {projects.map((project) => (
             <ProjectIcon key={project.id} project={project} />
