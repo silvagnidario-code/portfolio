@@ -6,10 +6,14 @@ import { ProjectCover } from './project-cover'
 /**
  * One project as a home-screen icon.
  *
- * Unlike `ProjectCard`, the cover and the label are not two separate reveal
- * units — the whole tile carries one `data-reveal="pop"`, because a real
- * icon and its name arrive together, not half a beat apart. No hover video:
- * an icon this small has no room for a second read.
+ * The reveal is split in two, on purpose: the outer tile (`data-reveal="pop"`)
+ * carries the inward-converging translate and the fade, while the inner
+ * `data-pop-scale` cover is the only thing that actually scales. If the
+ * label scaled with the icon, the spring's overshoot would briefly blow the
+ * text up past its box and clip it — see `scroll-reveal.tsx`. The cover
+ * itself sits narrower than its grid cell (not full-width) so the icons read
+ * as smaller, deliberately, leaving more paper between them; the label stays
+ * full-width so the name doesn't shrink along with it.
  */
 export function ProjectIcon({ project }: { project: Project }) {
   return (
@@ -18,11 +22,14 @@ export function ProjectIcon({ project }: { project: Project }) {
       data-reveal="pop"
       className="group flex flex-col items-center gap-8 text-center"
     >
-      <div className="aspect-square w-full overflow-hidden rounded-glass-md transition ease-reveal duration-slow group-hover:scale-[1.04]">
+      <div
+        data-pop-scale
+        className="mx-auto aspect-square w-[78%] overflow-hidden rounded-glass-md transition ease-reveal duration-slow group-hover:scale-[1.04]"
+      >
         <ProjectCover
           cover={project.cover}
-          coverVideo={null}
-          sizes="(min-width: 1180px) 11vw, (min-width: 768px) 15vw, 22vw"
+          coverVideo={project.coverVideo}
+          sizes="(min-width: 768px) 26vw, 39vw"
           className="h-full w-full object-cover"
         />
       </div>
