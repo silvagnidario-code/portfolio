@@ -43,4 +43,8 @@ export const migrations = [
     down: migration_20260902_120032_add_project_year_end.down,
     name: '20260902_120032_add_project_year_end',
   },
+  { up: migration_20260918_120000_add_icon_grid_variant.up,
+   down: migration_20260918_120000_add_icon_grid_variant.down,
+   name: '20260918_120000_add_icon_grid_variant',
+  },
 ];
