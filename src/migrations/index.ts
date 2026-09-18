@@ -5,6 +5,7 @@ import * as migration_20260819_171003 from './20260819_171003';
 import * as migration_20260824_170500_add_gallery_variant from './20260824_170500_add_gallery_variant';
 import * as migration_20260824_170600_add_bio_block from './20260824_170600_add_bio_block';
 import * as migration_20260902_120032_add_project_year_end from './20260902_120032_add_project_year_end';
+import * as migration_20260918_120000_add_icon_grid_variant from './20260918_120000_add_icon_grid_variant';
 
 export const migrations = [
   {
