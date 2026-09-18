@@ -1,0 +1,38 @@
+From a1f96b815469c8899a45f157d4a1b7eaf060ccdb Mon Sep 17 00:00:00 2001
+From: Claude <noreply@anthropic.com>
+Date: Thu, 3 Sep 2026 08:48:38 +0000
+Subject: [PATCH] Reveal the videoLoop media block's controls on hover too
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Every other video placement (gallery thumbnails, the pair variant,
+the full-bleed default variant, the lightbox) already reveals its
+play/mute/fullscreen bar only on hover. The `videoLoop` variant — a
+single looping video, e.g. the rounded case-study clips on
+/work/reel — was the one spot still constructing `<MediaVideo>`
+without a `chrome` prop, so it fell back to the `always`-visible
+default and showed its bar permanently. Pass `chrome="hover"` there
+too, matching every other placement.
+
+Co-Authored-By: Claude Sonnet 5 <noreply@anthropic.com>
+Claude-Session: https://claude.ai/code/session_01HxB4PXbbyDtVBArjRyHo21
+---
+ src/components/blocks/media-block.tsx | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/src/components/blocks/media-block.tsx b/src/components/blocks/media-block.tsx
+index 45ab9f7..8e238a1 100644
+--- a/src/components/blocks/media-block.tsx
++++ b/src/components/blocks/media-block.tsx
+@@ -45,6 +45,7 @@ export function MediaBlock({ block }: { block: MediaBlockType }) {
+                 mimeType={video.mimeType}
+                 className="block h-auto max-h-[80vh] w-auto max-w-full rounded-glass-lg"
+                 poster={typeof poster === 'object' ? (poster?.url ?? undefined) : undefined}
++                chrome="hover"
+               />
+             ) : (
+               <MediaImage
+-- 
+2.43.0
+

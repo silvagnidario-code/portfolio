@@ -4,6 +4,7 @@ import type { Project, ProjectGridBlock } from '@/payload-types'
 
 import { BlockSection } from './block-section'
 import { ProjectCard } from './project-card'
+import { ProjectIcon } from './project-icon'
 
 async function resolveProjects(block: ProjectGridBlock, locale: Locale): Promise<Project[]> {
   if (block.source === 'manual') {
@@ -27,12 +28,17 @@ async function resolveProjects(block: ProjectGridBlock, locale: Locale): Promise
 }
 
 /**
- * The project grid, three variants.
+ * The project grid, four variants.
  *
  * `staggeredTwo` offsets the second column downwards — the asymmetry the
  * specification asks for, made with the grid rather than against it.
  * `draggableRow` scrolls inside itself; the drag-to-scroll behaviour is added
  * with the animation system in phase 8 and this is the version it enhances.
+ * `iconGrid` reads as a phone's home screen: fixed 4/6/8 columns rather than
+ * the page's structural 12/6/4, so a project is always a square icon and
+ * never a fraction of one. Purely CMS-driven — the tile count is `limit`,
+ * not a layout decision — so adding a project later is a new icon in the
+ * grid, not a change to this component.
  */
 export async function ProjectGrid({ block, locale }: { block: ProjectGridBlock; locale: Locale }) {
   const projects = await resolveProjects(block, locale)
@@ -55,6 +61,22 @@ export async function ProjectGrid({ block, locale }: { block: ProjectGridBlock; 
                 sizes="(min-width: 1180px) 33vw, (min-width: 768px) 50vw, 100vw"
               />
             </div>
+          ))}
+        </div>
+      </BlockSection>
+    )
+  }
+
+  if (block.variant === 'iconGrid') {
+    return (
+      <BlockSection settings={block.settings}>
+        {heading}
+        <div
+          data-reveal-group
+          className="page-margin grid grid-cols-4 gap-16 tablet:grid-cols-6 tablet:gap-24 desktop:grid-cols-8 desktop:gap-32"
+        >
+          {projects.map((project) => (
+            <ProjectIcon key={project.id} project={project} />
           ))}
         </div>
       </BlockSection>

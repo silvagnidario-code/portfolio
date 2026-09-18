@@ -1,0 +1,149 @@
+From 86755d83a5a608c7d8229ee631e3360f2cb5f00e Mon Sep 17 00:00:00 2001
+From: Claude <noreply@anthropic.com>
+Date: Tue, 8 Sep 2026 17:28:47 +0000
+Subject: [PATCH] Default first-time visitors to dark mode instead of following
+ OS preference
+
+The `system` theme mode used to resolve against prefers-color-scheme, so a
+first-time visitor saw whatever their OS was set to. It now resolves to a
+fixed DEFAULT_RESOLVED_THEME (dark) until the reader explicitly picks light
+or dark from the switcher, in both the no-flash inline script and the React
+provider.
+
+Co-Authored-By: Claude Sonnet 5 <noreply@anthropic.com>
+Claude-Session: https://claude.ai/code/session_012SegVSanfJ6o179tB426b6
+---
+ src/components/theme/theme-provider.tsx | 24 +++++++-----------------
+ src/components/theme/theme-script.tsx   | 11 +++++++----
+ src/components/theme/theme-switcher.tsx |  5 ++---
+ src/lib/theme.ts                        | 10 ++++++++--
+ 4 files changed, 24 insertions(+), 26 deletions(-)
+
+diff --git a/src/components/theme/theme-provider.tsx b/src/components/theme/theme-provider.tsx
+index e8408dc..5c23260 100644
+--- a/src/components/theme/theme-provider.tsx
++++ b/src/components/theme/theme-provider.tsx
+@@ -4,6 +4,7 @@ import { createContext, useCallback, useContext, useEffect, useState, type React
+ 
+ import {
+   applyResolvedTheme,
++  DEFAULT_RESOLVED_THEME,
+   defaultThemeMode,
+   isThemeMode,
+   THEME_STORAGE_KEY,
+@@ -27,7 +28,6 @@ const ThemeContext = createContext<ThemeContextValue | null>(null)
+ 
+ export function ThemeProvider({ children }: { children: ReactNode }) {
+   const [mode, setModeState] = useState<ThemeMode>(defaultThemeMode)
+-  const [systemDark, setSystemDark] = useState(false)
+   const [ready, setReady] = useState(false)
+ 
+   // The document attribute is already correct at this point: the inline script
+@@ -39,28 +39,18 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
+         setModeState(stored)
+       }
+     } catch {
+-      // Storage unavailable (private mode, blocked cookies): stay on system.
++      // Storage unavailable (private mode, blocked cookies): stay on the default.
+     }
+     setReady(true)
+   }, [])
+ 
+-  // The system preference can change while the page is open.
+-  useEffect(() => {
+-    const query = window.matchMedia('(prefers-color-scheme: dark)')
+-    const read = () => setSystemDark(query.matches)
+-
+-    read()
+-    query.addEventListener('change', read)
+-    return () => query.removeEventListener('change', read)
+-  }, [])
+-
+-  const resolved: 'light' | 'dark' = mode === 'system' ? (systemDark ? 'dark' : 'light') : mode
++  // `system` means "no explicit choice yet", which resolves to the site
++  // default rather than the reader's OS preference — see DEFAULT_RESOLVED_THEME.
++  const resolved: 'light' | 'dark' = mode === 'system' ? DEFAULT_RESOLVED_THEME : mode
+ 
+   // The single source of truth for what is painted. Re-applied on every
+-  // render of `resolved` — mount, a route change, a system-preference flip,
+-  // or an explicit choice — so the attribute can never drift from what React
+-  // believes is showing, the way relying on a bare CSS media-query fallback
+-  // for `system` could.
++  // render of `resolved` — mount, a route change, or an explicit choice — so
++  // the attribute can never drift from what React believes is showing.
+   useEffect(() => {
+     applyResolvedTheme(resolved)
+   }, [resolved])
+diff --git a/src/components/theme/theme-script.tsx b/src/components/theme/theme-script.tsx
+index f3b769e..c932878 100644
+--- a/src/components/theme/theme-script.tsx
++++ b/src/components/theme/theme-script.tsx
+@@ -1,14 +1,17 @@
+-import { THEME_ATTRIBUTE, THEME_STORAGE_KEY } from '@/lib/theme'
++import { DEFAULT_RESOLVED_THEME, THEME_ATTRIBUTE, THEME_STORAGE_KEY } from '@/lib/theme'
+ 
+ /**
+  * Applies the stored theme before the first paint. Without this the page
+- * renders in the system theme and then swaps, which on a paper-and-ink palette
+- * is a full-screen flash.
++ * renders in the default theme and then swaps, which on a paper-and-ink
++ * palette is a full-screen flash.
++ *
++ * A first-time visitor (nothing in storage yet) always gets
++ * `DEFAULT_RESOLVED_THEME`, not whatever their OS prefers.
+  *
+  * Must stay in <head>, above everything else.
+  */
+ export function ThemeScript() {
+-  const script = `(function(){try{var k=${JSON.stringify(THEME_STORAGE_KEY)};var attr=${JSON.stringify(THEME_ATTRIBUTE)};var m=localStorage.getItem(k);var resolved=(m==="light"||m==="dark")?m:((window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches)?"dark":"light");document.documentElement.setAttribute(attr,resolved)}catch(e){}})()`
++  const script = `(function(){try{var k=${JSON.stringify(THEME_STORAGE_KEY)};var attr=${JSON.stringify(THEME_ATTRIBUTE)};var m=localStorage.getItem(k);var resolved=(m==="light"||m==="dark")?m:${JSON.stringify(DEFAULT_RESOLVED_THEME)};document.documentElement.setAttribute(attr,resolved)}catch(e){}})()`
+ 
+   return <script dangerouslySetInnerHTML={{ __html: script }} />
+ }
+diff --git a/src/components/theme/theme-switcher.tsx b/src/components/theme/theme-switcher.tsx
+index ebe73f7..a1aa2da 100644
+--- a/src/components/theme/theme-switcher.tsx
++++ b/src/components/theme/theme-switcher.tsx
+@@ -13,9 +13,8 @@ import { useTheme } from './theme-provider'
+  *
+  * `system` is still the starting state — nothing is stored until the reader
+  * picks — but it is not offered as a third button. What the control shows is
+- * the theme the reader is *looking at*: with no choice made, that is whatever
+- * the operating system resolved to, and picking either icon simply makes it
+- * explicit.
++ * the theme the reader is *looking at*: with no choice made, that is the site
++ * default (dark), and picking either icon simply makes it explicit.
+  *
+  * The icons carry the meaning to the eye; the inputs carry it to everything
+  * else, and each label keeps its word in a visually hidden span so the control
+diff --git a/src/lib/theme.ts b/src/lib/theme.ts
+index 9deede5..bf5f42f 100644
+--- a/src/lib/theme.ts
++++ b/src/lib/theme.ts
+@@ -1,8 +1,11 @@
+ /**
+  * Theme contract, shared by the no-flash script, the provider and the switcher.
+  *
+- * Three states, not two: `system` follows `prefers-color-scheme`, `light` and
+- * `dark` are explicit choices that override it in both directions.
++ * Three states, not two: `system` is "no explicit choice yet", `light` and
++ * `dark` are explicit choices the reader made. `system` no longer means
++ * "follow prefers-color-scheme" — a first-time visitor lands on
++ * `DEFAULT_RESOLVED_THEME` regardless of their OS setting, and stays there
++ * until they pick a mode themselves via the switcher.
+  */
+ 
+ export const THEME_STORAGE_KEY = 'theme'
+@@ -16,6 +19,9 @@ export type ThemeMode = (typeof themeModes)[number]
+ 
+ export const defaultThemeMode: ThemeMode = 'system'
+ 
++/** What a reader with no stored preference sees on their first visit. */
++export const DEFAULT_RESOLVED_THEME: 'light' | 'dark' = 'dark'
++
+ export function isThemeMode(value: unknown): value is ThemeMode {
+   return typeof value === 'string' && (themeModes as readonly string[]).includes(value)
+ }
+-- 
+2.43.0
+

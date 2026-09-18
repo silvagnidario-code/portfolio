@@ -1,0 +1,35 @@
+From 48c05019b7c535e2cc2b37826f6b6fad37aa262f Mon Sep 17 00:00:00 2001
+From: Claude <noreply@anthropic.com>
+Date: Tue, 8 Sep 2026 17:44:10 +0000
+Subject: [PATCH] Fix type error in merge-narrative-paragraphs.ts breaking the
+ Vercel build
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+`doc as Record<string, unknown>` failed to compile because Project's fixed
+fields don't sufficiently overlap with an index signature. Route the cast
+through `unknown` first, as TS suggested — no behavior change.
+
+Co-Authored-By: Claude Sonnet 5 <noreply@anthropic.com>
+Claude-Session: https://claude.ai/code/session_012SegVSanfJ6o179tB426b6
+---
+ scripts/merge-narrative-paragraphs.ts | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/scripts/merge-narrative-paragraphs.ts b/scripts/merge-narrative-paragraphs.ts
+index b0ec0ab..221d011 100644
+--- a/scripts/merge-narrative-paragraphs.ts
++++ b/scripts/merge-narrative-paragraphs.ts
+@@ -87,7 +87,7 @@ async function main(): Promise<void> {
+       let docChanged = false
+ 
+       for (const field of NARRATIVE_FIELDS) {
+-        const byLocale = (doc as Record<string, unknown>)[field] as
++        const byLocale = (doc as unknown as Record<string, unknown>)[field] as
+           | Partial<Record<Locale, LexicalState>>
+           | undefined
+         if (!byLocale || typeof byLocale !== 'object') continue
+-- 
+2.43.0
+

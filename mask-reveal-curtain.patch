@@ -1,0 +1,122 @@
+From 7f0228b05a7a01134fabccfb51b03e7b898c4830 Mon Sep 17 00:00:00 2001
+From: Claude <noreply@anthropic.com>
+Date: Thu, 3 Sep 2026 09:55:22 +0000
+Subject: [PATCH] Replace the mask reveal's clip-path with a curtain, to stop
+ it flashing video black
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+The `mask` scroll reveal animated `clip-path` directly on the target
+— often a `videoLoop` block or the case-study hero, i.e. an ancestor
+of a `<video>`. Confirmed live on /it/work/reel: animating clip-path
+on a video's ancestor forces Chromium to rebuild that video's
+compositor layer every frame of the transition, and the video paints
+black for a frame or two while it catches up — the "flash" reported
+on that page, worse toward the bottom where more of these blocks
+stack up.
+
+Replace it with a curtain: a `[data-reveal="mask"]::after` pseudo-
+element (blocks.css) that covers the target with the page's own
+background and slides away, driven by a `--mask-hidden` custom
+property `ScrollReveal` sets to 1 then animates to 0. The curtain is
+a separate layer that never touches the video's own paint, so there's
+nothing left for Chromium to rebuild mid-transition. It also sidesteps
+inserting a real DOM node into a React-owned subtree, which a raw
+`element.appendChild` here would have risked.
+
+Co-Authored-By: Claude Sonnet 5 <noreply@anthropic.com>
+Claude-Session: https://claude.ai/code/session_01HxB4PXbbyDtVBArjRyHo21
+---
+ src/components/motion/scroll-reveal.tsx | 17 ++++++++------
+ src/styles/blocks.css                   | 30 +++++++++++++++++++++++++
+ 2 files changed, 40 insertions(+), 7 deletions(-)
+
+diff --git a/src/components/motion/scroll-reveal.tsx b/src/components/motion/scroll-reveal.tsx
+index 9cfed91..678d47a 100644
+--- a/src/components/motion/scroll-reveal.tsx
++++ b/src/components/motion/scroll-reveal.tsx
+@@ -143,24 +143,27 @@ export function ScrollReveal() {
+         })
+       }
+ 
+-      // `mask`: an edge-to-edge banner unveiled rather than faded in. The
+-      // clip rises off it the same way everything else here rises — just as
+-      // a curtain instead of a translation, which is what a full-bleed
+-      // video or cover image asks for.
++      // `mask`: an edge-to-edge banner unveiled rather than faded in, by a
++      // solid curtain sliding off it — see the `[data-reveal="mask"]::after`
++      // rule in blocks.css for the curtain itself and why it's a CSS
++      // variable driving a pseudo-element rather than a `clip-path`
++      // animated directly on the target: the target is very often a video,
++      // and clipping a video's own ancestor is what used to flash it black
++      // mid-transition.
+       const maskTargets = Array.from(
+         document.querySelectorAll<HTMLElement>('[data-reveal="mask"]:not([data-revealed])'),
+       )
+ 
+       if (maskTargets.length > 0) {
+         for (const target of maskTargets) target.dataset.revealed = 'pending'
+-        gsap.set(maskTargets, { clipPath: 'inset(100% 0% 0% 0%)' })
++        gsap.set(maskTargets, { '--mask-hidden': 1 })
+ 
+         const triggers = ScrollTrigger.batch(maskTargets, {
+           start: START,
+           once: true,
+           onEnter: (batch) => {
+             gsap.to(batch, {
+-              clipPath: 'inset(0% 0% 0% 0%)',
++              '--mask-hidden': 0,
+               duration: duration.slow / 1000,
+               ease,
+               stagger: stagger.base / 1000,
+@@ -171,7 +174,7 @@ export function ScrollReveal() {
+ 
+         disposers.push(() => {
+           for (const trigger of triggers) trigger.kill()
+-          gsap.set(maskTargets, { clearProps: 'clipPath' })
++          gsap.set(maskTargets, { clearProps: '--mask-hidden' })
+           for (const target of maskTargets) delete target.dataset.revealed
+         })
+       }
+diff --git a/src/styles/blocks.css b/src/styles/blocks.css
+index 3ee440a..90b1eae 100644
+--- a/src/styles/blocks.css
++++ b/src/styles/blocks.css
+@@ -121,3 +121,33 @@
+ :root[data-theme='light'] .project-accent {
+   --accent: var(--accent-light);
+ }
++
++/**
++ * The `mask` scroll reveal: a solid curtain covering `[data-reveal="mask"]`
++ * that `ScrollReveal` slides away, rather than a `clip-path` animated on the
++ * element itself. `clip-path` was the original approach, and reads simpler,
++ * but animating it on an ancestor of a `<video>` forces Chromium to rebuild
++ * that video's compositor layer on every frame of the transition — which
++ * flashes the video black for a frame or two while it catches up. A curtain
++ * never touches the video's own layer: only this unrelated, solid pseudo-
++ * element moves, so the video's paint is never disturbed.
++ *
++ * `--mask-hidden` defaults to 0 (curtain collapsed, content fully visible)
++ * so a reader with no JavaScript, or a bot with none, meets the real content
++ * rather than a stuck curtain — `ScrollReveal` is what sets it to 1 before
++ * the reveal, then animates it back down to 0.
++ */
++[data-reveal='mask'] {
++  position: relative;
++}
++
++[data-reveal='mask']::after {
++  content: '';
++  position: absolute;
++  inset: 0;
++  z-index: 1;
++  background-color: var(--bg-primary);
++  transform-origin: top;
++  transform: scaleY(var(--mask-hidden, 0));
++  pointer-events: none;
++}
+-- 
+2.43.0
+

@@ -11,6 +11,7 @@ export const ProjectGrid: Block = {
       { label: 'Due colonne sfalsate', value: 'staggeredTwo' },
       { label: 'Tre colonne compatte', value: 'compactThree' },
       { label: 'Lista orizzontale trascinabile', value: 'draggableRow' },
+      { label: 'Griglia icone (home screen)', value: 'iconGrid' },
     ]),
     { name: 'heading', type: 'text', localized: true },
     {
@@ -42,7 +43,7 @@ export const ProjectGrid: Block = {
       type: 'number',
       defaultValue: 6,
       min: 1,
-      max: 24,
+      max: 48,
       admin: { condition: (_, siblings) => siblings?.source !== 'manual' },
     },
     blockSettings,

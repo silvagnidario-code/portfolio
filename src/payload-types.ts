@@ -633,7 +633,7 @@ export interface ProjectGridBlock {
   /**
    * Cambiare variante non perde contenuti né traduzioni.
    */
-  variant: 'staggeredTwo' | 'compactThree' | 'draggableRow';
+  variant: 'staggeredTwo' | 'compactThree' | 'draggableRow' | 'iconGrid';
   heading?: string | null;
   source: 'featured' | 'manual' | 'byService';
   projects?: (number | Project)[] | null;

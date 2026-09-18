@@ -1,0 +1,102 @@
+From 596faf17ad09a4aab1157179a75be2207bff624c Mon Sep 17 00:00:00 2001
+From: Claude <noreply@anthropic.com>
+Date: Wed, 9 Sep 2026 10:01:26 +0000
+Subject: [PATCH] Add a static favicon.ico to stop it 500ing in production
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+/favicon.ico has no static file and isn't matched by the next-intl
+middleware (paths with a dot are excluded), so every browser's
+automatic request for it was falling through to the [locale] catch-all
+route with "favicon.ico" as the locale param — which then queried
+Payload/Postgres with an invalid locale value and threw, logged in
+Vercel as a 500 on every single request (confirmed in production logs
+and observability: this was the dominant cause of a 25.8% function
+error rate).
+
+Generated from the existing app/icon.svg via sharp + ImageMagick at
+16/32/48px, Next's standard app/favicon.ico convention, so it's served
+directly with no routing logic involved.
+
+Co-Authored-By: Claude Sonnet 5 <noreply@anthropic.com>
+Claude-Session: https://claude.ai/code/session_01NmbMBWtqtKDP2qBMGvpf2h
+---
+ src/app/favicon.ico | Bin 0 -> 15086 bytes
+ 1 file changed, 0 insertions(+), 0 deletions(-)
+ create mode 100644 src/app/favicon.ico
+
+diff --git a/src/app/favicon.ico b/src/app/favicon.ico
+new file mode 100644
+index 0000000000000000000000000000000000000000..58dab6ecf4b40335c9df051612a9e89240216bc3
+GIT binary patch
+literal 15086
+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
+
+literal 0
+HcmV?d00001
+
+-- 
+2.43.0
+

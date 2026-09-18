@@ -1,0 +1,150 @@
+From bf3841cf540011912f9805bbf0edba297b99a531 Mon Sep 17 00:00:00 2001
+From: Claude <noreply@anthropic.com>
+Date: Tue, 8 Sep 2026 17:29:48 +0000
+Subject: [PATCH] Play a project's coverVideo on hover in the grid
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+The Projects collection already had a coverVideo field — §4 of the
+spec calls it out as "loop breve per l'hover in griglia" — but
+ProjectCard only ever rendered the still cover; the field sat unused.
+
+Adds ProjectCover, a small client component that stacks the loop on
+top of the still cover (which doubles as its poster) inside a new
+relative wrapper. It stays at preload="none" with no <source> parked
+on the video until the pointer actually enters — nothing ever fetches
+for a project without a hover intent — and .play()/.pause() are
+called directly rather than left to an autoplay attribute, so the
+clip always restarts from frame zero on the next hover. A
+`(hover: hover)` check keeps this a mouse-only affordance, matching
+the "hover" the spec actually asks for rather than firing on a tap
+that's mid-navigation anyway.
+
+Projects without a coverVideo are unaffected: ProjectCover renders
+only the existing MediaImage in that case, same markup as before.
+
+Co-Authored-By: Claude Sonnet 5 <noreply@anthropic.com>
+Claude-Session: https://claude.ai/code/session_015hHvGTWvAaz9WDpZm7oPPi
+---
+ src/components/blocks/project-card.tsx  | 13 ++---
+ src/components/blocks/project-cover.tsx | 75 +++++++++++++++++++++++++
+ 2 files changed, 81 insertions(+), 7 deletions(-)
+ create mode 100644 src/components/blocks/project-cover.tsx
+
+diff --git a/src/components/blocks/project-card.tsx b/src/components/blocks/project-card.tsx
+index 1e10f55..3c61044 100644
+--- a/src/components/blocks/project-card.tsx
++++ b/src/components/blocks/project-card.tsx
+@@ -1,8 +1,9 @@
+-import { MediaImage } from '@/components/media/media-image'
+ import { Link } from '@/i18n/navigation'
+ import { formatYearRange } from '@/lib/format'
+ import type { Project } from '@/payload-types'
+ 
++import { ProjectCover } from './project-cover'
++
+ /**
+  * One project in a grid. The cover video, when there is one, is the hover loop
+  * of §4 — it stays `preload="none"` and never starts without a poster, which is
+@@ -33,12 +34,10 @@ export function ProjectCard({
+   return (
+     <article>
+       <Link href={`/work/${project.slug}`} className="group block">
+-        <div
+-          data-reveal="blur"
+-          className={`w-full overflow-hidden rounded-glass-lg ${aspect}`}
+-        >
+-          <MediaImage
+-            media={project.cover}
++        <div data-reveal="blur" className={`w-full overflow-hidden rounded-glass-lg ${aspect}`}>
++          <ProjectCover
++            cover={project.cover}
++            coverVideo={project.coverVideo}
+             sizes={sizes}
+             className="h-full w-full object-cover transition ease-reveal duration-slow group-hover:scale-[1.02] group-hover:opacity-90"
+           />
+diff --git a/src/components/blocks/project-cover.tsx b/src/components/blocks/project-cover.tsx
+new file mode 100644
+index 0000000..8848b61
+--- /dev/null
++++ b/src/components/blocks/project-cover.tsx
+@@ -0,0 +1,75 @@
++'use client'
++
++import { useCallback, useRef, useState } from 'react'
++
++import { MediaImage } from '@/components/media/media-image'
++import type { Media } from '@/payload-types'
++
++/**
++ * The still cover always renders through `MediaImage`, exactly as before.
++ * `coverVideo`, when a project has one, is a silent loop stacked on top of
++ * it — §4 of the spec: "loop per hover in griglia". It carries no
++ * `<source>` until the pointer actually arrives (`preload="none"`, and
++ * nothing calls `.play()` before then), so a project without a hover intent
++ * never costs a single byte of video, and the still cover doubles as its
++ * poster: nothing else ever paints before it.
++ *
++ * The hover check is re-armed on every enter rather than assumed from a
++ * mount-time media query, since a laptop with a mouse plugged in and
++ * unplugged mid-session can change `hover: hover` without a reload.
++ */
++export function ProjectCover({
++  cover,
++  coverVideo,
++  sizes,
++  className,
++}: {
++  cover: number | Media | null | undefined
++  coverVideo: number | Media | null | undefined
++  sizes: string
++  className?: string
++}) {
++  const videoRef = useRef<HTMLVideoElement>(null)
++  const [hovered, setHovered] = useState(false)
++
++  const handleEnter = useCallback(() => {
++    if (typeof window !== 'undefined' && !window.matchMedia('(hover: hover)').matches) return
++    setHovered(true)
++    void videoRef.current?.play()
++  }, [])
++
++  const handleLeave = useCallback(() => {
++    setHovered(false)
++    const el = videoRef.current
++    if (!el) return
++    el.pause()
++    el.currentTime = 0
++  }, [])
++
++  const video = coverVideo && typeof coverVideo === 'object' ? coverVideo : null
++
++  return (
++    <div className="relative h-full w-full" onMouseEnter={handleEnter} onMouseLeave={handleLeave}>
++      <MediaImage media={cover} sizes={sizes} className={className} />
++
++      {video?.url ? (
++        <video
++          ref={videoRef}
++          className={[
++            className ?? '',
++            'absolute inset-0 opacity-0 transition-opacity duration-slow ease-reveal',
++            hovered ? 'opacity-100' : '',
++          ].join(' ')}
++          muted
++          loop
++          playsInline
++          preload="none"
++          aria-hidden="true"
++          tabIndex={-1}
++        >
++          <source src={video.url} type={video.mimeType ?? undefined} />
++        </video>
++      ) : null}
++    </div>
++  )
++}
+-- 
+2.43.0
+

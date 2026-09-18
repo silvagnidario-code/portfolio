@@ -1,0 +1,79 @@
+From 8888bf08b3ad088651848f71489d384f876b456a Mon Sep 17 00:00:00 2001
+From: Claude <noreply@anthropic.com>
+Date: Tue, 8 Sep 2026 19:01:31 +0000
+Subject: [PATCH] Fix the photo lightbox rendering off-page under the
+ page-enter animation
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Reported on /it/work/still-life: opening a photo from a gallery grid in
+the lightbox turned the screen pale/blank with the photo centred oddly
+on the page instead of the viewport.
+
+Root cause, confirmed live in the browser: `.page-enter` (the wrapper
+`PageTransition` puts around every page's content) animates `transform`
+with `animation: ... both`. `both` keeps applying the animation's `to`
+keyframe forever after it finishes, and per spec an element with a
+running *or filling* animation on `transform` becomes the containing
+block for any `position: fixed` descendant, for as long as that holds —
+regardless of the keyframe's value (`transform: none` included).
+Toggling this element's `animation-fill-mode` live in devtools flipped
+its computed `transform` from `matrix(1, 0, 0, 1, 0, 0)` to `none`
+outright, and the lightbox (`fixed inset-0` in PhotoGallery) immediately
+started filling the actual viewport (0,0,1920,945) instead of the
+~6300px document height it had been resolving `inset-0` against.
+
+Every page's content sits inside this wrapper, so this wasn't just the
+lightbox: any `position: fixed` element rendered in page content (as
+opposed to persistent chrome like the header, which sits outside
+`PageTransition`) was affected the same way, for the page's entire
+lifetime, not just during the transition itself.
+
+Switching to `backwards` keeps the pre-animation state applied before
+the animation starts — so there's still no flash of unanimated content
+on arrival — but lets go the moment it ends. Nothing else styles this
+element, so the state it's left in afterwards (opacity 1, transform
+none) is identical to what `both` was holding; the difference is only
+that the animation, and the containing-block side effect that comes
+with it, actually ends.
+
+Co-Authored-By: Claude Sonnet 5 <noreply@anthropic.com>
+Claude-Session: https://claude.ai/code/session_015hHvGTWvAaz9WDpZm7oPPi
+---
+ src/styles/globals.css | 18 +++++++++++++++++-
+ 1 file changed, 17 insertions(+), 1 deletion(-)
+
+diff --git a/src/styles/globals.css b/src/styles/globals.css
+index 1bddbfe..5c56e29 100644
+--- a/src/styles/globals.css
++++ b/src/styles/globals.css
+@@ -84,8 +84,24 @@
+   }
+ }
+ 
++/**
++ * `backwards`, not `both`: a running or filling animation on `transform`
++ * makes the element a containing block for its `position: fixed`
++ * descendants for as long as the animation is in effect — `both` never lets
++ * go of that, since it keeps applying the `to` keyframe forever after the
++ * animation ends. Confirmed live on /it/work/still-life: the photo
++ * lightbox's `fixed inset-0` was resolving against this wrapper's full
++ * (multi-thousand-pixel) document height instead of the viewport, so the
++ * backdrop centred the photo on the *page*, not the screen — miles off
++ * whatever the viewer had scrolled to, with only the oversized pale
++ * backdrop actually on screen. `backwards` only reaches back before the
++ * animation starts (so there's no flash of the un-animated state on
++ * arrival) and lets go the moment it finishes; nothing else styles this
++ * element, so what's left afterwards is the same opacity 1 / transform
++ * none the `to` keyframe asked for anyway.
++ */
+ .page-enter {
+-  animation: page-enter var(--duration-slow) var(--easing-reveal) both;
++  animation: page-enter var(--duration-slow) var(--easing-reveal) backwards;
+ }
+ 
+ /* Cross-document navigations get the same dissolve for free. */
+-- 
+2.43.0
+

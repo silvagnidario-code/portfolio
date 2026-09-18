@@ -9,7 +9,7 @@ import { registerRevealEase } from './gsap-ease'
 import { useMayAnimate } from './motion-preferences'
 
 /**
- * The scroll reveals — four flavours sharing one clock.
+ * The scroll reveals — five flavours sharing one clock.
  *
  * It is declarative and central: elements mark themselves in the markup and
  * this component finds them. No component animates itself, so there is
@@ -30,8 +30,23 @@ import { useMayAnimate } from './motion-preferences'
  * Elements are *not* hidden in the markup: the hidden state is set from
  * JavaScript, a frame before the trigger is built. Without that, a reader with
  * JavaScript disabled or a bot with no scripting would meet a blank page.
+ *
+ * `pop` is the fifth, and a deliberate exception to two rules the other four
+ * keep: the site's one quiet easing, and no scale. It exists only for the
+ * icon-grid variant of `ProjectGrid`, and it moves too: each icon starts
+ * further out than its resting slot, in the direction it already sits from
+ * the grid's centre, and travels inward to arrive — the screen converging
+ * into place, not icons landing where they already were. Nothing else
+ * should reach for it; a card, a stat or a photograph still wants `rise` or
+ * `blur`, not this.
  */
 const START = 'top 85%'
+const POP_EASE = 'back.out(1.15)'
+const POP_DURATION = 420
+const POP_STAGGER = 25
+const POP_SCALE_FROM = 0.55
+/** How much further out an icon's start point sits, as a multiple of its own distance from the grid's centre. */
+const POP_OUTSIDE = 1.3
 
 export function ScrollReveal() {
   const mayAnimate = useMayAnimate()
@@ -141,6 +156,78 @@ export function ScrollReveal() {
           gsap.set(blurTargets, { clearProps: 'opacity,transform,filter' })
           for (const target of blurTargets) delete target.dataset.revealed
         })
+      }
+
+      // `pop`: icons converging onto a home screen. Each `[data-reveal-group]`
+      // (the icon-grid container) is its own centre — a page with more than
+      // one such grid should not have icons from one converging toward
+      // another. Distance and direction come from real layout (`getBoundingClientRect`), not from row/column
+      // math, so the effect survives the grid's own responsive column count
+      // changing under it.
+      const popTargets = Array.from(
+        document.querySelectorAll<HTMLElement>('[data-reveal="pop"]:not([data-revealed])'),
+      )
+
+      if (popTargets.length > 0) {
+        const groups = new Map<HTMLElement, HTMLElement[]>()
+        for (const target of popTargets) {
+          const group = target.closest<HTMLElement>('[data-reveal-group]') ?? target.parentElement
+          if (!group) continue
+          const members = groups.get(group) ?? []
+          members.push(target)
+          groups.set(group, members)
+        }
+
+        for (const [group, members] of groups) {
+          for (const target of members) target.dataset.revealed = 'pending'
+
+          const groupRect = group.getBoundingClientRect()
+          const centerX = groupRect.left + groupRect.width / 2
+          const centerY = groupRect.top + groupRect.height / 2
+
+          // The start point per icon: further out, in the same direction it
+          // already sits from centre — an icon just left of centre starts
+          // further left, one just below starts further below.
+          const withOffsets = members
+            .map((el) => {
+              const rect = el.getBoundingClientRect()
+              const dx = (rect.left + rect.width / 2 - centerX) * POP_OUTSIDE
+              const dy = (rect.top + rect.height / 2 - centerY) * POP_OUTSIDE
+              return { el, dx, dy, distance: Math.hypot(dx, dy) }
+            })
+            // Closest to centre settles first; the ripple moves outward
+            // from there, so the last icons to land are the ones that
+            // travelled the furthest inward.
+            .sort((a, b) => a.distance - b.distance)
+
+          const els = withOffsets.map((o) => o.el)
+          gsap.set(els, { opacity: 0, scale: POP_SCALE_FROM })
+          for (const { el, dx, dy } of withOffsets) gsap.set(el, { x: dx, y: dy })
+
+          const trigger = ScrollTrigger.create({
+            trigger: group,
+            start: START,
+            once: true,
+            onEnter: () => {
+              gsap.to(els, {
+                x: 0,
+                y: 0,
+                opacity: 1,
+                scale: 1,
+                duration: POP_DURATION / 1000,
+                ease: POP_EASE,
+                stagger: POP_STAGGER / 1000,
+                onComplete: () => markRevealed(els),
+              })
+            },
+          })
+
+          disposers.push(() => {
+            trigger.kill()
+            gsap.set(els, { clearProps: 'opacity,transform' })
+            for (const el of els) delete el.dataset.revealed
+          })
+        }
       }
 
       // `mask`: an edge-to-edge banner unveiled rather than faded in, by a

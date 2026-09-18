@@ -1,0 +1,136 @@
+From 663d6ef8f7fb885294c892cb94868e533a3f9172 Mon Sep 17 00:00:00 2001
+From: Claude <noreply@anthropic.com>
+Date: Tue, 8 Sep 2026 19:05:39 +0000
+Subject: [PATCH] Route gallery/thumbnail videos through MediaVideo's lazy
+ loader too
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+MediaImage had two code paths for a video mime type: MediaVideo (viewport-
+gated, one decode budget, stable box) when `controls` was passed, and a bare
+<video autoPlay preload="auto"> with none of that when it wasn't. Every
+video in a PhotoGallery grid (no `controls`) used the second path, so a
+gallery with several clips — like the /work/reel page's client-reel gallery
+— decoded and played all of them at once, all the time, regardless of
+scroll position. That sustained decode load is what read as stutter/jank
+while scrolling the page, not a bug in the reveal or lazy-loading system
+itself (which only ever covered the `controls` path).
+
+MediaVideo now takes a `controls` prop (default true, matching its previous
+always-on behavior) and MediaImage always renders through it, passing
+`controls` through unchanged. Same visual behavior (silent autoplay loop for
+thumbnails, native bar in the lightbox), but now every video placement gets
+the same viewport gating, decode budget and stable sizing.
+
+Co-Authored-By: Claude Sonnet 5 <noreply@anthropic.com>
+Claude-Session: https://claude.ai/code/session_012SegVSanfJ6o179tB426b6
+---
+ src/components/media/media-image.tsx | 35 ++++++++--------------------
+ src/components/media/media-video.tsx | 19 +++++++++++++--
+ 2 files changed, 27 insertions(+), 27 deletions(-)
+
+diff --git a/src/components/media/media-image.tsx b/src/components/media/media-image.tsx
+index 4e7f603..b6002c6 100644
+--- a/src/components/media/media-image.tsx
++++ b/src/components/media/media-image.tsx
+@@ -25,8 +25,10 @@ type MediaImageProps = {
+  * a generic upload, so nothing stops an editor picking an mp4 for a cover, a
+  * hero or a gallery item. `next/image` cannot decode a video stream, so those
+  * used to render as a broken-image icon showing only the alt text. Here the
+- * mime type decides: a video becomes a muted, looping `<video>` — silent by
+- * default, since that is what most placements want. Passing `controls` adds
++ * mime type decides: a video renders through `MediaVideo`, which is what
++ * keeps a page of many clips — a gallery grid, a reel — from decoding all of
++ * them at once regardless of `controls`. Silent, muted, looping is the
++ * default, since that's what most placements want; passing `controls` adds
+  * the browser's native control bar for the placements — the gallery
+  * lightbox — where the viewer is meant to be able to stop, unmute or seek
+  * the clip.
+@@ -48,33 +50,16 @@ export function MediaImage({
+   if (mimeType?.startsWith('video/')) {
+     const posterUrl = poster && typeof poster === 'object' ? (poster.url ?? undefined) : undefined
+ 
+-    if (controls) {
+-      return (
+-        <MediaVideo
+-          src={url}
+-          mimeType={mimeType}
+-          className={className}
+-          style={{ objectPosition }}
+-          ariaLabel={alt ?? undefined}
+-          poster={posterUrl}
+-        />
+-      )
+-    }
+-
+     return (
+-      <video
++      <MediaVideo
++        src={url}
++        mimeType={mimeType}
+         className={className}
+         style={{ objectPosition }}
+-        autoPlay
+-        playsInline
+-        muted
+-        loop
+-        preload="auto"
++        ariaLabel={alt ?? undefined}
+         poster={posterUrl}
+-        aria-label={alt ?? undefined}
+-      >
+-        <source src={url} type={mimeType} />
+-      </video>
++        controls={controls}
++      />
+     )
+   }
+ 
+diff --git a/src/components/media/media-video.tsx b/src/components/media/media-video.tsx
+index 737a91d..8d1d74c 100644
+--- a/src/components/media/media-video.tsx
++++ b/src/components/media/media-video.tsx
+@@ -21,6 +21,13 @@ type MediaVideoProps = {
+   className?: string
+   style?: CSSProperties
+   ariaLabel?: string
++  /**
++   * The browser's native control bar, for placements where the viewer is
++   * meant to be able to stop, unmute or seek the clip (the gallery
++   * lightbox). Off by default: a silent autoplay loop — a thumbnail, a
++   * grid cover — has nothing for a bar to control.
++   */
++  controls?: boolean
+ }
+ 
+ /**
+@@ -40,7 +47,15 @@ type MediaVideoProps = {
+  * good: unlike `preload` and the `<source>` itself, it does not get undone by
+  * scrolling the video back out of range and losing its buffer again.
+  */
+-export function MediaVideo({ src, mimeType, poster, className, style, ariaLabel }: MediaVideoProps) {
++export function MediaVideo({
++  src,
++  mimeType,
++  poster,
++  className,
++  style,
++  ariaLabel,
++  controls = true,
++}: MediaVideoProps) {
+   const instanceId = useId()
+   const videoRef = useRef<HTMLVideoElement>(null)
+   // A page can carry a dozen of these; mobile browsers cap how many videos
+@@ -197,7 +212,7 @@ export function MediaVideo({ src, mimeType, poster, className, style, ariaLabel
+       ref={videoRef}
+       className={className}
+       style={aspectRatio ? { ...style, aspectRatio: String(aspectRatio) } : style}
+-      controls
++      controls={controls}
+       playsInline
+       muted
+       loop
+-- 
+2.43.0
+
