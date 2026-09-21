@@ -87,14 +87,14 @@
       "exploring": "Stiamo valutando"
     },
     "status": {
-      "sent": "Ricevuto. Ti rispondiamo entro due giorni lavorativi.",
+      "sent": "Ricevuto. Ti rispondo entro un giorno lavorativo.",
       "invalid": "Qualche campo non è valido. Controlla quelli segnalati.",
       "rateLimited": "Troppi invii ravvicinati. Riprova fra qualche minuto.",
-      "notConfigured": "L'invio non è configurato. Scrivici direttamente all'indirizzo qui sotto.",
-      "failed": "L'invio non è riuscito. Riprova, o scrivici direttamente all'indirizzo qui sotto."
+      "notConfigured": "L'invio non è configurato. Scrivimi direttamente all'indirizzo qui sotto.",
+      "failed": "L'invio non è riuscito. Riprova, o scrivimi direttamente all'indirizzo qui sotto."
     },
     "invalidField": "Controlla questo campo.",
-    "writeUs": "Oppure scrivici"
+    "writeUs": "Oppure scrivimi"
   },
   "BlocksPage": {
     "title": "Blocchi",
