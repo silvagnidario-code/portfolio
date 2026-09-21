@@ -62,14 +62,14 @@ export default async function WorkIndexPage({ params, searchParams }: PageProps)
       {projects.docs.length === 0 ? (
         <p className="page-margin text-body-lg text-ink-2">{t('empty')}</p>
       ) : (
-        <div className="page-grid gap-y-48">
+        <div className="page-grid gap-y-24">
           {projects.docs.map((project, index) => (
             <div
               key={project.id}
               className={
                 index % 2 === 0
                   ? 'col-span-4 tablet:col-span-4 desktop:col-span-5'
-                  : 'col-span-4 tablet:col-span-4 tablet:col-start-3 desktop:col-span-4 desktop:col-start-8 desktop:mt-64'
+                  : 'col-span-4 tablet:col-span-4 tablet:col-start-3 desktop:col-span-4 desktop:col-start-8 desktop:mt-32'
               }
             >
               <ProjectCard
