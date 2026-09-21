@@ -87,14 +87,14 @@
       "exploring": "Still exploring"
     },
     "status": {
-      "sent": "Received. We will answer within two working days.",
+      "sent": "Received. I'll answer within one business day.",
       "invalid": "Some fields are not valid. Check the ones marked.",
       "rateLimited": "Too many submissions in a row. Try again in a few minutes.",
-      "notConfigured": "Sending is not configured. Write to us directly at the address below.",
-      "failed": "Sending failed. Try again, or write to us directly at the address below."
+      "notConfigured": "Sending is not configured. Write to me directly at the address below.",
+      "failed": "Sending failed. Try again, or write to me directly at the address below."
     },
     "invalidField": "Check this field.",
-    "writeUs": "Or write to us"
+    "writeUs": "Or write to me"
   },
   "BlocksPage": {
     "title": "Blocks",
