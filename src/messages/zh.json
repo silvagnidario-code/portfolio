@@ -87,14 +87,14 @@
       "exploring": "仍在评估"
     },
     "status": {
-      "sent": "已收到。我们会在两个工作日内回复。",
+      "sent": "已收到。我会在一个工作日内回复。",
       "invalid": "部分字段无效，请检查标记处。",
       "rateLimited": "提交过于频繁，请几分钟后再试。",
       "notConfigured": "发送功能尚未配置。请直接写信到下方地址。",
       "failed": "发送失败。请重试，或直接写信到下方地址。"
     },
     "invalidField": "请检查此字段。",
-    "writeUs": "或直接联系我们"
+    "writeUs": "或直接联系我"
   },
   "BlocksPage": {
     "title": "区块",
