@@ -68,8 +68,8 @@ export default async function WorkIndexPage({ params, searchParams }: PageProps)
               key={project.id}
               className={
                 index % 2 === 0
-                  ? 'col-span-4 tablet:col-span-4 desktop:col-span-5'
-                  : 'col-span-4 tablet:col-span-4 tablet:col-start-3 desktop:col-span-4 desktop:col-start-6 desktop:mt-32'
+                  ? 'col-span-4 tablet:col-span-4 desktop:col-span-5 desktop:col-start-2'
+                  : 'col-span-4 tablet:col-span-4 tablet:col-start-3 desktop:col-span-4 desktop:col-start-8 desktop:mt-48'
               }
             >
               <ProjectCard
