@@ -1,0 +1,278 @@
+From 91d306c05fdde1c00d6ce07c01b0246d71fc28fc Mon Sep 17 00:00:00 2001
+From: Claude <noreply@anthropic.com>
+Date: Wed, 30 Sep 2026 17:57:02 +0000
+Subject: [PATCH] Add a live-embed (iframe) block for case studies
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Projects can now carry a 'Sito live (iframe)' block in the execution
+array alongside Testo and Media: an editable URL, height and heading,
+rendered as an <iframe> with a fallback link that always sits next to
+the frame rather than behind a failure this page cannot detect — a
+site that refuses to be framed (X-Frame-Options / CSP) just renders an
+empty box, with no error a script here can observe.
+
+payload-types.ts updated by hand (LiveEmbedBlock / LiveEmbedBlockSelect,
+both unions) rather than via 'generate:types', which needs a live DB
+connection this environment doesn't have. Run generate:types once
+against a real database to confirm it reproduces the same shape.
+---
+ src/blocks/live-embed.ts                   | 62 ++++++++++++++++++++++
+ src/collections/Projects.ts                |  3 +-
+ src/components/blocks/live-embed-block.tsx | 53 ++++++++++++++++++
+ src/components/blocks/render-blocks.tsx    |  3 ++
+ src/payload-types.ts                       | 45 +++++++++++++++-
+ 5 files changed, 164 insertions(+), 2 deletions(-)
+ create mode 100644 src/blocks/live-embed.ts
+ create mode 100644 src/components/blocks/live-embed-block.tsx
+
+diff --git a/src/blocks/live-embed.ts b/src/blocks/live-embed.ts
+new file mode 100644
+index 0000000..d527764
+--- /dev/null
++++ b/src/blocks/live-embed.ts
+@@ -0,0 +1,62 @@
++import type { Block } from 'payload'
++
++import { blockSettings } from './shared'
++
++/**
++ * A live, navigable window onto another site — the case study's own project,
++ * typically — embedded directly in the page via `<iframe>`.
++ *
++ * Caveat that can't be engineered away: many sites refuse to be framed
++ * (`X-Frame-Options` / `frame-ancestors`), and a blocked frame fails silently
++ * — no error a script can catch, just an empty box. There is no reliable way
++ * to detect that from the parent page, so the fallback link is never
++ * conditional on failure; it always sits with the frame, not behind it.
++ */
++export const LiveEmbed: Block = {
++  slug: 'liveEmbed',
++  interfaceName: 'LiveEmbedBlock',
++  labels: { singular: 'Sito live (iframe)', plural: 'Siti live (iframe)' },
++  fields: [
++    { name: 'eyebrow', type: 'text', localized: true },
++    { name: 'heading', type: 'text', localized: true },
++    {
++      name: 'url',
++      type: 'text',
++      required: true,
++      admin: {
++        description:
++          'URL completo (con https://). Alcuni siti rifiutano di essere incorporati: se il riquadro resta vuoto, è quello — non un errore di questo blocco.',
++      },
++      validate: (value: string | null | undefined) => {
++        if (!value) return 'Obbligatorio.'
++        try {
++          const parsed = new URL(value)
++          return parsed.protocol === 'https:' || parsed.protocol === 'http:'
++            ? true
++            : "Deve iniziare con 'https://' o 'http://'."
++        } catch {
++          return "URL non valido — deve includere 'https://'."
++        }
++      },
++    },
++    {
++      name: 'height',
++      type: 'number',
++      required: true,
++      defaultValue: 640,
++      min: 320,
++      max: 1200,
++      admin: {
++        description: 'Altezza del riquadro in pixel (desktop). Si adatta da solo sotto i tablet.',
++      },
++    },
++    {
++      name: 'fallbackLabel',
++      type: 'text',
++      localized: true,
++      defaultValue: 'Apri il sito in una nuova scheda',
++      admin: { description: 'Testo del link che affianca il riquadro, sempre visibile.' },
++    },
++    blockSettings,
++  ],
++}
+diff --git a/src/collections/Projects.ts b/src/collections/Projects.ts
+index 9c2fd66..71c5787 100644
+--- a/src/collections/Projects.ts
++++ b/src/collections/Projects.ts
+@@ -1,6 +1,7 @@
+ import type { CollectionConfig } from 'payload'
+ 
+ import { admins, authenticated, authenticatedOrPublished } from '../access/roles'
++import { LiveEmbed } from '../blocks/live-embed'
+ import { MediaBlock } from '../blocks/media'
+ import { Prose } from '../blocks/prose'
+ import { metaGroup } from '../fields/meta'
+@@ -187,7 +188,7 @@ export const Projects: CollectionConfig = {
+             {
+               name: 'execution',
+               type: 'blocks',
+-              blocks: [Prose, MediaBlock],
++              blocks: [Prose, MediaBlock, LiveEmbed],
+               admin: { description: "Testo e media alternati, nell'ordine in cui si leggono." },
+             },
+             {
+diff --git a/src/components/blocks/live-embed-block.tsx b/src/components/blocks/live-embed-block.tsx
+new file mode 100644
+index 0000000..44ab2db
+--- /dev/null
++++ b/src/components/blocks/live-embed-block.tsx
+@@ -0,0 +1,53 @@
++import type { LiveEmbedBlock as LiveEmbedBlockType } from '@/payload-types'
++
++import { BlockSection } from './block-section'
++
++/**
++ * A live, navigable window onto another site, via `<iframe>`.
++ *
++ * The fallback link is never conditional on the frame failing to load: a
++ * site that refuses to be framed (`X-Frame-Options` / CSP) just renders an
++ * empty box, with no error a script on this page can observe. So the link
++ * always sits next to the frame, described as the safety net it is, not
++ * swapped in after a failure this component cannot detect.
++ */
++export function LiveEmbedBlock({ block }: { block: LiveEmbedBlockType }) {
++  const { eyebrow, heading, url, height, fallbackLabel, settings } = block
++
++  if (!url) return null
++
++  return (
++    <BlockSection settings={settings}>
++      <div className="page-grid">
++        <div className="col-span-4 tablet:col-span-6 desktop:col-span-10 desktop:col-start-2">
++          {eyebrow ? (
++            <p className="font-mono text-caption uppercase text-ink-muted">{eyebrow}</p>
++          ) : null}
++          <div className="mt-8 flex flex-wrap items-baseline justify-between gap-16">
++            {heading ? <h2 className="text-h3 text-balance">{heading}</h2> : <span />}
++            <a
++              href={url}
++              target="_blank"
++              rel="noopener noreferrer"
++              className="text-body-sm underline text-ink-muted hover:text-ink"
++            >
++              {fallbackLabel || 'Apri il sito in una nuova scheda'} ↗
++            </a>
++          </div>
++          <div
++            className="mt-24 w-full overflow-hidden rounded-glass-lg border border-line-strong bg-surface-2"
++            style={{ height: `${height ?? 640}px` }}
++          >
++            <iframe
++              src={url}
++              title={heading || url}
++              className="h-full w-full"
++              loading="lazy"
++              sandbox="allow-scripts allow-same-origin allow-forms allow-popups allow-popups-to-escape-sandbox"
++            />
++          </div>
++        </div>
++      </div>
++    </BlockSection>
++  )
++}
+diff --git a/src/components/blocks/render-blocks.tsx b/src/components/blocks/render-blocks.tsx
+index ce06616..218dac1 100644
+--- a/src/components/blocks/render-blocks.tsx
++++ b/src/components/blocks/render-blocks.tsx
+@@ -7,6 +7,7 @@ import { ContactFormBlock } from './contact-form'
+ import { Cta } from './cta'
+ import { Faq } from './faq'
+ import { Hero } from './hero'
++import { LiveEmbedBlock } from './live-embed-block'
+ import { MediaBlock } from './media-block'
+ import { ProjectGrid } from './project-grid'
+ import { Prose } from './prose'
+@@ -36,6 +37,8 @@ function renderBlock(block: LayoutBlock | NarrativeBlock, locale: Locale) {
+       return <ProjectGrid block={block} locale={locale} />
+     case 'media':
+       return <MediaBlock block={block} />
++    case 'liveEmbed':
++      return <LiveEmbedBlock block={block} />
+     case 'bio':
+       return <BioBlock block={block} />
+     case 'services':
+diff --git a/src/payload-types.ts b/src/payload-types.ts
+index 86f8aa0..e31d23c 100644
+--- a/src/payload-types.ts
++++ b/src/payload-types.ts
+@@ -254,7 +254,7 @@ export interface Project {
+   /**
+    * Testo e media alternati, nell'ordine in cui si leggono.
+    */
+-  execution?: (ProseBlock | MediaBlockType)[] | null;
++  execution?: (ProseBlock | MediaBlockType | LiveEmbedBlock)[] | null;
+   results?:
+     | {
+         label: string;
+@@ -474,6 +474,28 @@ export interface ProseBlock {
+   blockName?: string | null;
+   blockType: 'prose';
+ }
++/**
++ * This interface was referenced by `Config`'s JSON-Schema
++ * via the `definition` "LiveEmbedBlock".
++ */
++export interface LiveEmbedBlock {
++  eyebrow?: string | null;
++  heading?: string | null;
++  url: string;
++  height: number;
++  fallbackLabel?: string | null;
++  /**
++   * Fondo, respiro verticale e animazione di ingresso.
++   */
++  settings: {
++    background: 'paper' | 'sumi' | 'accent';
++    spacing: 'compact' | 'normal' | 'wide';
++    animate?: boolean | null;
++  };
++  id?: string | null;
++  blockName?: string | null;
++  blockType: 'liveEmbed';
++}
+ /**
+  * This interface was referenced by `Config`'s JSON-Schema
+  * via the `definition` "testimonials".
+@@ -1104,6 +1126,7 @@ export interface ProjectsSelect<T extends boolean = true> {
+     | {
+         prose?: T | ProseBlockSelect<T>;
+         media?: T | MediaBlockTypeSelect<T>;
++        liveEmbed?: T | LiveEmbedBlockSelect<T>;
+       };
+   results?:
+     | T
+@@ -1175,6 +1198,26 @@ export interface ProseBlockSelect<T extends boolean = true> {
+   id?: T;
+   blockName?: T;
+ }
++/**
++ * This interface was referenced by `Config`'s JSON-Schema
++ * via the `definition` "LiveEmbedBlock_select".
++ */
++export interface LiveEmbedBlockSelect<T extends boolean = true> {
++  eyebrow?: T;
++  heading?: T;
++  url?: T;
++  height?: T;
++  fallbackLabel?: T;
++  settings?:
++    | T
++    | {
++        background?: T;
++        spacing?: T;
++        animate?: T;
++      };
++  id?: T;
++  blockName?: T;
++}
+ /**
+  * This interface was referenced by `Config`'s JSON-Schema
+  * via the `definition` "pages_select".
+-- 
+2.43.0
+

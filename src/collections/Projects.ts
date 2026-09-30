@@ -1,6 +1,7 @@
 import type { CollectionConfig } from 'payload'
 
 import { admins, authenticated, authenticatedOrPublished } from '../access/roles'
+import { LiveEmbed } from '../blocks/live-embed'
 import { MediaBlock } from '../blocks/media'
 import { Prose } from '../blocks/prose'
 import { metaGroup } from '../fields/meta'
@@ -187,7 +188,7 @@ export const Projects: CollectionConfig = {
             {
               name: 'execution',
               type: 'blocks',
-              blocks: [Prose, MediaBlock],
+              blocks: [Prose, MediaBlock, LiveEmbed],
               admin: { description: "Testo e media alternati, nell'ordine in cui si leggono." },
             },
             {

@@ -7,6 +7,7 @@ import { ContactFormBlock } from './contact-form'
 import { Cta } from './cta'
 import { Faq } from './faq'
 import { Hero } from './hero'
+import { LiveEmbedBlock } from './live-embed-block'
 import { MediaBlock } from './media-block'
 import { ProjectGrid } from './project-grid'
 import { Prose } from './prose'
@@ -36,6 +37,8 @@ function renderBlock(block: LayoutBlock | NarrativeBlock, locale: Locale) {
       return <ProjectGrid block={block} locale={locale} />
     case 'media':
       return <MediaBlock block={block} />
+    case 'liveEmbed':
+      return <LiveEmbedBlock block={block} />
     case 'bio':
       return <BioBlock block={block} />
     case 'services':

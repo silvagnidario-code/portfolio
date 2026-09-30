@@ -254,7 +254,7 @@ export interface Project {
   /**
    * Testo e media alternati, nell'ordine in cui si leggono.
    */
-  execution?: (ProseBlock | MediaBlockType)[] | null;
+  execution?: (ProseBlock | MediaBlockType | LiveEmbedBlock)[] | null;
   results?:
     | {
         label: string;
@@ -473,6 +473,37 @@ export interface ProseBlock {
   id?: string | null;
   blockName?: string | null;
   blockType: 'prose';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "LiveEmbedBlock".
+ */
+export interface LiveEmbedBlock {
+  eyebrow?: string | null;
+  heading?: string | null;
+  /**
+   * URL completo (con https://). Alcuni siti rifiutano di essere incorporati: se il riquadro resta vuoto, è quello — non un errore di questo blocco.
+   */
+  url: string;
+  /**
+   * Altezza del riquadro in pixel (desktop). Si adatta da solo sotto i tablet.
+   */
+  height: number;
+  /**
+   * Testo del link che affianca il riquadro, sempre visibile.
+   */
+  fallbackLabel?: string | null;
+  /**
+   * Fondo, respiro verticale e animazione di ingresso.
+   */
+  settings: {
+    background: 'paper' | 'sumi' | 'accent';
+    spacing: 'compact' | 'normal' | 'wide';
+    animate?: boolean | null;
+  };
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'liveEmbed';
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -1104,6 +1135,7 @@ export interface ProjectsSelect<T extends boolean = true> {
     | {
         prose?: T | ProseBlockSelect<T>;
         media?: T | MediaBlockTypeSelect<T>;
+        liveEmbed?: T | LiveEmbedBlockSelect<T>;
       };
   results?:
     | T
@@ -1172,6 +1204,26 @@ export interface ProseBlockSelect<T extends boolean = true> {
   eyebrow?: T;
   heading?: T;
   body?: T;
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "LiveEmbedBlock_select".
+ */
+export interface LiveEmbedBlockSelect<T extends boolean = true> {
+  eyebrow?: T;
+  heading?: T;
+  url?: T;
+  height?: T;
+  fallbackLabel?: T;
+  settings?:
+    | T
+    | {
+        background?: T;
+        spacing?: T;
+        animate?: T;
+      };
   id?: T;
   blockName?: T;
 }
