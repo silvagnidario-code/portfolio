@@ -131,11 +131,16 @@ export default async function CaseStudyPage({ params }: PageProps) {
         // (16:9) replaced an earlier viewport-relative height (70vh): at
         // this section's actual width that read as a short, overly wide
         // letterbox rather than the familiar video-frame proportions a
-        // 16:9 box gives regardless of screen size. `max-w-5xl` caps how
-        // large that box gets on a wide monitor, where 16:9 at the full
-        // content width would otherwise dominate the page — 1024px wide
-        // (576px tall) is the "scale it down a bit" asked for, not a
-        // measurement tied to anything else on the page.
+        // 16:9 box gives regardless of screen size.
+        //
+        // No `max-w-*` cap: an earlier version of this capped the box at
+        // 1024px, which read as too small once seen alongside the rest of
+        // the page — this instead fills the full content column, same
+        // width as everything else between the margins. The iframe itself
+        // is never scaled down with a CSS `transform` to fit a smaller
+        // box — by request, it renders at the frame's real size, so the
+        // embedded site lays itself out as its own desktop breakpoint
+        // would at that width rather than appearing shrunk.
         //
         // Two animations, stacked on purpose: `data-reveal="mask"` on the
         // figure is the one-time curtain that opens when the section first
@@ -148,7 +153,7 @@ export default async function CaseStudyPage({ params }: PageProps) {
         // reveal alone doesn't give. The frame clips it; the zoom never
         // touches the rounded corners themselves.
         <figure className="page-margin mb-96" data-reveal="mask">
-          <div className="mx-auto aspect-video w-full max-w-5xl overflow-hidden rounded-glass-lg border border-line-strong bg-surface-2">
+          <div className="aspect-video w-full overflow-hidden rounded-glass-lg border border-line-strong bg-surface-2">
             <div className="h-full w-full" data-parallax="zoom">
               <iframe
                 src={heroEmbed.url}
