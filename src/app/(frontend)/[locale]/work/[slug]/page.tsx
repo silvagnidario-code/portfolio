@@ -17,7 +17,14 @@ import { formatYearRange } from '@/lib/format'
 import { alternatesForPaths } from '@/lib/metadata'
 import { ogSize } from '@/lib/og'
 import { getProjectAlternates, getProjectBySlug } from '@/lib/queries'
-import type { Industry, Project, Service, TeamMember, Testimonial } from '@/payload-types'
+import type {
+  Industry,
+  LiveEmbedBlock,
+  Project,
+  Service,
+  TeamMember,
+  Testimonial,
+} from '@/payload-types'
 
 type PageProps = { params: Promise<{ locale: Locale; slug: string }> }
 
@@ -83,6 +90,18 @@ export default async function CaseStudyPage({ params }: PageProps) {
   )
   const testimonial = populated<Testimonial>(project.testimonial)
 
+  // A liveEmbed block anywhere in `execution` gets hoisted into the hero
+  // slot, in place of heroMedia, so the reader lands on the live site
+  // itself rather than a screenshot of it. Pulled out of the array (by
+  // identity, not a second type check) so it doesn't also render a second
+  // time further down the page.
+  const isLiveEmbed = (block: NonNullable<Project['execution']>[number]): block is LiveEmbedBlock =>
+    block.blockType === 'liveEmbed'
+  const heroEmbed = (project.execution ?? []).find(isLiveEmbed) ?? null
+  const execution = heroEmbed
+    ? (project.execution ?? []).filter((block) => block !== heroEmbed)
+    : project.execution
+
   const narrative: Array<{ label: string; body: Project['context'] }> = [
     { label: t('context'), body: project.context },
     { label: t('challenge'), body: project.challenge },
@@ -104,7 +123,38 @@ export default async function CaseStudyPage({ params }: PageProps) {
         </div>
       </header>
 
-      {project.heroMedia ? (
+      {heroEmbed ? (
+        // Same curtain reveal as the image hero below — chosen for the same
+        // reason the comment on [data-reveal='mask'] gives for video: an
+        // iframe has its own compositor layer too, and a mask that never
+        // touches it (only an unrelated ::after curtain slides) is the one
+        // animation that can't flash or stutter it. Height is viewport-
+        // relative here, not the block's own `height` field — that field
+        // sizes an inline embed further down the page; the hero instead
+        // claims the same vertical weight heroMedia did.
+        <figure className="mb-96" data-reveal="mask">
+          <div className="h-[70vh] max-h-[900px] min-h-[480px] w-full">
+            <iframe
+              src={heroEmbed.url}
+              title={heroEmbed.heading || project.title}
+              className="h-full w-full"
+              loading="eager"
+              sandbox="allow-scripts allow-same-origin allow-forms allow-popups allow-popups-to-escape-sandbox"
+            />
+          </div>
+          <figcaption className="page-margin mt-16 flex flex-wrap items-baseline justify-between gap-16 text-caption text-ink-muted">
+            {heroEmbed.heading ? <span>{heroEmbed.heading}</span> : <span />}
+            <a
+              href={heroEmbed.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="underline hover:text-ink"
+            >
+              {heroEmbed.fallbackLabel || 'Apri il sito in una nuova scheda'} ↗
+            </a>
+          </figcaption>
+        </figure>
+      ) : project.heroMedia ? (
         // Edge-to-edge banner, same role as the hero — square-cornered like
         // any other full-bleed visual, not rounded like content in the grid.
         <figure className="mb-96" data-reveal="mask">
@@ -152,7 +202,7 @@ export default async function CaseStudyPage({ params }: PageProps) {
           </BlockSection>
         ))}
 
-      <RenderBlocks blocks={project.execution} locale={locale} />
+      <RenderBlocks blocks={execution} locale={locale} />
 
       {(project.results ?? []).length > 0 ? (
         <BlockSection settings={{ background: 'sumi', spacing: 'wide' }}>
