@@ -54,6 +54,8 @@ const POP_STAGGER = 45
 const POP_SCALE_FROM = 0.6
 /** How much further out an icon's start point sits, as a multiple of its own distance from the grid's centre. */
 const POP_OUTSIDE = 1.25
+/** How zoomed-in a `[data-parallax="zoom"]` element starts, before scrubbing down to its true size. */
+const ZOOM_FROM = 1.15
 
 export function ScrollReveal() {
   const mayAnimate = useMayAnimate()
@@ -281,6 +283,40 @@ export function ScrollReveal() {
           for (const trigger of triggers) trigger.kill()
           gsap.set(maskTargets, { clearProps: '--mask-hidden' })
           for (const target of maskTargets) delete target.dataset.revealed
+        })
+      }
+
+      // `[data-parallax="zoom"]`: not one of the five reveals above, and
+      // deliberately outside that naming — it never finishes and has no
+      // "revealed" state to mark, so it doesn't belong next to five things
+      // that each fire once and stop. The element starts zoomed in and
+      // scrubs down to its true size exactly in step with the scrollbar,
+      // from the moment it enters the viewport to the moment it fills it,
+      // then holds — scrolling back up reverses it the same way, cleanly,
+      // because `scrub: true` ties it directly to scroll position rather
+      // than to a timeline GSAP is driving on its own. Meant for a framed
+      // photograph or embed that wants to feel alive rather than static;
+      // the element this is set on should itself be `overflow-hidden` with
+      // the corner radius, so the zoom is clipped to the frame rather than
+      // spilling past it.
+      const zoomTargets = Array.from(
+        document.querySelectorAll<HTMLElement>('[data-parallax="zoom"]'),
+      )
+
+      for (const target of zoomTargets) {
+        gsap.set(target, { scale: ZOOM_FROM })
+
+        const trigger = ScrollTrigger.create({
+          trigger: target,
+          start: 'top bottom',
+          end: 'top top',
+          scrub: true,
+          animation: gsap.to(target, { scale: 1, ease: 'none' }),
+        })
+
+        disposers.push(() => {
+          trigger.kill()
+          gsap.set(target, { clearProps: 'transform' })
         })
       }
 

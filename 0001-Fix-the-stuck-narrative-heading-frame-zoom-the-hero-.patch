@@ -1,0 +1,204 @@
+From f3ab24fabb87878799ac98bfcc84792131078447 Mon Sep 17 00:00:00 2001
+From: Claude <noreply@anthropic.com>
+Date: Thu, 1 Oct 2026 15:04:56 +0000
+Subject: [PATCH] Fix the stuck narrative heading; frame + zoom the hero embed
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Two fixes, same page:
+
+- 'La sfida' (and any other narrative heading) could outlive its body
+  text. Payload only stores null for a richText field never touched;
+  once an editor opens it and clears it, what's saved is an empty-but-
+  structured document instead, which is truthy. narrative.filter(s =>
+  s.body) was gating the heading on that truthiness, so clearing a
+  field's text left its heading behind forever. New src/lib/rich-text.ts
+  exports hasRichText(), which actually checks for text in the tree,
+  and the page now filters with that instead.
+
+- The hero embed now matches what was asked for over the previous
+  patch: framed and rounded like the inline embed (LiveEmbedBlock)
+  rather than square-cornered full-bleed like heroMedia, and a second,
+  continuous animation layered on the existing mask-curtain reveal —
+  data-parallax="zoom" (new in scroll-reveal.tsx) scrubs the frame's
+  contents from 1.15x down to true size exactly as far as the reader
+  has scrolled, rather than firing once like every other reveal. The
+  zoom lives on an inner, overflow-hidden element so it never touches
+  the frame's own rounded corners.
+---
+ .../(frontend)/[locale]/work/[slug]/page.tsx  | 46 +++++++++++--------
+ src/components/motion/scroll-reveal.tsx       | 36 +++++++++++++++
+ src/lib/rich-text.ts                          | 34 ++++++++++++++
+ 3 files changed, 97 insertions(+), 19 deletions(-)
+ create mode 100644 src/lib/rich-text.ts
+
+diff --git a/src/app/(frontend)/[locale]/work/[slug]/page.tsx b/src/app/(frontend)/[locale]/work/[slug]/page.tsx
+index 2ff8fe0..3a18ec4 100644
+--- a/src/app/(frontend)/[locale]/work/[slug]/page.tsx
++++ b/src/app/(frontend)/[locale]/work/[slug]/page.tsx
+@@ -17,6 +17,7 @@ import { formatYearRange } from '@/lib/format'
+ import { alternatesForPaths } from '@/lib/metadata'
+ import { ogSize } from '@/lib/og'
+ import { getProjectAlternates, getProjectBySlug } from '@/lib/queries'
++import { hasRichText } from '@/lib/rich-text'
+ import type {
+   Industry,
+   LiveEmbedBlock,
+@@ -124,25 +125,32 @@ export default async function CaseStudyPage({ params }: PageProps) {
+       </header>
+ 
+       {heroEmbed ? (
+-        // Same curtain reveal as the image hero below — chosen for the same
+-        // reason the comment on [data-reveal='mask'] gives for video: an
+-        // iframe has its own compositor layer too, and a mask that never
+-        // touches it (only an unrelated ::after curtain slides) is the one
+-        // animation that can't flash or stutter it. Height is viewport-
+-        // relative here, not the block's own `height` field — that field
+-        // sizes an inline embed further down the page; the hero instead
+-        // claims the same vertical weight heroMedia did.
+-        <figure className="mb-96" data-reveal="mask">
+-          <div className="h-[70vh] max-h-[900px] min-h-[480px] w-full">
+-            <iframe
+-              src={heroEmbed.url}
+-              title={heroEmbed.heading || project.title}
+-              className="h-full w-full"
+-              loading="eager"
+-              sandbox="allow-scripts allow-same-origin allow-forms allow-popups allow-popups-to-escape-sandbox"
+-            />
++        // Framed rather than full-bleed, by request — rounded and bordered
++        // like the inline embed further down the page (LiveEmbedBlock),
++        // not square-cornered edge-to-edge like heroMedia. Two animations,
++        // stacked on purpose: `data-reveal="mask"` on the figure is the
++        // one-time curtain that opens when the section first scrolls into
++        // view (see the comment on [data-reveal='mask'] in blocks.css for
++        // why a curtain, not a clip-path, is what doesn't disturb an
++        // embedded element's own compositor layer); `data-parallax="zoom"`
++        // on the inner, overflow-hidden frame is a second, continuous
++        // effect — scaling down to true size exactly as far as the reader
++        // has scrolled, for the "alive" feel a static reveal alone doesn't
++        // give. The frame clips it; the zoom never touches the rounded
++        // corners themselves.
++        <figure className="page-margin mb-96" data-reveal="mask">
++          <div className="h-[70vh] max-h-[900px] min-h-[480px] w-full overflow-hidden rounded-glass-lg border border-line-strong bg-surface-2">
++            <div className="h-full w-full" data-parallax="zoom">
++              <iframe
++                src={heroEmbed.url}
++                title={heroEmbed.heading || project.title}
++                className="h-full w-full"
++                loading="eager"
++                sandbox="allow-scripts allow-same-origin allow-forms allow-popups allow-popups-to-escape-sandbox"
++              />
++            </div>
+           </div>
+-          <figcaption className="page-margin mt-16 flex flex-wrap items-baseline justify-between gap-16 text-caption text-ink-muted">
++          <figcaption className="mt-16 flex flex-wrap items-baseline justify-between gap-16 text-caption text-ink-muted">
+             {heroEmbed.heading ? <span>{heroEmbed.heading}</span> : <span />}
+             <a
+               href={heroEmbed.url}
+@@ -182,7 +190,7 @@ export default async function CaseStudyPage({ params }: PageProps) {
+       </dl>
+ 
+       {narrative
+-        .filter((section) => section.body)
++        .filter((section) => hasRichText(section.body))
+         .map((section) => (
+           <BlockSection key={section.label} settings={{ background: 'paper', spacing: 'compact' }}>
+             <div className="page-grid">
+diff --git a/src/components/motion/scroll-reveal.tsx b/src/components/motion/scroll-reveal.tsx
+index b25db0e..19e6b42 100644
+--- a/src/components/motion/scroll-reveal.tsx
++++ b/src/components/motion/scroll-reveal.tsx
+@@ -54,6 +54,8 @@ const POP_STAGGER = 45
+ const POP_SCALE_FROM = 0.6
+ /** How much further out an icon's start point sits, as a multiple of its own distance from the grid's centre. */
+ const POP_OUTSIDE = 1.25
++/** How zoomed-in a `[data-parallax="zoom"]` element starts, before scrubbing down to its true size. */
++const ZOOM_FROM = 1.15
+ 
+ export function ScrollReveal() {
+   const mayAnimate = useMayAnimate()
+@@ -284,6 +286,40 @@ export function ScrollReveal() {
+         })
+       }
+ 
++      // `[data-parallax="zoom"]`: not one of the five reveals above, and
++      // deliberately outside that naming — it never finishes and has no
++      // "revealed" state to mark, so it doesn't belong next to five things
++      // that each fire once and stop. The element starts zoomed in and
++      // scrubs down to its true size exactly in step with the scrollbar,
++      // from the moment it enters the viewport to the moment it fills it,
++      // then holds — scrolling back up reverses it the same way, cleanly,
++      // because `scrub: true` ties it directly to scroll position rather
++      // than to a timeline GSAP is driving on its own. Meant for a framed
++      // photograph or embed that wants to feel alive rather than static;
++      // the element this is set on should itself be `overflow-hidden` with
++      // the corner radius, so the zoom is clipped to the frame rather than
++      // spilling past it.
++      const zoomTargets = Array.from(
++        document.querySelectorAll<HTMLElement>('[data-parallax="zoom"]'),
++      )
++
++      for (const target of zoomTargets) {
++        gsap.set(target, { scale: ZOOM_FROM })
++
++        const trigger = ScrollTrigger.create({
++          trigger: target,
++          start: 'top bottom',
++          end: 'top top',
++          scrub: true,
++          animation: gsap.to(target, { scale: 1, ease: 'none' }),
++        })
++
++        disposers.push(() => {
++          trigger.kill()
++          gsap.set(target, { clearProps: 'transform' })
++        })
++      }
++
+       // `lines`: text split into its own lines and lifted in one at a time.
+       // Each heading is its own sequence, triggered independently when it
+       // individually crosses the threshold, rather than a batch of separate
+diff --git a/src/lib/rich-text.ts b/src/lib/rich-text.ts
+new file mode 100644
+index 0000000..eac25aa
+--- /dev/null
++++ b/src/lib/rich-text.ts
+@@ -0,0 +1,34 @@
++import type {
++  SerializedEditorState,
++  SerializedLexicalNode,
++} from '@payloadcms/richtext-lexical/lexical'
++
++/**
++ * Whether a Lexical field has any text in it — not just whether the field is
++ * non-null.
++ *
++ * Payload only stores `null` for a richText field that has never been
++ * touched. Once an editor opens it and clears the text, what's saved is an
++ * empty-but-structured document instead — `{ root: { children: [{ type:
++ * 'paragraph', children: [] }], ... } }` — which is a perfectly truthy
++ * object. Code that gates a section's whole heading-plus-body on `Boolean(
++ * project.challenge)` (as this page's `narrative` array did) keeps showing
++ * the heading forever after the first edit, text or no text — which is
++ * exactly what happened on /work/peng-zhang: the heading ("La sfida")
++ * survived clearing the body because the clear left this truthy husk behind
++ * rather than `null`.
++ */
++export function hasRichText(value?: SerializedEditorState | null): boolean {
++  const children = value?.root?.children
++  if (!children?.length) return false
++
++  const nodeHasText = (node: SerializedLexicalNode): boolean => {
++    if ('text' in node && typeof node.text === 'string' && node.text.trim().length > 0) {
++      return true
++    }
++    const kids = (node as { children?: SerializedLexicalNode[] }).children
++    return Array.isArray(kids) && kids.some(nodeHasText)
++  }
++
++  return children.some(nodeHasText)
++}
+-- 
+2.43.0
+

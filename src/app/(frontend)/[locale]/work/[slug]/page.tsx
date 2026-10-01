@@ -17,6 +17,7 @@ import { formatYearRange } from '@/lib/format'
 import { alternatesForPaths } from '@/lib/metadata'
 import { ogSize } from '@/lib/og'
 import { getProjectAlternates, getProjectBySlug } from '@/lib/queries'
+import { hasRichText } from '@/lib/rich-text'
 import type {
   Industry,
   LiveEmbedBlock,
@@ -124,25 +125,32 @@ export default async function CaseStudyPage({ params }: PageProps) {
       </header>
 
       {heroEmbed ? (
-        // Same curtain reveal as the image hero below — chosen for the same
-        // reason the comment on [data-reveal='mask'] gives for video: an
-        // iframe has its own compositor layer too, and a mask that never
-        // touches it (only an unrelated ::after curtain slides) is the one
-        // animation that can't flash or stutter it. Height is viewport-
-        // relative here, not the block's own `height` field — that field
-        // sizes an inline embed further down the page; the hero instead
-        // claims the same vertical weight heroMedia did.
-        <figure className="mb-96" data-reveal="mask">
-          <div className="h-[70vh] max-h-[900px] min-h-[480px] w-full">
-            <iframe
-              src={heroEmbed.url}
-              title={heroEmbed.heading || project.title}
-              className="h-full w-full"
-              loading="eager"
-              sandbox="allow-scripts allow-same-origin allow-forms allow-popups allow-popups-to-escape-sandbox"
-            />
+        // Framed rather than full-bleed, by request — rounded and bordered
+        // like the inline embed further down the page (LiveEmbedBlock),
+        // not square-cornered edge-to-edge like heroMedia. Two animations,
+        // stacked on purpose: `data-reveal="mask"` on the figure is the
+        // one-time curtain that opens when the section first scrolls into
+        // view (see the comment on [data-reveal='mask'] in blocks.css for
+        // why a curtain, not a clip-path, is what doesn't disturb an
+        // embedded element's own compositor layer); `data-parallax="zoom"`
+        // on the inner, overflow-hidden frame is a second, continuous
+        // effect — scaling down to true size exactly as far as the reader
+        // has scrolled, for the "alive" feel a static reveal alone doesn't
+        // give. The frame clips it; the zoom never touches the rounded
+        // corners themselves.
+        <figure className="page-margin mb-96" data-reveal="mask">
+          <div className="h-[70vh] max-h-[900px] min-h-[480px] w-full overflow-hidden rounded-glass-lg border border-line-strong bg-surface-2">
+            <div className="h-full w-full" data-parallax="zoom">
+              <iframe
+                src={heroEmbed.url}
+                title={heroEmbed.heading || project.title}
+                className="h-full w-full"
+                loading="eager"
+                sandbox="allow-scripts allow-same-origin allow-forms allow-popups allow-popups-to-escape-sandbox"
+              />
+            </div>
           </div>
-          <figcaption className="page-margin mt-16 flex flex-wrap items-baseline justify-between gap-16 text-caption text-ink-muted">
+          <figcaption className="mt-16 flex flex-wrap items-baseline justify-between gap-16 text-caption text-ink-muted">
             {heroEmbed.heading ? <span>{heroEmbed.heading}</span> : <span />}
             <a
               href={heroEmbed.url}
@@ -182,7 +190,7 @@ export default async function CaseStudyPage({ params }: PageProps) {
       </dl>
 
       {narrative
-        .filter((section) => section.body)
+        .filter((section) => hasRichText(section.body))
         .map((section) => (
           <BlockSection key={section.label} settings={{ background: 'paper', spacing: 'compact' }}>
             <div className="page-grid">
