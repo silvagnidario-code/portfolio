@@ -127,11 +127,18 @@ export default async function CaseStudyPage({ params }: PageProps) {
       {heroEmbed ? (
         // Framed rather than full-bleed, by request — rounded and bordered
         // like the inline embed further down the page (LiveEmbedBlock),
-        // not square-cornered edge-to-edge like heroMedia. `aspect-video`
-        // (16:9) replaced an earlier viewport-relative height (70vh): at
-        // this section's actual width that read as a short, overly wide
-        // letterbox rather than the familiar video-frame proportions a
-        // 16:9 box gives regardless of screen size.
+        // not square-cornered edge-to-edge like heroMedia. The aspect
+        // ratio steps through three fixed values at this site's own
+        // `tablet` (768px) and `desktop` (1180px) breakpoints rather than
+        // holding one ratio everywhere: 16:9 (`aspect-video`, replacing an
+        // earlier viewport-relative height that read as a short, overly
+        // wide letterbox at this section's actual width) only from
+        // desktop up. Below that the embedded site is mostly a narrow
+        // column regardless of what the frame around it does, so a wide
+        // ratio wastes height on empty space either side of it — `3:4`
+        // under 768px turns the frame vertical to match, `4:3` between
+        // 768 and 1180px is the middle step down from 16:9 rather than a
+        // jump straight to portrait.
         //
         // No `max-w-*` cap: an earlier version of this capped the box at
         // 1024px, which read as too small once seen alongside the rest of
@@ -153,7 +160,7 @@ export default async function CaseStudyPage({ params }: PageProps) {
         // reveal alone doesn't give. The frame clips it; the zoom never
         // touches the rounded corners themselves.
         <figure className="page-margin mb-96" data-reveal="mask">
-          <div className="aspect-video w-full overflow-hidden rounded-glass-lg border border-line-strong bg-surface-2">
+          <div className="aspect-[3/4] w-full overflow-hidden rounded-glass-lg border border-line-strong bg-surface-2 tablet:aspect-[4/3] desktop:aspect-video">
             <div className="h-full w-full" data-parallax="zoom">
               <iframe
                 src={heroEmbed.url}
