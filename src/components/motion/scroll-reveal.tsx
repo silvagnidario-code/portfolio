@@ -56,6 +56,8 @@ const POP_SCALE_FROM = 0.6
 const POP_OUTSIDE = 1.25
 /** How zoomed-in a `[data-parallax="zoom"]` element starts, before scrubbing down to its true size. */
 const ZOOM_FROM = 1.15
+/** How far below its resting position a `[data-parallax="zoom"]` element starts, as a % of its own height — the companion drift that makes the zoom read as depth rather than just a scale. */
+const ZOOM_Y_FROM = '5%'
 
 export function ScrollReveal() {
   const mayAnimate = useMayAnimate()
@@ -290,28 +292,49 @@ export function ScrollReveal() {
       // deliberately outside that naming — it never finishes and has no
       // "revealed" state to mark, so it doesn't belong next to five things
       // that each fire once and stop. The element starts zoomed in and
-      // scrubs down to its true size exactly in step with the scrollbar,
-      // from the moment it enters the viewport to the moment it fills it,
-      // then holds — scrolling back up reverses it the same way, cleanly,
-      // because `scrub: true` ties it directly to scroll position rather
-      // than to a timeline GSAP is driving on its own. Meant for a framed
-      // photograph or embed that wants to feel alive rather than static;
-      // the element this is set on should itself be `overflow-hidden` with
-      // the corner radius, so the zoom is clipped to the frame rather than
-      // spilling past it.
+      // drifted slightly down, and scrubs to true size and position exactly
+      // in step with the scrollbar — scrolling back up reverses it the same
+      // way, cleanly, because `scrub: true` ties it directly to scroll
+      // position rather than to a timeline GSAP is driving on its own.
+      //
+      // `end: 'bottom top'` — the full time the element takes to pass
+      // through the viewport, not just until its top reaches the top —
+      // is deliberate, not the original `top top`: this page has a sticky
+      // header sitting over the content, so by the point an element's own
+      // top aligns with the viewport's top it is already half hidden
+      // behind that header, and the scale finishing exactly there read as
+      // premature — settled while still visually arriving. Stretching the
+      // scrub across the element's entire transit gives it room to finish
+      // once it has actually cleared the header, and the slower rate makes
+      // it read as the lighter, ambient effect it's meant to be rather
+      // than something finished and done with early.
+      //
+      // The y drift is the second, smaller half of the same scrub: a few
+      // percent of the element's own height, not pixels, so it scales with
+      // the element rather than needing its own tuning per use. Scale
+      // alone can look like a static image being stretched; scale paired
+      // with a drift reads as the element settling into place, which is
+      // the "more immersive" ask without reaching for anything heavier —
+      // no blur, no tilt, nothing that costs more than these two tweened
+      // properties.
+      //
+      // Meant for a framed photograph or embed; the element this is set on
+      // should itself be `overflow-hidden` with the corner radius, so the
+      // zoom and drift are clipped to the frame rather than spilling past
+      // it.
       const zoomTargets = Array.from(
         document.querySelectorAll<HTMLElement>('[data-parallax="zoom"]'),
       )
 
       for (const target of zoomTargets) {
-        gsap.set(target, { scale: ZOOM_FROM })
+        gsap.set(target, { scale: ZOOM_FROM, y: ZOOM_Y_FROM })
 
         const trigger = ScrollTrigger.create({
           trigger: target,
           start: 'top bottom',
-          end: 'top top',
+          end: 'bottom top',
           scrub: true,
-          animation: gsap.to(target, { scale: 1, ease: 'none' }),
+          animation: gsap.to(target, { scale: 1, y: 0, ease: 'none' }),
         })
 
         disposers.push(() => {
