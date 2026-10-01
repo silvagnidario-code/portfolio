@@ -127,19 +127,28 @@ export default async function CaseStudyPage({ params }: PageProps) {
       {heroEmbed ? (
         // Framed rather than full-bleed, by request — rounded and bordered
         // like the inline embed further down the page (LiveEmbedBlock),
-        // not square-cornered edge-to-edge like heroMedia. Two animations,
-        // stacked on purpose: `data-reveal="mask"` on the figure is the
-        // one-time curtain that opens when the section first scrolls into
-        // view (see the comment on [data-reveal='mask'] in blocks.css for
-        // why a curtain, not a clip-path, is what doesn't disturb an
-        // embedded element's own compositor layer); `data-parallax="zoom"`
-        // on the inner, overflow-hidden frame is a second, continuous
-        // effect — scaling down to true size exactly as far as the reader
-        // has scrolled, for the "alive" feel a static reveal alone doesn't
-        // give. The frame clips it; the zoom never touches the rounded
-        // corners themselves.
+        // not square-cornered edge-to-edge like heroMedia. `aspect-video`
+        // (16:9) replaced an earlier viewport-relative height (70vh): at
+        // this section's actual width that read as a short, overly wide
+        // letterbox rather than the familiar video-frame proportions a
+        // 16:9 box gives regardless of screen size. `max-w-5xl` caps how
+        // large that box gets on a wide monitor, where 16:9 at the full
+        // content width would otherwise dominate the page — 1024px wide
+        // (576px tall) is the "scale it down a bit" asked for, not a
+        // measurement tied to anything else on the page.
+        //
+        // Two animations, stacked on purpose: `data-reveal="mask"` on the
+        // figure is the one-time curtain that opens when the section first
+        // scrolls into view (see the comment on [data-reveal='mask'] in
+        // blocks.css for why a curtain, not a clip-path, is what doesn't
+        // disturb an embedded element's own compositor layer);
+        // `data-parallax="zoom"` on the inner, overflow-hidden frame is a
+        // second, continuous effect — scaling down to true size exactly as
+        // far as the reader has scrolled, for the "alive" feel a static
+        // reveal alone doesn't give. The frame clips it; the zoom never
+        // touches the rounded corners themselves.
         <figure className="page-margin mb-96" data-reveal="mask">
-          <div className="h-[70vh] max-h-[900px] min-h-[480px] w-full overflow-hidden rounded-glass-lg border border-line-strong bg-surface-2">
+          <div className="mx-auto aspect-video w-full max-w-5xl overflow-hidden rounded-glass-lg border border-line-strong bg-surface-2">
             <div className="h-full w-full" data-parallax="zoom">
               <iframe
                 src={heroEmbed.url}
