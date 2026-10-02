@@ -20,7 +20,7 @@ export type ThemeMode = (typeof themeModes)[number]
 export const defaultThemeMode: ThemeMode = 'system'
 
 /** What a reader with no stored preference sees on their first visit. */
-export const DEFAULT_RESOLVED_THEME: 'light' | 'dark' = 'dark'
+export const DEFAULT_RESOLVED_THEME: 'light' | 'dark' = 'light'
 
 export function isThemeMode(value: unknown): value is ThemeMode {
   return typeof value === 'string' && (themeModes as readonly string[]).includes(value)

@@ -9,6 +9,15 @@ import { RichText } from './rich-text'
  * first in the markup — a screen reader meets the name and the words before
  * the picture whichever side it sits on — and `imagePosition` only ever
  * changes where the two columns land on a wide screen.
+ *
+ * Below the `tablet` breakpoint, where the two columns stack instead of
+ * sitting side by side, the photo is moved visually ahead of the text with
+ * `order-first` (reset by `tablet:order-none`, where `imagePosition`'s own
+ * `desktop:col-start-*` placement takes back over) and held narrower than
+ * the full column with `w-4/5 mx-auto`, by request — a visitor on a phone
+ * sees a smaller photo before the bio text rather than after it. DOM order
+ * is untouched, so a screen reader's reading order is unaffected either
+ * way; this only changes what sighted mobile visitors see first.
  */
 export function BioBlock({ block }: { block: BioBlockType }) {
   const { eyebrow, heading, body, links, photo, imagePosition, settings } = block
@@ -52,7 +61,7 @@ export function BioBlock({ block }: { block: BioBlockType }) {
         </div>
 
         <div
-          className={`col-span-4 mt-32 tablet:col-span-3 tablet:mt-0 desktop:col-span-5 ${
+          className={`order-first col-span-4 mx-auto mb-32 w-4/5 tablet:order-none tablet:col-span-3 tablet:mb-0 tablet:w-full desktop:col-span-5 ${
             isLeft ? 'desktop:col-start-1' : 'desktop:col-start-8'
           }`}
           data-reveal={reveal('blur')}

@@ -1,0 +1,54 @@
+From 3f044552274347b32b799f12ab366b4ecb32da76 Mon Sep 17 00:00:00 2001
+From: Claude <noreply@anthropic.com>
+Date: Thu, 1 Oct 2026 16:12:11 +0000
+Subject: [PATCH] Move the About page photo above the text on mobile, and
+ shrink it
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Below the tablet breakpoint (768px) the bio block's two columns stack,
+text first — DOM order was already text-then-photo, by design, so a
+screen reader meets the name and the words first regardless of screen
+size. order-first on the photo (reset by tablet:order-none, where
+imagePosition's own desktop:col-start-* placement takes back over)
+now puts it first visually too, but only below that breakpoint, and
+only visually: tab order and reading order are untouched. w-4/5
+mx-auto is the 'a bit smaller' half of the same request — narrower
+than the full column, centred, rather than edge to edge.
+---
+ src/components/blocks/bio-block.tsx | 11 ++++++++++-
+ 1 file changed, 10 insertions(+), 1 deletion(-)
+
+diff --git a/src/components/blocks/bio-block.tsx b/src/components/blocks/bio-block.tsx
+index 9262332..ec9e43b 100644
+--- a/src/components/blocks/bio-block.tsx
++++ b/src/components/blocks/bio-block.tsx
+@@ -9,6 +9,15 @@ import { RichText } from './rich-text'
+  * first in the markup — a screen reader meets the name and the words before
+  * the picture whichever side it sits on — and `imagePosition` only ever
+  * changes where the two columns land on a wide screen.
++ *
++ * Below the `tablet` breakpoint, where the two columns stack instead of
++ * sitting side by side, the photo is moved visually ahead of the text with
++ * `order-first` (reset by `tablet:order-none`, where `imagePosition`'s own
++ * `desktop:col-start-*` placement takes back over) and held narrower than
++ * the full column with `w-4/5 mx-auto`, by request — a visitor on a phone
++ * sees a smaller photo before the bio text rather than after it. DOM order
++ * is untouched, so a screen reader's reading order is unaffected either
++ * way; this only changes what sighted mobile visitors see first.
+  */
+ export function BioBlock({ block }: { block: BioBlockType }) {
+   const { eyebrow, heading, body, links, photo, imagePosition, settings } = block
+@@ -52,7 +61,7 @@ export function BioBlock({ block }: { block: BioBlockType }) {
+         </div>
+ 
+         <div
+-          className={`col-span-4 mt-32 tablet:col-span-3 tablet:mt-0 desktop:col-span-5 ${
++          className={`order-first col-span-4 mx-auto mb-32 w-4/5 tablet:order-none tablet:col-span-3 tablet:mb-0 tablet:w-full desktop:col-span-5 ${
+             isLeft ? 'desktop:col-start-1' : 'desktop:col-start-8'
+           }`}
+           data-reveal={reveal('blur')}
+-- 
+2.43.0
+
