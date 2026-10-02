@@ -3,6 +3,7 @@ import type { CollectionConfig } from 'payload'
 import { admins, authenticated, authenticatedOrPublished } from '../access/roles'
 import { LiveEmbed } from '../blocks/live-embed'
 import { MediaBlock } from '../blocks/media'
+import { Model3D } from '../blocks/model-3d'
 import { Prose } from '../blocks/prose'
 import { metaGroup } from '../fields/meta'
 import { slugField, slugFromTitle } from '../fields/slug'
@@ -188,7 +189,7 @@ export const Projects: CollectionConfig = {
             {
               name: 'execution',
               type: 'blocks',
-              blocks: [Prose, MediaBlock, LiveEmbed],
+              blocks: [Prose, MediaBlock, LiveEmbed, Model3D],
               admin: { description: "Testo e media alternati, nell'ordine in cui si leggono." },
             },
             {

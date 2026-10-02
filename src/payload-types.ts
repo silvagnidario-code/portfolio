@@ -254,7 +254,7 @@ export interface Project {
   /**
    * Testo e media alternati, nell'ordine in cui si leggono.
    */
-  execution?: (ProseBlock | MediaBlockType | LiveEmbedBlock)[] | null;
+  execution?: (ProseBlock | MediaBlockType | LiveEmbedBlock | Model3DBlock)[] | null;
   results?:
     | {
         label: string;
@@ -504,6 +504,37 @@ export interface LiveEmbedBlock {
   id?: string | null;
   blockName?: string | null;
   blockType: 'liveEmbed';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "Model3DBlock".
+ */
+export interface Model3DBlock {
+  eyebrow?: string | null;
+  heading?: string | null;
+  /**
+   * .glb, già pronto per il web (texture/colori inclusi, compresso). Non .skp — nessun browser lo legge.
+   */
+  model: number | Media;
+  /**
+   * Immagine mostrata finché il modello (alcuni MB) non ha finito di caricare. Facoltativa ma consigliata.
+   */
+  poster?: (number | null) | Media;
+  /**
+   * Ruota lentamente da solo finché il visitatore non lo tocca.
+   */
+  autoRotate?: boolean | null;
+  /**
+   * Fondo, respiro verticale e animazione di ingresso.
+   */
+  settings: {
+    background: 'paper' | 'sumi' | 'accent';
+    spacing: 'compact' | 'normal' | 'wide';
+    animate?: boolean | null;
+  };
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'model3d';
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -1136,6 +1167,7 @@ export interface ProjectsSelect<T extends boolean = true> {
         prose?: T | ProseBlockSelect<T>;
         media?: T | MediaBlockTypeSelect<T>;
         liveEmbed?: T | LiveEmbedBlockSelect<T>;
+        model3d?: T | Model3DBlockSelect<T>;
       };
   results?:
     | T
@@ -1217,6 +1249,26 @@ export interface LiveEmbedBlockSelect<T extends boolean = true> {
   url?: T;
   height?: T;
   fallbackLabel?: T;
+  settings?:
+    | T
+    | {
+        background?: T;
+        spacing?: T;
+        animate?: T;
+      };
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "Model3DBlock_select".
+ */
+export interface Model3DBlockSelect<T extends boolean = true> {
+  eyebrow?: T;
+  heading?: T;
+  model?: T;
+  poster?: T;
+  autoRotate?: T;
   settings?:
     | T
     | {

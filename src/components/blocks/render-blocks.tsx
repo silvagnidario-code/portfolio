@@ -9,6 +9,7 @@ import { Faq } from './faq'
 import { Hero } from './hero'
 import { LiveEmbedBlock } from './live-embed-block'
 import { MediaBlock } from './media-block'
+import { Model3DBlock } from './model-3d-block'
 import { ProjectGrid } from './project-grid'
 import { Prose } from './prose'
 import { Results } from './results'
@@ -39,6 +40,8 @@ function renderBlock(block: LayoutBlock | NarrativeBlock, locale: Locale) {
       return <MediaBlock block={block} />
     case 'liveEmbed':
       return <LiveEmbedBlock block={block} />
+    case 'model3d':
+      return <Model3DBlock block={block} />
     case 'bio':
       return <BioBlock block={block} />
     case 'services':
