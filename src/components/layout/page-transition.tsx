@@ -21,7 +21,14 @@ export function PageTransition({ children }: { children: ReactNode }) {
 
   return (
     // `tabIndex={-1}` lets the skip link move focus here, not just the scroll.
-    <div key={pathname} id="main" tabIndex={-1} className="page-enter pt-128">
+    //
+    // `overflow-x-clip`: the `pop` reveal parks each icon further out than its
+    // resting slot until its grid scrolls into view, and those parked icons
+    // reach past the right edge — widening the document, so the full-bleed
+    // hero above stopped short of a page that was now wider than the viewport.
+    // `clip`, not `hidden`: it adds no scroll container, so the vertical axis
+    // stays visible and sticky/fixed descendants behave as before.
+    <div key={pathname} id="main" tabIndex={-1} className="page-enter overflow-x-clip pt-128">
       {children}
     </div>
   )
