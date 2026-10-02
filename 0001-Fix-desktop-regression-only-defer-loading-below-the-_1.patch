@@ -1,0 +1,108 @@
+From 5ff4ea76f55e486e15af2220acdcf4b656ac3c07 Mon Sep 17 00:00:00 2001
+From: Claude <noreply@anthropic.com>
+Date: Fri, 2 Oct 2026 11:42:25 +0000
+Subject: [PATCH] Fix desktop regression: only defer loading below the desktop
+ breakpoint
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Desktop never crashed — only a phone decompressing this model did —
+but the previous patch's loading="lazy" reveal="interaction" applied
+everywhere, including desktop. With no poster set, reveal="interaction"
+shows nothing at all until tapped, with no visible cue there's
+anything there: reported as "doesn't work on desktop either", and it
+was effectively right. loading/reveal now key off isDesktop: eager and
+auto on desktop, exactly as before mobile had a problem; lazy and
+interaction only below the desktop breakpoint, reached whenever no
+fallback video is set there.
+---
+ src/components/blocks/model-3d-block.tsx | 58 ++++++++++++++----------
+ 1 file changed, 33 insertions(+), 25 deletions(-)
+
+diff --git a/src/components/blocks/model-3d-block.tsx b/src/components/blocks/model-3d-block.tsx
+index 80963c4..232b067 100644
+--- a/src/components/blocks/model-3d-block.tsx
++++ b/src/components/blocks/model-3d-block.tsx
+@@ -20,19 +20,24 @@ function mediaUrl(media: Model3DBlockType['model'] | Model3DBlockType['poster'])
+  * import has resolved, so the element isn't written into the DOM — as a
+  * plain, inert tag — before the browser knows what it is.
+  *
+- * `isDesktop` gates something heavier than that: even deferred to an
+- * explicit tap (see the comment further down), decompressing a model of
+- * this size was enough to crash the tab on phones that tried anyway. Below
+- * this site's own `desktop` breakpoint (1180px, matching every other
+- * `desktop:` utility class on the page), a pre-rendered turntable video is
+- * shown instead whenever one is provided — not interactivity lost to a
+- * budget, but the viewer never mounted there at all, so there is nothing
+- * for a phone's GPU to choke on. The check starts `false` (not `null`) and
+- * only ever flips to `true` once `matchMedia` has explicitly confirmed a
+- * desktop width: the failure mode that matters is a phone that briefly
+- * mounts `<model-viewer>` before JS corrects it, not a desktop reader
+- * seeing the video flash for a frame, so the safer default is the one a
+- * narrow screen already wants.
++ * `isDesktop` gates two things, both below this site's own `desktop`
++ * breakpoint (1180px, matching every other `desktop:` utility class on the
++ * page) and both there because desktop itself never had a problem:
++ *
++ * - Whenever a fallback video is provided, it replaces `<model-viewer>`
++ *   entirely below that breakpoint — not interactivity lost to a budget,
++ *   the viewer simply never mounts there, so there is nothing for a
++ *   phone's GPU to choke on decompressing a model this size.
++ * - Without one, the viewer still mounts, but `loading`/`reveal` differ by
++ *   breakpoint too (see the comment further down) — eager and automatic on
++ *   desktop, deferred to a tap below it.
++ *
++ * The check starts `false` (not `null`) and only ever flips to `true` once
++ * `matchMedia` has explicitly confirmed a desktop width: the failure mode
++ * that matters is a phone that briefly mounts the heavier desktop path
++ * before JS corrects it, not a desktop reader seeing the lighter mobile
++ * one flash for a frame, so the safer default is the one a narrow screen
++ * already wants.
+  */
+ export function Model3DBlock({ block }: { block: Model3DBlockType }) {
+   const { eyebrow, heading, model, poster, autoRotate, mobileFallbackVideo, settings } = block
+@@ -95,16 +100,19 @@ export function Model3DBlock({ block }: { block: Model3DBlockType }) {
+                 className="h-full w-full object-contain"
+               />
+             ) : (
+-              // loading="lazy" + reveal="interaction": eager, automatic
+-              // loading decompressed this model's geometry in memory the
+-              // moment the page opened, which was enough to crash the tab
+-              // on mobile even before the isDesktop check above existed.
+-              // Deferring the actual load to an explicit tap (model-
+-              // viewer's own interaction prompt, shown over `poster` when
+-              // set) keeps that decompression off the critical path
+-              // entirely unless the reader asks for it — still the
+-              // behaviour here on desktop, and on mobile/tablet whenever no
+-              // fallback video has been set.
++              // Desktop never crashed — only a phone trying to decompress
++              // this model did — so only the mobile/tablet case (reached
++              // whenever no fallback video is set) defers to a tap:
++              // loading="lazy" reveal="interaction" keeps that
++              // decompression off the critical path until the reader asks
++              // for it. Applying that same deferral to desktop too, in an
++              // earlier version of this block, was the actual bug behind
++              // "doesn't work on desktop either" — reveal="interaction"
++              // with no `poster` set shows nothing at all until tapped, no
++              // visible cue that there's anything there to tap. Desktop
++              // goes back to loading="eager" reveal="auto": immediate,
++              // automatic, exactly as it was before mobile ever had a
++              // problem.
+               ready && (
+                 <model-viewer
+                   src={src}
+@@ -116,8 +124,8 @@ export function Model3DBlock({ block }: { block: Model3DBlockType }) {
+                   shadow-intensity="1"
+                   exposure="1"
+                   environment-image="neutral"
+-                  loading="lazy"
+-                  reveal="interaction"
++                  loading={isDesktop ? 'eager' : 'lazy'}
++                  reveal={isDesktop ? 'auto' : 'interaction'}
+                   style={{ width: '100%', height: '100%' }}
+                 />
+               )
+-- 
+2.43.0
+

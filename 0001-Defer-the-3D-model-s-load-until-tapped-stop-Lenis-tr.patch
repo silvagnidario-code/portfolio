@@ -1,0 +1,122 @@
+From 06b322b0aa7d7c490f046cc1a40affeac7794c56 Mon Sep 17 00:00:00 2001
+From: Claude <noreply@anthropic.com>
+Date: Fri, 2 Oct 2026 11:26:05 +0000
+Subject: [PATCH] Defer the 3D model's load until tapped; stop Lenis trapping
+ its zoom
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Two fixes reported after the model-3d block shipped:
+
+- loading="eager" reveal="auto" decompressed the model's geometry in
+  memory the moment the page opened — enough to crash the tab on
+  mobile. loading="lazy" reveal="interaction" defers that entirely
+  until the reader taps model-viewer's own interaction prompt, so a
+  visit that never touches the model never pays for it. This doesn't
+  shrink the model itself; a phone that can't render it will still
+  struggle once tapped, so a lower-poly export is the next lever if
+  mobile trouble persists.
+
+- Lenis (smooth-scroll.tsx) binds wheel capture at the window level,
+  which was winning over model-viewer's own wheel-to-zoom — scrolling
+  the page instead of zooming the model whenever the pointer was over
+  it. data-lenis-prevent-wheel, which Lenis 1.3 reads itself with no
+  config needed on the Lenis side, fixes that for the model-viewer
+  frame. Added to both live-embed frames (hero and inline) too, as a
+  defensive measure rather than a reported bug there — a cross-origin
+  iframe normally owns wheel events for itself once the pointer is
+  inside it, but it costs nothing to rule out as another source of the
+  same complaint.
+---
+ .../(frontend)/[locale]/work/[slug]/page.tsx  |  7 ++++-
+ src/components/blocks/live-embed-block.tsx    |  7 +++++
+ src/components/blocks/model-3d-block.tsx      | 27 ++++++++++++++++---
+ 3 files changed, 37 insertions(+), 4 deletions(-)
+
+diff --git a/src/app/(frontend)/[locale]/work/[slug]/page.tsx b/src/app/(frontend)/[locale]/work/[slug]/page.tsx
+index c826297..cddde97 100644
+--- a/src/app/(frontend)/[locale]/work/[slug]/page.tsx
++++ b/src/app/(frontend)/[locale]/work/[slug]/page.tsx
+@@ -160,7 +160,12 @@ export default async function CaseStudyPage({ params }: PageProps) {
+         // reveal alone doesn't give. The frame clips it; the zoom never
+         // touches the rounded corners themselves.
+         <figure className="page-margin mb-96" data-reveal="mask">
+-          <div className="aspect-[3/4] w-full overflow-hidden rounded-glass-lg border border-line-strong bg-surface-2 tablet:aspect-[4/3] desktop:aspect-video">
++          <div
++            // Defensive, not a reported bug here: see the matching comment
++            // in live-embed-block.tsx — same reasoning, same attribute.
++            className="aspect-[3/4] w-full overflow-hidden rounded-glass-lg border border-line-strong bg-surface-2 tablet:aspect-[4/3] desktop:aspect-video"
++            data-lenis-prevent-wheel
++          >
+             <div className="h-full w-full" data-parallax="zoom">
+               <iframe
+                 src={heroEmbed.url}
+diff --git a/src/components/blocks/live-embed-block.tsx b/src/components/blocks/live-embed-block.tsx
+index 44ab2db..2bfb9ae 100644
+--- a/src/components/blocks/live-embed-block.tsx
++++ b/src/components/blocks/live-embed-block.tsx
+@@ -35,8 +35,15 @@ export function LiveEmbedBlock({ block }: { block: LiveEmbedBlockType }) {
+             </a>
+           </div>
+           <div
++            // Defensive, not a reported bug here: Lenis (src/components/
++            // motion/smooth-scroll.tsx) binds wheel capture at the window
++            // level, and while a cross-origin iframe normally owns wheel
++            // events for itself once the pointer is inside it, this costs
++            // nothing to rule out as a source of the same scroll-stealing
++            // reported for the model-viewer block.
+             className="mt-24 w-full overflow-hidden rounded-glass-lg border border-line-strong bg-surface-2"
+             style={{ height: `${height ?? 640}px` }}
++            data-lenis-prevent-wheel
+           >
+             <iframe
+               src={url}
+diff --git a/src/components/blocks/model-3d-block.tsx b/src/components/blocks/model-3d-block.tsx
+index 2f0efd6..52cc25f 100644
+--- a/src/components/blocks/model-3d-block.tsx
++++ b/src/components/blocks/model-3d-block.tsx
+@@ -41,7 +41,28 @@ export function Model3DBlock({ block }: { block: Model3DBlockType }) {
+           ) : null}
+           {heading ? <h2 className="mt-8 text-h3 text-balance">{heading}</h2> : null}
+ 
+-          <div className="mt-24 h-[70vh] max-h-[800px] min-h-[420px] w-full overflow-hidden rounded-glass-lg border border-line-strong bg-surface-2">
++          <div
++            // data-lenis-prevent-wheel: Lenis (src/components/motion/smooth-scroll.tsx)
++            // binds to the whole window and would otherwise capture a wheel
++            // scroll meant for model-viewer's own zoom, turning "zoom the
++            // model" into "scroll the page" the moment the pointer is over
++            // this frame. Lenis 1.3 reads this attribute itself — no
++            // `prevent` callback to wire up on the Lenis side.
++            className="mt-24 h-[70vh] max-h-[800px] min-h-[420px] w-full overflow-hidden rounded-glass-lg border border-line-strong bg-surface-2"
++            data-lenis-prevent-wheel
++          >
++            {/* loading="lazy" + reveal="interaction": eager, automatic
++                loading decompressed this model's geometry in memory the
++                moment the page opened, which was enough to crash the tab on
++                mobile — reported after shipping with loading="eager"
++                reveal="auto". Deferring the actual load to an explicit tap
++                (model-viewer's own interaction prompt, shown over `poster`
++                when set) keeps that decompression off the critical path
++                entirely unless the reader asks for it. This doesn't shrink
++                the model itself — a phone that can't render it at all will
++                still struggle once tapped — so if mobile trouble persists
++                after this, the next lever is a lower-poly export, not this
++                block. */}
+             {ready ? (
+               <model-viewer
+                 src={src}
+@@ -53,8 +74,8 @@ export function Model3DBlock({ block }: { block: Model3DBlockType }) {
+                 shadow-intensity="1"
+                 exposure="1"
+                 environment-image="neutral"
+-                loading="eager"
+-                reveal="auto"
++                loading="lazy"
++                reveal="interaction"
+                 style={{ width: '100%', height: '100%' }}
+               />
+             ) : null}
+-- 
+2.43.0
+

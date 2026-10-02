@@ -1,0 +1,716 @@
+From 15156ace56287143960aceea0e7efca1d82cc8ae Mon Sep 17 00:00:00 2001
+From: Claude <noreply@anthropic.com>
+Date: Fri, 2 Oct 2026 11:10:25 +0000
+Subject: [PATCH] Add the interactive 3D model (GLB) block
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+New 'Modello 3D' block for projects.execution, alongside Testo, Media
+and Sito live: an upload field for an already web-ready .glb, an
+optional poster image shown while it loads, and auto-rotate — rendered
+client-side with Google's <model-viewer> (new dependency,
+@google/model-viewer). Built for the Oway/Cosmoprof stand model, which
+only existed as a 60MB SketchUp file with flat (untextured) material
+colors; converting that to .glb and compressing it with Draco geometry
+compression (gltf-transform optimize --compress draco) took it from
+287MB to roughly 8.65MB with the flat colors intact, verified by
+inspecting the material/color data directly rather than visually.
+
+Three things worth knowing about the implementation:
+
+- The custom element is dynamically imported inside useEffect, not at
+  module scope: @google/model-viewer calls customElements.define() on
+  import, which touches document and would break this (client)
+  component's server-rendered pass if imported eagerly.
+- src/types/model-viewer.d.ts augments declare module 'react' {
+  namespace JSX }, not the classic declare global { namespace JSX } —
+  @types/react 19 moved IntrinsicElements under React.JSX with no
+  global JSX namespace left for anything to bridge to.
+- payload-types.ts was updated by hand, as with the two previous
+  blocks: no live database to run generate:types against from here.
+  20261002_120000_add_model_3d_block.ts is the accompanying migration
+  this time — included from the start, unlike live-embed's first
+  patch, which shipped the block without it and broke that deploy.
+---
+ package-lock.json                             | 128 +++++++++++++++++-
+ package.json                                  |   1 +
+ src/blocks/model-3d.ts                        |  52 +++++++
+ src/collections/Projects.ts                   |   3 +-
+ src/components/blocks/model-3d-block.tsx      |  66 +++++++++
+ src/components/blocks/render-blocks.tsx       |   3 +
+ .../20261002_120000_add_model_3d_block.ts     | 112 +++++++++++++++
+ src/migrations/index.ts                       |   6 +
+ src/payload-types.ts                          |  45 +++++-
+ src/types/model-viewer.d.ts                   |  39 ++++++
+ 10 files changed, 450 insertions(+), 5 deletions(-)
+ create mode 100644 src/blocks/model-3d.ts
+ create mode 100644 src/components/blocks/model-3d-block.tsx
+ create mode 100644 src/migrations/20261002_120000_add_model_3d_block.ts
+ create mode 100644 src/types/model-viewer.d.ts
+
+diff --git a/package-lock.json b/package-lock.json
+index 4310d7d..3dea83c 100644
+--- a/package-lock.json
++++ b/package-lock.json
+@@ -8,6 +8,7 @@
+       "name": "portfolio-agenzia",
+       "version": "0.1.0",
+       "dependencies": {
++        "@google/model-viewer": "4.3.1",
+         "@payloadcms/db-postgres": "3.88.0",
+         "@payloadcms/next": "3.88.0",
+         "@payloadcms/richtext-lexical": "3.88.0",
+@@ -1900,6 +1901,22 @@
+         "@formatjs/fast-memoize": "3.1.7"
+       }
+     },
++    "node_modules/@google/model-viewer": {
++      "version": "4.3.1",
++      "resolved": "https://registry.npmjs.org/@google/model-viewer/-/model-viewer-4.3.1.tgz",
++      "integrity": "sha512-GP+inXhAtY31E8rILVmByA6z8CZZjdlNajddppyI1/j1eIaSQiZcMRaUqTFe7+jv4mzRzwKIOiKBud0apiv+WQ==",
++      "license": "Apache-2.0",
++      "dependencies": {
++        "@monogrid/gainmap-js": "^3.1.0",
++        "lit": "^3.2.1"
++      },
++      "engines": {
++        "node": ">=6.0.0"
++      },
++      "peerDependencies": {
++        "three": "^0.183.0"
++      }
++    },
+     "node_modules/@humanfs/core": {
+       "version": "0.19.2",
+       "resolved": "https://registry.npmjs.org/@humanfs/core/-/core-0.19.2.tgz",
+@@ -2780,6 +2797,21 @@
+         "yjs": ">=13.5.22"
+       }
+     },
++    "node_modules/@lit-labs/ssr-dom-shim": {
++      "version": "1.6.0",
++      "resolved": "https://registry.npmjs.org/@lit-labs/ssr-dom-shim/-/ssr-dom-shim-1.6.0.tgz",
++      "integrity": "sha512-VHb0ALPMTlgKjM6yIxxoQNnpKyUKLD04VzeQdsiXkMqkvYlAHxq9glGLmgbb889/1GsohSOAjvQYoiBppXFqrQ==",
++      "license": "BSD-3-Clause"
++    },
++    "node_modules/@lit/reactive-element": {
++      "version": "2.1.2",
++      "resolved": "https://registry.npmjs.org/@lit/reactive-element/-/reactive-element-2.1.2.tgz",
++      "integrity": "sha512-pbCDiVMnne1lYUIaYNN5wrwQXDtHaYtg7YEFPeW+hws6U47WeFvISGUWekPGKWOP1ygrs0ef0o1VJMk1exos5A==",
++      "license": "BSD-3-Clause",
++      "dependencies": {
++        "@lit-labs/ssr-dom-shim": "^1.5.0"
++      }
++    },
+     "node_modules/@monaco-editor/loader": {
+       "version": "1.7.0",
+       "resolved": "https://registry.npmjs.org/@monaco-editor/loader/-/loader-1.7.0.tgz",
+@@ -2803,6 +2835,18 @@
+         "react-dom": "^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0"
+       }
+     },
++    "node_modules/@monogrid/gainmap-js": {
++      "version": "3.4.0",
++      "resolved": "https://registry.npmjs.org/@monogrid/gainmap-js/-/gainmap-js-3.4.0.tgz",
++      "integrity": "sha512-2Z0FATFHaoYJ8b+Y4y4Hgfn3FRFwuU5zRrk+9dFWp4uGAdHGqVEdP7HP+gLA3X469KXHmfupJaUbKo1b/aDKIg==",
++      "license": "MIT",
++      "dependencies": {
++        "promise-worker-transferable": "^1.0.4"
++      },
++      "peerDependencies": {
++        "three": ">= 0.159.0"
++      }
++    },
+     "node_modules/@napi-rs/wasm-runtime": {
+       "version": "1.2.3",
+       "resolved": "https://registry.npmjs.org/@napi-rs/wasm-runtime/-/wasm-runtime-1.2.3.tgz",
+@@ -4799,9 +4843,7 @@
+       "version": "2.0.7",
+       "resolved": "https://registry.npmjs.org/@types/trusted-types/-/trusted-types-2.0.7.tgz",
+       "integrity": "sha512-ScaPdn1dQczgbl0QFTeTOmVHFULt394XJgOQNoyVhZ6r2vLnMLJfBPd53SB52T/3G36VI1/g2MZaX0cwDuXsfw==",
+-      "license": "MIT",
+-      "optional": true,
+-      "peer": true
++      "license": "MIT"
+     },
+     "node_modules/@types/unist": {
+       "version": "3.0.3",
+@@ -8165,6 +8207,12 @@
+         "url": "https://github.com/sponsors/sindresorhus"
+       }
+     },
++    "node_modules/immediate": {
++      "version": "3.0.6",
++      "resolved": "https://registry.npmjs.org/immediate/-/immediate-3.0.6.tgz",
++      "integrity": "sha512-XXOFtyqDjNDAQxVfYxuF7g9Il/IbWmmlQg2MYKOH8ExIT1qg6xc4zyS3HaEEATgs1btfzxq15ciUiY7gjSXRGQ==",
++      "license": "MIT"
++    },
+     "node_modules/immutable": {
+       "version": "4.3.9",
+       "resolved": "https://registry.npmjs.org/immutable/-/immutable-4.3.9.tgz",
+@@ -8580,6 +8628,12 @@
+         "url": "https://github.com/sponsors/ljharb"
+       }
+     },
++    "node_modules/is-promise": {
++      "version": "2.2.2",
++      "resolved": "https://registry.npmjs.org/is-promise/-/is-promise-2.2.2.tgz",
++      "integrity": "sha512-+lP4/6lKUBfQjZ2pdxThZvLUAafmZb8OAxFb8XXtiQmS35INgr85hdOGoEs124ez1FCnZJt6jau/T+alh58QFQ==",
++      "license": "MIT"
++    },
+     "node_modules/is-regex": {
+       "version": "1.2.1",
+       "resolved": "https://registry.npmjs.org/is-regex/-/is-regex-1.2.1.tgz",
+@@ -9043,6 +9097,15 @@
+         "url": "https://github.com/sponsors/dmonad"
+       }
+     },
++    "node_modules/lie": {
++      "version": "3.3.0",
++      "resolved": "https://registry.npmjs.org/lie/-/lie-3.3.0.tgz",
++      "integrity": "sha512-UaiMJzeWRlEujzAuw5LokY1L5ecNQYZKfmyZ9L7wDHb/p5etKaxXhohBcrw0EYby+G/NA52vRSN4N39dxHAIwQ==",
++      "license": "MIT",
++      "dependencies": {
++        "immediate": "~3.0.5"
++      }
++    },
+     "node_modules/lightningcss": {
+       "version": "1.32.0",
+       "resolved": "https://registry.npmjs.org/lightningcss/-/lightningcss-1.32.0.tgz",
+@@ -9298,6 +9361,37 @@
+       "integrity": "sha512-7ylylesZQ/PV29jhEDl3Ufjo6ZX7gCqJr5F7PKrqc93v7fzSymt1BpwEU8nAUXs8qzzvqhbjhK5QZg6Mt/HkBg==",
+       "license": "MIT"
+     },
++    "node_modules/lit": {
++      "version": "3.3.3",
++      "resolved": "https://registry.npmjs.org/lit/-/lit-3.3.3.tgz",
++      "integrity": "sha512-fycuvZg/hkpozL00lm1pEJH5nN/lr9ZXd6mJI2HSN4+Bzc+LDNdEApJ6HFbPkdFNHLvOplIIuJvxkS4XUxqirw==",
++      "license": "BSD-3-Clause",
++      "dependencies": {
++        "@lit/reactive-element": "^2.1.0",
++        "lit-element": "^4.2.0",
++        "lit-html": "^3.3.0"
++      }
++    },
++    "node_modules/lit-element": {
++      "version": "4.2.2",
++      "resolved": "https://registry.npmjs.org/lit-element/-/lit-element-4.2.2.tgz",
++      "integrity": "sha512-aFKhNToWxoyhkNDmWZwEva2SlQia+jfG0fjIWV//YeTaWrVnOxD89dPKfigCUspXFmjzOEUQpOkejH5Ly6sG0w==",
++      "license": "BSD-3-Clause",
++      "dependencies": {
++        "@lit-labs/ssr-dom-shim": "^1.5.0",
++        "@lit/reactive-element": "^2.1.0",
++        "lit-html": "^3.3.0"
++      }
++    },
++    "node_modules/lit-html": {
++      "version": "3.3.3",
++      "resolved": "https://registry.npmjs.org/lit-html/-/lit-html-3.3.3.tgz",
++      "integrity": "sha512-el8M6jK2o3RXBnrSHX3ZKrsN8zEV63pSExTO1wYJz7QndGYZ8353e2a5PPX+qHe2aGayfnchQmkAojaWAREOIA==",
++      "license": "BSD-3-Clause",
++      "dependencies": {
++        "@types/trusted-types": "^2.0.2"
++      }
++    },
+     "node_modules/locate-path": {
+       "version": "6.0.0",
+       "resolved": "https://registry.npmjs.org/locate-path/-/locate-path-6.0.0.tgz",
+@@ -10258,6 +10352,17 @@
+         }
+       }
+     },
++    "node_modules/next-intl/node_modules/@swc/helpers": {
++      "version": "0.5.23",
++      "resolved": "https://registry.npmjs.org/@swc/helpers/-/helpers-0.5.23.tgz",
++      "integrity": "sha512-5lSsMOTXURePglDfvuAQUqkGek9Hg2kksOYay2m0+XR++b2NWYL/4sWyuvVBIs8oKnJaxkdi9whaL/sqN13afw==",
++      "license": "Apache-2.0",
++      "optional": true,
++      "peer": true,
++      "dependencies": {
++        "tslib": "^2.8.0"
++      }
++    },
+     "node_modules/node-addon-api": {
+       "version": "7.1.1",
+       "resolved": "https://registry.npmjs.org/node-addon-api/-/node-addon-api-7.1.1.tgz",
+@@ -11515,6 +11620,16 @@
+       ],
+       "license": "MIT"
+     },
++    "node_modules/promise-worker-transferable": {
++      "version": "1.0.4",
++      "resolved": "https://registry.npmjs.org/promise-worker-transferable/-/promise-worker-transferable-1.0.4.tgz",
++      "integrity": "sha512-bN+0ehEnrXfxV2ZQvU2PetO0n4gqBD4ulq3MI1WOPLgr7/Mg9yRQkX5+0v1vagr74ZTsl7XtzlaYDo2EuCeYJw==",
++      "license": "Apache-2.0",
++      "dependencies": {
++        "is-promise": "^2.1.0",
++        "lie": "^3.0.2"
++      }
++    },
+     "node_modules/prompts": {
+       "version": "2.4.2",
+       "resolved": "https://registry.npmjs.org/prompts/-/prompts-2.4.2.tgz",
+@@ -12656,6 +12771,13 @@
+         "real-require": "^0.2.0"
+       }
+     },
++    "node_modules/three": {
++      "version": "0.183.2",
++      "resolved": "https://registry.npmjs.org/three/-/three-0.183.2.tgz",
++      "integrity": "sha512-di3BsL2FEQ1PA7Hcvn4fyJOlxRRgFYBpMTcyOgkwJIaDOdJMebEFPA+t98EvjuljDx4hNulAGwF6KIjtwI5jgQ==",
++      "license": "MIT",
++      "peer": true
++    },
+     "node_modules/tinyglobby": {
+       "version": "0.2.17",
+       "resolved": "https://registry.npmjs.org/tinyglobby/-/tinyglobby-0.2.17.tgz",
+diff --git a/package.json b/package.json
+index 6fe3ada..4b586ae 100644
+--- a/package.json
++++ b/package.json
+@@ -31,6 +31,7 @@
+     "build:deploy": "npm run tokens && npm run fonts && npm run migrate && npm run build"
+   },
+   "dependencies": {
++    "@google/model-viewer": "4.3.1",
+     "@payloadcms/db-postgres": "3.88.0",
+     "@payloadcms/next": "3.88.0",
+     "@payloadcms/richtext-lexical": "3.88.0",
+diff --git a/src/blocks/model-3d.ts b/src/blocks/model-3d.ts
+new file mode 100644
+index 0000000..3f0628a
+--- /dev/null
++++ b/src/blocks/model-3d.ts
+@@ -0,0 +1,52 @@
++import type { Block } from 'payload'
++
++import { blockSettings } from './shared'
++
++/**
++ * An interactive, orbit-and-zoom 3D model — a .glb, rendered client-side
++ * with Google's `<model-viewer>` — rather than a flat render of one. Built
++ * for the Oway/Cosmoprof stand model, which only existed as a 60MB
++ * SketchUp file: converting that to .glb (preserving the flat SketchUp
++ * materials, not just textures) and compressing it with Draco geometry
++ * compression took it from 287MB to roughly 8-9MB. That conversion and
++ * compression happen before the file ever reaches this block — `model`
++ * just wants an already-web-ready .glb, the same way `MediaBlock` wants an
++ * already-sized image. No format validation here: Payload's `media`
++ * collection has no mimeType allowlist (see Media.ts), so this takes
++ * whatever file is uploaded on faith, same as a PDF ends up there today.
++ */
++export const Model3D: Block = {
++  slug: 'model3d',
++  interfaceName: 'Model3DBlock',
++  labels: { singular: 'Modello 3D', plural: 'Modelli 3D' },
++  fields: [
++    { name: 'eyebrow', type: 'text', localized: true },
++    { name: 'heading', type: 'text', localized: true },
++    {
++      name: 'model',
++      type: 'upload',
++      relationTo: 'media',
++      required: true,
++      admin: {
++        description:
++          '.glb, già pronto per il web (texture/colori inclusi, compresso). Non .skp — nessun browser lo legge.',
++      },
++    },
++    {
++      name: 'poster',
++      type: 'upload',
++      relationTo: 'media',
++      admin: {
++        description:
++          'Immagine mostrata finché il modello (alcuni MB) non ha finito di caricare. Facoltativa ma consigliata.',
++      },
++    },
++    {
++      name: 'autoRotate',
++      type: 'checkbox',
++      defaultValue: true,
++      admin: { description: 'Ruota lentamente da solo finché il visitatore non lo tocca.' },
++    },
++    blockSettings,
++  ],
++}
+diff --git a/src/collections/Projects.ts b/src/collections/Projects.ts
+index 71c5787..945716f 100644
+--- a/src/collections/Projects.ts
++++ b/src/collections/Projects.ts
+@@ -3,6 +3,7 @@ import type { CollectionConfig } from 'payload'
+ import { admins, authenticated, authenticatedOrPublished } from '../access/roles'
+ import { LiveEmbed } from '../blocks/live-embed'
+ import { MediaBlock } from '../blocks/media'
++import { Model3D } from '../blocks/model-3d'
+ import { Prose } from '../blocks/prose'
+ import { metaGroup } from '../fields/meta'
+ import { slugField, slugFromTitle } from '../fields/slug'
+@@ -188,7 +189,7 @@ export const Projects: CollectionConfig = {
+             {
+               name: 'execution',
+               type: 'blocks',
+-              blocks: [Prose, MediaBlock, LiveEmbed],
++              blocks: [Prose, MediaBlock, LiveEmbed, Model3D],
+               admin: { description: "Testo e media alternati, nell'ordine in cui si leggono." },
+             },
+             {
+diff --git a/src/components/blocks/model-3d-block.tsx b/src/components/blocks/model-3d-block.tsx
+new file mode 100644
+index 0000000..2f0efd6
+--- /dev/null
++++ b/src/components/blocks/model-3d-block.tsx
+@@ -0,0 +1,66 @@
++'use client'
++
++import { useEffect, useState } from 'react'
++
++import type { Model3DBlock as Model3DBlockType } from '@/payload-types'
++
++import { BlockSection } from './block-section'
++
++function mediaUrl(media: Model3DBlockType['model'] | Model3DBlockType['poster']): string | null {
++  if (!media || typeof media !== 'object') return null
++  return media.url ?? null
++}
++
++/**
++ * `<model-viewer>` is a browser custom element, not a React component —
++ * importing `@google/model-viewer` at module scope runs `customElements
++ * .define(...)` on load, which touches `document` and breaks Next's server
++ * render of this (client) component. Deferring the import to `useEffect`
++ * keeps it off the server pass entirely; `ready` only flips once the
++ * import has resolved, so the element isn't written into the DOM — as a
++ * plain, inert tag — before the browser knows what it is.
++ */
++export function Model3DBlock({ block }: { block: Model3DBlockType }) {
++  const { eyebrow, heading, model, poster, autoRotate, settings } = block
++  const [ready, setReady] = useState(false)
++
++  useEffect(() => {
++    import('@google/model-viewer').then(() => setReady(true))
++  }, [])
++
++  const src = mediaUrl(model)
++  const posterUrl = mediaUrl(poster)
++  if (!src) return null
++
++  return (
++    <BlockSection settings={settings}>
++      <div className="page-grid">
++        <div className="col-span-4 tablet:col-span-6 desktop:col-span-10 desktop:col-start-2">
++          {eyebrow ? (
++            <p className="font-mono text-caption uppercase text-ink-muted">{eyebrow}</p>
++          ) : null}
++          {heading ? <h2 className="mt-8 text-h3 text-balance">{heading}</h2> : null}
++
++          <div className="mt-24 h-[70vh] max-h-[800px] min-h-[420px] w-full overflow-hidden rounded-glass-lg border border-line-strong bg-surface-2">
++            {ready ? (
++              <model-viewer
++                src={src}
++                poster={posterUrl ?? undefined}
++                alt={heading || 'Modello 3D'}
++                camera-controls
++                auto-rotate={autoRotate ?? undefined}
++                auto-rotate-delay="0"
++                shadow-intensity="1"
++                exposure="1"
++                environment-image="neutral"
++                loading="eager"
++                reveal="auto"
++                style={{ width: '100%', height: '100%' }}
++              />
++            ) : null}
++          </div>
++        </div>
++      </div>
++    </BlockSection>
++  )
++}
+diff --git a/src/components/blocks/render-blocks.tsx b/src/components/blocks/render-blocks.tsx
+index 218dac1..879f3b9 100644
+--- a/src/components/blocks/render-blocks.tsx
++++ b/src/components/blocks/render-blocks.tsx
+@@ -9,6 +9,7 @@ import { Faq } from './faq'
+ import { Hero } from './hero'
+ import { LiveEmbedBlock } from './live-embed-block'
+ import { MediaBlock } from './media-block'
++import { Model3DBlock } from './model-3d-block'
+ import { ProjectGrid } from './project-grid'
+ import { Prose } from './prose'
+ import { Results } from './results'
+@@ -39,6 +40,8 @@ function renderBlock(block: LayoutBlock | NarrativeBlock, locale: Locale) {
+       return <MediaBlock block={block} />
+     case 'liveEmbed':
+       return <LiveEmbedBlock block={block} />
++    case 'model3d':
++      return <Model3DBlock block={block} />
+     case 'bio':
+       return <BioBlock block={block} />
+     case 'services':
+diff --git a/src/migrations/20261002_120000_add_model_3d_block.ts b/src/migrations/20261002_120000_add_model_3d_block.ts
+new file mode 100644
+index 0000000..1b489ab
+--- /dev/null
++++ b/src/migrations/20261002_120000_add_model_3d_block.ts
+@@ -0,0 +1,112 @@
++import { MigrateUpArgs, MigrateDownArgs, sql } from '@payloadcms/db-postgres'
++
++/**
++ * Adds the tables for the new `model3d` block on `projects.execution`
++ * (`src/blocks/model-3d.ts`) — live and draft-version, same pair as every
++ * other block on that field. Hand-written for the same reason as
++ * `20260930_190000_add_live_embed_block`: no live database to diff against
++ * from here.
++ *
++ * Modelled on `projects_blocks_live_embed` for the shape (one simple block
++ * table + a locales table for the translated text fields), but with two
++ * upload relations (`model_id`, `poster_id`) instead of live-embed's plain
++ * `url` text column — copied from how `projects_blocks_media` points at
++ * `video_id` / `poster_id` in `20260815_181959_cms_schema`: an integer
++ * column with a `media(id)` foreign key, `ON DELETE set null` rather than
++ * `cascade`, so deleting a Media document clears the reference instead of
++ * deleting the block that pointed to it. `model_id` has no `NOT NULL`
++ * despite being `required` in the Payload config, for the same reason nothing
++ * else in this migration is `NOT NULL` either: Payload enforces `required`
++ * at the application layer, not with a DB constraint.
++ */
++export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
++  await db.execute(sql`
++   CREATE TYPE "public"."enum_projects_blocks_model3d_settings_background" AS ENUM('paper', 'sumi', 'accent');
++  CREATE TYPE "public"."enum_projects_blocks_model3d_settings_spacing" AS ENUM('compact', 'normal', 'wide');
++  CREATE TYPE "public"."enum__projects_v_blocks_model3d_settings_background" AS ENUM('paper', 'sumi', 'accent');
++  CREATE TYPE "public"."enum__projects_v_blocks_model3d_settings_spacing" AS ENUM('compact', 'normal', 'wide');
++
++  CREATE TABLE "projects_blocks_model3d" (
++  	"_order" integer NOT NULL,
++  	"_parent_id" integer NOT NULL,
++  	"_path" text NOT NULL,
++  	"id" varchar PRIMARY KEY NOT NULL,
++  	"model_id" integer,
++  	"poster_id" integer,
++  	"auto_rotate" boolean DEFAULT true,
++  	"settings_background" "enum_projects_blocks_model3d_settings_background" DEFAULT 'paper',
++  	"settings_spacing" "enum_projects_blocks_model3d_settings_spacing" DEFAULT 'normal',
++  	"settings_animate" boolean DEFAULT true,
++  	"block_name" varchar
++  );
++
++  CREATE TABLE "projects_blocks_model3d_locales" (
++  	"eyebrow" varchar,
++  	"heading" varchar,
++  	"id" serial PRIMARY KEY NOT NULL,
++  	"_locale" "_locales" NOT NULL,
++  	"_parent_id" varchar NOT NULL
++  );
++
++  CREATE TABLE "_projects_v_blocks_model3d" (
++  	"_order" integer NOT NULL,
++  	"_parent_id" integer NOT NULL,
++  	"_path" text NOT NULL,
++  	"id" serial PRIMARY KEY NOT NULL,
++  	"model_id" integer,
++  	"poster_id" integer,
++  	"auto_rotate" boolean DEFAULT true,
++  	"settings_background" "enum__projects_v_blocks_model3d_settings_background" DEFAULT 'paper',
++  	"settings_spacing" "enum__projects_v_blocks_model3d_settings_spacing" DEFAULT 'normal',
++  	"settings_animate" boolean DEFAULT true,
++  	"_uuid" varchar,
++  	"block_name" varchar
++  );
++
++  CREATE TABLE "_projects_v_blocks_model3d_locales" (
++  	"eyebrow" varchar,
++  	"heading" varchar,
++  	"id" serial PRIMARY KEY NOT NULL,
++  	"_locale" "_locales" NOT NULL,
++  	"_parent_id" integer NOT NULL
++  );
++
++  ALTER TABLE "projects_blocks_model3d" ADD CONSTRAINT "projects_blocks_model3d_parent_id_fk" FOREIGN KEY ("_parent_id") REFERENCES "public"."projects"("id") ON DELETE cascade ON UPDATE no action;
++  ALTER TABLE "projects_blocks_model3d" ADD CONSTRAINT "projects_blocks_model3d_model_id_media_id_fk" FOREIGN KEY ("model_id") REFERENCES "public"."media"("id") ON DELETE set null ON UPDATE no action;
++  ALTER TABLE "projects_blocks_model3d" ADD CONSTRAINT "projects_blocks_model3d_poster_id_media_id_fk" FOREIGN KEY ("poster_id") REFERENCES "public"."media"("id") ON DELETE set null ON UPDATE no action;
++  ALTER TABLE "projects_blocks_model3d_locales" ADD CONSTRAINT "projects_blocks_model3d_locales_parent_id_fk" FOREIGN KEY ("_parent_id") REFERENCES "public"."projects_blocks_model3d"("id") ON DELETE cascade ON UPDATE no action;
++  ALTER TABLE "_projects_v_blocks_model3d" ADD CONSTRAINT "_projects_v_blocks_model3d_parent_id_fk" FOREIGN KEY ("_parent_id") REFERENCES "public"."_projects_v"("id") ON DELETE cascade ON UPDATE no action;
++  ALTER TABLE "_projects_v_blocks_model3d" ADD CONSTRAINT "_projects_v_blocks_model3d_model_id_media_id_fk" FOREIGN KEY ("model_id") REFERENCES "public"."media"("id") ON DELETE set null ON UPDATE no action;
++  ALTER TABLE "_projects_v_blocks_model3d" ADD CONSTRAINT "_projects_v_blocks_model3d_poster_id_media_id_fk" FOREIGN KEY ("poster_id") REFERENCES "public"."media"("id") ON DELETE set null ON UPDATE no action;
++  ALTER TABLE "_projects_v_blocks_model3d_locales" ADD CONSTRAINT "_projects_v_blocks_model3d_locales_parent_id_fk" FOREIGN KEY ("_parent_id") REFERENCES "public"."_projects_v_blocks_model3d"("id") ON DELETE cascade ON UPDATE no action;
++
++  CREATE INDEX "projects_blocks_model3d_order_idx" ON "projects_blocks_model3d" USING btree ("_order");
++  CREATE INDEX "projects_blocks_model3d_parent_id_idx" ON "projects_blocks_model3d" USING btree ("_parent_id");
++  CREATE INDEX "projects_blocks_model3d_path_idx" ON "projects_blocks_model3d" USING btree ("_path");
++  CREATE INDEX "projects_blocks_model3d_model_idx" ON "projects_blocks_model3d" USING btree ("model_id");
++  CREATE INDEX "projects_blocks_model3d_poster_idx" ON "projects_blocks_model3d" USING btree ("poster_id");
++  CREATE UNIQUE INDEX "projects_blocks_model3d_locales_locale_parent_id_unique" ON "projects_blocks_model3d_locales" USING btree ("_locale","_parent_id");
++  CREATE INDEX "_projects_v_blocks_model3d_order_idx" ON "_projects_v_blocks_model3d" USING btree ("_order");
++  CREATE INDEX "_projects_v_blocks_model3d_parent_id_idx" ON "_projects_v_blocks_model3d" USING btree ("_parent_id");
++  CREATE INDEX "_projects_v_blocks_model3d_path_idx" ON "_projects_v_blocks_model3d" USING btree ("_path");
++  CREATE INDEX "_projects_v_blocks_model3d_model_idx" ON "_projects_v_blocks_model3d" USING btree ("model_id");
++  CREATE INDEX "_projects_v_blocks_model3d_poster_idx" ON "_projects_v_blocks_model3d" USING btree ("poster_id");
++  CREATE UNIQUE INDEX "_projects_v_blocks_model3d_locales_locale_parent_id_unique" ON "_projects_v_blocks_model3d_locales" USING btree ("_locale","_parent_id");
++
++  ALTER TABLE "projects_blocks_model3d" DISABLE ROW LEVEL SECURITY;
++  ALTER TABLE "projects_blocks_model3d_locales" DISABLE ROW LEVEL SECURITY;
++  ALTER TABLE "_projects_v_blocks_model3d" DISABLE ROW LEVEL SECURITY;
++  ALTER TABLE "_projects_v_blocks_model3d_locales" DISABLE ROW LEVEL SECURITY;`)
++}
++
++export async function down({ db, payload, req }: MigrateDownArgs): Promise<void> {
++  await db.execute(sql`
++   DROP TABLE "projects_blocks_model3d" CASCADE;
++  DROP TABLE "projects_blocks_model3d_locales" CASCADE;
++  DROP TABLE "_projects_v_blocks_model3d" CASCADE;
++  DROP TABLE "_projects_v_blocks_model3d_locales" CASCADE;
++  DROP TYPE "public"."enum_projects_blocks_model3d_settings_background";
++  DROP TYPE "public"."enum_projects_blocks_model3d_settings_spacing";
++  DROP TYPE "public"."enum__projects_v_blocks_model3d_settings_background";
++  DROP TYPE "public"."enum__projects_v_blocks_model3d_settings_spacing";`)
++}
+diff --git a/src/migrations/index.ts b/src/migrations/index.ts
+index de07464..b750162 100644
+--- a/src/migrations/index.ts
++++ b/src/migrations/index.ts
+@@ -7,6 +7,7 @@ import * as migration_20260824_170600_add_bio_block from './20260824_170600_add_
+ import * as migration_20260902_120032_add_project_year_end from './20260902_120032_add_project_year_end';
+ import * as migration_20260918_120000_add_icon_grid_variant from './20260918_120000_add_icon_grid_variant';
+ import * as migration_20260930_190000_add_live_embed_block from './20260930_190000_add_live_embed_block';
++import * as migration_20261002_120000_add_model_3d_block from './20261002_120000_add_model_3d_block';
+ 
+ export const migrations = [
+   {
+@@ -53,4 +54,9 @@ export const migrations = [
+     down: migration_20260930_190000_add_live_embed_block.down,
+     name: '20260930_190000_add_live_embed_block',
+   },
++  {
++    up: migration_20261002_120000_add_model_3d_block.up,
++    down: migration_20261002_120000_add_model_3d_block.down,
++    name: '20261002_120000_add_model_3d_block',
++  },
+ ];
+diff --git a/src/payload-types.ts b/src/payload-types.ts
+index e31d23c..05bb6d1 100644
+--- a/src/payload-types.ts
++++ b/src/payload-types.ts
+@@ -254,7 +254,7 @@ export interface Project {
+   /**
+    * Testo e media alternati, nell'ordine in cui si leggono.
+    */
+-  execution?: (ProseBlock | MediaBlockType | LiveEmbedBlock)[] | null;
++  execution?: (ProseBlock | MediaBlockType | LiveEmbedBlock | Model3DBlock)[] | null;
+   results?:
+     | {
+         label: string;
+@@ -496,6 +496,28 @@ export interface LiveEmbedBlock {
+   blockName?: string | null;
+   blockType: 'liveEmbed';
+ }
++/**
++ * This interface was referenced by `Config`'s JSON-Schema
++ * via the `definition` "Model3DBlock".
++ */
++export interface Model3DBlock {
++  eyebrow?: string | null;
++  heading?: string | null;
++  model: number | Media;
++  poster?: (number | null) | Media;
++  autoRotate?: boolean | null;
++  /**
++   * Fondo, respiro verticale e animazione di ingresso.
++   */
++  settings: {
++    background: 'paper' | 'sumi' | 'accent';
++    spacing: 'compact' | 'normal' | 'wide';
++    animate?: boolean | null;
++  };
++  id?: string | null;
++  blockName?: string | null;
++  blockType: 'model3d';
++}
+ /**
+  * This interface was referenced by `Config`'s JSON-Schema
+  * via the `definition` "testimonials".
+@@ -1127,6 +1149,7 @@ export interface ProjectsSelect<T extends boolean = true> {
+         prose?: T | ProseBlockSelect<T>;
+         media?: T | MediaBlockTypeSelect<T>;
+         liveEmbed?: T | LiveEmbedBlockSelect<T>;
++        model3d?: T | Model3DBlockSelect<T>;
+       };
+   results?:
+     | T
+@@ -1218,6 +1241,26 @@ export interface LiveEmbedBlockSelect<T extends boolean = true> {
+   id?: T;
+   blockName?: T;
+ }
++/**
++ * This interface was referenced by `Config`'s JSON-Schema
++ * via the `definition` "Model3DBlock_select".
++ */
++export interface Model3DBlockSelect<T extends boolean = true> {
++  eyebrow?: T;
++  heading?: T;
++  model?: T;
++  poster?: T;
++  autoRotate?: T;
++  settings?:
++    | T
++    | {
++        background?: T;
++        spacing?: T;
++        animate?: T;
++      };
++  id?: T;
++  blockName?: T;
++}
+ /**
+  * This interface was referenced by `Config`'s JSON-Schema
+  * via the `definition` "pages_select".
+diff --git a/src/types/model-viewer.d.ts b/src/types/model-viewer.d.ts
+new file mode 100644
+index 0000000..1422665
+--- /dev/null
++++ b/src/types/model-viewer.d.ts
+@@ -0,0 +1,39 @@
++import type { DetailedHTMLProps, HTMLAttributes } from 'react'
++
++/**
++ * `@google/model-viewer` registers `<model-viewer>` as a browser custom
++ * element — it ships no React component, so JSX has no idea what props it
++ * takes without this. Attribute names stay kebab-case (`camera-controls`,
++ * not `cameraControls`): React passes unrecognised hyphenated props on a
++ * lowercase tag straight through as DOM attributes, which is exactly what
++ * the custom element reads, but only if the casing matches.
++ *
++ * Augmenting `declare global { namespace JSX }` doesn't reach this
++ * project's actual JSX checking: `@types/react` 19 moved
++ * `IntrinsicElements` to live under `React.JSX`, with no global `JSX`
++ * namespace left for anything to bridge to (confirmed by grepping
++ * `@types/react` for a `declare global` block — there is none). Module
++ * augmentation has to target `react`'s own `JSX` namespace directly.
++ */
++declare module 'react' {
++  namespace JSX {
++    interface IntrinsicElements {
++      'model-viewer': DetailedHTMLProps<HTMLAttributes<HTMLElement>, HTMLElement> & {
++        src?: string
++        alt?: string
++        poster?: string
++        exposure?: string
++        'shadow-intensity'?: string
++        'environment-image'?: string
++        'camera-controls'?: boolean
++        'auto-rotate'?: boolean
++        'auto-rotate-delay'?: string
++        ar?: boolean
++        loading?: 'auto' | 'lazy' | 'eager'
++        reveal?: 'auto' | 'interaction' | 'manual'
++      }
++    }
++  }
++}
++
++export {}
+-- 
+2.43.0
+

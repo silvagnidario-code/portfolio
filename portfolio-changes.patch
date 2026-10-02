@@ -1,0 +1,99 @@
+diff --git a/src/components/blocks/bio-block.tsx b/src/components/blocks/bio-block.tsx
+index ec9e43b..c660a20 100644
+--- a/src/components/blocks/bio-block.tsx
++++ b/src/components/blocks/bio-block.tsx
+@@ -5,7 +5,7 @@ import { BlockSection, Eyebrow } from './block-section'
+ import { RichText } from './rich-text'
+ 
+ /**
+- * One photo, one heading, one bio: the "chi sono" block. Text always comes
++ * One photo, one heading, one bio: the "chi sono" block. The heading is the page's h1 (the block is only used on the About page). Text always comes
+  * first in the markup — a screen reader meets the name and the words before
+  * the picture whichever side it sits on — and `imagePosition` only ever
+  * changes where the two columns land on a wide screen.
+@@ -34,9 +34,9 @@ export function BioBlock({ block }: { block: BioBlockType }) {
+           }`}
+         >
+           {eyebrow ? <Eyebrow>{eyebrow}</Eyebrow> : null}
+-          <h2 className="mt-16 text-h1 text-balance" data-reveal={reveal('lines')}>
++          <h1 className="mt-16 text-h1 text-balance" data-reveal={reveal('lines')}>
+             {heading}
+-          </h2>
++          </h1>
+ 
+           <div data-reveal={settings?.animate ? 'rise' : undefined}>
+             <RichText data={body} className="mt-32" />
+diff --git a/src/components/work/work-filters.tsx b/src/components/work/work-filters.tsx
+index 31f718c..527d4a6 100644
+--- a/src/components/work/work-filters.tsx
++++ b/src/components/work/work-filters.tsx
+@@ -54,11 +54,8 @@ export async function WorkFilters({
+ 
+   const hasFilter = Boolean(active.service ?? active.industry)
+ 
+-  return (
+-    <section
+-      aria-label={t('filters')}
+-      className="flex flex-col gap-16 border-b border-line pb-24 tablet:flex-row tablet:items-center tablet:gap-32"
+-    >
++  const groups = (
++    <>
+       <div className="flex flex-wrap items-center gap-16">
+         <span className="font-mono text-caption uppercase text-ink-muted">{t('byService')}</span>
+         {pill(t('allProjects'), href({ industry: active.industry }), !active.service)}
+@@ -91,6 +88,16 @@ export async function WorkFilters({
+           {t('clear')}
+         </Link>
+       ) : null}
++    </>
++  )
++
++  return (
++    <section
++      aria-label={t('filters')}
++      className="hidden border-b border-line pb-24 tablet:flex tablet:flex-row tablet:items-center tablet:gap-32"
++    >
++      {/* Hidden on mobile by request: the filters only appear from tablet up. */}
++      {groups}
+     </section>
+   )
+ }
+diff --git a/src/messages/en.json b/src/messages/en.json
+index e14fec5..e3d59c4 100644
+--- a/src/messages/en.json
++++ b/src/messages/en.json
+@@ -41,7 +41,7 @@
+   },
+   "WorkPage": {
+     "title": "Work",
+-    "intro": "Three cases told end to end: what was there before, what we took away, what changed after. Filter by service or by industry.",
++    "intro": "Cases told end to end: what was there before, what we took away, what changed after. Filter by service or by industry.",
+     "filters": "Filters",
+     "allProjects": "All",
+     "byService": "Service",
+diff --git a/src/messages/it.json b/src/messages/it.json
+index b24093d..ef70f7b 100644
+--- a/src/messages/it.json
++++ b/src/messages/it.json
+@@ -41,7 +41,7 @@
+   },
+   "WorkPage": {
+     "title": "Progetti",
+-    "intro": "Tre casi raccontati per intero: cosa c'era prima, cosa abbiamo tolto, cosa è cambiato dopo. Filtra per servizio o per settore.",
++    "intro": "Casi raccontati per intero: cosa c'era prima, cosa abbiamo tolto, cosa è cambiato dopo. Filtra per servizio o per settore.",
+     "filters": "Filtri",
+     "allProjects": "Tutti",
+     "byService": "Servizio",
+diff --git a/src/messages/zh.json b/src/messages/zh.json
+index 37fad09..fc635ce 100644
+--- a/src/messages/zh.json
++++ b/src/messages/zh.json
+@@ -41,7 +41,7 @@
+   },
+   "WorkPage": {
+     "title": "作品",
+-    "intro": "三个完整讲述的案例：此前是什么、我们拿掉了什么、之后发生了什么变化。可按服务或行业筛选。",
++    "intro": "完整讲述的案例：此前是什么、我们拿掉了什么、之后发生了什么变化。可按服务或行业筛选。",
+     "filters": "筛选",
+     "allProjects": "全部",
+     "byService": "服务",

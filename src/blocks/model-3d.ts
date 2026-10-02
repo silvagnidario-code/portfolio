@@ -47,6 +47,15 @@ export const Model3D: Block = {
       defaultValue: true,
       admin: { description: 'Ruota lentamente da solo finché il visitatore non lo tocca.' },
     },
+    {
+      name: 'mobileFallbackVideo',
+      type: 'upload',
+      relationTo: 'media',
+      admin: {
+        description:
+          'Video di un giro a 360° (sfondo a tinta unita, non trasparente — non affidabile su Safari/iOS), mostrato al posto del modello interattivo sotto il breakpoint desktop. Un modello di questo peso può mandare in crash la pagina su molti telefoni; senza un video qui, il modello interattivo resta l’unica opzione anche su mobile.',
+      },
+    },
     blockSettings,
   ],
 }

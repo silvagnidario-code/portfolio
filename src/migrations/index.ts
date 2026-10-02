@@ -8,6 +8,7 @@ import * as migration_20260902_120032_add_project_year_end from './20260902_1200
 import * as migration_20260918_120000_add_icon_grid_variant from './20260918_120000_add_icon_grid_variant';
 import * as migration_20260930_190000_add_live_embed_block from './20260930_190000_add_live_embed_block';
 import * as migration_20261002_120000_add_model_3d_block from './20261002_120000_add_model_3d_block';
+import * as migration_20261002_130000_add_model_3d_mobile_fallback_video from './20261002_130000_add_model_3d_mobile_fallback_video';
 
 export const migrations = [
   {
@@ -58,5 +59,10 @@ export const migrations = [
     up: migration_20261002_120000_add_model_3d_block.up,
     down: migration_20261002_120000_add_model_3d_block.down,
     name: '20261002_120000_add_model_3d_block',
+  },
+  {
+    up: migration_20261002_130000_add_model_3d_mobile_fallback_video.up,
+    down: migration_20261002_130000_add_model_3d_mobile_fallback_video.down,
+    name: '20261002_130000_add_model_3d_mobile_fallback_video',
   },
 ];

@@ -18,6 +18,12 @@ import { MigrateUpArgs, MigrateDownArgs, sql } from '@payloadcms/db-postgres'
  * despite being `required` in the Payload config, for the same reason nothing
  * else in this migration is `NOT NULL` either: Payload enforces `required`
  * at the application layer, not with a DB constraint.
+ *
+ * A third upload relation on this same block, `mobileFallbackVideo`, is
+ * migrated separately in `20261002_130000_add_model_3d_mobile_fallback_video`
+ * rather than added here: this migration had already run against the live
+ * database by the time that field existed, so its column has to arrive as
+ * an `ALTER TABLE`, not by editing the `CREATE TABLE` below.
  */
 export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   await db.execute(sql`

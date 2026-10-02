@@ -1,0 +1,287 @@
+From 35f4a42d6c999bd7e53bd40ba3ffac63489859a4 Mon Sep 17 00:00:00 2001
+From: Claude <noreply@anthropic.com>
+Date: Fri, 2 Oct 2026 11:39:19 +0000
+Subject: [PATCH] Swap in a turntable video below desktop instead of the live
+ model
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Even deferred to an explicit tap, decompressing this model was still
+enough to crash the tab on phones that tried it. Below this site's
+desktop breakpoint (1180px), a pre-rendered 360 turntable video now
+replaces <model-viewer> whenever one is set on the block —
+mobileFallbackVideo, a new optional upload field — so there is nothing
+for a phone's GPU to choke on: the viewer isn't mounted there at all,
+not de-prioritised. The isDesktop check starts false and only flips
+true once matchMedia has explicitly confirmed a desktop width, because
+the failure mode that matters is a phone briefly mounting the viewer
+before JS corrects it, not a desktop reader seeing the video for a
+frame. Without a fallback video set, behaviour on mobile/tablet is
+unchanged from before this patch (interactive viewer, tap to load).
+
+Database: 20261002_130000_add_model_3d_mobile_fallback_video is a
+second, separate migration (ALTER TABLE, not a rewrite of the first
+one's CREATE TABLE) — 20261002_120000_add_model_3d_block had already
+run against the live database by the time this field existed.
+---
+ src/blocks/model-3d.ts                        |  9 ++
+ src/components/blocks/model-3d-block.tsx      | 97 +++++++++++++------
+ .../20261002_120000_add_model_3d_block.ts     |  6 ++
+ ...0000_add_model_3d_mobile_fallback_video.ts | 34 +++++++
+ src/migrations/index.ts                       |  6 ++
+ src/payload-types.ts                          |  2 +
+ 6 files changed, 127 insertions(+), 27 deletions(-)
+ create mode 100644 src/migrations/20261002_130000_add_model_3d_mobile_fallback_video.ts
+
+diff --git a/src/blocks/model-3d.ts b/src/blocks/model-3d.ts
+index 3f0628a..368ff2e 100644
+--- a/src/blocks/model-3d.ts
++++ b/src/blocks/model-3d.ts
+@@ -47,6 +47,15 @@ export const Model3D: Block = {
+       defaultValue: true,
+       admin: { description: 'Ruota lentamente da solo finché il visitatore non lo tocca.' },
+     },
++    {
++      name: 'mobileFallbackVideo',
++      type: 'upload',
++      relationTo: 'media',
++      admin: {
++        description:
++          'Video di un giro a 360° (sfondo a tinta unita, non trasparente — non affidabile su Safari/iOS), mostrato al posto del modello interattivo sotto il breakpoint desktop. Un modello di questo peso può mandare in crash la pagina su molti telefoni; senza un video qui, il modello interattivo resta l’unica opzione anche su mobile.',
++      },
++    },
+     blockSettings,
+   ],
+ }
+diff --git a/src/components/blocks/model-3d-block.tsx b/src/components/blocks/model-3d-block.tsx
+index 52cc25f..80963c4 100644
+--- a/src/components/blocks/model-3d-block.tsx
++++ b/src/components/blocks/model-3d-block.tsx
+@@ -19,19 +19,45 @@ function mediaUrl(media: Model3DBlockType['model'] | Model3DBlockType['poster'])
+  * keeps it off the server pass entirely; `ready` only flips once the
+  * import has resolved, so the element isn't written into the DOM — as a
+  * plain, inert tag — before the browser knows what it is.
++ *
++ * `isDesktop` gates something heavier than that: even deferred to an
++ * explicit tap (see the comment further down), decompressing a model of
++ * this size was enough to crash the tab on phones that tried anyway. Below
++ * this site's own `desktop` breakpoint (1180px, matching every other
++ * `desktop:` utility class on the page), a pre-rendered turntable video is
++ * shown instead whenever one is provided — not interactivity lost to a
++ * budget, but the viewer never mounted there at all, so there is nothing
++ * for a phone's GPU to choke on. The check starts `false` (not `null`) and
++ * only ever flips to `true` once `matchMedia` has explicitly confirmed a
++ * desktop width: the failure mode that matters is a phone that briefly
++ * mounts `<model-viewer>` before JS corrects it, not a desktop reader
++ * seeing the video flash for a frame, so the safer default is the one a
++ * narrow screen already wants.
+  */
+ export function Model3DBlock({ block }: { block: Model3DBlockType }) {
+-  const { eyebrow, heading, model, poster, autoRotate, settings } = block
++  const { eyebrow, heading, model, poster, autoRotate, mobileFallbackVideo, settings } = block
+   const [ready, setReady] = useState(false)
++  const [isDesktop, setIsDesktop] = useState(false)
+ 
+   useEffect(() => {
+     import('@google/model-viewer').then(() => setReady(true))
+   }, [])
+ 
++  useEffect(() => {
++    const query = window.matchMedia('(min-width: 1180px)')
++    setIsDesktop(query.matches)
++    const onChange = (e: MediaQueryListEvent) => setIsDesktop(e.matches)
++    query.addEventListener('change', onChange)
++    return () => query.removeEventListener('change', onChange)
++  }, [])
++
+   const src = mediaUrl(model)
+   const posterUrl = mediaUrl(poster)
++  const videoUrl = mediaUrl(mobileFallbackVideo)
+   if (!src) return null
+ 
++  const showVideo = !isDesktop && videoUrl
++
+   return (
+     <BlockSection settings={settings}>
+       <div className="page-grid">
+@@ -51,34 +77,51 @@ export function Model3DBlock({ block }: { block: Model3DBlockType }) {
+             className="mt-24 h-[70vh] max-h-[800px] min-h-[420px] w-full overflow-hidden rounded-glass-lg border border-line-strong bg-surface-2"
+             data-lenis-prevent-wheel
+           >
+-            {/* loading="lazy" + reveal="interaction": eager, automatic
+-                loading decompressed this model's geometry in memory the
+-                moment the page opened, which was enough to crash the tab on
+-                mobile — reported after shipping with loading="eager"
+-                reveal="auto". Deferring the actual load to an explicit tap
+-                (model-viewer's own interaction prompt, shown over `poster`
+-                when set) keeps that decompression off the critical path
+-                entirely unless the reader asks for it. This doesn't shrink
+-                the model itself — a phone that can't render it at all will
+-                still struggle once tapped — so if mobile trouble persists
+-                after this, the next lever is a lower-poly export, not this
+-                block. */}
+-            {ready ? (
+-              <model-viewer
+-                src={src}
++            {showVideo ? (
++              // A pre-rendered turntable, not the live model: chosen over
++              // trying to detect a failed load, which isn't reliable
++              // either — the crash this replaces is often silent (an OOM
++              // kill), with no error event for anything here to catch.
++              // Autoplay/loop/muted/playsInline is the standard combo for
++              // an ambient looping clip that mobile browsers will actually
++              // autoplay without a tap.
++              <video
++                src={videoUrl}
+                 poster={posterUrl ?? undefined}
+-                alt={heading || 'Modello 3D'}
+-                camera-controls
+-                auto-rotate={autoRotate ?? undefined}
+-                auto-rotate-delay="0"
+-                shadow-intensity="1"
+-                exposure="1"
+-                environment-image="neutral"
+-                loading="lazy"
+-                reveal="interaction"
+-                style={{ width: '100%', height: '100%' }}
++                autoPlay
++                loop
++                muted
++                playsInline
++                className="h-full w-full object-contain"
+               />
+-            ) : null}
++            ) : (
++              // loading="lazy" + reveal="interaction": eager, automatic
++              // loading decompressed this model's geometry in memory the
++              // moment the page opened, which was enough to crash the tab
++              // on mobile even before the isDesktop check above existed.
++              // Deferring the actual load to an explicit tap (model-
++              // viewer's own interaction prompt, shown over `poster` when
++              // set) keeps that decompression off the critical path
++              // entirely unless the reader asks for it — still the
++              // behaviour here on desktop, and on mobile/tablet whenever no
++              // fallback video has been set.
++              ready && (
++                <model-viewer
++                  src={src}
++                  poster={posterUrl ?? undefined}
++                  alt={heading || 'Modello 3D'}
++                  camera-controls
++                  auto-rotate={autoRotate ?? undefined}
++                  auto-rotate-delay="0"
++                  shadow-intensity="1"
++                  exposure="1"
++                  environment-image="neutral"
++                  loading="lazy"
++                  reveal="interaction"
++                  style={{ width: '100%', height: '100%' }}
++                />
++              )
++            )}
+           </div>
+         </div>
+       </div>
+diff --git a/src/migrations/20261002_120000_add_model_3d_block.ts b/src/migrations/20261002_120000_add_model_3d_block.ts
+index 1b489ab..8030865 100644
+--- a/src/migrations/20261002_120000_add_model_3d_block.ts
++++ b/src/migrations/20261002_120000_add_model_3d_block.ts
+@@ -18,6 +18,12 @@ import { MigrateUpArgs, MigrateDownArgs, sql } from '@payloadcms/db-postgres'
+  * despite being `required` in the Payload config, for the same reason nothing
+  * else in this migration is `NOT NULL` either: Payload enforces `required`
+  * at the application layer, not with a DB constraint.
++ *
++ * A third upload relation on this same block, `mobileFallbackVideo`, is
++ * migrated separately in `20261002_130000_add_model_3d_mobile_fallback_video`
++ * rather than added here: this migration had already run against the live
++ * database by the time that field existed, so its column has to arrive as
++ * an `ALTER TABLE`, not by editing the `CREATE TABLE` below.
+  */
+ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
+   await db.execute(sql`
+diff --git a/src/migrations/20261002_130000_add_model_3d_mobile_fallback_video.ts b/src/migrations/20261002_130000_add_model_3d_mobile_fallback_video.ts
+new file mode 100644
+index 0000000..414dcf2
+--- /dev/null
++++ b/src/migrations/20261002_130000_add_model_3d_mobile_fallback_video.ts
+@@ -0,0 +1,34 @@
++import { MigrateUpArgs, MigrateDownArgs, sql } from '@payloadcms/db-postgres'
++
++/**
++ * Adds `mobile_fallback_video_id` to `projects_blocks_model3d` and
++ * `_projects_v_blocks_model3d` — the new `mobileFallbackVideo` field on
++ * `src/blocks/model-3d.ts`, a third upload relation alongside `model_id`
++ * and `poster_id`. A separate `ALTER TABLE` migration, not a rewrite of
++ * `20261002_120000_add_model_3d_block`'s `CREATE TABLE`: that migration had
++ * already run against the live database — the model3d block itself
++ * shipped first, without this field — so the only way to add a column at
++ * this point is to alter the existing table, the same as
++ * `20260902_120032_add_project_year_end` did for `projects.year_end`.
++ *
++ * Same FK shape as `model_id` / `poster_id` in the original migration:
++ * `ON DELETE set null`, not `cascade` — deleting the fallback video clears
++ * the reference rather than deleting the block.
++ */
++export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
++  await db.execute(sql`
++   ALTER TABLE "projects_blocks_model3d" ADD COLUMN "mobile_fallback_video_id" integer;
++  ALTER TABLE "_projects_v_blocks_model3d" ADD COLUMN "mobile_fallback_video_id" integer;
++
++  ALTER TABLE "projects_blocks_model3d" ADD CONSTRAINT "projects_blocks_model3d_mobile_fallback_video_id_media_id_fk" FOREIGN KEY ("mobile_fallback_video_id") REFERENCES "public"."media"("id") ON DELETE set null ON UPDATE no action;
++  ALTER TABLE "_projects_v_blocks_model3d" ADD CONSTRAINT "_projects_v_blocks_model3d_mobile_fallback_video_id_media_id_fk" FOREIGN KEY ("mobile_fallback_video_id") REFERENCES "public"."media"("id") ON DELETE set null ON UPDATE no action;
++
++  CREATE INDEX "projects_blocks_model3d_mobile_fallback_video_idx" ON "projects_blocks_model3d" USING btree ("mobile_fallback_video_id");
++  CREATE INDEX "_projects_v_blocks_model3d_mobile_fallback_video_idx" ON "_projects_v_blocks_model3d" USING btree ("mobile_fallback_video_id");`)
++}
++
++export async function down({ db, payload, req }: MigrateDownArgs): Promise<void> {
++  await db.execute(sql`
++   ALTER TABLE "projects_blocks_model3d" DROP COLUMN "mobile_fallback_video_id";
++  ALTER TABLE "_projects_v_blocks_model3d" DROP COLUMN "mobile_fallback_video_id";`)
++}
+diff --git a/src/migrations/index.ts b/src/migrations/index.ts
+index b750162..24105ee 100644
+--- a/src/migrations/index.ts
++++ b/src/migrations/index.ts
+@@ -8,6 +8,7 @@ import * as migration_20260902_120032_add_project_year_end from './20260902_1200
+ import * as migration_20260918_120000_add_icon_grid_variant from './20260918_120000_add_icon_grid_variant';
+ import * as migration_20260930_190000_add_live_embed_block from './20260930_190000_add_live_embed_block';
+ import * as migration_20261002_120000_add_model_3d_block from './20261002_120000_add_model_3d_block';
++import * as migration_20261002_130000_add_model_3d_mobile_fallback_video from './20261002_130000_add_model_3d_mobile_fallback_video';
+ 
+ export const migrations = [
+   {
+@@ -59,4 +60,9 @@ export const migrations = [
+     down: migration_20261002_120000_add_model_3d_block.down,
+     name: '20261002_120000_add_model_3d_block',
+   },
++  {
++    up: migration_20261002_130000_add_model_3d_mobile_fallback_video.up,
++    down: migration_20261002_130000_add_model_3d_mobile_fallback_video.down,
++    name: '20261002_130000_add_model_3d_mobile_fallback_video',
++  },
+ ];
+diff --git a/src/payload-types.ts b/src/payload-types.ts
+index 05bb6d1..dadd86d 100644
+--- a/src/payload-types.ts
++++ b/src/payload-types.ts
+@@ -506,6 +506,7 @@ export interface Model3DBlock {
+   model: number | Media;
+   poster?: (number | null) | Media;
+   autoRotate?: boolean | null;
++  mobileFallbackVideo?: (number | null) | Media;
+   /**
+    * Fondo, respiro verticale e animazione di ingresso.
+    */
+@@ -1251,6 +1252,7 @@ export interface Model3DBlockSelect<T extends boolean = true> {
+   model?: T;
+   poster?: T;
+   autoRotate?: T;
++  mobileFallbackVideo?: T;
+   settings?:
+     | T
+     | {
+-- 
+2.43.0
+

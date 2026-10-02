@@ -525,6 +525,10 @@ export interface Model3DBlock {
    */
   autoRotate?: boolean | null;
   /**
+   * Video di un giro a 360° (sfondo a tinta unita, non trasparente — non affidabile su Safari/iOS), mostrato al posto del modello interattivo sotto il breakpoint desktop. Un modello di questo peso può mandare in crash la pagina su molti telefoni; senza un video qui, il modello interattivo resta l’unica opzione anche su mobile.
+   */
+  mobileFallbackVideo?: (number | null) | Media;
+  /**
    * Fondo, respiro verticale e animazione di ingresso.
    */
   settings: {
@@ -1269,6 +1273,7 @@ export interface Model3DBlockSelect<T extends boolean = true> {
   model?: T;
   poster?: T;
   autoRotate?: T;
+  mobileFallbackVideo?: T;
   settings?:
     | T
     | {
