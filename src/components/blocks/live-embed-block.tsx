@@ -35,8 +35,15 @@ export function LiveEmbedBlock({ block }: { block: LiveEmbedBlockType }) {
             </a>
           </div>
           <div
+            // Defensive, not a reported bug here: Lenis (src/components/
+            // motion/smooth-scroll.tsx) binds wheel capture at the window
+            // level, and while a cross-origin iframe normally owns wheel
+            // events for itself once the pointer is inside it, this costs
+            // nothing to rule out as a source of the same scroll-stealing
+            // reported for the model-viewer block.
             className="mt-24 w-full overflow-hidden rounded-glass-lg border border-line-strong bg-surface-2"
             style={{ height: `${height ?? 640}px` }}
+            data-lenis-prevent-wheel
           >
             <iframe
               src={url}

@@ -41,7 +41,28 @@ export function Model3DBlock({ block }: { block: Model3DBlockType }) {
           ) : null}
           {heading ? <h2 className="mt-8 text-h3 text-balance">{heading}</h2> : null}
 
-          <div className="mt-24 h-[70vh] max-h-[800px] min-h-[420px] w-full overflow-hidden rounded-glass-lg border border-line-strong bg-surface-2">
+          <div
+            // data-lenis-prevent-wheel: Lenis (src/components/motion/smooth-scroll.tsx)
+            // binds to the whole window and would otherwise capture a wheel
+            // scroll meant for model-viewer's own zoom, turning "zoom the
+            // model" into "scroll the page" the moment the pointer is over
+            // this frame. Lenis 1.3 reads this attribute itself — no
+            // `prevent` callback to wire up on the Lenis side.
+            className="mt-24 h-[70vh] max-h-[800px] min-h-[420px] w-full overflow-hidden rounded-glass-lg border border-line-strong bg-surface-2"
+            data-lenis-prevent-wheel
+          >
+            {/* loading="lazy" + reveal="interaction": eager, automatic
+                loading decompressed this model's geometry in memory the
+                moment the page opened, which was enough to crash the tab on
+                mobile — reported after shipping with loading="eager"
+                reveal="auto". Deferring the actual load to an explicit tap
+                (model-viewer's own interaction prompt, shown over `poster`
+                when set) keeps that decompression off the critical path
+                entirely unless the reader asks for it. This doesn't shrink
+                the model itself — a phone that can't render it at all will
+                still struggle once tapped — so if mobile trouble persists
+                after this, the next lever is a lower-poly export, not this
+                block. */}
             {ready ? (
               <model-viewer
                 src={src}
@@ -53,8 +74,8 @@ export function Model3DBlock({ block }: { block: Model3DBlockType }) {
                 shadow-intensity="1"
                 exposure="1"
                 environment-image="neutral"
-                loading="eager"
-                reveal="auto"
+                loading="lazy"
+                reveal="interaction"
                 style={{ width: '100%', height: '100%' }}
               />
             ) : null}

@@ -160,7 +160,12 @@ export default async function CaseStudyPage({ params }: PageProps) {
         // reveal alone doesn't give. The frame clips it; the zoom never
         // touches the rounded corners themselves.
         <figure className="page-margin mb-96" data-reveal="mask">
-          <div className="aspect-[3/4] w-full overflow-hidden rounded-glass-lg border border-line-strong bg-surface-2 tablet:aspect-[4/3] desktop:aspect-video">
+          <div
+            // Defensive, not a reported bug here: see the matching comment
+            // in live-embed-block.tsx — same reasoning, same attribute.
+            className="aspect-[3/4] w-full overflow-hidden rounded-glass-lg border border-line-strong bg-surface-2 tablet:aspect-[4/3] desktop:aspect-video"
+            data-lenis-prevent-wheel
+          >
             <div className="h-full w-full" data-parallax="zoom">
               <iframe
                 src={heroEmbed.url}
