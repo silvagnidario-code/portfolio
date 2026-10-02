@@ -5,7 +5,7 @@ import { BlockSection, Eyebrow } from './block-section'
 import { RichText } from './rich-text'
 
 /**
- * One photo, one heading, one bio: the "chi sono" block. Text always comes
+ * One photo, one heading, one bio: the "chi sono" block. The heading is the page's h1 (the block is only used on the About page). Text always comes
  * first in the markup — a screen reader meets the name and the words before
  * the picture whichever side it sits on — and `imagePosition` only ever
  * changes where the two columns land on a wide screen.
@@ -34,9 +34,9 @@ export function BioBlock({ block }: { block: BioBlockType }) {
           }`}
         >
           {eyebrow ? <Eyebrow>{eyebrow}</Eyebrow> : null}
-          <h2 className="mt-16 text-h1 text-balance" data-reveal={reveal('lines')}>
+          <h1 className="mt-16 text-h1 text-balance" data-reveal={reveal('lines')}>
             {heading}
-          </h2>
+          </h1>
 
           <div data-reveal={settings?.animate ? 'rise' : undefined}>
             <RichText data={body} className="mt-32" />

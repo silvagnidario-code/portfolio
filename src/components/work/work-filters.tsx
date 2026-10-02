@@ -54,11 +54,8 @@ export async function WorkFilters({
 
   const hasFilter = Boolean(active.service ?? active.industry)
 
-  return (
-    <section
-      aria-label={t('filters')}
-      className="flex flex-col gap-16 border-b border-line pb-24 tablet:flex-row tablet:items-center tablet:gap-32"
-    >
+  const groups = (
+    <>
       <div className="flex flex-wrap items-center gap-16">
         <span className="font-mono text-caption uppercase text-ink-muted">{t('byService')}</span>
         {pill(t('allProjects'), href({ industry: active.industry }), !active.service)}
@@ -91,6 +88,16 @@ export async function WorkFilters({
           {t('clear')}
         </Link>
       ) : null}
+    </>
+  )
+
+  return (
+    <section
+      aria-label={t('filters')}
+      className="hidden border-b border-line pb-24 tablet:flex tablet:flex-row tablet:items-center tablet:gap-32"
+    >
+      {/* Hidden on mobile by request: the filters only appear from tablet up. */}
+      {groups}
     </section>
   )
 }
