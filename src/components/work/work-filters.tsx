@@ -54,11 +54,8 @@ export async function WorkFilters({
 
   const hasFilter = Boolean(active.service ?? active.industry)
 
-  return (
-    <section
-      aria-label={t('filters')}
-      className="flex flex-col gap-16 border-b border-line pb-24 tablet:flex-row tablet:items-center tablet:gap-32"
-    >
+  const groups = (
+    <>
       <div className="flex flex-wrap items-center gap-16">
         <span className="font-mono text-caption uppercase text-ink-muted">{t('byService')}</span>
         {pill(t('allProjects'), href({ industry: active.industry }), !active.service)}
@@ -91,6 +88,30 @@ export async function WorkFilters({
           {t('clear')}
         </Link>
       ) : null}
+    </>
+  )
+
+  return (
+    <section aria-label={t('filters')} className="border-b border-line pb-24">
+      {/* Mobile: collapsed behind a native <details> (no JavaScript needed).
+          Opens by default when a filter is already active, so the state stays visible. */}
+      <details open={hasFilter} className="group tablet:hidden">
+        <summary className="flex cursor-pointer list-none items-center justify-between font-mono text-caption uppercase text-ink [&::-webkit-details-marker]:hidden">
+          <span>
+            {t('filters')}
+            {hasFilter ? ' •' : ''}
+          </span>
+          <span aria-hidden className="transition-transform duration-fast group-open:rotate-45">
+            +
+          </span>
+        </summary>
+        <div className="mt-16 flex flex-col gap-16">{groups}</div>
+      </details>
+
+      {/* Tablet and up: always visible, as before. */}
+      <div className="hidden tablet:flex tablet:flex-row tablet:items-center tablet:gap-32">
+        {groups}
+      </div>
     </section>
   )
 }
