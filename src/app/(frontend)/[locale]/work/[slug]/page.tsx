@@ -135,10 +135,18 @@ export default async function CaseStudyPage({ params }: PageProps) {
         // wide letterbox at this section's actual width) only from
         // desktop up. Below that the embedded site is mostly a narrow
         // column regardless of what the frame around it does, so a wide
-        // ratio wastes height on empty space either side of it — `3:4`
-        // under 768px turns the frame vertical to match, `4:3` between
-        // 768 and 1180px is the middle step down from 16:9 rather than a
-        // jump straight to portrait.
+        // ratio wastes height on empty space either side of it — `9:16`
+        // under 768px (close to an actual phone's own proportions, not
+        // just "taller than wide") gives the embedded site's own mobile
+        // layout the vertical room to render as itself rather than a
+        // cramped, short crop of it. The iframe's CSS width already equals
+        // this frame's rendered width with no transform applied anywhere,
+        // so pengzhang.eu was always receiving a true narrow viewport and
+        // serving its own mobile breakpoint — nothing here ever scaled or
+        // zoomed it; a too-short frame just hadn't left room to see that
+        // layout as more than a sliver, which read as "zoomed in" even
+        // though it wasn't. `4:3` between 768 and 1180px is the middle
+        // step down from 16:9 rather than a jump straight to portrait.
         //
         // No `max-w-*` cap: an earlier version of this capped the box at
         // 1024px, which read as too small once seen alongside the rest of
@@ -163,7 +171,7 @@ export default async function CaseStudyPage({ params }: PageProps) {
           <div
             // Defensive, not a reported bug here: see the matching comment
             // in live-embed-block.tsx — same reasoning, same attribute.
-            className="aspect-[3/4] w-full overflow-hidden rounded-glass-lg border border-line-strong bg-surface-2 tablet:aspect-[4/3] desktop:aspect-video"
+            className="aspect-[9/16] w-full overflow-hidden rounded-glass-lg border border-line-strong bg-surface-2 tablet:aspect-[4/3] desktop:aspect-video"
             data-lenis-prevent-wheel
           >
             <div className="h-full w-full" data-parallax="zoom">
