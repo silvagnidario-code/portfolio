@@ -41,7 +41,7 @@
   },
   "WorkPage": {
     "title": "Work",
-    "intro": "Three cases told end to end: what was there before, what we took away, what changed after. Filter by service or by industry.",
+    "intro": "Cases told end to end: what was there before, what we took away, what changed after. Filter by service or by industry.",
     "filters": "Filters",
     "allProjects": "All",
     "byService": "Service",

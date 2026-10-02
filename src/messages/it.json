@@ -41,7 +41,7 @@
   },
   "WorkPage": {
     "title": "Progetti",
-    "intro": "Tre casi raccontati per intero: cosa c'era prima, cosa abbiamo tolto, cosa è cambiato dopo. Filtra per servizio o per settore.",
+    "intro": "Casi raccontati per intero: cosa c'era prima, cosa abbiamo tolto, cosa è cambiato dopo. Filtra per servizio o per settore.",
     "filters": "Filtri",
     "allProjects": "Tutti",
     "byService": "Servizio",
