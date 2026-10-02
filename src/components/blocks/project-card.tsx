@@ -39,7 +39,8 @@ export function ProjectCard({
             cover={project.cover}
             coverVideo={project.coverVideo}
             sizes={sizes}
-            className="h-full w-full object-cover transition ease-reveal duration-slow group-hover:scale-[1.02] group-hover:opacity-90"
+            className="h-full w-full object-cover"
+            imageHoverClassName="transition ease-reveal duration-slow group-hover:scale-[1.02] group-hover:opacity-90"
           />
         </div>
 

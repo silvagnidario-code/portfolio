@@ -1,0 +1,102 @@
+From 93316ed61fc9b1f4c63b24fc1f8a01845b19d156 Mon Sep 17 00:00:00 2001
+From: Claude <noreply@anthropic.com>
+Date: Fri, 2 Oct 2026 16:47:07 +0000
+Subject: [PATCH] Stop the cover image bleeding through the hover-video on
+ project cards
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Reported as "the cover image shows superimposed" when hovering a
+project card with a coverVideo. The cause: ProjectCard passed one
+className — including group-hover:scale-[1.02] group-hover:opacity-90,
+its own card-hover micro-interaction meant for the still image — into
+ProjectCover, which gave that same string to both the image and the
+video. On the video, group-hover:opacity-90 fought ProjectCover's own
+opacity-0 -> opacity-100 crossfade over the same property, and the
+group-hover rule won: the video capped at 90% opacity for as long as
+the card stayed hovered, never reaching full opacity, with the cover
+image visibly bleeding through underneath it the whole time — not
+just during the brief gap before the video has a frame to paint.
+
+ProjectCover now takes className (shared sizing, applied to both) and
+imageHoverClassName (the hover scale/dim, applied to the image only)
+as separate props. The video's opacity is ProjectCover's alone to
+drive again. The only other caller (project-icon.tsx) already passed
+a clean className with no hover effect mixed in, so it needed no
+change.
+---
+ src/components/blocks/project-card.tsx  |  3 ++-
+ src/components/blocks/project-cover.tsx | 24 +++++++++++++++++++++++-
+ 2 files changed, 25 insertions(+), 2 deletions(-)
+
+diff --git a/src/components/blocks/project-card.tsx b/src/components/blocks/project-card.tsx
+index 3c61044..ee6617f 100644
+--- a/src/components/blocks/project-card.tsx
++++ b/src/components/blocks/project-card.tsx
+@@ -39,7 +39,8 @@ export function ProjectCard({
+             cover={project.cover}
+             coverVideo={project.coverVideo}
+             sizes={sizes}
+-            className="h-full w-full object-cover transition ease-reveal duration-slow group-hover:scale-[1.02] group-hover:opacity-90"
++            className="h-full w-full object-cover"
++            imageHoverClassName="transition ease-reveal duration-slow group-hover:scale-[1.02] group-hover:opacity-90"
+           />
+         </div>
+ 
+diff --git a/src/components/blocks/project-cover.tsx b/src/components/blocks/project-cover.tsx
+index 8848b61..48463b3 100644
+--- a/src/components/blocks/project-cover.tsx
++++ b/src/components/blocks/project-cover.tsx
+@@ -17,17 +17,35 @@ import type { Media } from '@/payload-types'
+  * The hover check is re-armed on every enter rather than assumed from a
+  * mount-time media query, since a laptop with a mouse plugged in and
+  * unplugged mid-session can change `hover: hover` without a reload.
++ *
++ * `className` and `imageHoverClassName` are deliberately separate props,
++ * not one string a caller might reuse for both elements. ProjectCard's own
++ * card-hover micro-interaction (a slight scale and a dim to 90% opacity)
++ * is meant for the still image only — applying it to the video too, as an
++ * earlier version of this component did by giving both elements the same
++ * className, capped the video at 90% opacity for the whole time it was
++ * playing: `group-hover:opacity-90` and this component's own `opacity-0`
++ * → `opacity-100` crossfade were fighting over the same property, and the
++ * group-hover rule was winning. The video never actually reached full
++ * opacity, so the cover image stayed visibly bleeding through underneath
++ * it, not just during the brief gap before the video has a frame to show,
++ * but for as long as the card stayed hovered. The video's own opacity is
++ * this component's alone to drive now; `imageHoverClassName` never reaches
++ * it.
+  */
+ export function ProjectCover({
+   cover,
+   coverVideo,
+   sizes,
+   className,
++  imageHoverClassName,
+ }: {
+   cover: number | Media | null | undefined
+   coverVideo: number | Media | null | undefined
+   sizes: string
+   className?: string
++  /** Applied to the still image only — never the video. See the block comment above. */
++  imageHoverClassName?: string
+ }) {
+   const videoRef = useRef<HTMLVideoElement>(null)
+   const [hovered, setHovered] = useState(false)
+@@ -50,7 +68,11 @@ export function ProjectCover({
+ 
+   return (
+     <div className="relative h-full w-full" onMouseEnter={handleEnter} onMouseLeave={handleLeave}>
+-      <MediaImage media={cover} sizes={sizes} className={className} />
++      <MediaImage
++        media={cover}
++        sizes={sizes}
++        className={[className ?? '', imageHoverClassName ?? ''].join(' ')}
++      />
+ 
+       {video?.url ? (
+         <video
+-- 
+2.43.0
+
