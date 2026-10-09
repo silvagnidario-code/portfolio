@@ -3,6 +3,7 @@ import { getTranslations, setRequestLocale } from 'next-intl/server'
 import { notFound } from 'next/navigation'
 import type { CSSProperties } from 'react'
 
+import { getYouTubeId } from '@/lib/youtube'
 import { BlockSection, Eyebrow } from '@/components/blocks/block-section'
 import { ProjectCard } from '@/components/blocks/project-card'
 import { RenderBlocks } from '@/components/blocks/render-blocks'
@@ -97,7 +98,7 @@ export default async function CaseStudyPage({ params }: PageProps) {
   // identity, not a second type check) so it doesn't also render a second
   // time further down the page.
   const isLiveEmbed = (block: NonNullable<Project['execution']>[number]): block is LiveEmbedBlock =>
-    block.blockType === 'liveEmbed'
+    block.blockType === 'liveEmbed' && !getYouTubeId(block.url)
   const heroEmbed = (project.execution ?? []).find(isLiveEmbed) ?? null
   const execution = heroEmbed
     ? (project.execution ?? []).filter((block) => block !== heroEmbed)
