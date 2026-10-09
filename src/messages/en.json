@@ -220,5 +220,11 @@
     "unmute": "Unmute",
     "fullscreen": "Fullscreen",
     "exitFullscreen": "Exit fullscreen"
+  },
+    "Model3D": {
+    "start": "Tap to explore the 3D model",
+    "alt": "3D model",
+    "hintMouse": "Drag to rotate · scroll to zoom",
+    "hintTouch": "One finger to rotate · pinch to zoom · swipe vertically to keep scrolling"
   }
 }
