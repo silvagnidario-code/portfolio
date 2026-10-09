@@ -1,5 +1,6 @@
 'use client'
 
+import { useTranslations } from 'next-intl'
 import { useEffect, useState } from 'react'
 
 import type { Model3DBlock as Model3DBlockType } from '@/payload-types'
@@ -17,32 +18,24 @@ function mediaUrl(media: Model3DBlockType['model'] | Model3DBlockType['poster'])
  * .define(...)` on load, which touches `document` and breaks Next's server
  * render of this (client) component. Deferring the import to `useEffect`
  * keeps it off the server pass entirely; `ready` only flips once the
- * import has resolved, so the element isn't written into the DOM — as a
- * plain, inert tag — before the browser knows what it is.
+ * import has resolved.
  *
- * `isDesktop` gates two things, both below this site's own `desktop`
- * breakpoint (1180px, matching every other `desktop:` utility class on the
- * page) and both there because desktop itself never had a problem:
+ * Below the site's `desktop` breakpoint (1180px):
+ * - with a `mobileFallbackVideo`, the video replaces the viewer entirely;
+ * - without one, the reader gets a visible "tap to explore" button (over
+ *   the poster, when there is one) and the heavy model is only fetched and
+ *   mounted after that tap. Before, `reveal="interaction"` with no poster
+ *   left an empty frame with nothing to tap.
  *
- * - Whenever a fallback video is provided, it replaces `<model-viewer>`
- *   entirely below that breakpoint — not interactivity lost to a budget,
- *   the viewer simply never mounts there, so there is nothing for a
- *   phone's GPU to choke on decompressing a model this size.
- * - Without one, the viewer still mounts, but `loading`/`reveal` differ by
- *   breakpoint too (see the comment further down) — eager and automatic on
- *   desktop, deferred to a tap below it.
- *
- * The check starts `false` (not `null`) and only ever flips to `true` once
- * `matchMedia` has explicitly confirmed a desktop width: the failure mode
- * that matters is a phone that briefly mounts the heavier desktop path
- * before JS corrects it, not a desktop reader seeing the lighter mobile
- * one flash for a frame, so the safer default is the one a narrow screen
- * already wants.
+ * `isDesktop` starts `false` and only flips to `true` once `matchMedia`
+ * confirms a desktop width, so a phone never mounts the heavy path first.
  */
 export function Model3DBlock({ block }: { block: Model3DBlockType }) {
+  const t = useTranslations('Model3D')
   const { eyebrow, heading, model, poster, autoRotate, mobileFallbackVideo, settings } = block
   const [ready, setReady] = useState(false)
   const [isDesktop, setIsDesktop] = useState(false)
+  const [started, setStarted] = useState(false)
 
   useEffect(() => {
     import('@google/model-viewer').then(() => setReady(true))
@@ -61,7 +54,9 @@ export function Model3DBlock({ block }: { block: Model3DBlockType }) {
   const videoUrl = mediaUrl(mobileFallbackVideo)
   if (!src) return null
 
-  const showVideo = !isDesktop && videoUrl
+  const showVideo = !isDesktop && Boolean(videoUrl)
+  const showStart = !isDesktop && !videoUrl && !started
+  const showViewer = ready && !showVideo && !showStart
 
   return (
     <BlockSection settings={settings}>
@@ -75,23 +70,17 @@ export function Model3DBlock({ block }: { block: Model3DBlockType }) {
           <div
             // data-lenis-prevent-wheel: Lenis (src/components/motion/smooth-scroll.tsx)
             // binds to the whole window and would otherwise capture a wheel
-            // scroll meant for model-viewer's own zoom, turning "zoom the
-            // model" into "scroll the page" the moment the pointer is over
-            // this frame. Lenis 1.3 reads this attribute itself — no
-            // `prevent` callback to wire up on the Lenis side.
-            className="mt-24 h-[70vh] max-h-[800px] min-h-[420px] w-full overflow-hidden rounded-glass-lg border border-line-strong bg-surface-2"
+            // scroll meant for model-viewer's own zoom. Lenis 1.3 reads this
+            // attribute itself.
+            className="relative mt-24 h-[70vh] max-h-[800px] min-h-[420px] w-full overflow-hidden rounded-glass-lg border border-line-strong bg-surface-2"
             data-lenis-prevent-wheel
           >
             {showVideo ? (
-              // A pre-rendered turntable, not the live model: chosen over
-              // trying to detect a failed load, which isn't reliable
-              // either — the crash this replaces is often silent (an OOM
-              // kill), with no error event for anything here to catch.
-              // Autoplay/loop/muted/playsInline is the standard combo for
-              // an ambient looping clip that mobile browsers will actually
-              // autoplay without a tap.
+              // A pre-rendered turntable, not the live model: the crash it
+              // replaces is often silent (an OOM kill), with no error event
+              // to catch.
               <video
-                src={videoUrl}
+                src={videoUrl ?? undefined}
                 poster={posterUrl ?? undefined}
                 autoPlay
                 loop
@@ -99,38 +88,52 @@ export function Model3DBlock({ block }: { block: Model3DBlockType }) {
                 playsInline
                 className="h-full w-full object-contain"
               />
-            ) : (
-              // Desktop never crashed — only a phone trying to decompress
-              // this model did — so only the mobile/tablet case (reached
-              // whenever no fallback video is set) defers to a tap:
-              // loading="lazy" reveal="interaction" keeps that
-              // decompression off the critical path until the reader asks
-              // for it. Applying that same deferral to desktop too, in an
-              // earlier version of this block, was the actual bug behind
-              // "doesn't work on desktop either" — reveal="interaction"
-              // with no `poster` set shows nothing at all until tapped, no
-              // visible cue that there's anything there to tap. Desktop
-              // goes back to loading="eager" reveal="auto": immediate,
-              // automatic, exactly as it was before mobile ever had a
-              // problem.
-              ready && (
-                <model-viewer
-                  src={src}
-                  poster={posterUrl ?? undefined}
-                  alt={heading || 'Modello 3D'}
-                  camera-controls
-                  auto-rotate={autoRotate ?? undefined}
-                  auto-rotate-delay="0"
-                  shadow-intensity="1"
-                  exposure="1"
-                  environment-image="neutral"
-                  loading={isDesktop ? 'eager' : 'lazy'}
-                  reveal={isDesktop ? 'auto' : 'interaction'}
-                  style={{ width: '100%', height: '100%' }}
-                />
-              )
-            )}
+            ) : showStart ? (
+              <button
+                type="button"
+                onClick={() => setStarted(true)}
+                className="absolute inset-0 flex items-center justify-center bg-cover bg-center"
+                style={posterUrl ? { backgroundImage: `url(${posterUrl})` } : undefined}
+              >
+                <span className="rounded-full border border-line-strong bg-surface px-24 py-12 font-mono text-caption uppercase">
+                  {t('start')}
+                </span>
+              </button>
+            ) : showViewer ? (
+              <model-viewer
+                src={src}
+                poster={posterUrl ?? undefined}
+                alt={heading || t('alt')}
+                camera-controls
+                auto-rotate={autoRotate ?? undefined}
+                auto-rotate-delay="0"
+                interaction-prompt="none"
+                // Pivot on the centre of the model's bounding box (the .glb's
+                // own origin sits at a corner), no panning, so it can never
+                // drift off-centre; polar angle capped to stay above the floor.
+                camera-target="auto auto auto"
+                camera-orbit="30deg 72deg 85%"
+                min-camera-orbit="auto 40deg auto"
+                max-camera-orbit="auto 90deg auto"
+                disable-pan
+                // Vertical swipes keep scrolling the page on touch screens.
+                touch-action="pan-y"
+                shadow-intensity="1"
+                exposure="1"
+                environment-image="neutral"
+                loading="eager"
+                reveal="auto"
+                style={{ width: '100%', height: '100%' }}
+              />
+            ) : null}
           </div>
+
+          {showVideo ? null : (
+            <p className="mt-16 font-mono text-caption text-ink-muted">
+              <span className="[@media(pointer:coarse)]:hidden">{t('hintMouse')}</span>
+              <span className="hidden [@media(pointer:coarse)]:inline">{t('hintTouch')}</span>
+            </p>
+          )}
         </div>
       </div>
     </BlockSection>
