@@ -220,11 +220,11 @@
     "unmute": "Attiva audio",
     "fullscreen": "Schermo intero",
     "exitFullscreen": "Esci da schermo intero"
-  }
+  },
   "Model3D": {
-  "start": "Tocca per esplorare il modello in 3D",
-  "alt": "Modello 3D",
-  "hintMouse": "Trascina per ruotare · rotella per zoomare",
-  "hintTouch": "Un dito per ruotare · pizzica per zoomare · scorri in verticale per proseguire"
+    "start": "Tocca per esplorare il modello in 3D",
+    "alt": "Modello 3D",
+    "hintMouse": "Trascina per ruotare · rotella per zoomare",
+    "hintTouch": "Un dito per ruotare · pizzica per zoomare · scorri in verticale per proseguire"
   }
 }
