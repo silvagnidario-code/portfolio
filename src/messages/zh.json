@@ -220,5 +220,11 @@
     "unmute": "取消静音",
     "fullscreen": "全屏",
     "exitFullscreen": "退出全屏"
+  },
+    "Model3D": {
+    "start": "点按以 3D 探索模型",
+    "alt": "3D 模型",
+    "hintMouse": "拖动旋转 · 滚轮缩放",
+    "hintTouch": "单指旋转 · 双指捏合缩放 · 上下滑动继续浏览页面"
   }
 }
