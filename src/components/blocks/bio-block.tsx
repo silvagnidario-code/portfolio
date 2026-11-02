@@ -1,6 +1,7 @@
 import { MediaImage } from '@/components/media/media-image'
 import type { BioBlockType } from '@/payload-types'
 
+import { BioLinks } from './bio-links'
 import { BlockSection, Eyebrow } from './block-section'
 import { RichText } from './rich-text'
 
@@ -41,22 +42,7 @@ export function BioBlock({ block }: { block: BioBlockType }) {
           <div data-reveal={settings?.animate ? 'rise' : undefined}>
             <RichText data={body} className="mt-32" />
 
-            {links && links.length > 0 ? (
-              <ul className="mt-32 flex flex-wrap gap-24">
-                {links.map((link) => (
-                  <li key={link.id ?? link.url}>
-                    <a
-                      href={link.url}
-                      rel="noreferrer"
-                      target="_blank"
-                      className="font-mono text-caption uppercase text-ink-2 underline underline-offset-4 transition ease-reveal duration-fast hover:text-ink"
-                    >
-                      {link.label}
-                    </a>
-                  </li>
-                ))}
-              </ul>
-            ) : null}
+            <BioLinks links={links} />
           </div>
         </div>
 
