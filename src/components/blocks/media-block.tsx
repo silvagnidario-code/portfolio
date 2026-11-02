@@ -1,6 +1,7 @@
 import { MediaImage } from '@/components/media/media-image'
 import { MediaVideo } from '@/components/media/media-video'
 import { PhotoGallery } from '@/components/media/photo-gallery'
+import { ReelCard } from '@/components/media/reel-card'
 import type { MediaBlockType } from '@/payload-types'
 import { BlockSection } from './block-section'
 
@@ -115,6 +116,45 @@ export function MediaBlock({ block }: { block: MediaBlockType }) {
      * 1 on mobile.
      */
     const isGrid = pairItems.length > 2
+
+    /**
+     * A grid made only of videos is a reel wall: four across on desktop,
+     * three on tablet, two on mobile, the last row centred so an odd count
+     * never leaves a hole, and each clip wears an Instagram-style HUD.
+     */
+    const isReel =
+      isGrid &&
+      pairItems.every(
+        (item) =>
+          typeof item.media === 'object' && Boolean(item.media?.mimeType?.startsWith('video/')),
+      )
+
+    if (isReel) {
+      return (
+        <BlockSection settings={settings}>
+          <figure className="page-margin">
+            <div className="flex flex-wrap justify-center gap-16 tablet:gap-24">
+              {pairItems.map((item, index) => (
+                <div
+                  key={item.id ?? index}
+                  className="w-[calc((100%-16px)/2)] tablet:w-[calc((100%-48px)/3)] desktop:w-[calc((100%-72px)/4)]"
+                  data-reveal={reveal('blur')}
+                >
+                  <ReelCard caption={item.caption}>
+                    <MediaImage
+                      media={item.media}
+                      sizes="(min-width: 1024px) 25vw, (min-width: 768px) 33vw, 50vw"
+                      className="block w-full"
+                    />
+                  </ReelCard>
+                </div>
+              ))}
+            </div>
+            <Caption>{caption}</Caption>
+          </figure>
+        </BlockSection>
+      )
+    }
 
     return (
       <BlockSection settings={settings}>
