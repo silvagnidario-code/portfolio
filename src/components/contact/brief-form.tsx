@@ -9,6 +9,8 @@ import { HONEYPOT_FIELD, timelines, type BriefState } from '@/lib/brief'
 type BriefFormProps = {
   locale: Locale
   action: (locale: Locale, previous: BriefState, formData: FormData) => Promise<BriefState>
+  /** Reveal each field on scroll — the block's own animate toggle. */
+  animate?: boolean
 }
 
 const initial: BriefState = { status: 'idle' }
@@ -21,7 +23,8 @@ const initial: BriefState = { status: 'idle' }
  * each field points at its own message with `aria-describedby`, so a screen
  * reader hears what to fix without hunting.
  */
-export function BriefForm({ locale, action }: BriefFormProps) {
+export function BriefForm({ locale, action, animate = false }: BriefFormProps) {
+  const reveal = animate ? 'rise' : undefined
   const t = useTranslations('ContactPage')
   const [state, formAction, pending] = useActionState(action.bind(null, locale), initial)
   const formId = useId()
@@ -67,7 +70,7 @@ export function BriefForm({ locale, action }: BriefFormProps) {
         </p>
       ) : null}
 
-      <div className="grid gap-32 tablet:grid-cols-2">
+      <div className="grid gap-32 tablet:grid-cols-2" data-reveal={reveal}>
         <div>
           <Label name="name">{t('name')}</Label>
           <input
@@ -95,7 +98,7 @@ export function BriefForm({ locale, action }: BriefFormProps) {
         </div>
       </div>
 
-      <div>
+      <div data-reveal={reveal}>
         <Label name="email">{t('email')}</Label>
         <input
           id={fieldId('email')}
@@ -110,7 +113,7 @@ export function BriefForm({ locale, action }: BriefFormProps) {
         <Error name="email" />
       </div>
 
-      <div className="max-w-xs">
+      <div className="max-w-xs" data-reveal={reveal}>
         <Label name="timeline">{t('timeline')}</Label>
         <select id={fieldId('timeline')} name="timeline" className={fieldClasses}>
           {timelines.map((value) => (
@@ -121,7 +124,7 @@ export function BriefForm({ locale, action }: BriefFormProps) {
         </select>
       </div>
 
-      <div>
+      <div data-reveal={reveal}>
         <Label name="message">{t('message')}</Label>
         <textarea
           id={fieldId('message')}
@@ -149,7 +152,7 @@ export function BriefForm({ locale, action }: BriefFormProps) {
         />
       </div>
 
-      <div>
+      <div data-reveal={reveal}>
         <button
           type="submit"
           disabled={pending}
