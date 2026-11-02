@@ -22,6 +22,7 @@ export async function ContactFormBlock({
   locale: Locale
 }) {
   const { eyebrow, heading, lead, showContactInfo, settings } = block
+  const reveal = (kind: 'lines' | 'rise') => (settings?.animate ? kind : undefined)
 
   const [globalSettings, t] = await Promise.all([
     showContactInfo ? getGlobal('settings', locale) : Promise.resolve(null),
@@ -29,15 +30,19 @@ export async function ContactFormBlock({
   ])
 
   return (
-    <BlockSection settings={settings}>
+    <BlockSection settings={settings} className="pt-32!">
       <div className="page-grid pb-96">
         <header className="col-span-4 tablet:col-span-6 desktop:col-span-5">
-          {eyebrow ? <Eyebrow>{eyebrow}</Eyebrow> : null}
-          <h1 className="mt-16 text-h1 text-balance">{heading}</h1>
-          {lead ? <p className="mt-32 max-w-measure text-body-lg text-ink-2">{lead}</p> : null}
+          {eyebrow ? (
+            <div data-reveal={reveal('rise')}>
+              <Eyebrow>{eyebrow}</Eyebrow>
+            </div>
+          ) : null}
+          <h1 className="mt-16 text-h1 text-balance" data-reveal={reveal('lines')}>{heading}</h1>
+          {lead ? <p className="mt-32 max-w-measure text-body-lg text-ink-2" data-reveal={reveal('rise')}>{lead}</p> : null}
 
           {globalSettings?.contact?.email ? (
-            <p className="mt-48">
+            <p className="mt-48" data-reveal={reveal('rise')}>
               <span className="block font-mono text-caption uppercase text-ink-muted">
                 {t('writeUs')}
               </span>
@@ -48,7 +53,7 @@ export async function ContactFormBlock({
           ) : null}
 
           {globalSettings && (globalSettings.offices ?? []).length > 0 ? (
-            <ul className="mt-48 flex flex-col gap-24">
+            <ul className="mt-48 flex flex-col gap-24" data-reveal={reveal('rise')}>
               {(globalSettings.offices ?? []).map((office) => (
                 <li key={office.id ?? office.city} className="text-body text-ink-2">
                   <span className="block text-ink">{office.city}</span>
@@ -60,7 +65,7 @@ export async function ContactFormBlock({
         </header>
 
         <div className="col-span-4 tablet:col-span-6 desktop:col-span-6 desktop:col-start-7">
-          <BriefForm locale={locale} action={submitBrief} />
+          <BriefForm locale={locale} action={submitBrief} animate={Boolean(settings?.animate)} />
         </div>
       </div>
     </BlockSection>
