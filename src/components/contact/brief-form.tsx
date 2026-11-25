@@ -156,7 +156,7 @@ export function BriefForm({ locale, action, animate = false }: BriefFormProps) {
         <button
           type="submit"
           disabled={pending}
-          className="border border-line-strong px-32 py-16 text-body-lg transition ease-reveal duration-fast hover:bg-surface-2 disabled:opacity-60"
+          className="inline-flex min-h-[3.25rem] items-center bg-accent px-32 font-mono text-caption uppercase text-accent-ink transition ease-reveal duration-fast hover:opacity-85 disabled:opacity-60"
         >
           {pending ? t('sending') : t('submit')}
         </button>

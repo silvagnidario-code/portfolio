@@ -18,7 +18,8 @@
     "localeLabel": "Lingua",
     "offices": "Sedi",
     "social": "Social",
-    "toTop": "Torna su"
+    "toTop": "Torna su",
+    "contactCta": "Contattami"
   },
   "PhotoGallery": {
     "open": "Apri la foto {index} di {total} a schermo intero",
@@ -32,7 +33,9 @@
     "legend": "Tema",
     "system": "Sistema",
     "light": "Chiaro",
-    "dark": "Scuro"
+    "dark": "Scuro",
+    "switchToLight": "Passa al tema chiaro",
+    "switchToDark": "Passa al tema scuro"
   },
   "HomePage": {
     "title": "Fondamenta",
@@ -41,7 +44,7 @@
   },
   "WorkPage": {
     "title": "Progetti",
-    "intro": "Casi raccontati per intero: cosa c'era prima, cosa abbiamo tolto, cosa è cambiato dopo. Filtra per servizio o per settore.",
+    "intro": "Casi raccontati per intero: cosa c'era prima, cosa ho tolto, cosa è cambiato dopo. Filtra per servizio o per settore.",
     "filters": "Filtri",
     "allProjects": "Tutti",
     "byService": "Servizio",
@@ -69,7 +72,7 @@
   },
   "ContactPage": {
     "title": "Contatti",
-    "intro": "Raccontaci il progetto in poche righe: cosa vendete, a chi, e cosa non funziona adesso. Rispondiamo entro due giorni lavorativi.",
+    "intro": "Raccontami il progetto in poche righe: cosa vendi, a chi, e cosa non funziona adesso. Rispondo entro un giorno lavorativo.",
     "name": "Nome",
     "company": "Azienda",
     "email": "Email",
@@ -226,5 +229,53 @@
     "alt": "Modello 3D",
     "hintMouse": "Trascina per ruotare · rotella per zoomare",
     "hintTouch": "Un dito per ruotare · pizzica per zoomare · scorri in verticale per proseguire"
+  },
+  "Hero": {
+    "play": "Play",
+    "pause": "Pausa"
+  },
+  "ProjectIndex": {
+    "number": "N.",
+    "project": "Progetto",
+    "services": "Servizi",
+    "year": "Anno",
+    "open": "Apri il progetto",
+    "all": "Tutti",
+    "filterLabel": "Filtra per servizio",
+    "count": "{count, plural, =0 {Nessun progetto} one {# progetto} other {# progetti}}",
+    "empty": "Nessun progetto da mostrare.",
+    "viewAll": "Tutti i lavori"
+  },
+  "Services": {
+    "deliverables": {
+      "1": "Logo · Sistema visivo · Linee guida",
+      "2": "Rendering · Stand · Modelli 3D",
+      "3": "Still life · Prodotto · Post-produzione",
+      "4": "Siti web · WordPress · Next.js",
+      "5": "Riprese · Montaggio · Color grading"
+    }
+  },
+  "Method": {
+    "steps": [
+      {
+        "title": "Capire",
+        "body": "Cosa serve davvero al progetto, a chi parla, cosa non funziona oggi."
+      },
+      {
+        "title": "Togliere",
+        "body": "Resta solo l'essenziale: un'idea chiara, riconoscibile ovunque."
+      },
+      {
+        "title": "Realizzare",
+        "body": "Con cura, dall'idea al file finale: logo, sito, shooting, video."
+      }
+    ]
+  },
+  "Contact": {
+    "label": "Contatti",
+    "available": "Disponibile per nuovi progetti",
+    "copy": "copia",
+    "copied": "Email copiata ✓",
+    "copiedStatus": "Indirizzo email copiato negli appunti"
   }
 }

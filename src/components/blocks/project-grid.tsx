@@ -1,10 +1,14 @@
+import { getTranslations } from 'next-intl/server'
+
+import { ProjectIndex } from '@/components/work/project-index'
+import { Link } from '@/i18n/navigation'
 import type { Locale } from '@/i18n/routing'
+import { toProjectIndexItems } from '@/lib/project-index'
 import { getProjectsList } from '@/lib/queries'
 import type { Project, ProjectGridBlock } from '@/payload-types'
 
 import { BlockSection } from './block-section'
 import { ProjectCard } from './project-card'
-import { ProjectIcon } from './project-icon'
 
 async function resolveProjects(block: ProjectGridBlock, locale: Locale): Promise<Project[]> {
   if (block.source === 'manual') {
@@ -34,11 +38,8 @@ async function resolveProjects(block: ProjectGridBlock, locale: Locale): Promise
  * specification asks for, made with the grid rather than against it.
  * `draggableRow` scrolls inside itself; the drag-to-scroll behaviour is added
  * with the animation system in phase 8 and this is the version it enhances.
- * `iconGrid` reads as a phone's home screen: fixed 2/3/3 columns (max 3 per
- * row, by request) rather than the page's structural 12/6/4, so a project is
- * always a square icon and never a fraction of one. Purely CMS-driven — the
- * tile count is `limit`, not a layout decision — so adding a project later
- * is a new icon in the grid, not a change to this component.
+ * `iconGrid` renders the project index: numbered rows, a preview that
+ * follows the pointer on desktop and a thumbnail per row on smaller screens.
  */
 export async function ProjectGrid({ block, locale }: { block: ProjectGridBlock; locale: Locale }) {
   const projects = await resolveProjects(block, locale)
@@ -68,16 +69,26 @@ export async function ProjectGrid({ block, locale }: { block: ProjectGridBlock; 
   }
 
   if (block.variant === 'iconGrid') {
+    // The index: numbered rows with a following preview. The variant keeps
+    // its old name so the content already in the CMS renders unchanged.
+    const t = await getTranslations('ProjectIndex')
+
     return (
       <BlockSection settings={block.settings}>
-        {heading}
-        <div
-          data-reveal-group
-          className="page-margin grid grid-cols-2 gap-16 tablet:grid-cols-3 tablet:gap-24 desktop:grid-cols-3 desktop:gap-32"
-        >
-          {projects.map((project) => (
-            <ProjectIcon key={project.id} project={project} />
-          ))}
+        <div className="page-margin">
+          <div className="mb-32 flex flex-wrap items-baseline justify-between gap-16 border-t border-line pt-16">
+            {block.heading ? <h2 className="text-h2 text-balance">{block.heading}</h2> : <span />}
+            <span className="font-mono text-caption text-ink-muted">
+              ({String(projects.length).padStart(2, '0')})
+            </span>
+          </div>
+          <ProjectIndex items={toProjectIndexItems(projects)} headingLevel="h3" filterable />
+          <Link
+            href="/work"
+            className="mt-48 inline-flex min-h-[3rem] items-center border border-ink px-24 font-mono text-caption uppercase transition ease-reveal duration-fast hover:bg-ink hover:text-surface"
+          >
+            {t('viewAll')} →
+          </Link>
         </div>
       </BlockSection>
     )

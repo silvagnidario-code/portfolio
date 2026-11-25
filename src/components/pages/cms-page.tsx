@@ -21,7 +21,7 @@ export async function CmsPage({ slug, locale }: { slug: string; locale: Locale }
   // having no main region at all.
   return (
     <main>
-      <RenderBlocks blocks={page.layout} locale={locale} />
+      <RenderBlocks blocks={page.layout} locale={locale} isPage />
     </main>
   )
 }

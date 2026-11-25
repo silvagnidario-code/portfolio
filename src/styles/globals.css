@@ -176,3 +176,32 @@
 @utility page-snap-margin {
   scroll-padding-inline: var(--page-margin);
 }
+
+/**
+ * A hairline that draws itself under a link on hover or keyboard focus —
+ * the quiet hover of the Sumi direction, used on small monospaced links.
+ */
+@utility link-underline {
+  background-image: linear-gradient(currentColor, currentColor);
+  background-position: 0 100%;
+  background-repeat: no-repeat;
+  background-size: 0 1px;
+  transition: background-size var(--duration-base) var(--easing-reveal);
+
+  &:hover,
+  &:focus-visible {
+    background-size: 100% 1px;
+  }
+}
+
+/** A slow blink for "live" dots. Switched off with every other animation
+    under prefers-reduced-motion by the rule above. */
+@keyframes blink {
+  50% {
+    opacity: 0.2;
+  }
+}
+
+@utility animate-blink {
+  animation: blink 1.6s steps(1) infinite;
+}

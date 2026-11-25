@@ -1,12 +1,13 @@
 import type { Metadata } from 'next'
 import { getTranslations, setRequestLocale } from 'next-intl/server'
 
-import { ProjectCard } from '@/components/blocks/project-card'
+import { ProjectIndex } from '@/components/work/project-index'
 import { WorkFilters, type WorkFilter } from '@/components/work/work-filters'
 import type { Locale } from '@/i18n/routing'
 import { alternatesFor } from '@/lib/metadata'
+import { toProjectIndexItems } from '@/lib/project-index'
 import { getIndustriesList, getProjectsList, getServicesList } from '@/lib/queries'
-import type { Where } from 'payload'
+import type { Industry, Service } from '@/payload-types'
 
 type PageProps = {
   params: Promise<{ locale: Locale }>
@@ -32,56 +33,58 @@ export default async function WorkIndexPage({ params, searchParams }: PageProps)
 
   const t = await getTranslations('WorkPage')
 
-  const conditions: Where[] = [{ _status: { equals: 'published' } }]
-  if (active.service) conditions.push({ 'services.slug': { equals: active.service } })
-  if (active.industry) conditions.push({ 'industry.slug': { equals: active.industry } })
-
-  const [projects, services, industries] = await Promise.all([
-    getProjectsList(locale, { limit: 50, sort: ['order', '-year'], where: { and: conditions } }),
+  // Every published project is read once; the filters then run in memory.
+  // That is what lets the filter bar offer only the services and sectors
+  // some project actually carries — a filter that leads to an empty page is
+  // never shown — and there are a few dozen projects, not thousands.
+  const [all, services, industries] = await Promise.all([
+    getProjectsList(locale, {
+      limit: 100,
+      sort: ['order', '-year'],
+      where: { _status: { equals: 'published' } },
+    }),
     getServicesList(locale),
     getIndustriesList(locale),
   ])
 
+  const slugOf = (value: number | Service | Industry | null | undefined) =>
+    value && typeof value === 'object' ? value.slug : undefined
+
+  const usedServices = new Set(all.docs.flatMap((project) => (project.services ?? []).map(slugOf)))
+  const usedIndustries = new Set(all.docs.map((project) => slugOf(project.industry)))
+
+  const projects = all.docs.filter(
+    (project) =>
+      (!active.service ||
+        (project.services ?? []).some((service) => slugOf(service) === active.service)) &&
+      (!active.industry || slugOf(project.industry) === active.industry),
+  )
+
   return (
     <main className="pb-96">
-      <header className="page-grid pb-64">
-        <div className="col-span-4 tablet:col-span-5 desktop:col-span-8">
-          <h1 className="text-display text-balance">{t('title')}</h1>
-          <p className="mt-32 max-w-measure text-body-lg text-ink-2">{t('intro')}</p>
-        </div>
+      <header className="page-margin pb-48">
+        <h1 className="text-display text-balance">{t('title')}</h1>
+        <p className="mt-32 max-w-[48ch] text-body-lg text-ink-2">{t('intro')}</p>
       </header>
 
-      <div className="page-margin pb-64">
-        <WorkFilters services={services} industries={industries} active={active} />
+      <div className="page-margin pb-48">
+        <WorkFilters
+          services={services.filter((service) => usedServices.has(service.slug))}
+          industries={industries.filter((industry) => usedIndustries.has(industry.slug))}
+          active={active}
+        />
       </div>
 
-      <p className="page-margin pb-32 font-mono text-caption uppercase text-ink-muted">
-        {t('count', { count: projects.totalDocs })}
-      </p>
-
-      {projects.docs.length === 0 ? (
-        <p className="page-margin text-body-lg text-ink-2">{t('empty')}</p>
-      ) : (
-        <div className="page-grid gap-y-24">
-          {projects.docs.map((project, index) => (
-            <div
-              key={project.id}
-              className={
-                index % 2 === 0
-                  ? 'col-span-4 tablet:col-span-4 desktop:col-span-5 desktop:col-start-2'
-                  : 'col-span-4 tablet:col-span-4 tablet:col-start-3 desktop:col-span-4 desktop:col-start-8 desktop:mt-48'
-              }
-            >
-              <ProjectCard
-                project={project}
-                headingLevel="h2"
-                sizes="(min-width: 1180px) 38vw, (min-width: 768px) 50vw, 100vw"
-                aspect={index % 2 === 0 ? 'aspect-[4/3]' : 'aspect-[3/4]'}
-              />
-            </div>
-          ))}
-        </div>
-      )}
+      <div className="page-margin">
+        <p aria-live="polite" className="pb-24 font-mono text-caption uppercase text-ink-muted">
+          {t('count', { count: projects.length })}
+        </p>
+        {projects.length === 0 ? (
+          <p className="text-body-lg text-ink-2">{t('empty')}</p>
+        ) : (
+          <ProjectIndex items={toProjectIndexItems(projects)} headingLevel="h2" />
+        )}
+      </div>
     </main>
   )
 }

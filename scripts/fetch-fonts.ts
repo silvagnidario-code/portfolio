@@ -40,11 +40,11 @@ type FamilySpec = {
 
 const families: readonly FamilySpec[] = [
   {
-    family: 'Zen Kaku Gothic New',
-    slug: 'zen-kaku',
+    family: 'Inter Tight',
+    slug: 'inter-tight',
     weights: [300, 400, 500],
     keep: 'latin',
-    preloadWeights: [300, 400],
+    preloadWeights: [400],
   },
   {
     family: 'Noto Sans SC',
@@ -69,7 +69,7 @@ const manifestPath = path.join(root, 'src', 'lib', 'font-manifest.generated.ts')
 const LEGACY_UA =
   'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/28.0.1500.71 Safari/537.36'
 
-const OG_FONT = { family: 'Zen Kaku Gothic New', weight: 400, file: 'og-body.woff' }
+const OG_FONT = { family: 'Inter Tight', weight: 400, file: 'og-body.woff' }
 
 async function fetchOgFont(): Promise<void> {
   const target = path.join(ogFonts, OG_FONT.file)

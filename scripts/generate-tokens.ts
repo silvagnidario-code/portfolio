@@ -286,12 +286,12 @@ ${breakpoints}
   /* Colours — resolved at runtime so the theme can switch without a rebuild */
 ${colors}
 
-  /* Typefaces. Zen Kaku and Noto Sans SC are self-hosted (scripts/fetch-fonts.ts),
-     Geist Mono comes from next/font. */
-  --font-body: 'Zen Kaku Gothic New', ui-sans-serif, system-ui, sans-serif;
-  --font-display: 'Zen Kaku Gothic New', ui-sans-serif, system-ui, sans-serif;
-  --font-mono: var(--font-geist-mono), ui-monospace, monospace;
-  --font-cjk: 'Noto Sans SC', 'Zen Kaku Gothic New', ui-sans-serif, sans-serif;
+  /* Typefaces. Inter Tight and Noto Sans SC are self-hosted (scripts/fetch-fonts.ts),
+     IBM Plex Mono comes from next/font. */
+  --font-body: 'Inter Tight', ui-sans-serif, system-ui, sans-serif;
+  --font-display: 'Inter Tight', ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-plex-mono), ui-monospace, monospace;
+  --font-cjk: 'Inter Tight', 'Noto Sans SC', ui-sans-serif, sans-serif;
 
   /* Only the three weights this direction allows */
   --font-weight-light: 300;

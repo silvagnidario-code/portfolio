@@ -18,7 +18,8 @@
     "localeLabel": "Language",
     "offices": "Offices",
     "social": "Social",
-    "toTop": "Back to top"
+    "toTop": "Back to top",
+    "contactCta": "Contact me"
   },
   "PhotoGallery": {
     "open": "Open photo {index} of {total} full screen",
@@ -32,7 +33,9 @@
     "legend": "Theme",
     "system": "System",
     "light": "Light",
-    "dark": "Dark"
+    "dark": "Dark",
+    "switchToLight": "Switch to light theme",
+    "switchToDark": "Switch to dark theme"
   },
   "HomePage": {
     "title": "Foundations",
@@ -41,7 +44,7 @@
   },
   "WorkPage": {
     "title": "Work",
-    "intro": "Cases told end to end: what was there before, what we took away, what changed after. Filter by service or by industry.",
+    "intro": "Cases told end to end: what was there before, what I took away, what changed after. Filter by service or by industry.",
     "filters": "Filters",
     "allProjects": "All",
     "byService": "Service",
@@ -69,7 +72,7 @@
   },
   "ContactPage": {
     "title": "Contact",
-    "intro": "Tell us about the project in a few lines: what you sell, to whom, and what is not working now. We answer within two working days.",
+    "intro": "Tell me about the project in a few lines: what you sell, to whom, and what is not working now. I reply within one working day.",
     "name": "Name",
     "company": "Company",
     "email": "Email",
@@ -221,10 +224,58 @@
     "fullscreen": "Fullscreen",
     "exitFullscreen": "Exit fullscreen"
   },
-    "Model3D": {
+  "Model3D": {
     "start": "Tap to explore the 3D model",
     "alt": "3D model",
     "hintMouse": "Drag to rotate · scroll to zoom",
     "hintTouch": "One finger to rotate · pinch to zoom · swipe vertically to keep scrolling"
+  },
+  "Hero": {
+    "play": "Play",
+    "pause": "Pause"
+  },
+  "ProjectIndex": {
+    "number": "No.",
+    "project": "Project",
+    "services": "Services",
+    "year": "Year",
+    "open": "Open the project",
+    "all": "All",
+    "filterLabel": "Filter by service",
+    "count": "{count, plural, =0 {No projects} one {# project} other {# projects}}",
+    "empty": "No projects to show.",
+    "viewAll": "All work"
+  },
+  "Services": {
+    "deliverables": {
+      "1": "Logo · Visual system · Guidelines",
+      "2": "Rendering · Booths · 3D models",
+      "3": "Still life · Product · Retouching",
+      "4": "Websites · WordPress · Next.js",
+      "5": "Shooting · Editing · Color grading"
+    }
+  },
+  "Method": {
+    "steps": [
+      {
+        "title": "Understand",
+        "body": "What the project really needs, who it speaks to, what is not working today."
+      },
+      {
+        "title": "Take away",
+        "body": "Only the essential stays: one clear idea, recognisable everywhere."
+      },
+      {
+        "title": "Make",
+        "body": "With care, from the idea to the final file: logo, website, shoot, video."
+      }
+    ]
+  },
+  "Contact": {
+    "label": "Contact",
+    "available": "Available for new projects",
+    "copy": "copy",
+    "copied": "Email copied ✓",
+    "copiedStatus": "Email address copied to the clipboard"
   }
 }
