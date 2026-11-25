@@ -1,67 +1,35 @@
 'use client'
 
 import { useTranslations } from 'next-intl'
-import { useId, type ComponentType, type SVGProps } from 'react'
 
 import { MoonIcon, SunIcon } from '@/components/icons'
-import type { ThemeMode } from '@/lib/theme'
 
 import { useTheme } from './theme-provider'
 
 /**
- * Two icons, two radio inputs: light and dark.
+ * One round button, one icon: it shows where a click takes you. On the dark
+ * default that is the sun (switch to light); on light it is the moon.
  *
- * `system` is still the starting state — nothing is stored until the reader
- * picks — but it is not offered as a third button. What the control shows is
- * the theme the reader is *looking at*: with no choice made, that is the site
- * default (dark), and picking either icon simply makes it explicit.
- *
- * The icons carry the meaning to the eye; the inputs carry it to everything
- * else, and each label keeps its word in a visually hidden span so the control
- * is announced by name rather than as an unnamed graphic.
- *
- * It renders on the navbar's glass, so it is not a glass surface itself:
- * blurring a backdrop that is already blurred costs a second expensive layer
- * and reads as a smudge.
+ * Until the stored preference has been read the button renders the default's
+ * icon, which is what the inline theme script painted too, so nothing flips
+ * on hydration for a reader with no stored choice.
  */
-const choices = ['light', 'dark'] as const satisfies ReadonlyArray<ThemeMode>
-
-const icons: Record<(typeof choices)[number], ComponentType<SVGProps<SVGSVGElement>>> = {
-  light: SunIcon,
-  dark: MoonIcon,
-}
-
 export function ThemeSwitcher() {
   const t = useTranslations('Theme')
   const { resolved, setMode } = useTheme()
-  const name = useId()
+  const next = resolved === 'dark' ? 'light' : 'dark'
+  const Glyph = resolved === 'dark' ? SunIcon : MoonIcon
+  const label = t(next === 'light' ? 'switchToLight' : 'switchToDark')
 
   return (
-    <fieldset className="flex items-center gap-4">
-      <legend className="sr-only">{t('legend')}</legend>
-
-      {choices.map((value) => {
-        const Glyph = icons[value]
-
-        return (
-          <label
-            key={value}
-            title={t(value)}
-            className="flex cursor-pointer items-center rounded-glass-sm p-8 text-ink-muted transition ease-reveal duration-fast hover:text-ink has-[:checked]:bg-ink has-[:checked]:text-ink-inverse has-[:focus-visible]:focus-ring"
-          >
-            <input
-              type="radio"
-              name={name}
-              value={value}
-              checked={resolved === value}
-              onChange={() => setMode(value)}
-              className="sr-only"
-            />
-            <Glyph />
-            <span className="sr-only">{t(value)}</span>
-          </label>
-        )
-      })}
-    </fieldset>
+    <button
+      type="button"
+      onClick={() => setMode(next)}
+      aria-label={label}
+      title={label}
+      className="grid size-[2.75rem] shrink-0 place-items-center rounded-full border border-line text-ink transition ease-reveal duration-fast hover:border-line-strong hover:bg-surface-2"
+    >
+      <Glyph aria-hidden="true" />
+    </button>
   )
 }

@@ -19,7 +19,7 @@ import { FontLinks } from '@/components/typography/font-links'
 import { routing } from '@/i18n/routing'
 import { env } from '@/lib/env'
 import { getGlobal } from '@/lib/payload'
-import { geistMono } from '@/lib/fonts'
+import { plexMono } from '@/lib/fonts'
 
 import '@/styles/globals.css'
 
@@ -94,7 +94,7 @@ export default async function LocaleLayout({ children, params }: LayoutProps) {
 
   return (
     // The inline theme script mutates data-theme before React hydrates.
-    <html lang={locale} className={geistMono.variable} suppressHydrationWarning>
+    <html lang={locale} className={plexMono.variable} suppressHydrationWarning>
       <head>
         <ThemeScript />
         <FontLinks />

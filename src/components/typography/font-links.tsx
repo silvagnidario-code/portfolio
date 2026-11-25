@@ -1,16 +1,16 @@
 import { fontManifest } from '@/lib/font-manifest.generated'
 
-const zenKaku = fontManifest['zen-kaku']
+const interTight = fontManifest['inter-tight']
 
 /**
- * Stylesheets for the two self-hosted faces (see `scripts/fetch-fonts.ts`).
- * The basic-latin slices of the body and display weights are preloaded, so the
+ * Stylesheet for the self-hosted latin face (see `scripts/fetch-fonts.ts`).
+ * The basic-latin slice of the regular weight is preloaded, so the
  * first paint does not swap.
  */
 export function FontLinks() {
   return (
     <>
-      {zenKaku.preload.map((href) => (
+      {interTight.preload.map((href) => (
         <link
           key={href}
           rel="preload"
@@ -20,7 +20,7 @@ export function FontLinks() {
           crossOrigin="anonymous"
         />
       ))}
-      <link rel="stylesheet" href={zenKaku.css} precedence="default" />
+      <link rel="stylesheet" href={interTight.css} precedence="default" />
     </>
   )
 }

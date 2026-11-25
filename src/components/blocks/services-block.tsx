@@ -1,9 +1,10 @@
+import { getTranslations } from 'next-intl/server'
+
 import type { Locale } from '@/i18n/routing'
 import { getServicesList } from '@/lib/queries'
 import type { Service, ServicesBlockType } from '@/payload-types'
 
 import { BlockSection } from './block-section'
-import { RichText } from './rich-text'
 
 async function resolveServices(block: ServicesBlockType, locale: Locale): Promise<Service[]> {
   const selected = (block.services ?? []).filter(
@@ -87,21 +88,65 @@ export async function ServicesBlock({
     )
   }
 
+  // The default (`accordion` in the CMS) is now a bento grid: five cells of
+  // unequal width on a hairline grid, each turning to the accent on hover.
+  // The widths repeat every five services — wide, narrow, narrow / narrow,
+  // wide — so the grid closes cleanly on four columns whatever the count.
+  const t = await getTranslations('Services')
+  const spans = [
+    'desktop:col-span-2',
+    'desktop:col-span-1',
+    'desktop:col-span-1',
+    'desktop:col-span-1',
+    'desktop:col-span-3',
+  ]
+
   return (
     <BlockSection settings={block.settings}>
-      {intro}
-      <div className="page-grid">
-        <div className="col-span-4 tablet:col-span-6 desktop:col-span-10 desktop:col-start-2">
-          {services.map((service) => (
-            <details key={service.id} className="border-t border-line last:border-b">
-              <summary className="flex cursor-pointer list-none items-baseline justify-between gap-24 py-24">
-                <span className="text-h3">{service.title}</span>
-                <span className="max-w-measure text-body text-ink-muted">{service.summary}</span>
-              </summary>
-              <RichText data={service.description} className="pb-32" />
-            </details>
-          ))}
+      <div className="page-margin">
+        <div className="mb-32 flex flex-wrap items-baseline justify-between gap-16 border-t border-line pt-16">
+          {block.heading ? <h2 className="text-h2 text-balance">{block.heading}</h2> : <span />}
+          <span className="font-mono text-caption text-ink-muted">
+            ({String(services.length).padStart(2, '0')})
+          </span>
         </div>
+        {block.intro ? (
+          <p className="mb-48 max-w-[40ch] text-body-lg text-ink-2">{block.intro}</p>
+        ) : null}
+
+        <ul className="grid grid-cols-1 tablet:grid-cols-2 desktop:grid-cols-4">
+          {services.map((service, index) => {
+            const deliverablesKey = `deliverables.${service.id}`
+            const deliverables = t.has(deliverablesKey) ? t(deliverablesKey) : null
+            const wide = index % 5 === 0 || index % 5 === 4
+
+            return (
+              <li
+                key={service.id}
+                className={`-mb-px -mr-px flex min-h-[15rem] flex-col justify-between gap-32 border border-line p-24 transition-colors ease-reveal duration-base hover:bg-accent hover:text-accent-ink ${spans[index % 5]} ${
+                  index % 5 === 0 ? 'tablet:col-span-2' : ''
+                }`}
+              >
+                <span className="font-mono text-caption">
+                  ({String(index + 1).padStart(2, '0')})
+                </span>
+                <div>
+                  <ServiceHeading className={`${wide ? 'text-h2' : 'text-h3'} font-light`}>
+                    {service.title}
+                  </ServiceHeading>
+                  {service.summary ? (
+                    <p className="mt-8 max-w-[40ch] text-body opacity-80">{service.summary}</p>
+                  ) : null}
+                  {deliverables ? (
+                    <p className="mt-16 font-mono text-caption uppercase opacity-75">
+                      {deliverables}
+                    </p>
+                  ) : null}
+                </div>
+              </li>
+            )
+          })}
+        </ul>
       </div>
     </BlockSection>
   )

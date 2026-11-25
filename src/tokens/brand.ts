@@ -16,21 +16,23 @@
  * as a printing error.
  */
 export const grey = {
-  paper50: '#FDFCF9',
-  paper100: '#F7F5F0',
-  paper200: '#EFEBE2',
-  paper300: '#E3DED2',
-  clay400: '#C7BFAF',
-  clay500: '#8C826C',
-  clay600: '#6F6757',
-  clay700: '#4E4838',
-  sumi800: '#332F29',
-  sumi850: '#232220',
-  sumi900: '#1A1A18',
-  sumi950: '#131211',
-  ink100: '#EDEAE3',
-  ink200: '#CFC9BC',
-  ink300: '#A79E8C',
+  paper50: '#F4F1EA',
+  paper100: '#ECE8DF',
+  paper200: '#E3DED3',
+  paper300: '#D3CDC0',
+  clay400: '#B8B1A3',
+  clay500: '#7A7468',
+  clay600: '#57534B',
+  clay700: '#3E3B35',
+  sumi800: '#2A2926',
+  sumi850: '#191918',
+  sumi900: '#0F0F0E',
+  sumi950: '#0E0E0D',
+  ink100: '#ECE8DF',
+  ink200: '#CFCAC0',
+  ink300: '#A39E93',
+  /** Strong border on ink: the paper-side clay is too dark to read there. */
+  clayDark: '#6A655B',
 } as const
 
 /**
@@ -39,11 +41,12 @@ export const grey = {
  * Both are contrast-checked on the styleguide, not assumed.
  */
 export const accent = {
-  onLight: '#A83A15',
-  onDark: '#FF8452',
-  /** Foreground used on top of a filled accent surface. */
-  fgOnLight: '#FDFCF9',
-  fgOnDark: '#1A1A18',
+  /** The logo red, darkened just enough to read as text on paper (5.2:1). */
+  onLight: '#B42A12',
+  /** The logo red (#E8442E), lifted a hair so it holds 4.5:1 on both inks. */
+  onDark: '#EA4A33',
+  fgOnLight: '#F4F1EA',
+  fgOnDark: '#0E0E0D',
 } as const
 
 /** Base unit of the spacing scale, in pixels. */
@@ -67,10 +70,12 @@ export type TypeGrade = {
   /** Font size in px at the largest viewport. */
   max: number
   lineHeight: number
-  /** Letter spacing in em. Never negative: tracking is neutral or positive. */
+  /** Letter spacing in em. Large display sizes are tightened; small sizes stay neutral or open. */
   tracking: number
   weight: 300 | 400 | 500
   uppercase?: boolean
+  /** Set in the monospaced face rather than the body face. */
+  mono?: boolean
 }
 
 /**
@@ -78,13 +83,21 @@ export type TypeGrade = {
  * only 300, 400 and 500 exist.
  */
 export const typeScale = {
-  display: { min: 44, max: 124, lineHeight: 1.3, tracking: 0, weight: 300 },
-  h1: { min: 34, max: 72, lineHeight: 1.3, tracking: 0, weight: 300 },
-  h2: { min: 27, max: 48, lineHeight: 1.3, tracking: 0, weight: 400 },
-  h3: { min: 22, max: 32, lineHeight: 1.3, tracking: 0, weight: 400 },
-  bodyLg: { min: 18, max: 22, lineHeight: 1.3, tracking: 0.01, weight: 400 },
-  body: { min: 16, max: 18, lineHeight: 1.3, tracking: 0, weight: 400 },
-  caption: { min: 12, max: 13, lineHeight: 1.3, tracking: 0.12, weight: 500, uppercase: true },
+  display: { min: 44, max: 128, lineHeight: 0.95, tracking: -0.05, weight: 400 },
+  h1: { min: 36, max: 72, lineHeight: 1.02, tracking: -0.04, weight: 300 },
+  h2: { min: 30, max: 56, lineHeight: 1.05, tracking: -0.035, weight: 400 },
+  h3: { min: 22, max: 34, lineHeight: 1.15, tracking: -0.02, weight: 400 },
+  bodyLg: { min: 18, max: 24, lineHeight: 1.4, tracking: -0.01, weight: 400 },
+  body: { min: 16, max: 17, lineHeight: 1.6, tracking: 0, weight: 400 },
+  caption: {
+    min: 12,
+    max: 12,
+    lineHeight: 1.5,
+    tracking: 0.03,
+    weight: 400,
+    uppercase: true,
+    mono: true,
+  },
 } as const satisfies Record<string, TypeGrade>
 
 export type TypeGradeName = keyof typeof typeScale
@@ -115,12 +128,11 @@ export const revealDistance = { min: 16, max: 24 } as const
 export const revealBlur = { max: 10 } as const
 
 /**
- * Radii. Layout containers stay square: content is paper. Photos and video
- * are the one exception — they carry the same wide continuous corner as the
- * glass interface layer (§7) and the navbar, `glassLg`, except where a video
- * or image is a full-bleed background rather than content being looked at.
+ * Radii. Everything is square-cornered — layout, photos, video and the
+ * interface layer alike: the Sumi direction is paper and ink, cut straight.
+ * The `glass*` names are kept so existing utilities resolve unchanged.
  */
-export const radius = { none: 0, glassSm: 20, glassMd: 24, glassLg: 28 } as const
+export const radius = { none: 0, glassSm: 0, glassMd: 0, glassLg: 0 } as const
 
 /** 12 columns on desktop, 6 on tablet, 4 on mobile, with a fixed gutter. */
 export const grid = {

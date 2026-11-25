@@ -52,7 +52,7 @@ export const semanticColors: Record<ThemeName, Record<ColorRole, string>> = {
     'fg-muted': grey.ink300,
     'fg-inverse': grey.sumi950,
     'border-subtle': grey.sumi800,
-    'border-strong': grey.clay500,
+    'border-strong': grey.clayDark,
     accent: accent.onDark,
     'accent-fg': accent.fgOnDark,
   },

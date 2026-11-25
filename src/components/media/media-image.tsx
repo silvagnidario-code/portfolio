@@ -14,6 +14,12 @@ type MediaImageProps = {
   poster?: number | Media | null
   /** Adds the browser's native `<video controls>` bar when a video is intentionally being viewed. */
   controls?: boolean
+  /**
+   * The image repeats what a neighbouring link or heading already says — a
+   * cover inside a project row, say — so it is hidden from assistive tech
+   * rather than announcing the project a second time.
+   */
+  decorative?: boolean
 }
 
 /**
@@ -40,6 +46,7 @@ export function MediaImage({
   priority,
   poster,
   controls = false,
+  decorative = false,
 }: MediaImageProps) {
   if (!media || typeof media === 'number' || !media.url) return null
 
@@ -56,7 +63,7 @@ export function MediaImage({
         mimeType={mimeType}
         className={className}
         style={{ objectPosition }}
-        ariaLabel={alt ?? undefined}
+        ariaLabel={decorative ? undefined : (alt ?? undefined)}
         poster={posterUrl}
         controls={controls}
       />
@@ -66,7 +73,7 @@ export function MediaImage({
   return (
     <Image
       src={url}
-      alt={alt ?? ''}
+      alt={decorative ? '' : (alt ?? '')}
       width={width ?? 1600}
       height={height ?? 1200}
       sizes={sizes}

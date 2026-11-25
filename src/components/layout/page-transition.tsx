@@ -28,7 +28,12 @@ export function PageTransition({ children }: { children: ReactNode }) {
     // hero above stopped short of a page that was now wider than the viewport.
     // `clip`, not `hidden`: it adds no scroll container, so the vertical axis
     // stays visible and sticky/fixed descendants behave as before.
-    <div key={pathname} id="main" tabIndex={-1} className="page-enter overflow-x-clip pt-128">
+    <div
+      key={pathname}
+      id="main"
+      tabIndex={-1}
+      className="page-enter overflow-x-clip pt-48 desktop:pt-64"
+    >
       {children}
     </div>
   )

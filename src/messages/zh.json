@@ -18,7 +18,8 @@
     "localeLabel": "语言",
     "offices": "办公室",
     "social": "社交媒体",
-    "toTop": "回到顶部"
+    "toTop": "回到顶部",
+    "contactCta": "联系我"
   },
   "PhotoGallery": {
     "open": "全屏打开第 {index} 张，共 {total} 张照片",
@@ -32,7 +33,9 @@
     "legend": "主题",
     "system": "跟随系统",
     "light": "浅色",
-    "dark": "深色"
+    "dark": "深色",
+    "switchToLight": "切换到浅色主题",
+    "switchToDark": "切换到深色主题"
   },
   "HomePage": {
     "title": "基础架构",
@@ -41,7 +44,7 @@
   },
   "WorkPage": {
     "title": "作品",
-    "intro": "完整讲述的案例：此前是什么、我们拿掉了什么、之后发生了什么变化。可按服务或行业筛选。",
+    "intro": "完整讲述的案例：此前是什么、我拿掉了什么、之后发生了什么变化。可按服务或行业筛选。",
     "filters": "筛选",
     "allProjects": "全部",
     "byService": "服务",
@@ -69,7 +72,7 @@
   },
   "ContactPage": {
     "title": "联系",
-    "intro": "用几行字告诉我们项目：你们卖什么、卖给谁、现在哪里不顺。我们会在两个工作日内回复。",
+    "intro": "用几行字告诉我这个项目：你卖什么、卖给谁、现在哪里不顺。我会在一个工作日内回复。",
     "name": "姓名",
     "company": "公司",
     "email": "电子邮箱",
@@ -221,10 +224,58 @@
     "fullscreen": "全屏",
     "exitFullscreen": "退出全屏"
   },
-    "Model3D": {
+  "Model3D": {
     "start": "点按以 3D 探索模型",
     "alt": "3D 模型",
     "hintMouse": "拖动旋转 · 滚轮缩放",
     "hintTouch": "单指旋转 · 双指捏合缩放 · 上下滑动继续浏览页面"
+  },
+  "Hero": {
+    "play": "播放",
+    "pause": "暂停"
+  },
+  "ProjectIndex": {
+    "number": "编号",
+    "project": "项目",
+    "services": "服务",
+    "year": "年份",
+    "open": "打开项目",
+    "all": "全部",
+    "filterLabel": "按服务筛选",
+    "count": "{count, plural, =0 {暂无项目} other {# 个项目}}",
+    "empty": "暂无可显示的项目。",
+    "viewAll": "全部作品"
+  },
+  "Services": {
+    "deliverables": {
+      "1": "标志 · 视觉系统 · 规范手册",
+      "2": "渲染 · 展台 · 3D 模型",
+      "3": "静物 · 产品 · 后期",
+      "4": "网站 · WordPress · Next.js",
+      "5": "拍摄 · 剪辑 · 调色"
+    }
+  },
+  "Method": {
+    "steps": [
+      {
+        "title": "理解",
+        "body": "项目真正需要什么、面向谁、现在哪里不顺。"
+      },
+      {
+        "title": "删减",
+        "body": "只留下本质：一个清晰、处处可辨的想法。"
+      },
+      {
+        "title": "实现",
+        "body": "用心完成，从想法到最终文件：标志、网站、拍摄、视频。"
+      }
+    ]
+  },
+  "Contact": {
+    "label": "联系",
+    "available": "可接新项目",
+    "copy": "复制",
+    "copied": "邮箱已复制 ✓",
+    "copiedStatus": "邮箱地址已复制到剪贴板"
   }
 }

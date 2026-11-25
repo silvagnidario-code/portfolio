@@ -28,12 +28,12 @@ type NarrativeBlock = NonNullable<Project['execution']>[number]
  * than crashing the page: content added in the admin panel before its renderer
  * exists should leave a hole, not a stack trace.
  */
-function renderBlock(block: LayoutBlock | NarrativeBlock, locale: Locale) {
+function renderBlock(block: LayoutBlock | NarrativeBlock, locale: Locale, isPage: boolean) {
   switch (block.blockType) {
     case 'hero':
       return <Hero block={block} />
     case 'statement':
-      return <Statement block={block} />
+      return <Statement block={block} showMethod={isPage} />
     case 'projectGrid':
       return <ProjectGrid block={block} locale={locale} />
     case 'media':
@@ -55,7 +55,7 @@ function renderBlock(block: LayoutBlock | NarrativeBlock, locale: Locale) {
     case 'team':
       return <TeamBlock block={block} locale={locale} />
     case 'cta':
-      return <Cta block={block} />
+      return <Cta block={block} locale={locale} />
     case 'faq':
       return <Faq block={block} />
     case 'prose':
@@ -70,15 +70,20 @@ function renderBlock(block: LayoutBlock | NarrativeBlock, locale: Locale) {
 export function RenderBlocks({
   blocks,
   locale,
+  isPage = false,
 }: {
   blocks?: Array<LayoutBlock | NarrativeBlock> | null
   locale: Locale
+  /** True for a page composed in the CMS, false inside a case study. */
+  isPage?: boolean
 }) {
   if (!blocks || blocks.length === 0) return null
   return (
     <>
       {blocks.map((block, index) => (
-        <div key={block.id ?? `${block.blockType}-${index}`}>{renderBlock(block, locale)}</div>
+        <div key={block.id ?? `${block.blockType}-${index}`}>
+          {renderBlock(block, locale, isPage)}
+        </div>
       ))}
     </>
   )

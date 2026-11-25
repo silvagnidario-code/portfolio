@@ -117,11 +117,17 @@ export default async function CaseStudyPage({ params }: PageProps) {
     >
       <CreativeWorkJsonLd project={project} locale={locale} path={`/work/${slug}`} />
 
-      <header className="page-grid pb-64">
-        <div className="col-span-4 tablet:col-span-6 desktop:col-span-9">
+      <header className="page-margin pb-64">
+        <Link
+          href="/work"
+          className="link-underline inline-block py-8 font-mono text-caption uppercase text-ink-muted hover:text-ink"
+        >
+          ← {t('backToWork')}
+        </Link>
+        <div className="mt-32">
           <Eyebrow>{project.client}</Eyebrow>
-          <h1 className="mt-24 text-display text-balance">{project.title}</h1>
-          <p className="mt-32 max-w-measure text-h3 text-ink-2">{project.claim}</p>
+          <h1 className="mt-24 max-w-[20ch] text-h1 text-balance">{project.title}</h1>
+          <p className="mt-32 max-w-[44ch] text-h3 text-ink-2">{project.claim}</p>
         </div>
       </header>
 
@@ -382,8 +388,11 @@ export default async function CaseStudyPage({ params }: PageProps) {
       ) : null}
 
       <p className="page-margin">
-        <Link href="/work" className="text-body-lg underline">
-          {t('backToWork')}
+        <Link
+          href="/work"
+          className="inline-flex min-h-[3rem] items-center border border-ink px-24 font-mono text-caption uppercase transition ease-reveal duration-fast hover:bg-ink hover:text-surface"
+        >
+          ← {t('backToWork')}
         </Link>
       </p>
     </main>
