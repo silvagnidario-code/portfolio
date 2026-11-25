@@ -58,6 +58,19 @@ function roleBlock(theme: ThemeName, indent: string): string {
 /** The opposite palette, for a section that inverts against the page. */
 const opposite = (theme: ThemeName): ThemeName => (theme === 'light' ? 'dark' : 'light')
 
+/**
+ * A `sumi` section on the dark theme. Inverting to paper would drop a bright
+ * band into a dark page; instead the section stays ink and lifts one step,
+ * which every dark role was also checked against (bg-secondary).
+ */
+function raisedDarkBlock(indent: string): string {
+  const raised = {
+    ...semanticColors.dark,
+    'bg-primary': semanticColors.dark['bg-secondary'],
+  }
+  return colorRoles.map((role) => `${indent}--${role}: ${raised[role]};`).join('\n')
+}
+
 function colorBlock(theme: ThemeName, indent: string): string {
   const roles = colorRoles.map((role) => `${indent}--${role}: ${semanticColors[theme][role]};`)
 
@@ -198,12 +211,12 @@ ${colorBlock('light', '  ')}
 
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme='light']) [data-background='sumi'] {
-${roleBlock(opposite('dark'), '    ')}
+${raisedDarkBlock('    ')}
   }
 }
 
 :root[data-theme='dark'] [data-background='sumi'] {
-${roleBlock(opposite('dark'), '  ')}
+${raisedDarkBlock('  ')}
 }
 
 :root[data-theme='light'] [data-background='sumi'] {

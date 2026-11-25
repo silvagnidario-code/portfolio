@@ -80,7 +80,11 @@ export function ProjectIndex({
     <div>
       {filterable && filters.length > 1 ? (
         <div className="mb-32 flex flex-wrap items-center justify-between gap-16">
-          <div role="group" aria-label={t('filterLabel')} className="flex flex-wrap">
+          <div
+            role="group"
+            aria-label={t('filterLabel')}
+            className="-mx-[var(--page-margin)] flex w-[calc(100%+2*var(--page-margin))] overflow-x-auto px-[var(--page-margin)] tablet:mx-0 tablet:w-auto tablet:flex-wrap tablet:overflow-visible tablet:px-0"
+          >
             {[{ id: null, title: t('all') }, ...filters].map((option) => {
               const pressed = filter === option.id
               return (
@@ -89,7 +93,7 @@ export function ProjectIndex({
                   type="button"
                   aria-pressed={pressed}
                   onClick={() => setFilter(option.id)}
-                  className={`-mb-px -mr-px min-h-[2.75rem] border border-line-strong px-16 font-mono text-caption uppercase transition ease-reveal duration-fast ${
+                  className={`-mb-px -mr-px min-h-[2.75rem] shrink-0 whitespace-nowrap border border-line-strong px-16 font-mono text-caption uppercase transition ease-reveal duration-fast ${
                     pressed ? 'bg-ink text-surface' : 'text-ink hover:bg-surface-2'
                   }`}
                 >
@@ -108,7 +112,7 @@ export function ProjectIndex({
         <div>
           <div
             aria-hidden="true"
-            className="hidden grid-cols-[3rem_minmax(0,1.4fr)_minmax(0,1fr)_5rem] gap-24 border-b border-line pb-12 font-mono text-caption uppercase text-ink-muted desktop:grid"
+            className="hidden grid-cols-[3rem_minmax(0,1.4fr)_minmax(0,1fr)_6.5rem] gap-24 border-b border-line pb-12 font-mono text-caption uppercase text-ink-muted desktop:grid"
           >
             <span>{t('number')}</span>
             <span>{t('project')}</span>
@@ -127,7 +131,7 @@ export function ProjectIndex({
                     href={`/work/${item.slug}`}
                     onMouseEnter={() => setActiveId(item.id)}
                     onFocus={() => setActiveId(item.id)}
-                    className={`group grid grid-cols-[3.5rem_minmax(0,1fr)_auto] items-center gap-16 border-b border-line py-16 transition-[padding,opacity,filter] ease-reveal duration-base hover:pl-12 focus-visible:pl-12 desktop:grid-cols-[3rem_minmax(0,1.4fr)_minmax(0,1fr)_5rem] desktop:gap-24 desktop:py-24 desktop:hover:pl-24 ${
+                    className={`group grid grid-cols-[3.5rem_minmax(0,1fr)] items-center tablet:grid-cols-[3.5rem_minmax(0,1fr)_auto] gap-16 border-b border-line py-16 transition-[padding,opacity,filter] ease-reveal duration-base hover:pl-12 focus-visible:pl-12 desktop:grid-cols-[3rem_minmax(0,1.4fr)_minmax(0,1fr)_6.5rem] desktop:gap-24 desktop:py-24 desktop:hover:pl-24 ${
                       dimmed ? 'opacity-25 grayscale' : ''
                     }`}
                   >
@@ -156,13 +160,16 @@ export function ProjectIndex({
                       {item.claim ? (
                         <span className="mt-4 block text-body text-ink-muted">{item.claim}</span>
                       ) : null}
+                      <span className="mt-4 block font-mono text-caption text-ink-muted tablet:hidden">
+                        {item.year}
+                      </span>
                     </span>
 
                     <span className="hidden font-mono text-caption uppercase text-ink-muted desktop:block">
                       {item.services.map((service) => service.title).join(' · ')}
                     </span>
 
-                    <span className="flex items-center justify-end gap-8 font-mono text-caption text-ink-muted">
+                    <span className="hidden items-center justify-end gap-8 whitespace-nowrap font-mono text-caption text-ink-muted tablet:flex">
                       {item.year}
                       <span
                         aria-hidden="true"
