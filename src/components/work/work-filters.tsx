@@ -68,19 +68,21 @@ export async function WorkFilters({
         </div>
       </div>
 
-      <div className="flex flex-col gap-12">
-        <span className="font-mono text-caption uppercase text-ink-muted">{t('byIndustry')}</span>
-        <div className="flex flex-wrap">
-          {pill(t('allProjects'), href({ service: active.service }), !active.industry)}
-          {industries.map((industry) =>
-            pill(
-              industry.title,
-              href({ service: active.service, industry: industry.slug }),
-              active.industry === industry.slug,
-            ),
-          )}
+      {industries.length > 0 ? (
+        <div className="flex flex-col gap-12">
+          <span className="font-mono text-caption uppercase text-ink-muted">{t('byIndustry')}</span>
+          <div className="flex flex-wrap">
+            {pill(t('allProjects'), href({ service: active.service }), !active.industry)}
+            {industries.map((industry) =>
+              pill(
+                industry.title,
+                href({ service: active.service, industry: industry.slug }),
+                active.industry === industry.slug,
+              ),
+            )}
+          </div>
         </div>
-      </div>
+      ) : null}
 
       {hasFilter ? (
         <Link

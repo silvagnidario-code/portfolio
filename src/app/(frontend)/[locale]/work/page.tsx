@@ -6,8 +6,8 @@ import { WorkFilters, type WorkFilter } from '@/components/work/work-filters'
 import type { Locale } from '@/i18n/routing'
 import { alternatesFor } from '@/lib/metadata'
 import { toProjectIndexItems } from '@/lib/project-index'
-import { getIndustriesList, getProjectsList, getServicesList } from '@/lib/queries'
-import type { Industry, Service } from '@/payload-types'
+import { getProjectsList, getServicesList } from '@/lib/queries'
+import type { Service } from '@/payload-types'
 
 type PageProps = {
   params: Promise<{ locale: Locale }>
@@ -29,35 +29,35 @@ export default async function WorkIndexPage({ params, searchParams }: PageProps)
   setRequestLocale(locale)
 
   const query = await searchParams
-  const active: WorkFilter = { service: single(query.service), industry: single(query.industry) }
+  // Sectors are not shown any more: with a handful of projects a second
+  // filter row split them into groups of one. The field stays in the CMS
+  // (and in the data), so the filter can come back by passing it again.
+  const active: WorkFilter = { service: single(query.service) }
 
   const t = await getTranslations('WorkPage')
 
   // Every published project is read once; the filters then run in memory.
-  // That is what lets the filter bar offer only the services and sectors
-  // some project actually carries — a filter that leads to an empty page is
+  // That is what lets the filter bar offer only the services some
+  // project actually carries — a filter that leads to an empty page is
   // never shown — and there are a few dozen projects, not thousands.
-  const [all, services, industries] = await Promise.all([
+  const [all, services] = await Promise.all([
     getProjectsList(locale, {
       limit: 100,
       sort: ['order', '-year'],
       where: { _status: { equals: 'published' } },
     }),
     getServicesList(locale),
-    getIndustriesList(locale),
   ])
 
-  const slugOf = (value: number | Service | Industry | null | undefined) =>
+  const slugOf = (value: number | Service | null | undefined) =>
     value && typeof value === 'object' ? value.slug : undefined
 
   const usedServices = new Set(all.docs.flatMap((project) => (project.services ?? []).map(slugOf)))
-  const usedIndustries = new Set(all.docs.map((project) => slugOf(project.industry)))
 
   const projects = all.docs.filter(
     (project) =>
-      (!active.service ||
-        (project.services ?? []).some((service) => slugOf(service) === active.service)) &&
-      (!active.industry || slugOf(project.industry) === active.industry),
+      !active.service ||
+      (project.services ?? []).some((service) => slugOf(service) === active.service),
   )
 
   return (
@@ -70,7 +70,7 @@ export default async function WorkIndexPage({ params, searchParams }: PageProps)
       <div className="page-margin pb-48">
         <WorkFilters
           services={services.filter((service) => usedServices.has(service.slug))}
-          industries={industries.filter((industry) => usedIndustries.has(industry.slug))}
+          industries={[]}
           active={active}
         />
       </div>

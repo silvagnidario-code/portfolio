@@ -21,14 +21,7 @@ import { alternatesForPaths } from '@/lib/metadata'
 import { ogSize } from '@/lib/og'
 import { getProjectAlternates, getProjectBySlug } from '@/lib/queries'
 import { hasRichText } from '@/lib/rich-text'
-import type {
-  Industry,
-  LiveEmbedBlock,
-  Project,
-  Service,
-  TeamMember,
-  Testimonial,
-} from '@/payload-types'
+import type { LiveEmbedBlock, Project, Service, TeamMember, Testimonial } from '@/payload-types'
 
 type PageProps = { params: Promise<{ locale: Locale; slug: string }> }
 
@@ -82,7 +75,6 @@ export default async function CaseStudyPage({ params }: PageProps) {
   const t = await getTranslations('CaseStudy')
 
   const accent = resolveProjectAccent(project.accentColor)
-  const industry = populated<Industry>(project.industry)
   const services = (project.services ?? []).filter(
     (service): service is Service => typeof service === 'object',
   )
@@ -196,14 +188,13 @@ export default async function CaseStudyPage({ params }: PageProps) {
         {[
           { label: t('client'), value: project.client },
           { label: t('year'), value: formatYearRange(project.year, project.yearEnd) },
-          { label: t('industry'), value: industry?.title ?? null },
           { label: t('services'), value: services.map((service) => service.title).join(', ') },
         ]
           .filter((entry) => entry.value)
           .map((entry) => (
             <div
               key={entry.label}
-              className="col-span-2 tablet:col-span-3 desktop:col-span-3 border-t border-line pt-16"
+              className="col-span-4 tablet:col-span-2 desktop:col-span-4 border-t border-line pt-16"
             >
               <dt className="font-mono text-caption uppercase text-ink-muted">{entry.label}</dt>
               <dd className="mt-8 text-body">{entry.value}</dd>
