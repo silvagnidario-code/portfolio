@@ -145,10 +145,10 @@ export default async function CaseStudyPage({ params }: PageProps) {
         // An Instagram page goes in a phone, beside its handle: it is a
         // social profile, so it is shown the way it is actually seen.
         <figure
-          className="page-margin mb-96 grid items-center gap-48 desktop:grid-cols-2 desktop:gap-64"
+          className="page-margin mb-96 flex flex-col items-center justify-center gap-48 desktop:flex-row desktop:gap-96"
           data-reveal="mask"
         >
-          <div className="order-2 desktop:order-1">
+          <div className="order-2 w-full max-w-[26rem] desktop:order-1 desktop:w-auto desktop:max-w-[24rem]">
             <p className="font-mono text-caption uppercase text-ink-muted">Instagram</p>
             <p className="mt-16 text-h2 break-words">@{instagramHandle(heroEmbed.url)}</p>
             {heroEmbed.heading ? (
@@ -163,7 +163,7 @@ export default async function CaseStudyPage({ params }: PageProps) {
               {heroEmbed.fallbackLabel || 'Apri su Instagram'} ↗
             </a>
           </div>
-          <div className="order-1 desktop:order-2">
+          <div className="order-1 w-full max-w-[26rem] desktop:order-2">
             <PhoneFrame url={heroEmbed.url} title={heroEmbed.heading || project.title} />
           </div>
         </figure>
@@ -172,7 +172,7 @@ export default async function CaseStudyPage({ params }: PageProps) {
         // scaled to fit, narrower than the column and lifted on a shadow.
         <figure className="page-margin mb-96" data-reveal="mask">
           <BrowserWindow url={heroEmbed.url} title={heroEmbed.heading || project.title} />
-          <figcaption className="mx-auto mt-24 flex max-w-[68rem] flex-wrap items-baseline justify-between gap-16 font-mono text-caption uppercase text-ink-muted">
+          <figcaption className="mx-auto mt-24 flex max-w-[80rem] flex-wrap items-baseline justify-between gap-16 font-mono text-caption uppercase text-ink-muted">
             {heroEmbed.heading ? <span>{heroEmbed.heading}</span> : <span />}
             <a
               href={heroEmbed.url}

@@ -4,13 +4,13 @@
  * so a social page reads as what it is — something seen on a phone — and
  * never as a website in a browser window.
  *
- * The phone is at most 22rem wide and keeps a real handset's proportions;
+ * The phone is at most 26rem wide and keeps a real handset's proportions;
  * on a narrow screen it simply shrinks with the column.
  */
 export function PhoneFrame({ url, title }: { url: string; title: string }) {
   return (
-    <div className="mx-auto w-full max-w-[22rem]">
-      <div className="relative rounded-[3rem] bg-[#0B0B0A] p-[0.65rem] shadow-[0_40px_90px_-30px_rgb(0_0_0/0.6),0_0_70px_-6px_rgb(236_232_223/0.1),inset_0_0_0_1.5px_rgb(255_255_255/0.08)]">
+    <div className="mx-auto w-full max-w-[26rem]">
+      <div className="relative rounded-[3rem] bg-[#0B0B0A] p-[0.65rem] shadow-[0_24px_60px_-42px_rgb(0_0_0/0.55),0_0_50px_-28px_rgb(236_232_223/0.14),inset_0_0_0_1.5px_rgb(255_255_255/0.08)]">
         <span
           aria-hidden="true"
           className="absolute left-1/2 top-[1.15rem] z-10 h-[1.6rem] w-[6.5rem] -translate-x-1/2 rounded-full bg-[#0B0B0A]"
