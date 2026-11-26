@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import { hasLocale, NextIntlClientProvider } from 'next-intl'
 import { setRequestLocale } from 'next-intl/server'
 import { notFound } from 'next/navigation'
+import Script from 'next/script'
 import type { ReactNode } from 'react'
 
 import { GlassBudgetProvider } from '@/components/glass/glass-budget'
@@ -141,6 +142,13 @@ export default async function LocaleLayout({ children, params }: LayoutProps) {
             </MotionPreferencesProvider>
           </ThemeProvider>
         </NextIntlClientProvider>
+        {/* Vercel Web Analytics: cookieless, anonymous page views. Loaded on
+            the production deployment only, so previews and local runs never
+            count as visits. Switched on in the Vercel project (Analytics →
+            Enable); until then the script answers 404 and does nothing. */}
+        {process.env.VERCEL_ENV === 'production' ? (
+          <Script src="/_vercel/insights/script.js" strategy="afterInteractive" />
+        ) : null}
       </body>
     </html>
   )
