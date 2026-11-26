@@ -3,22 +3,15 @@
 import { type ReactNode, useEffect, useRef, useState } from 'react'
 
 /**
- * An Instagram-style HUD laid over a vertical video: story-style progress
- * bar and profile row on top, reel-style actions on the right, a mute toggle
+ * An Instagram-style HUD laid over a vertical video: a story-style progress
+ * bar on top (no profile row: the work is not a social account), reel-style
+ * actions on the right, a mute toggle
  * at the bottom. It wraps whatever renders the <video> (MediaImage /
  * MediaVideo), finds that element and only reads from or toggles it, so the
  * lazy loading, autoplay-in-view and "one unmuted at a time" logic in
  * MediaVideo keep working untouched.
  */
-export function ReelCard({
-  children,
-  handle = 'silvagnidario',
-  caption,
-}: {
-  children: ReactNode
-  handle?: string
-  caption?: string | null
-}) {
+export function ReelCard({ children }: { children: ReactNode }) {
   const rootRef = useRef<HTMLDivElement>(null)
   const barRef = useRef<HTMLSpanElement>(null)
   const [muted, setMuted] = useState(true)
@@ -94,13 +87,6 @@ export function ReelCard({
           <span className="reel-track">
             <span ref={barRef} className="reel-fill" />
           </span>
-          <div className="reel-profile">
-            <span className="reel-avatar" aria-hidden="true">
-              SD
-            </span>
-            <span className="reel-handle">{handle}</span>
-            {caption ? <span className="reel-caption">{caption}</span> : null}
-          </div>
         </div>
 
         <div className="reel-actions">
@@ -161,11 +147,6 @@ const css = `
 .reel-top{position:absolute;inset:0 0 auto 0;padding:10px 12px 28px;background:linear-gradient(rgba(0,0,0,.45),rgba(0,0,0,0))}
 .reel-track{display:block;height:2px;border-radius:2px;background:rgba(255,255,255,.35);overflow:hidden}
 .reel-fill{display:block;height:100%;background:#fff;transform:scaleX(0);transform-origin:left center;will-change:transform}
-.reel-profile{display:flex;align-items:center;gap:8px;margin-top:10px;min-width:0}
-.reel-avatar{flex:none;display:grid;place-items:center;width:28px;height:28px;border-radius:999px;font-size:10px;font-weight:600;letter-spacing:.04em;color:#fff;
-  background:#b8432a;box-shadow:0 0 0 2px #fff,0 0 0 3.5px #d8783f}
-.reel-handle{font-size:13px;font-weight:500;text-shadow:0 1px 2px rgba(0,0,0,.35)}
-.reel-caption{font-size:12px;opacity:.75;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .reel-actions{position:absolute;right:10px;bottom:60px;display:flex;flex-direction:column;gap:16px;align-items:center}
 .reel-btn{display:grid;place-items:center;width:36px;height:36px;padding:0;border:0;background:none;color:#fff;
   filter:drop-shadow(0 1px 3px rgba(0,0,0,.45));transition:transform .2s cubic-bezier(.2,.7,.2,1)}
@@ -180,9 +161,6 @@ const css = `
 .reel-card:hover .reel-actions,.reel-card:hover .reel-mute{opacity:1}
 @media (max-width:767px){
   .reel-top{padding:8px 8px 20px}
-  .reel-avatar{width:22px;height:22px;font-size:8px}
-  .reel-handle{font-size:11px}
-  .reel-caption{display:none}
   .reel-actions{right:4px;bottom:48px;gap:8px}
   .reel-btn{width:30px;height:30px}
   .reel-btn svg{width:20px;height:20px}

@@ -19,7 +19,8 @@
     "offices": "Offices",
     "social": "Social",
     "toTop": "Back to top",
-    "contactCta": "Contact me"
+    "contactCta": "Contact me",
+    "links": "Links"
   },
   "PhotoGallery": {
     "open": "Open photo {index} of {total} full screen",
@@ -68,7 +69,8 @@
     "awards": "Awards",
     "liveUrl": "See it live",
     "related": "More work",
-    "backToWork": "All work"
+    "backToWork": "All work",
+    "embedHint": "The site is live: scroll and click inside the window"
   },
   "ContactPage": {
     "title": "Contact",

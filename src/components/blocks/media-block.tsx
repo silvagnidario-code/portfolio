@@ -45,6 +45,7 @@ export function MediaBlock({ block }: { block: MediaBlockType }) {
                 src={video.url}
                 mimeType={video.mimeType}
                 className="block h-auto max-h-[80vh] w-auto max-w-full rounded-glass-lg"
+                controls={false}
                 poster={typeof poster === 'object' ? (poster?.url ?? undefined) : undefined}
               />
             ) : (
@@ -140,7 +141,7 @@ export function MediaBlock({ block }: { block: MediaBlockType }) {
                   className="w-[calc((100%-16px)/2)] tablet:w-[calc((100%-48px)/3)] desktop:w-[calc((100%-72px)/4)]"
                   data-reveal={reveal('blur')}
                 >
-                  <ReelCard caption={item.caption}>
+                  <ReelCard>
                     <MediaImage
                       media={item.media}
                       sizes="(min-width: 1024px) 25vw, (min-width: 768px) 33vw, 50vw"

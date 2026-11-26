@@ -19,7 +19,8 @@
     "offices": "办公室",
     "social": "社交媒体",
     "toTop": "回到顶部",
-    "contactCta": "联系我"
+    "contactCta": "联系我",
+    "links": "链接"
   },
   "PhotoGallery": {
     "open": "全屏打开第 {index} 张，共 {total} 张照片",
@@ -68,7 +69,8 @@
     "awards": "奖项",
     "liveUrl": "查看线上版本",
     "related": "更多作品",
-    "backToWork": "全部作品"
+    "backToWork": "全部作品",
+    "embedHint": "网站可以浏览：在窗口内滚动和点击"
   },
   "ContactPage": {
     "title": "联系",
