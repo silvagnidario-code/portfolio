@@ -148,7 +148,7 @@ export default async function CaseStudyPage({ params }: PageProps) {
           className="page-margin mb-96 flex flex-col items-center justify-center gap-48 desktop:flex-row desktop:gap-96"
           data-reveal="mask"
         >
-          <div className="order-2 w-full max-w-[26rem] desktop:order-1 desktop:w-auto desktop:max-w-[24rem]">
+          <div className="order-2 w-full max-w-[25rem] desktop:order-1 desktop:w-auto desktop:max-w-[24rem]">
             <p className="font-mono text-caption uppercase text-ink-muted">Instagram</p>
             <p className="mt-16 text-h2 break-words">@{instagramHandle(heroEmbed.url)}</p>
             {heroEmbed.heading ? (
@@ -163,7 +163,7 @@ export default async function CaseStudyPage({ params }: PageProps) {
               {heroEmbed.fallbackLabel || 'Apri su Instagram'} ↗
             </a>
           </div>
-          <div className="order-1 w-full max-w-[26rem] desktop:order-2">
+          <div className="order-1 w-full max-w-[25rem] desktop:order-2">
             <PhoneFrame url={heroEmbed.url} title={heroEmbed.heading || project.title} />
           </div>
         </figure>
