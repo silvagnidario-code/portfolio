@@ -26,8 +26,8 @@ export type ProjectIndexItem = {
  *
  * Every row is a real link to the case study; the preview only mirrors it,
  * so nothing is reachable by hover alone. Below the desktop breakpoint the
- * preview is gone and each row carries its own thumbnail instead — a phone
- * still sees the work, not just its names.
+ * index becomes a column of cards — number and year, a large cover, title,
+ * claim and services — two across on a tablet, one on a phone.
  *
  * The images here are decorative: each row's link already says which
  * project it is, so reading the cover's alt text as well would announce the
@@ -79,11 +79,11 @@ export function ProjectIndex({
   return (
     <div>
       {filterable && filters.length > 1 ? (
-        <div className="mb-32 flex flex-wrap items-center justify-between gap-16">
+        <div className="mb-32 flex flex-col gap-16 tablet:flex-row tablet:flex-wrap tablet:items-center tablet:justify-between">
           <div
             role="group"
             aria-label={t('filterLabel')}
-            className="-mx-[var(--page-margin)] flex w-[calc(100%+2*var(--page-margin))] overflow-x-auto px-[var(--page-margin)] tablet:mx-0 tablet:w-auto tablet:flex-wrap tablet:overflow-visible tablet:px-0"
+            className="grid w-full grid-cols-2 tablet:flex tablet:w-auto tablet:flex-wrap"
           >
             {[{ id: null, title: t('all') }, ...filters].map((option) => {
               const pressed = filter === option.id
@@ -93,7 +93,7 @@ export function ProjectIndex({
                   type="button"
                   aria-pressed={pressed}
                   onClick={() => setFilter(option.id)}
-                  className={`-mb-px -mr-px min-h-[2.75rem] shrink-0 whitespace-nowrap border border-line-strong px-16 font-mono text-caption uppercase transition ease-reveal duration-fast ${
+                  className={`-mb-px -mr-px min-h-[2.75rem] border border-line-strong px-12 text-left tablet:whitespace-nowrap tablet:px-16 font-mono text-caption uppercase transition ease-reveal duration-fast ${
                     pressed ? 'bg-ink text-surface' : 'text-ink hover:bg-surface-2'
                   }`}
                 >
@@ -108,11 +108,43 @@ export function ProjectIndex({
         </div>
       ) : null}
 
-      <div className="grid gap-48 desktop:grid-cols-[minmax(0,1.45fr)_minmax(0,1fr)] desktop:gap-64">
+      {/* Below the desktop breakpoint: the same index, card by card. Each
+          project keeps the desktop row's number, title, claim and year, and
+          gets the large picture the desktop preview would have shown — two
+          columns on a tablet, one on a phone. */}
+      <ul className="grid gap-x-24 gap-y-48 tablet:grid-cols-2 desktop:hidden">
+        {items.map((item, index) => (
+          <li key={item.id} className={matches(item) ? '' : 'opacity-25 grayscale'}>
+            <Link href={`/work/${item.slug}`} className="group block border-t border-line pt-12">
+              <span className="flex items-center justify-between gap-16 font-mono text-caption uppercase text-ink-muted">
+                <span className="text-accent">{String(index + 1).padStart(2, '0')}</span>
+                <span>{item.year}</span>
+              </span>
+              <span className="mt-12 block aspect-[4/3] overflow-hidden bg-surface-2">
+                <MediaImage
+                  media={item.cover}
+                  sizes="(min-width: 768px) 45vw, 92vw"
+                  className="h-full w-full object-cover transition-transform ease-reveal duration-slow group-hover:scale-[1.03]"
+                  decorative
+                />
+              </span>
+              <Heading className="mt-16 text-h3 text-balance">{item.title}</Heading>
+              {item.claim ? (
+                <span className="mt-8 block text-body text-ink-muted">{item.claim}</span>
+              ) : null}
+              <span className="mt-12 block font-mono text-caption uppercase text-ink-muted">
+                {item.services.map((service) => service.title).join(' · ')}
+              </span>
+            </Link>
+          </li>
+        ))}
+      </ul>
+
+      <div className="hidden gap-64 desktop:grid desktop:grid-cols-[minmax(0,1.45fr)_minmax(0,1fr)]">
         <div>
           <div
             aria-hidden="true"
-            className="hidden grid-cols-[3rem_minmax(0,1.4fr)_minmax(0,1fr)_6.5rem] gap-24 border-b border-line pb-12 font-mono text-caption uppercase text-ink-muted desktop:grid"
+            className="grid grid-cols-[3rem_minmax(0,1.4fr)_minmax(0,1fr)_6.5rem] gap-24 border-b border-line pb-12 font-mono text-caption uppercase text-ink-muted"
           >
             <span>{t('number')}</span>
             <span>{t('project')}</span>
@@ -120,7 +152,7 @@ export function ProjectIndex({
             <span className="text-right">{t('year')}</span>
           </div>
 
-          <ul className="border-t border-line desktop:border-t-0">
+          <ul>
             {items.map((item, index) => {
               const isActive = item.id === active?.id
               const dimmed = !matches(item)
@@ -131,28 +163,16 @@ export function ProjectIndex({
                     href={`/work/${item.slug}`}
                     onMouseEnter={() => setActiveId(item.id)}
                     onFocus={() => setActiveId(item.id)}
-                    className={`group grid grid-cols-[3.5rem_minmax(0,1fr)] items-center tablet:grid-cols-[3.5rem_minmax(0,1fr)_auto] gap-16 border-b border-line py-16 transition-[padding,opacity,filter] ease-reveal duration-base hover:pl-12 focus-visible:pl-12 desktop:grid-cols-[3rem_minmax(0,1.4fr)_minmax(0,1fr)_6.5rem] desktop:gap-24 desktop:py-24 desktop:hover:pl-24 ${
+                    className={`group grid grid-cols-[3rem_minmax(0,1.4fr)_minmax(0,1fr)_6.5rem] items-center gap-24 border-b border-line py-24 transition-[padding,opacity,filter] ease-reveal duration-base hover:pl-24 focus-visible:pl-24 ${
                       dimmed ? 'opacity-25 grayscale' : ''
                     }`}
                   >
                     <span
-                      className={`hidden font-mono text-caption desktop:block ${
+                      className={`font-mono text-caption ${
                         isActive ? 'text-accent' : 'text-ink-muted'
                       }`}
                     >
                       {String(index + 1).padStart(2, '0')}
-                    </span>
-
-                    <span
-                      aria-hidden="true"
-                      className="block size-[3.5rem] overflow-hidden bg-surface-2 desktop:hidden"
-                    >
-                      <MediaImage
-                        media={item.cover}
-                        sizes="56px"
-                        className="h-full w-full object-cover"
-                        decorative
-                      />
                     </span>
 
                     <span className="min-w-0">
@@ -160,16 +180,13 @@ export function ProjectIndex({
                       {item.claim ? (
                         <span className="mt-4 block text-body text-ink-muted">{item.claim}</span>
                       ) : null}
-                      <span className="mt-4 block font-mono text-caption text-ink-muted tablet:hidden">
-                        {item.year}
-                      </span>
                     </span>
 
-                    <span className="hidden font-mono text-caption uppercase text-ink-muted desktop:block">
+                    <span className="font-mono text-caption uppercase text-ink-muted">
                       {item.services.map((service) => service.title).join(' · ')}
                     </span>
 
-                    <span className="hidden items-center justify-end gap-8 whitespace-nowrap font-mono text-caption text-ink-muted tablet:flex">
+                    <span className="flex items-center justify-end gap-8 whitespace-nowrap font-mono text-caption text-ink-muted">
                       {item.year}
                       <span
                         aria-hidden="true"
@@ -186,7 +203,7 @@ export function ProjectIndex({
         </div>
 
         {active ? (
-          <div aria-hidden="true" className="hidden desktop:block">
+          <div aria-hidden="true">
             <div className="sticky top-[6rem]">
               <Link
                 href={`/work/${active.slug}`}

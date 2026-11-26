@@ -3,6 +3,8 @@ import { getTranslations, setRequestLocale } from 'next-intl/server'
 import { notFound } from 'next/navigation'
 import type { CSSProperties } from 'react'
 
+import { BrowserWindow } from '@/components/embeds/browser-window'
+import { PhoneFrame, isInstagram } from '@/components/embeds/phone-frame'
 import { getYouTubeId } from '@/lib/youtube'
 import { BlockSection, Eyebrow } from '@/components/blocks/block-section'
 import { ProjectCard } from '@/components/blocks/project-card'
@@ -104,6 +106,14 @@ export default async function CaseStudyPage({ params }: PageProps) {
     ? (project.execution ?? []).filter((block) => block !== heroEmbed)
     : project.execution
 
+  const instagramHandle = (url: string) => {
+    try {
+      return new URL(url).pathname.split('/').filter(Boolean)[0] ?? ''
+    } catch {
+      return ''
+    }
+  }
+
   const narrative: Array<{ label: string; body: Project['context'] }> = [
     { label: t('context'), body: project.context },
     { label: t('challenge'), body: project.challenge },
@@ -131,73 +141,44 @@ export default async function CaseStudyPage({ params }: PageProps) {
         </div>
       </header>
 
-      {heroEmbed ? (
-        // Framed rather than full-bleed, by request — rounded and bordered
-        // like the inline embed further down the page (LiveEmbedBlock),
-        // not square-cornered edge-to-edge like heroMedia. The aspect
-        // ratio steps through three fixed values at this site's own
-        // `tablet` (768px) and `desktop` (1180px) breakpoints rather than
-        // holding one ratio everywhere: 16:9 (`aspect-video`, replacing an
-        // earlier viewport-relative height that read as a short, overly
-        // wide letterbox at this section's actual width) only from
-        // desktop up. Below that the embedded site is mostly a narrow
-        // column regardless of what the frame around it does, so a wide
-        // ratio wastes height on empty space either side of it — `9:16`
-        // under 768px (close to an actual phone's own proportions, not
-        // just "taller than wide") gives the embedded site's own mobile
-        // layout the vertical room to render as itself rather than a
-        // cramped, short crop of it. The iframe's CSS width already equals
-        // this frame's rendered width with no transform applied anywhere,
-        // so pengzhang.eu was always receiving a true narrow viewport and
-        // serving its own mobile breakpoint — nothing here ever scaled or
-        // zoomed it; a too-short frame just hadn't left room to see that
-        // layout as more than a sliver, which read as "zoomed in" even
-        // though it wasn't. `4:3` between 768 and 1180px is the middle
-        // step down from 16:9 rather than a jump straight to portrait.
-        //
-        // No `max-w-*` cap: an earlier version of this capped the box at
-        // 1024px, which read as too small once seen alongside the rest of
-        // the page — this instead fills the full content column, same
-        // width as everything else between the margins. The iframe itself
-        // is never scaled down with a CSS `transform` to fit a smaller
-        // box — by request, it renders at the frame's real size, so the
-        // embedded site lays itself out as its own desktop breakpoint
-        // would at that width rather than appearing shrunk.
-        //
-        // Two animations, stacked on purpose: `data-reveal="mask"` on the
-        // figure is the one-time curtain that opens when the section first
-        // scrolls into view (see the comment on [data-reveal='mask'] in
-        // blocks.css for why a curtain, not a clip-path, is what doesn't
-        // disturb an embedded element's own compositor layer);
-        // `data-parallax="zoom"` on the inner, overflow-hidden frame is a
-        // second, continuous effect — scaling down to true size exactly as
-        // far as the reader has scrolled, for the "alive" feel a static
-        // reveal alone doesn't give. The frame clips it; the zoom never
-        // touches the rounded corners themselves.
-        <figure className="page-margin mb-96" data-reveal="mask">
-          <div
-            // Defensive, not a reported bug here: see the matching comment
-            // in live-embed-block.tsx — same reasoning, same attribute.
-            className="aspect-[9/16] w-full overflow-hidden rounded-glass-lg border border-line-strong bg-surface-2 tablet:aspect-[4/3] desktop:aspect-video"
-            data-lenis-prevent-wheel
-          >
-            <div className="h-full w-full" data-parallax="zoom">
-              <iframe
-                src={heroEmbed.url}
-                title={heroEmbed.heading || project.title}
-                className="h-full w-full"
-                loading="eager"
-                sandbox="allow-scripts allow-same-origin allow-forms allow-popups allow-popups-to-escape-sandbox"
-              />
-            </div>
+      {heroEmbed && isInstagram(heroEmbed.url) ? (
+        // An Instagram page goes in a phone, beside its handle: it is a
+        // social profile, so it is shown the way it is actually seen.
+        <figure
+          className="page-margin mb-96 grid items-center gap-48 desktop:grid-cols-2 desktop:gap-64"
+          data-reveal="mask"
+        >
+          <div className="order-2 desktop:order-1">
+            <p className="font-mono text-caption uppercase text-ink-muted">Instagram</p>
+            <p className="mt-16 text-h2 break-words">@{instagramHandle(heroEmbed.url)}</p>
+            {heroEmbed.heading ? (
+              <p className="mt-16 max-w-[36ch] text-body-lg text-ink-2">{heroEmbed.heading}</p>
+            ) : null}
+            <a
+              href={heroEmbed.url.replace(/\/embed\/?$/, '')}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="mt-32 inline-flex min-h-[3rem] items-center border border-ink px-24 font-mono text-caption uppercase transition ease-reveal duration-fast hover:bg-ink hover:text-surface"
+            >
+              {heroEmbed.fallbackLabel || 'Apri su Instagram'} ↗
+            </a>
           </div>
-          <figcaption className="mt-16 flex flex-wrap items-baseline justify-between gap-16 text-caption text-ink-muted">
+          <div className="order-1 desktop:order-2">
+            <PhoneFrame url={heroEmbed.url} title={heroEmbed.heading || project.title} />
+          </div>
+        </figure>
+      ) : heroEmbed ? (
+        // A live site in a browser window, rendered at desktop width and
+        // scaled to fit, narrower than the column and lifted on a shadow.
+        <figure className="page-margin mb-96" data-reveal="mask">
+          <BrowserWindow url={heroEmbed.url} title={heroEmbed.heading || project.title} />
+          <figcaption className="mx-auto mt-24 flex max-w-[68rem] flex-wrap items-baseline justify-between gap-16 font-mono text-caption uppercase text-ink-muted">
             {heroEmbed.heading ? <span>{heroEmbed.heading}</span> : <span />}
             <a
               href={heroEmbed.url}
               target="_blank"
               rel="noopener noreferrer"
-              className="underline hover:text-ink"
+              className="link-underline hover:text-ink"
             >
               {heroEmbed.fallbackLabel || 'Apri il sito in una nuova scheda'} ↗
             </a>

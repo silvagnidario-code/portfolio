@@ -19,7 +19,8 @@
     "offices": "办公室",
     "social": "社交媒体",
     "toTop": "回到顶部",
-    "contactCta": "联系我"
+    "contactCta": "联系我",
+    "links": "链接"
   },
   "PhotoGallery": {
     "open": "全屏打开第 {index} 张，共 {total} 张照片",

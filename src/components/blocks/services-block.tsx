@@ -118,12 +118,11 @@ export async function ServicesBlock({
           {services.map((service, index) => {
             const deliverablesKey = `deliverables.${service.id}`
             const deliverables = t.has(deliverablesKey) ? t(deliverablesKey) : null
-            const wide = index % 5 === 0 || index % 5 === 4
 
             return (
               <li
                 key={service.id}
-                className={`-mb-px -mr-px flex min-h-[15rem] flex-col justify-between gap-32 border border-line p-24 transition-colors ease-reveal duration-base hover:bg-accent hover:text-accent-ink ${spans[index % 5]} ${
+                className={`-mb-px -mr-px flex flex-col justify-between gap-16 border border-line p-16 tablet:min-h-[11rem] tablet:p-24 transition-colors ease-reveal duration-base hover:bg-accent hover:text-accent-ink ${spans[index % 5]} ${
                   index % 5 === 0 ? 'tablet:col-span-2' : ''
                 }`}
               >
@@ -131,11 +130,11 @@ export async function ServicesBlock({
                   ({String(index + 1).padStart(2, '0')})
                 </span>
                 <div>
-                  <ServiceHeading className={`${wide ? 'text-h2' : 'text-h3'} font-light`}>
+                  <ServiceHeading className="text-h3 font-light">
                     {service.title}
                   </ServiceHeading>
                   {service.summary ? (
-                    <p className="mt-8 max-w-[40ch] text-body opacity-80">{service.summary}</p>
+                    <p className="mt-4 max-w-[40ch] text-body opacity-80">{service.summary}</p>
                   ) : null}
                   {deliverables ? (
                     <p className="mt-16 font-mono text-caption uppercase opacity-75">

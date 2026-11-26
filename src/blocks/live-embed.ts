@@ -47,7 +47,8 @@ export const LiveEmbed: Block = {
       min: 320,
       max: 1200,
       admin: {
-        description: 'Altezza del riquadro in pixel (desktop). Si adatta da solo sotto i tablet.',
+        description:
+          'Non più usato: la finestra del sito si adatta da sola (resta qui per i contenuti già salvati).',
       },
     },
     {

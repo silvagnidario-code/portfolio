@@ -19,62 +19,49 @@ export async function SiteFooter({ locale }: { locale: Locale }) {
 
   const year = new Date().getFullYear()
 
+  // Two lines and no more: who and how to reach him on the first, the
+  // links folded into one row, then the legal line. Every column the CMS
+  // defines still appears — flattened into the row rather than stacked.
+  const links = (footer.columns ?? []).flatMap((column) => column.links ?? [])
+
   return (
-    <footer className="page-margin border-t border-line pb-32 pt-64">
-      <div className="grid gap-48 tablet:grid-cols-2 desktop:grid-cols-4">
-        <div className="desktop:col-span-2">
+    <footer className="page-margin border-t border-line py-32">
+      <div className="flex flex-col gap-24 desktop:flex-row desktop:items-baseline desktop:justify-between">
+        <div className="flex flex-wrap items-baseline gap-x-24 gap-y-8">
           <p className="font-mono text-caption uppercase text-ink">{seo.siteName}</p>
-          <p className="mt-16 max-w-[40ch] text-body text-ink-muted">{seo.description}</p>
           {settings.contact?.email ? (
-            <a
-              href={`mailto:${settings.contact.email}`}
-              className="link-underline mt-24 inline-block text-body-lg text-ink"
-            >
+            <a href={`mailto:${settings.contact.email}`} className="link-underline text-body text-ink">
               {settings.contact.email}
             </a>
           ) : null}
         </div>
 
-        {(footer.columns ?? []).map((column) => (
-          <nav key={column.id ?? column.title} aria-label={column.title}>
-            <p className="font-mono text-caption uppercase text-ink-muted">{column.title}</p>
-            <ul className="mt-16 flex flex-col">
-              {(column.links ?? []).map((link) => (
-                <li key={link.id ?? link.url}>
-                  <Link
-                    href={link.url}
-                    className="link-underline inline-block py-4 text-body text-ink-2 transition ease-reveal duration-fast hover:text-ink"
-                  >
-                    {link.label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </nav>
-        ))}
-
-        {(settings.social ?? []).length > 0 ? (
-          <nav aria-label={t('social')}>
-            <p className="font-mono text-caption uppercase text-ink-muted">{t('social')}</p>
-            <ul className="mt-16 flex flex-col">
-              {(settings.social ?? []).map((entry) => (
-                <li key={entry.id ?? entry.url}>
-                  <a
-                    href={entry.url}
-                    rel="noreferrer"
-                    target="_blank"
-                    className="link-underline inline-block py-4 text-body text-ink-2 transition ease-reveal duration-fast hover:text-ink"
-                  >
-                    {entry.platform} ↗
-                  </a>
-                </li>
-              ))}
-            </ul>
-          </nav>
-        ) : null}
+        <nav aria-label={t('links')}>
+          <ul className="flex flex-wrap gap-x-24 gap-y-8 font-mono text-caption uppercase text-ink-2">
+            {links.map((link) => (
+              <li key={link.id ?? link.url}>
+                <Link href={link.url} className="link-underline inline-block py-4 hover:text-ink">
+                  {link.label}
+                </Link>
+              </li>
+            ))}
+            {(settings.social ?? []).map((entry) => (
+              <li key={entry.id ?? entry.url}>
+                <a
+                  href={entry.url}
+                  rel="noreferrer"
+                  target="_blank"
+                  className="link-underline inline-block py-4 hover:text-ink"
+                >
+                  {entry.platform} ↗
+                </a>
+              </li>
+            ))}
+          </ul>
+        </nav>
       </div>
 
-      <div className="mt-64 flex flex-wrap items-center justify-between gap-16 border-t border-line pt-24 font-mono text-caption uppercase text-ink-muted">
+      <div className="mt-24 flex flex-wrap items-center justify-between gap-16 font-mono text-caption uppercase text-ink-muted">
         <p>
           © {year} {footer.legalText}
         </p>

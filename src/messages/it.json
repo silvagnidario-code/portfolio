@@ -19,7 +19,8 @@
     "offices": "Sedi",
     "social": "Social",
     "toTop": "Torna su",
-    "contactCta": "Contattami"
+    "contactCta": "Contattami",
+    "links": "Link"
   },
   "PhotoGallery": {
     "open": "Apri la foto {index} di {total} a schermo intero",
