@@ -36,7 +36,7 @@ export function PhoneFrame({ url, title }: { url: string; title: string }) {
             className="absolute -right-[4px] top-[8.5rem] h-[5rem] w-[3px] rounded-r bg-[#3a3937]"
           />
 
-          <div className="relative flex aspect-[9/19] w-full flex-col overflow-hidden rounded-[2.6rem] bg-white text-[#0B0B0A]">
+          <div className="relative flex aspect-[9/19] w-full flex-col overflow-hidden rounded-[2.6rem] bg-[#FFFFFF] text-[#0B0B0A]">
             {/* Status bar with the island in the middle */}
             <div
               aria-hidden="true"
@@ -88,7 +88,7 @@ export function PhoneFrame({ url, title }: { url: string; title: string }) {
             {/* The app's tab bar and the home indicator */}
             <div
               aria-hidden="true"
-              className="shrink-0 border-t border-[#e5e5e5] bg-white px-[1.4rem] pb-[0.6rem] pt-[0.7rem]"
+              className="shrink-0 border-t border-[#e5e5e5] bg-[#FFFFFF] px-[1.4rem] pb-[0.6rem] pt-[0.7rem]"
             >
               <div className="flex items-center justify-between">
                 {[
