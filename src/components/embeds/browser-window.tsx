@@ -45,7 +45,7 @@ export function BrowserWindow({ url, title }: { url: string; title: string }) {
   })()
 
   return (
-    <div className="mx-auto w-full max-w-[68rem] overflow-hidden border border-line-strong bg-surface shadow-[0_40px_90px_-30px_rgb(0_0_0/0.55),0_12px_30px_-12px_rgb(0_0_0/0.35)]">
+    <div className="mx-auto w-full max-w-[68rem] overflow-hidden border border-line-strong bg-surface shadow-[0_40px_90px_-30px_rgb(0_0_0/0.55),0_12px_30px_-12px_rgb(0_0_0/0.35),0_0_70px_-6px_rgb(236_232_223/0.1)]">
       <div
         className="flex items-center gap-12 border-b border-line bg-surface-2 px-16 py-12"
         aria-hidden="true"
