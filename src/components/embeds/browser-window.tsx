@@ -3,9 +3,10 @@
 import { useEffect, useRef, useState } from 'react'
 
 /**
- * A live site inside a small browser window: a title bar with the address,
- * and under it the site rendered at a real desktop width (1440px) and scaled
- * down to fit — so the reader sees the whole layout, as on a laptop, rather
+ * A live site inside a browser window: a title bar with the address and a
+ * link out, and under it the site rendered at a laptop width (1280px) —
+ * shown at its real size once the column is that wide, and scaled down to
+ * fit below that — so the reader sees the whole layout, as on a laptop, rather
  * than a zoomed-in corner of it. Below the tablet breakpoint the frame is
  * too narrow for a scaled desktop to be legible, so the site renders at a
  * phone width (390px) instead and shows its own mobile layout.
@@ -13,8 +14,8 @@ import { useEffect, useRef, useState } from 'react'
  * The window is narrower than the content column and sits on a soft shadow,
  * so it reads as an object placed on the page, not a hole cut into it.
  */
-const DESKTOP_WIDTH = 1440
-const DESKTOP_HEIGHT = 900
+const DESKTOP_WIDTH = 1280
+const DESKTOP_HEIGHT = 800
 const PHONE_WIDTH = 390
 const PHONE_HEIGHT = 760
 
@@ -50,13 +51,25 @@ export function BrowserWindow({ url, title }: { url: string; title: string }) {
         className="flex items-center gap-12 border-b border-line bg-surface-2 px-16 py-12"
         aria-hidden="true"
       >
-        <span className="flex gap-8">
+        <span className="flex gap-8" aria-hidden="true">
           <span className="size-[0.625rem] rounded-full bg-[#E8442E]/80" />
           <span className="size-[0.625rem] rounded-full bg-ink-muted/40" />
           <span className="size-[0.625rem] rounded-full bg-ink-muted/40" />
         </span>
-        <span className="mx-auto truncate px-12 font-mono text-caption text-ink-muted">{host}</span>
-        <span className="w-[2.25rem]" />
+        <span
+          aria-hidden="true"
+          className="mx-auto truncate px-12 font-mono text-caption text-ink-muted"
+        >
+          {host}
+        </span>
+        <a
+          href={url}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="shrink-0 font-mono text-caption uppercase text-ink-muted transition ease-reveal duration-fast hover:text-ink"
+        >
+          ↗<span className="sr-only">{title}</span>
+        </a>
       </div>
       <div
         ref={boxRef}

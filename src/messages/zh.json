@@ -69,7 +69,8 @@
     "awards": "奖项",
     "liveUrl": "查看线上版本",
     "related": "更多作品",
-    "backToWork": "全部作品"
+    "backToWork": "全部作品",
+    "embedHint": "网站可以浏览：在窗口内滚动和点击"
   },
   "ContactPage": {
     "title": "联系",

@@ -69,7 +69,8 @@
     "awards": "Awards",
     "liveUrl": "See it live",
     "related": "More work",
-    "backToWork": "All work"
+    "backToWork": "All work",
+    "embedHint": "The site is live: scroll and click inside the window"
   },
   "ContactPage": {
     "title": "Contact",

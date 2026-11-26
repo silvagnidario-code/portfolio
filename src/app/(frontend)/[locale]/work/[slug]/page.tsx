@@ -136,10 +136,7 @@ export default async function CaseStudyPage({ params }: PageProps) {
       {heroEmbed && isInstagram(heroEmbed.url) ? (
         // An Instagram page goes in a phone, beside its handle: it is a
         // social profile, so it is shown the way it is actually seen.
-        <figure
-          className="page-margin mb-96 flex flex-col items-center justify-center gap-48 desktop:flex-row desktop:gap-96"
-          data-reveal="mask"
-        >
+        <figure className="page-margin mb-96 flex flex-col items-center justify-center gap-48 desktop:flex-row desktop:gap-96">
           <div className="order-2 w-full max-w-[25rem] desktop:order-1 desktop:w-auto desktop:max-w-[24rem]">
             <p className="font-mono text-caption uppercase text-ink-muted">Instagram</p>
             <p className="mt-16 text-h2 break-words">@{instagramHandle(heroEmbed.url)}</p>
@@ -162,10 +159,10 @@ export default async function CaseStudyPage({ params }: PageProps) {
       ) : heroEmbed ? (
         // A live site in a browser window, rendered at desktop width and
         // scaled to fit, narrower than the column and lifted on a shadow.
-        <figure className="page-margin mb-96" data-reveal="mask">
+        <figure className="page-margin mb-96">
           <BrowserWindow url={heroEmbed.url} title={heroEmbed.heading || project.title} />
           <figcaption className="mx-auto mt-24 flex max-w-[80rem] flex-wrap items-baseline justify-between gap-16 font-mono text-caption uppercase text-ink-muted">
-            {heroEmbed.heading ? <span>{heroEmbed.heading}</span> : <span />}
+            <span>{t('embedHint')}</span>
             <a
               href={heroEmbed.url}
               target="_blank"

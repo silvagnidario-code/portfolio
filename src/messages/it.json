@@ -69,7 +69,8 @@
     "awards": "Riconoscimenti",
     "liveUrl": "Vedi il progetto",
     "related": "Altri progetti",
-    "backToWork": "Tutti i progetti"
+    "backToWork": "Tutti i progetti",
+    "embedHint": "Il sito è navigabile: scorri e clicca dentro la finestra"
   },
   "ContactPage": {
     "title": "Contatti",
