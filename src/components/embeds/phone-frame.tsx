@@ -1,3 +1,5 @@
+import { instagramProfile, type InstagramProfile } from '@/lib/instagram-profiles'
+
 /**
  * A phone, drawn in CSS: a metal edge, a black bezel, the island, a status
  * bar and the app's tab bar at the bottom, with the live page in between.
@@ -12,6 +14,7 @@
  * on a narrow screen it simply shrinks with the column.
  */
 export function PhoneFrame({ url, title }: { url: string; title: string }) {
+  const profile = instagramProfile(url)
   return (
     <div className="relative isolate mx-auto w-full max-w-[25rem]">
       <span
@@ -75,17 +78,18 @@ export function PhoneFrame({ url, title }: { url: string; title: string }) {
               </span>
             </div>
 
-            {/* The page is laid out a little wider than the screen and scaled
-                down to fit (like a phone with display zoom off), so more of
-                the profile grid — more posts — is visible at first sight. */}
-            <div className="relative min-h-0 flex-1 overflow-hidden" data-lenis-prevent-wheel>
-              <iframe
-                src={url}
-                title={title}
-                loading="eager"
-                className="absolute left-0 top-0 h-[calc(100%/0.7)] w-[calc(100%/0.7)] origin-top-left scale-[0.7] border-0"
-                sandbox="allow-scripts allow-same-origin allow-popups allow-popups-to-escape-sandbox"
-              />
+            <div className="relative min-h-0 flex-1" data-lenis-prevent-wheel>
+              {profile ? (
+                <ProfileSnapshot profile={profile} />
+              ) : (
+                <iframe
+                  src={url}
+                  title={title}
+                  loading="eager"
+                  className="absolute inset-0 h-full w-full border-0"
+                  sandbox="allow-scripts allow-same-origin allow-popups allow-popups-to-escape-sandbox"
+                />
+              )}
             </div>
 
             {/* The app's tab bar and the home indicator */}
@@ -132,4 +136,66 @@ export function isInstagram(url: string): boolean {
   } catch {
     return false
   }
+}
+
+/**
+ * A profile as it looks in the app: header, counts, bio and a long grid of
+ * posts that scrolls inside the screen. Everything links to the real profile.
+ */
+function ProfileSnapshot({ profile }: { profile: InstagramProfile }) {
+  const href = `https://www.instagram.com/${profile.handle}/`
+  const fmt = new Intl.NumberFormat('it-IT')
+  return (
+    <div className="absolute inset-0 overflow-y-auto overscroll-contain [scrollbar-width:none]">
+      <a
+        href={href}
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label={`@${profile.handle} su Instagram`}
+        className="block"
+      >
+        <p className="px-[1rem] pb-[0.6rem] pt-[0.2rem] text-[0.95rem] font-bold">
+          {profile.handle}
+        </p>
+        <div className="flex items-center gap-[1.1rem] px-[1rem]">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src={profile.avatar}
+            alt=""
+            width={300}
+            height={300}
+            className="size-[4.6rem] shrink-0 rounded-full border border-[#e5e5e5] object-cover"
+          />
+          <div className="flex flex-1 justify-around text-center text-[0.75rem] leading-tight">
+            <span>
+              <b className="block text-[0.95rem]">{profile.posts}</b>post
+            </span>
+            <span>
+              <b className="block text-[0.95rem]">{fmt.format(profile.followers)}</b>follower
+            </span>
+          </div>
+        </div>
+        <div className="px-[1rem] pb-[0.8rem] pt-[0.6rem] text-[0.75rem] leading-snug">
+          <p className="font-semibold">{profile.name}</p>
+          {profile.bio.map((line) => (
+            <p key={line}>{line}</p>
+          ))}
+        </div>
+        <div className="mx-[1rem] mb-[0.8rem] rounded-[0.5rem] bg-[#0095F6] py-[0.4rem] text-center text-[0.8rem] font-semibold text-[#FFFFFF]">
+          Segui
+        </div>
+        <div className="border-t border-[#e5e5e5]">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src={profile.grid.src}
+            alt={`Ultimi post di @${profile.handle}`}
+            width={profile.grid.width}
+            height={profile.grid.height}
+            loading="lazy"
+            className="block h-auto w-full"
+          />
+        </div>
+      </a>
+    </div>
+  )
 }
