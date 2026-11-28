@@ -1,9 +1,10 @@
 'use client'
 
 import { useTranslations } from 'next-intl'
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useId, useMemo, useState } from 'react'
 
 import { MediaImage } from '@/components/media/media-image'
+import { MediaVideo } from '@/components/media/media-video'
 import { Link } from '@/i18n/navigation'
 import type { Media } from '@/payload-types'
 
@@ -51,6 +52,19 @@ export function ProjectIndex({
   const [activeId, setActiveId] = useState(items[0]?.id ?? null)
   const [filter, setFilter] = useState<number | null>(null)
   const [canPlay, setCanPlay] = useState(false)
+  const [filtersOpen, setFiltersOpen] = useState(false)
+  const filterListId = useId()
+
+  // Cover videos in the cards play for anyone who has not asked for less
+  // motion; the desktop preview additionally needs a pointer that hovers.
+  const [autoplayOk, setAutoplayOk] = useState(false)
+  useEffect(() => {
+    const query = window.matchMedia('(prefers-reduced-motion: no-preference)')
+    const update = () => setAutoplayOk(query.matches)
+    update()
+    query.addEventListener('change', update)
+    return () => query.removeEventListener('change', update)
+  }, [])
 
   useEffect(() => {
     const query = window.matchMedia('(hover: hover) and (prefers-reduced-motion: no-preference)')
@@ -71,6 +85,8 @@ export function ProjectIndex({
     filter === null || item.services.some((service) => service.id === filter)
 
   const visibleCount = items.filter(matches).length
+  const OPTIONS = [{ id: null as number | null, title: t('all') }, ...filters]
+  const activeFilterTitle = OPTIONS.find((option) => option.id === filter)?.title ?? t('all')
   const active = items.find((item) => item.id === activeId) ?? items[0]
   const Heading = headingLevel
 
@@ -79,33 +95,78 @@ export function ProjectIndex({
   return (
     <div>
       {filterable && filters.length > 1 ? (
-        <div className="mb-32 flex flex-col gap-16 tablet:flex-row tablet:flex-wrap tablet:items-center tablet:justify-between">
-          <div
-            role="group"
-            aria-label={t('filterLabel')}
-            className="grid w-full grid-cols-2 tablet:flex tablet:w-auto tablet:flex-wrap"
-          >
-            {[{ id: null, title: t('all') }, ...filters].map((option) => {
-              const pressed = filter === option.id
-              return (
-                <button
-                  key={option.id ?? 'all'}
-                  type="button"
-                  aria-pressed={pressed}
-                  onClick={() => setFilter(option.id)}
-                  className={`-mb-px -mr-px min-h-[2.75rem] border border-line-strong px-12 text-left tablet:whitespace-nowrap tablet:px-16 font-mono text-caption uppercase transition ease-reveal duration-fast ${
-                    pressed ? 'bg-ink text-surface' : 'text-ink hover:bg-surface-2'
-                  }`}
+        <>
+          {/* Phone: one compact bar that names the current filter and opens
+              a short list; picking an option closes it again. */}
+          <div className="mb-24 tablet:hidden">
+            <div className="flex items-center justify-between gap-16 border-y border-line">
+              <button
+                type="button"
+                aria-expanded={filtersOpen}
+                aria-controls={filterListId}
+                onClick={() => setFiltersOpen((open) => !open)}
+                className="flex min-h-[2.75rem] items-center gap-8 font-mono text-caption uppercase text-ink"
+              >
+                <span className="text-ink-muted">{t('filterShort')}</span>
+                <span>{activeFilterTitle}</span>
+                <span
+                  aria-hidden="true"
+                  className={`transition-transform ease-reveal duration-fast ${filtersOpen ? 'rotate-180' : ''}`}
                 >
-                  {option.title}
-                </button>
-              )
-            })}
+                  ▾
+                </span>
+              </button>
+              <p aria-live="polite" className="font-mono text-caption uppercase text-ink-muted">
+                {t('count', { count: visibleCount })}
+              </p>
+            </div>
+            <ul id={filterListId} hidden={!filtersOpen} className="border-b border-line py-8">
+              {OPTIONS.map((option) => (
+                <li key={option.id ?? 'all'}>
+                  <button
+                    type="button"
+                    aria-pressed={filter === option.id}
+                    onClick={() => {
+                      setFilter(option.id)
+                      setFiltersOpen(false)
+                    }}
+                    className={`flex min-h-[2.5rem] w-full items-center gap-8 font-mono text-caption uppercase ${
+                      filter === option.id ? 'text-accent' : 'text-ink'
+                    }`}
+                  >
+                    <span aria-hidden="true">{filter === option.id ? '●' : '○'}</span>
+                    {option.title}
+                  </button>
+                </li>
+              ))}
+            </ul>
           </div>
-          <p aria-live="polite" className="font-mono text-caption uppercase text-ink-muted">
-            {t('count', { count: visibleCount })}
-          </p>
-        </div>
+
+          {/* Tablet and up: the chips, all visible. */}
+          <div className="mb-32 hidden flex-wrap items-center justify-between gap-16 tablet:flex">
+            <div role="group" aria-label={t('filterLabel')} className="flex flex-wrap">
+              {OPTIONS.map((option) => {
+                const pressed = filter === option.id
+                return (
+                  <button
+                    key={option.id ?? 'all'}
+                    type="button"
+                    aria-pressed={pressed}
+                    onClick={() => setFilter(option.id)}
+                    className={`-mb-px -mr-px min-h-[2.75rem] whitespace-nowrap border border-line-strong px-16 font-mono text-caption uppercase transition ease-reveal duration-fast ${
+                      pressed ? 'bg-ink text-surface' : 'text-ink hover:bg-surface-2'
+                    }`}
+                  >
+                    {option.title}
+                  </button>
+                )
+              })}
+            </div>
+            <p aria-live="polite" className="font-mono text-caption uppercase text-ink-muted">
+              {t('count', { count: visibleCount })}
+            </p>
+          </div>
+        </>
       ) : null}
 
       {/* Below the desktop breakpoint: the same index, card by card. Each
@@ -114,19 +175,41 @@ export function ProjectIndex({
           columns on a tablet, one on a phone. */}
       <ul className="grid gap-x-24 gap-y-48 tablet:grid-cols-2 desktop:hidden">
         {items.map((item, index) => (
-          <li key={item.id} className={matches(item) ? '' : 'opacity-25 grayscale'}>
+          <li
+            key={item.id}
+            className={
+              matches(item) ? '' : 'hidden tablet:block tablet:opacity-25 tablet:grayscale'
+            }
+          >
             <Link href={`/work/${item.slug}`} className="group block border-t border-line pt-12">
               <span className="flex items-center justify-between gap-16 font-mono text-caption uppercase text-ink-muted">
                 <span className="text-accent">{String(index + 1).padStart(2, '0')}</span>
                 <span>{item.year}</span>
               </span>
               <span className="mt-12 block aspect-[4/3] overflow-hidden bg-surface-2">
-                <MediaImage
-                  media={item.cover}
-                  sizes="(min-width: 768px) 45vw, 92vw"
-                  className="h-full w-full object-cover transition-transform ease-reveal duration-slow group-hover:scale-[1.03]"
-                  decorative
-                />
+                {item.coverVideo &&
+                typeof item.coverVideo === 'object' &&
+                item.coverVideo.url &&
+                autoplayOk ? (
+                  // A project with a cover video plays it here, muted and
+                  // looping, only while the card is on screen.
+                  <MediaVideo
+                    src={item.coverVideo.url}
+                    mimeType={item.coverVideo.mimeType}
+                    poster={
+                      typeof item.cover === 'object' ? (item.cover?.url ?? undefined) : undefined
+                    }
+                    controls={false}
+                    className="h-full w-full object-cover"
+                  />
+                ) : (
+                  <MediaImage
+                    media={item.cover}
+                    sizes="(min-width: 768px) 45vw, 92vw"
+                    className="h-full w-full object-cover transition-transform ease-reveal duration-slow group-hover:scale-[1.03]"
+                    decorative
+                  />
+                )}
               </span>
               <Heading className="mt-16 text-h3 text-balance">{item.title}</Heading>
               {item.claim ? (

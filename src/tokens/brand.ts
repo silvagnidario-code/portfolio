@@ -87,8 +87,8 @@ export const typeScale = {
   h1: { min: 36, max: 72, lineHeight: 1.02, tracking: -0.04, weight: 300 },
   h2: { min: 30, max: 56, lineHeight: 1.05, tracking: -0.035, weight: 400 },
   h3: { min: 22, max: 34, lineHeight: 1.15, tracking: -0.02, weight: 400 },
-  bodyLg: { min: 18, max: 24, lineHeight: 1.4, tracking: -0.01, weight: 400 },
-  body: { min: 16, max: 17, lineHeight: 1.6, tracking: 0, weight: 400 },
+  bodyLg: { min: 18, max: 22, lineHeight: 1.38, tracking: -0.01, weight: 400 },
+  body: { min: 16, max: 17, lineHeight: 1.45, tracking: 0, weight: 400 },
   caption: {
     min: 12,
     max: 12,
@@ -109,7 +109,7 @@ export type TypeGradeName = keyof typeof typeScale
 export const cjk = {
   /** Optical size compensation, within the 5–8% required by the spec. */
   sizeFactor: 1.06,
-  bodyLineHeight: 2,
+  bodyLineHeight: 1.75,
 } as const
 
 /** Durations in ms. Slow, decelerated, quiet. */

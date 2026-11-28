@@ -246,7 +246,8 @@
     "filterLabel": "按服务筛选",
     "count": "{count, plural, =0 {暂无项目} other {# 个项目}}",
     "empty": "暂无可显示的项目。",
-    "viewAll": "全部作品"
+    "viewAll": "全部作品",
+    "filterShort": "筛选"
   },
   "Services": {
     "deliverables": {

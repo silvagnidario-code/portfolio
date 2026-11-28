@@ -78,12 +78,12 @@
   --lh-h3: 1.15;
   --ls-h3: -0.02em;
   --fw-h3: 400;
-  --fs-body-lg: clamp(1.125rem, 1rem + 0.5556vw, 1.5rem);
-  --lh-body-lg: 1.4;
+  --fs-body-lg: clamp(1.125rem, 1.0417rem + 0.3704vw, 1.375rem);
+  --lh-body-lg: 1.38;
   --ls-body-lg: -0.01em;
   --fw-body-lg: 400;
   --fs-body: clamp(1rem, 0.9792rem + 0.0926vw, 1.0625rem);
-  --lh-body: 1.6;
+  --lh-body: 1.45;
   --ls-body: 0em;
   --fw-body: 400;
   --fs-caption: clamp(0.75rem, 0.75rem + 0vw, 0.75rem);
@@ -264,7 +264,8 @@
    Applies to any subtree marked lang="zh", not just the zh locale. */
 :lang(zh) {
   --type-scale-factor: 1.06;
-  --leading-body-override: 2;
+  --leading-body-override: 1.75;
+  --leading-prose: 1.75;
 }
 
 @media (min-width: 768px) {

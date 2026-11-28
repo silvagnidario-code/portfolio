@@ -246,7 +246,8 @@
     "filterLabel": "Filtra per servizio",
     "count": "{count, plural, =0 {Nessun progetto} one {# progetto} other {# progetti}}",
     "empty": "Nessun progetto da mostrare.",
-    "viewAll": "Tutti i lavori"
+    "viewAll": "Tutti i lavori",
+    "filterShort": "Filtra"
   },
   "Services": {
     "deliverables": {

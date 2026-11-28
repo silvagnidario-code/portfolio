@@ -1,6 +1,8 @@
 import { getTranslations } from 'next-intl/server'
 
 import type { Locale } from '@/i18n/routing'
+
+import { ServicesBento } from './services-bento'
 import { getServicesList } from '@/lib/queries'
 import type { Service, ServicesBlockType } from '@/payload-types'
 
@@ -93,13 +95,6 @@ export async function ServicesBlock({
   // The widths repeat every five services — wide, narrow, narrow / narrow,
   // wide — so the grid closes cleanly on four columns whatever the count.
   const t = await getTranslations('Services')
-  const spans = [
-    'desktop:col-span-2',
-    'desktop:col-span-1',
-    'desktop:col-span-1',
-    'desktop:col-span-1',
-    'desktop:col-span-3',
-  ]
 
   return (
     <BlockSection settings={block.settings}>
@@ -114,38 +109,18 @@ export async function ServicesBlock({
           <p className="mb-48 max-w-[40ch] text-body-lg text-ink-2">{block.intro}</p>
         ) : null}
 
-        <ul className="grid grid-cols-1 tablet:grid-cols-2 desktop:grid-cols-4">
-          {services.map((service, index) => {
-            const deliverablesKey = `deliverables.${service.id}`
-            const deliverables = t.has(deliverablesKey) ? t(deliverablesKey) : null
-
-            return (
-              <li
-                key={service.id}
-                className={`-mb-px -mr-px flex flex-col justify-between gap-16 border border-line p-16 tablet:min-h-[11rem] tablet:p-24 transition-colors ease-reveal duration-base hover:bg-accent hover:text-accent-ink ${spans[index % 5]} ${
-                  index % 5 === 0 ? 'tablet:col-span-2' : ''
-                }`}
-              >
-                <span className="font-mono text-caption">
-                  ({String(index + 1).padStart(2, '0')})
-                </span>
-                <div>
-                  <ServiceHeading className="text-h3 font-light">
-                    {service.title}
-                  </ServiceHeading>
-                  {service.summary ? (
-                    <p className="mt-4 max-w-[40ch] text-body opacity-80">{service.summary}</p>
-                  ) : null}
-                  {deliverables ? (
-                    <p className="mt-16 font-mono text-caption uppercase opacity-75">
-                      {deliverables}
-                    </p>
-                  ) : null}
-                </div>
-              </li>
-            )
+        <ServicesBento
+          headingLevel={block.heading ? 'h3' : 'h2'}
+          services={services.map((service) => {
+            const key = `deliverables.${service.id}`
+            return {
+              id: service.id,
+              title: service.title,
+              summary: service.summary ?? null,
+              deliverables: t.has(key) ? t(key) : null,
+            }
           })}
-        </ul>
+        />
       </div>
     </BlockSection>
   )
