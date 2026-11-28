@@ -228,6 +228,7 @@ ${roleBlock(opposite('light'), '  ')}
 :lang(zh) {
   --type-scale-factor: ${cjk.sizeFactor};
   --leading-body-override: ${cjk.bodyLineHeight};
+  --leading-prose: ${cjk.bodyLineHeight};
 }
 
 @media (min-width: ${breakpoint.tablet}px) {

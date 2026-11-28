@@ -46,13 +46,16 @@
  * from `.prose` would never reach the paragraphs.
  */
 .prose :is(p, h2, h3, ul, ol, blockquote) + :is(p, h2, h3, ul, ol, blockquote) {
-  margin-block-start: var(--space-32);
+  margin-block-start: var(--space-16);
 }
 
 .prose p {
   max-width: var(--container-measure);
   font-size: calc(var(--fs-body-lg) * var(--type-scale-factor));
-  line-height: var(--leading-body-override);
+  /* The body-lg leading, not the body's: case-study prose is set at the
+     larger size, and the body's leading would open it up too far. CJK
+     overrides it below via the same variable. */
+  line-height: var(--leading-prose, var(--lh-body-lg));
   letter-spacing: var(--ls-body-lg);
   color: var(--fg-secondary);
 }
