@@ -75,12 +75,15 @@ export function PhoneFrame({ url, title }: { url: string; title: string }) {
               </span>
             </div>
 
-            <div className="relative min-h-0 flex-1" data-lenis-prevent-wheel>
+            {/* The page is laid out a little wider than the screen and scaled
+                down to fit (like a phone with display zoom off), so more of
+                the profile grid — more posts — is visible at first sight. */}
+            <div className="relative min-h-0 flex-1 overflow-hidden" data-lenis-prevent-wheel>
               <iframe
                 src={url}
                 title={title}
                 loading="eager"
-                className="absolute inset-0 h-full w-full border-0"
+                className="absolute left-0 top-0 h-[calc(100%/0.7)] w-[calc(100%/0.7)] origin-top-left scale-[0.7] border-0"
                 sandbox="allow-scripts allow-same-origin allow-popups allow-popups-to-escape-sandbox"
               />
             </div>
